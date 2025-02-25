@@ -14,6 +14,7 @@ import kitchenpos.menu.application.dto.MenuGroupRequest;
 import kitchenpos.menu.application.dto.MenuGroupResponse;
 import kitchenpos.menu.application.facade.MenuGroupFacade;
 import kitchenpos.menu.domain.entity.MenuGroup;
+import kitchenpos.menu.domain.exception.MenuGroupNameException;
 import kitchenpos.menu.domain.fixture.MenuGroupFixture;
 import kitchenpos.menu.domain.repository.MenuGroupRepository;
 import kitchenpos.menu.domain.service.MenuGroupService;
@@ -101,7 +102,7 @@ class MenuGroupFacadeTest {
         void 메뉴그룹명_유효성_검사(final String name) {
             menuGroup = MenuGroupFixture.test(name).create();
 
-            assertThatExceptionOfType(IllegalArgumentException.class)
+            assertThatExceptionOfType(MenuGroupNameException.class)
                 .isThrownBy(() -> menuGroupFacade.create(menuGroup))
                 .withMessage(ErrorCode.MENU_GROUP_NAME_NOT_ALLOWED.toString());
         }

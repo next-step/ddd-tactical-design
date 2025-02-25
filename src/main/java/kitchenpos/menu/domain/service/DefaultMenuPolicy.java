@@ -5,9 +5,10 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.function.Function;
-import kitchenpos.global.exception.ErrorCode;
 import kitchenpos.menu.domain.entity.Menu;
 import kitchenpos.menu.domain.entity.MenuProduct;
+import kitchenpos.menu.domain.exception.MenuPriceInvalidException;
+import kitchenpos.menu.domain.exception.MenuStateInvalidException;
 import kitchenpos.menu.domain.model.MenuPrice;
 import kitchenpos.menu.domain.model.MenuVo;
 import kitchenpos.menu.domain.model.MenuVo.MenuInfo;
@@ -46,7 +47,7 @@ public class DefaultMenuPolicy implements MenuPolicy {
 
         diffMenuAndTotalMenuProductPrice(
             menu.getMenuProducts(), price,
-            total -> new IllegalArgumentException(ErrorCode.MENU_PRICE_OVER_TOTAL_PRODUCTS_NOT_ALLOWED.toString()));
+            total -> new MenuPriceInvalidException());
         menu.updatePrice(price);
         return MenuVo.MenuInfo.fromEntity(menu);
     }
@@ -57,7 +58,7 @@ public class DefaultMenuPolicy implements MenuPolicy {
 
         diffMenuAndTotalMenuProductPrice(
             menu.getMenuProducts(), menu.getPrice(),
-            total -> new IllegalStateException(ErrorCode.MENU_PRICE_OVER_TOTAL_PRODUCTS_NOT_ALLOWED.toString()));
+            total -> new MenuStateInvalidException());
         menu.updateDisplayed(true);
         return MenuVo.MenuInfo.fromEntity(menu);
     }
@@ -66,7 +67,7 @@ public class DefaultMenuPolicy implements MenuPolicy {
     public void validateMenuPrice(MenuPrice price, List<MenuProduct> menuProducts) {
         diffMenuAndTotalMenuProductPrice(
             menuProducts, price,
-            total -> new IllegalArgumentException(ErrorCode.MENU_PRICE_OVER_TOTAL_PRODUCTS_NOT_ALLOWED.toString()));
+            total -> new MenuPriceInvalidException());
     }
 
 

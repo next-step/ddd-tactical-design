@@ -11,10 +11,11 @@ import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 import kitchenpos.global.exception.ErrorCode;
+import kitchenpos.global.exception.NotFoundException;
+import kitchenpos.global.exception.ProfanityException;
 import kitchenpos.global.infrastructure.external.FakeProfanityClient;
 import kitchenpos.menu.application.dto.MenuRequest;
 import kitchenpos.menu.application.dto.MenuRequest.UpdatePrice;
@@ -22,9 +23,14 @@ import kitchenpos.menu.application.dto.MenuResponse;
 import kitchenpos.menu.application.facade.MenuFacade;
 import kitchenpos.menu.domain.entity.Menu;
 import kitchenpos.menu.domain.entity.MenuProduct;
+import kitchenpos.menu.domain.exception.MenuPriceException;
+import kitchenpos.menu.domain.exception.MenuPriceInvalidException;
+import kitchenpos.menu.domain.exception.MenuProductQtyException;
+import kitchenpos.menu.domain.exception.MenuStateInvalidException;
 import kitchenpos.menu.domain.fixture.MenuFixture;
 import kitchenpos.menu.domain.fixture.MenuGroupFixture;
 import kitchenpos.menu.domain.fixture.MenuProductFixture;
+import kitchenpos.menu.domain.model.MenuProductQty;
 import kitchenpos.menu.domain.repository.InMemoryMenuRepository;
 import kitchenpos.menu.domain.repository.MenuGroupRepository;
 import kitchenpos.menu.domain.repository.MenuRepository;
@@ -32,13 +38,13 @@ import kitchenpos.menu.domain.service.FakeMenuPolicy;
 import kitchenpos.menu.domain.service.MenuPurgomalumClient;
 import kitchenpos.menu.domain.service.MenuService;
 import kitchenpos.menu.domain.service.MenuServiceImpl;
+import kitchenpos.menu.domain.service.ProductContextService;
 import kitchenpos.product.domain.entity.Product;
 import kitchenpos.product.domain.fixture.ProductFixture;
 import kitchenpos.product.domain.model.ProductName;
 import kitchenpos.product.domain.model.ProductPrice;
 import kitchenpos.product.domain.repository.InMemoryProductRepository;
 import kitchenpos.product.domain.repository.ProductRepository;
-import kitchenpos.menu.domain.service.ProductContextService;
 import kitchenpos.product.domain.service.ProductPurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -100,7 +106,7 @@ class MenuFacadeTest {
             null,
             null,
             true,
-            List.of(new MenuProductFixture(chicken.getId(), 10).toEntity())
+            List.of(new MenuProductFixture(chicken.getId(), MenuProductQty.of(10)).toEntity())
         ).toEntity();
 
         productRepository.save(chicken);
@@ -156,7 +162,7 @@ class MenuFacadeTest {
             ).create();
 
             if (price < 0) {
-                assertThatExceptionOfType(IllegalArgumentException.class)
+                assertThatExceptionOfType(MenuPriceException.class)
                     .isThrownBy(() -> menuFacade.create(createMenu))
                     .withMessage(ErrorCode.MENU_PRICE_NOT_ALLOWED.toString());
             }
@@ -173,7 +179,7 @@ class MenuFacadeTest {
                 null
             ).create();
 
-            assertThatExceptionOfType(NoSuchElementException.class)
+            assertThatExceptionOfType(NotFoundException.class)
                 .isThrownBy(() -> menuFacade.create(createMenu))
                 .withMessage(ErrorCode.NOT_FOUND_MENU_GROUP.toString());
         }
@@ -191,7 +197,7 @@ class MenuFacadeTest {
                 null
             ).create();
 
-            assertThatExceptionOfType(IllegalArgumentException.class)
+            assertThatExceptionOfType(ProfanityException.class)
                 .isThrownBy(() -> menuFacade.create(createMenu))
                 .withMessage(ErrorCode.MENU_NAME_PROFANITY_NOT_ALLOWED.toString());
         }
@@ -205,7 +211,7 @@ class MenuFacadeTest {
                 BigDecimal.valueOf(price1),
                 null,
                 true,
-                List.of(new MenuProductFixture(chicken.getId(), 100).toEntity())
+                List.of(new MenuProductFixture(chicken.getId(), MenuProductQty.of(100)).toEntity())
             ).create();
 
             chicken = new Product(chicken.getId(), chicken.getName(), ProductPrice.of(BigDecimal.valueOf(price2)));
@@ -215,7 +221,7 @@ class MenuFacadeTest {
             mockCreateMenu();
             menuPolicy.setExceptionStatus(isOver(BigDecimal.valueOf(price1)));
 
-            assertThatExceptionOfType(IllegalArgumentException.class)
+            assertThatExceptionOfType(MenuPriceInvalidException.class)
                 .isThrownBy(() -> menuService.create(createMenu.toVo()))
                 .withMessage(ErrorCode.MENU_PRICE_OVER_TOTAL_PRODUCTS_NOT_ALLOWED.toString());
         }
@@ -228,33 +234,35 @@ class MenuFacadeTest {
                 null,
                 null,
                 true,
-                List.of(new MenuProduct(null, 1L))
+                List.of(new MenuProduct(null, MenuProductQty.of(1)))
             ).create();
             mockFindByMenuGroup();
 
-            assertThatExceptionOfType(IllegalArgumentException.class)
+            assertThatExceptionOfType(NotFoundException.class)
                 .isThrownBy(() -> menuFacade.create(createMenu))
                 .withMessage(ErrorCode.NOT_FOUND_ANY_PRODUCT.toString());
         }
 
         @DisplayName("메뉴 상품 정보에 속한 상품의 수량은 0개 이상이어야 한다.")
         @ParameterizedTest
-        @ValueSource(ints = {-100, 0, 100})
+        @ValueSource(ints = {-100, -10})
         void 메뉴구성상품_수량_검사(final int qty) {
-            createMenu = MenuFixture.test(
-                null,
-                null,
-                null,
-                true,
-                List.of(new MenuProductFixture(chicken.getId(), qty).toEntity())
-            ).create();
+            assertThatExceptionOfType(MenuProductQtyException.class)
+                .isThrownBy(() -> {
 
-            if (qty < 0) {
-                mockCreateMenu();
-                assertThatExceptionOfType(IllegalArgumentException.class)
-                    .isThrownBy(() -> menuService.create(createMenu.toVo()))
-                    .withMessage(ErrorCode.PRODUCT_QTY_NOT_ALLOWED.toString());
-            }
+                    createMenu = MenuFixture.test(
+                        null,
+                        null,
+                        null,
+                        true,
+                        List.of(new MenuProductFixture(chicken.getId(), MenuProductQty.of(qty)).toEntity())
+                    ).create();
+
+                    mockCreateMenu();
+
+                    menuService.create(createMenu.toVo());
+                })
+                .withMessage(ErrorCode.MENU_PRODUCT_QTY_NOT_ALLOWED.toString());
         }
 
 
@@ -291,14 +299,14 @@ class MenuFacadeTest {
                 BigDecimal.valueOf(price1),
                 null,
                 true,
-                List.of(new MenuProductFixture(chicken.getId(), 100).toEntity())
+                List.of(new MenuProductFixture(chicken.getId(), MenuProductQty.of(100)).toEntity())
             ).toEntity();
 
             menuRepository.save(defaultMenu);
 
             menuPolicy.setExceptionStatus(isOver(BigDecimal.valueOf(price1)));
 
-            assertThatExceptionOfType(IllegalStateException.class)
+            assertThatExceptionOfType(MenuStateInvalidException.class)
                 .isThrownBy(() -> menuService.display(defaultMenu.getId()))
                 .withMessage(ErrorCode.MENU_PRICE_OVER_TOTAL_PRODUCTS_NOT_ALLOWED.toString());
         }
@@ -348,7 +356,7 @@ class MenuFacadeTest {
             ).update();
 
             if (price < 0) {
-                assertThatExceptionOfType(IllegalArgumentException.class)
+                assertThatExceptionOfType(MenuPriceException.class)
                     .isThrownBy(() -> menuFacade.changePrice(updatePriceMenu))
                     .withMessage(ErrorCode.MENU_PRICE_NOT_ALLOWED.toString());
             }
@@ -363,7 +371,7 @@ class MenuFacadeTest {
 
             menuPolicy.setExceptionStatus(isOver(BigDecimal.valueOf(price)));
 
-            assertThatExceptionOfType(IllegalArgumentException.class)
+            assertThatExceptionOfType(MenuPriceInvalidException.class)
                 .isThrownBy(() -> menuService.changePrice(updatePriceMenu.toVo()))
                 .withMessage(ErrorCode.MENU_PRICE_OVER_TOTAL_PRODUCTS_NOT_ALLOWED.toString());
         }
@@ -392,7 +400,7 @@ class MenuFacadeTest {
     private boolean isOver(BigDecimal price) {
         return defaultMenu.getMenuProducts().stream()
             .map(mp -> {
-                return chicken.getPrice().price().multiply(BigDecimal.valueOf(mp.getQuantity()));
+                return chicken.getPrice().price().multiply(BigDecimal.valueOf(mp.getQuantity().quantity()));
             })
             .reduce(BigDecimal.ZERO, BigDecimal::add).compareTo(price) < 0;
     }

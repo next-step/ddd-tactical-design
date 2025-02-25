@@ -5,9 +5,11 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.UUID;
 import kitchenpos.global.exception.ErrorCode;
+import kitchenpos.global.exception.NotFoundException;
 import kitchenpos.menu.domain.entity.Menu;
 import kitchenpos.menu.domain.entity.MenuGroup;
 import kitchenpos.menu.domain.entity.MenuProduct;
+import kitchenpos.menu.domain.exception.MenuProductQtyException;
 import kitchenpos.menu.domain.model.MenuName;
 import kitchenpos.menu.domain.model.MenuPrice;
 import kitchenpos.menu.domain.model.MenuVo;
@@ -94,12 +96,12 @@ public class MenuServiceImpl implements MenuService {
 
     private MenuGroup validateMenuGroup(UUID menuGroupId) {
         return menuGroupRepository.findById(menuGroupId)
-            .orElseThrow(() -> new NoSuchElementException(ErrorCode.NOT_FOUND_MENU_GROUP.toString()));
+            .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_MENU_GROUP.toString()));
     }
 
     private List<MenuProduct> createMenuProducts(List<MenuProduct> menuProductRequests) {
         if (Objects.isNull(menuProductRequests) || menuProductRequests.isEmpty()) {
-            throw new IllegalArgumentException(ErrorCode.NOT_FOUND_MENU_PRODUCT.toString());
+            throw new NotFoundException(ErrorCode.NOT_FOUND_MENU_PRODUCT.toString());
         }
 
         final List<Product> products = productContextService.findAllByIds(
@@ -107,7 +109,7 @@ public class MenuServiceImpl implements MenuService {
         );
 
         if (products.size() != menuProductRequests.size()) {
-            throw new IllegalArgumentException(ErrorCode.NOT_FOUND_ANY_PRODUCT.toString());
+            throw new NotFoundException(ErrorCode.NOT_FOUND_ANY_PRODUCT.toString());
         }
 
         return menuProductRequests.stream()
@@ -117,13 +119,13 @@ public class MenuServiceImpl implements MenuService {
 
     private MenuProduct createMenuProduct(MenuProduct request, List<Product> products) {
         if (request.getQuantity().isNegative()) {
-            throw new IllegalArgumentException(ErrorCode.PRODUCT_QTY_NOT_ALLOWED.toString());
+            throw new MenuProductQtyException();
         }
 
         final Product product = products.stream()
             .filter(p -> p.getId().equals(request.getProductId()))
             .findFirst()
-            .orElseThrow(() -> new NoSuchElementException(ErrorCode.NOT_FOUND_PRODUCT.toString()));
+            .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_PRODUCT.toString()));
 
         return new MenuProduct(product.getId(), request.getQuantity());
     }

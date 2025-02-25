@@ -11,10 +11,12 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 import kitchenpos.global.exception.ErrorCode;
+import kitchenpos.global.exception.ProfanityException;
 import kitchenpos.global.infrastructure.external.FakeProfanityClient;
 import kitchenpos.menu.domain.entity.Menu;
 import kitchenpos.menu.domain.fixture.MenuFixture;
 import kitchenpos.menu.domain.fixture.MenuProductFixture;
+import kitchenpos.menu.domain.model.MenuProductQty;
 import kitchenpos.menu.domain.repository.MenuRepository;
 import kitchenpos.menu.domain.service.FakeMenuPolicy;
 import kitchenpos.product.application.dto.ProductRequest;
@@ -22,6 +24,7 @@ import kitchenpos.product.application.dto.ProductRequest.UpdatePrice;
 import kitchenpos.product.application.dto.ProductResponse;
 import kitchenpos.product.application.facade.ProductFacade;
 import kitchenpos.product.domain.event.ProductEventPublisher;
+import kitchenpos.product.domain.exception.ProductPriceException;
 import kitchenpos.product.domain.fixture.ProductFixture;
 import kitchenpos.product.domain.repository.InMemoryMenuRepository;
 import kitchenpos.product.domain.repository.InMemoryProductRepository;
@@ -110,7 +113,7 @@ class ProductFacadeTest {
         void 상품명_비속어_검사(final String name) {
             chicken = ProductFixture.test(name, null).create();
 
-            assertThatExceptionOfType(IllegalArgumentException.class)
+            assertThatExceptionOfType(ProfanityException.class)
                 .isThrownBy(() -> productService.create(chicken.toVo()))
                 .withMessage(ErrorCode.PRODUCT_NAME_PROFANITY_NOT_ALLOWED.toString());
         }
@@ -122,7 +125,7 @@ class ProductFacadeTest {
             chicken = ProductFixture.test(null, BigDecimal.valueOf(price)).create();
 
             if (price < 0) {
-                assertThatExceptionOfType(IllegalArgumentException.class)
+                assertThatExceptionOfType(ProductPriceException.class)
                     .isThrownBy(() -> productFacade.create(chicken))
                     .withMessage(ErrorCode.PRODUCT_PRICE_NOT_ALLOWED.toString());
             }
@@ -158,7 +161,7 @@ class ProductFacadeTest {
             updateChicken = ProductFixture.test(null, BigDecimal.valueOf(price)).update();
 
             if (price < 0) {
-                assertThatExceptionOfType(IllegalArgumentException.class)
+                assertThatExceptionOfType(ProductPriceException.class)
                     .isThrownBy(() -> productFacade.changePrice(updateChicken))
                     .withMessage(ErrorCode.PRODUCT_PRICE_NOT_ALLOWED.toString());
             }
@@ -182,7 +185,7 @@ class ProductFacadeTest {
                 true,
                 List.of(new MenuProductFixture(
                     productId,
-                    100
+                    MenuProductQty.of(100)
                 ).toEntity())
             ).toEntity();
             var menu = menuRepository.save(chickenMenu);

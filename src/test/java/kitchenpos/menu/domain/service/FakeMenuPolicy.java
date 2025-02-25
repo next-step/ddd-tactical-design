@@ -4,9 +4,10 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.function.Function;
-import kitchenpos.global.exception.ErrorCode;
 import kitchenpos.menu.domain.entity.Menu;
 import kitchenpos.menu.domain.entity.MenuProduct;
+import kitchenpos.menu.domain.exception.MenuPriceInvalidException;
+import kitchenpos.menu.domain.exception.MenuStateInvalidException;
 import kitchenpos.menu.domain.model.MenuPrice;
 import kitchenpos.menu.domain.model.MenuVo.MenuInfo;
 import kitchenpos.menu.domain.repository.MenuRepository;
@@ -37,20 +38,20 @@ public class FakeMenuPolicy implements MenuPolicy {
     @Override
     public MenuInfo changePrice(UUID menuId, MenuPrice price) {
         var menu = getMenu(menuId);
-        fakePriceValidation(exceptionStatus -> new IllegalArgumentException(ErrorCode.MENU_PRICE_OVER_TOTAL_PRODUCTS_NOT_ALLOWED.toString()));
+        fakePriceValidation(exceptionStatus -> new MenuPriceInvalidException());
         return MenuInfo.fromEntity(menu);
     }
 
     @Override
     public MenuInfo display(UUID menuId) {
         var menu = getMenu(menuId);
-        fakePriceValidation(exceptionStatus -> new IllegalStateException(ErrorCode.MENU_PRICE_OVER_TOTAL_PRODUCTS_NOT_ALLOWED.toString()));
+        fakePriceValidation(exceptionStatus -> new MenuStateInvalidException());
         return MenuInfo.fromEntity(menu);
     }
 
     @Override
     public void validateMenuPrice(MenuPrice price, List<MenuProduct> menuProducts) {
-        fakePriceValidation(exceptionStatus -> new IllegalArgumentException(ErrorCode.MENU_PRICE_OVER_TOTAL_PRODUCTS_NOT_ALLOWED.toString()));
+        fakePriceValidation(exceptionStatus -> new MenuPriceInvalidException());
     }
 
     private void fakePriceValidation(Function<Boolean, RuntimeException> exceptionFunction) {

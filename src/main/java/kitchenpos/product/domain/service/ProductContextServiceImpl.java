@@ -2,9 +2,9 @@ package kitchenpos.product.domain.service;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.UUID;
 import kitchenpos.global.exception.ErrorCode;
+import kitchenpos.global.exception.NotFoundException;
 import kitchenpos.menu.domain.service.ProductContextService;
 import kitchenpos.product.domain.entity.Product;
 import kitchenpos.product.domain.repository.ProductRepository;
@@ -31,7 +31,7 @@ public class ProductContextServiceImpl implements ProductContextService {
     @Override
     public BigDecimal getTotalPrice(UUID productId, BigDecimal qty) {
         Product product = productRepository.findById(productId)
-            .orElseThrow(() -> new NoSuchElementException(ErrorCode.NOT_FOUND_PRODUCT.toString()));
+            .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_PRODUCT.toString()));
 
         return product.getPrice()
             .price()
