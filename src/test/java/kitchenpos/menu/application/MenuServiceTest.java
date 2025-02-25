@@ -259,4 +259,17 @@ class MenuServiceTest {
     private Product createAndSaveProduct() {
         return productRepository.save(createProduct("김치", 5000));
     }
+
+    private CreateMenuServiceRq createMenuServiceRequest(String name, int price, UUID menuGroupId, UUID productId) {
+        return new CreateMenuServiceRq(name, BigDecimal.valueOf(price), true, menuGroupId,
+                List.of(new MenuProductServiceRq(productId, 2)));
+    }
+
+    private MenuGroup createAndSaveMenuGroup() {
+        return menuGroupRepository.save(createMenuGroup());
+    }
+
+    private Product createAndSaveProduct() {
+        return productRepository.save(createProduct("김치", 5000));
+    }
 }
