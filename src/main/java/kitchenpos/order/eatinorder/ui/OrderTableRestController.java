@@ -5,6 +5,10 @@ import java.util.List;
 import java.util.UUID;
 import kitchenpos.order.eatinorder.application.OrderTableService;
 import kitchenpos.order.eatinorder.domain.model.OrderTable;
+import kitchenpos.order.eatinorder.service.dto.CreateOrderTableServiceRq;
+import kitchenpos.order.eatinorder.service.dto.CreateOrderTableServiceRs;
+import kitchenpos.order.eatinorder.ui.dto.CreateOrderTableRq;
+import kitchenpos.order.eatinorder.ui.dto.CreateOrderTableRs;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,10 +28,11 @@ public class OrderTableRestController {
     }
 
     @PostMapping
-    public ResponseEntity<OrderTable> create(@RequestBody final OrderTable request) {
-        final OrderTable response = orderTableService.create(request);
+    public ResponseEntity<CreateOrderTableRs> create(@RequestBody final CreateOrderTableRq request) {
+        CreateOrderTableServiceRs response = orderTableService.create(
+                new CreateOrderTableServiceRq(request.getName()));
         return ResponseEntity.created(URI.create("/api/order-tables/" + response.getId()))
-                .body(response);
+                .body(new CreateOrderTableRs(response));
     }
 
     @PutMapping("/{orderTableId}/sit")

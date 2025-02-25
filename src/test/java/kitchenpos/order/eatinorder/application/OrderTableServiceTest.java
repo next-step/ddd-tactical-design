@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import kitchenpos.order.eatinorder.domain.model.EatInOrder;
 import kitchenpos.order.eatinorder.domain.model.EatInOrderFlow;
 import kitchenpos.order.eatinorder.domain.model.OrderTable;
@@ -23,6 +24,8 @@ import kitchenpos.order.eatinorder.domain.repository.EatInOrderRepository;
 import kitchenpos.order.eatinorder.domain.repository.OrderTableRepository;
 import kitchenpos.order.eatinorder.domain.service.OrderTableOccupationManager;
 import kitchenpos.order.eatinorder.infra.persistence.FakeEatInOrderRepository;
+import kitchenpos.order.eatinorder.service.dto.CreateOrderTableServiceRq;
+import kitchenpos.order.eatinorder.service.dto.CreateOrderTableServiceRs;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -48,27 +51,31 @@ class OrderTableServiceTest {
     @DisplayName("매장 테이블을 만들 수 있다")
     void create() {
         // given
-        OrderTable request = createOrderTableRequest();
+        CreateOrderTableServiceRq request = new CreateOrderTableServiceRq("1번 테이블");
         when(orderTableRepository.save(any(OrderTable.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
         // when
-        OrderTable created = orderTableService.create(request);
+        CreateOrderTableServiceRs result = orderTableService.create(request);
 
         // then
-        assertThat(created.getId()).isNotNull();
-        assertThat(created.getInnerName()).isEqualTo("1번 테이블");
-        assertThat(created.getNumberOfGuests()).isZero();
-        assertThat(created.isOccupied()).isFalse();
+        assertThat(result).isNotNull();
+        assertThat(result.getName()).isEqualTo("1번 테이블");
+        assertThat(result.getNumberOfGuests()).isZero();
+        assertThat(result.isOccupied()).isFalse();
     }
 
     @ParameterizedTest
     @NullAndEmptySource
     @DisplayName("매장 테이블 이름이 없으면 예외가 발생한다.")
     void orderTable_name_exception(String name) {
+        // given
+        CreateOrderTableServiceRq request = new CreateOrderTableServiceRq(name);
+
         // when // then
-        assertThatThrownBy(() -> orderTableService.create(new OrderTable(name, 0, false)))
-                .isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> {
+            orderTableService.create(request);
+        }).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test

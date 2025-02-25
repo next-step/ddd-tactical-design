@@ -8,6 +8,8 @@ import kitchenpos.order.eatinorder.domain.model.OrderTableName;
 import kitchenpos.order.eatinorder.domain.model.ReleaseOrderTableEvent;
 import kitchenpos.order.eatinorder.domain.repository.OrderTableRepository;
 import kitchenpos.order.eatinorder.domain.service.OrderTableOccupationManager;
+import kitchenpos.order.eatinorder.service.dto.CreateOrderTableServiceRq;
+import kitchenpos.order.eatinorder.service.dto.CreateOrderTableServiceRs;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,10 +25,10 @@ public class OrderTableService {
     }
 
     @Transactional
-    public OrderTable create(final OrderTable request) {
-        final String name = request.getInnerName();
-        final OrderTable orderTable = new OrderTable(new OrderTableName(name));
-        return orderTableRepository.save(orderTable);
+    public CreateOrderTableServiceRs create(final CreateOrderTableServiceRq request) {
+        final String name = request.getName();
+        final OrderTable orderTable = orderTableRepository.save(new OrderTable(new OrderTableName(name)));
+        return new CreateOrderTableServiceRs(orderTable);
     }
 
     @Transactional

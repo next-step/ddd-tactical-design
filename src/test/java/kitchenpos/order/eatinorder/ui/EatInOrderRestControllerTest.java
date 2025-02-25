@@ -148,17 +148,6 @@ class EatInOrderRestControllerTest {
                 .andExpect(jsonPath("$.length()").value(2));
     }
 
-    private EatInOrder createEatInOrderRequest() {
-        MenuGroup menuGroup = createAndSaveMenuGroup();
-        Product product = createAndSaveProduct();
-        Menu menu = createAndSaveMenu(menuGroup, product);
-
-        OrderLineItem orderLineItem = createOrderLineItem(menu);
-        OrderTable orderTable = createAndSaveUsingOrderTable();
-
-        return createEatInOrder(orderLineItem, orderTable, EatInOrderFlow.WAITING);
-    }
-
     private EatInOrder createAndSaveEatInOrder() {
         MenuGroup menuGroup = createAndSaveMenuGroup();
         Product product = createAndSaveProduct();
