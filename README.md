@@ -8,6 +8,77 @@
 cd docker
 docker compose -p kitchenpos up -d
 ```
+## 패키지 구조
+
+--- 
+
+```bash
+├── /global
+│    ├── /event
+│    ├── /exception
+│    │   └── /validation
+│    └── /infrastructure
+│        └── /external
+├── /menu
+│    ├── /application
+│    │    ├── /dto
+│    │    └── /facade
+│    ├── /domain
+│    │    ├── /entity
+│    │    ├── /event
+│    │    ├── /exception
+│    │    ├── /model
+│    │    ├── /repository
+│    │    └── /service
+│    ├── /infrastructure
+│    │    └── /persistence
+│    └── /presentation
+│         └── /controller
+├── /product
+│    ├── /application
+│    │    ├── /dto
+│    │    └── /facade
+│    ├── /domain
+│    │    ├── /entity
+│    │    ├── /event
+│    │    ├── /exception
+│    │    ├── /model
+│    │    ├── /repository
+│    │    └── /service
+│    ├── /infrastructure
+│    │    └── /persistence
+│    └── /presentation
+│         └── /controller
+├── /order
+│    ├── /common
+│    │    ├── /application
+│    │    │    ├── /dto
+│    │    │    └── /facade
+│    │    ├── /domain
+│    │    │    ├── /dto
+│    │    │    ├── /entity
+│    │    │    ├── /repository
+│    │    │    ├── /service
+│    │    ├── /infrastructure
+│    │    │    ├── /persistence
+│    │    │    └── /external
+│    │    └── /presentation
+│    │         └── /controller
+│    ├── /delivery
+│    │    ├── /domain
+│    │    │    ├── /model
+│    │    │    └── /service
+│    ├── /takeout
+│    │    ├── /domain
+│    │    │    ├── /model
+│    │    │    ├── /service
+│    └── /eatin
+│         └── /domain
+│              ├── /entity
+│              ├── /model
+│              └── /service
+```
+
 
 ## 요구 사항
 
