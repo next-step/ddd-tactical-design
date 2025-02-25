@@ -6,9 +6,9 @@ import java.util.UUID;
 import kitchenpos.order.eatinorder.application.OrderTableService;
 import kitchenpos.order.eatinorder.domain.model.OrderTable;
 import kitchenpos.order.eatinorder.service.dto.CreateOrderTableServiceRq;
-import kitchenpos.order.eatinorder.service.dto.CreateOrderTableServiceRs;
+import kitchenpos.order.eatinorder.service.dto.OrderTableServiceRs;
 import kitchenpos.order.eatinorder.ui.dto.CreateOrderTableRq;
-import kitchenpos.order.eatinorder.ui.dto.CreateOrderTableRs;
+import kitchenpos.order.eatinorder.ui.dto.OrderTableRs;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,33 +28,41 @@ public class OrderTableRestController {
     }
 
     @PostMapping
-    public ResponseEntity<CreateOrderTableRs> create(@RequestBody final CreateOrderTableRq request) {
-        CreateOrderTableServiceRs response = orderTableService.create(
+    public ResponseEntity<OrderTableRs> create(@RequestBody final CreateOrderTableRq request) {
+        OrderTableServiceRs response = orderTableService.create(
                 new CreateOrderTableServiceRq(request.getName()));
         return ResponseEntity.created(URI.create("/api/order-tables/" + response.getId()))
-                .body(new CreateOrderTableRs(response));
+                .body(new OrderTableRs(response));
     }
 
     @PutMapping("/{orderTableId}/sit")
-    public ResponseEntity<OrderTable> sit(@PathVariable("orderTableId") final UUID orderTableId) {
-        return ResponseEntity.ok(orderTableService.sit(orderTableId));
+    public ResponseEntity<OrderTableRs> sit(@PathVariable("orderTableId") final UUID orderTableId) {
+        OrderTableServiceRs response = orderTableService.sit(orderTableId);
+        return ResponseEntity.ok(new OrderTableRs(response));
     }
 
     @PutMapping("/{orderTableId}/clear")
-    public ResponseEntity<OrderTable> clear(@PathVariable("orderTableId") final UUID orderTableId) {
-        return ResponseEntity.ok(orderTableService.clear(orderTableId));
+    public ResponseEntity<OrderTableRs> clear(@PathVariable("orderTableId") final UUID orderTableId) {
+        OrderTableServiceRs response = orderTableService.clear(orderTableId);
+        return ResponseEntity.ok(new OrderTableRs(response));
     }
 
     @PutMapping("/{orderTableId}/number-of-guests")
-    public ResponseEntity<OrderTable> changeNumberOfGuests(
+    public ResponseEntity<OrderTableRs> changeNumberOfGuests(
             @PathVariable("orderTableId") final UUID orderTableId,
             @RequestBody final OrderTable request
     ) {
-        return ResponseEntity.ok(orderTableService.changeNumberOfGuests(orderTableId, request));
+        OrderTableServiceRs response = orderTableService.changeNumberOfGuests(orderTableId, request);
+        return ResponseEntity.ok(new OrderTableRs(response));
     }
 
     @GetMapping
-    public ResponseEntity<List<OrderTable>> findAll() {
-        return ResponseEntity.ok(orderTableService.findAll());
+    public ResponseEntity<List<OrderTableRs>> findAll() {
+        List<OrderTableServiceRs> response = orderTableService.findAll();
+        return ResponseEntity.ok(
+                response.stream()
+                        .map(OrderTableRs::new)
+                        .toList()
+        );
     }
 }

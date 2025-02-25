@@ -9,7 +9,7 @@ import kitchenpos.order.eatinorder.domain.model.ReleaseOrderTableEvent;
 import kitchenpos.order.eatinorder.domain.repository.OrderTableRepository;
 import kitchenpos.order.eatinorder.domain.service.OrderTableOccupationManager;
 import kitchenpos.order.eatinorder.service.dto.CreateOrderTableServiceRq;
-import kitchenpos.order.eatinorder.service.dto.CreateOrderTableServiceRs;
+import kitchenpos.order.eatinorder.service.dto.OrderTableServiceRs;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,39 +25,41 @@ public class OrderTableService {
     }
 
     @Transactional
-    public CreateOrderTableServiceRs create(final CreateOrderTableServiceRq request) {
+    public OrderTableServiceRs create(final CreateOrderTableServiceRq request) {
         final String name = request.getName();
         final OrderTable orderTable = orderTableRepository.save(new OrderTable(new OrderTableName(name)));
-        return new CreateOrderTableServiceRs(orderTable);
+        return new OrderTableServiceRs(orderTable);
     }
 
     @Transactional
-    public OrderTable sit(final UUID orderTableId) {
+    public OrderTableServiceRs sit(final UUID orderTableId) {
         final OrderTable orderTable = orderTableRepository.findById(orderTableId)
                 .orElseThrow(NoSuchElementException::new);
         orderTable.occupyTable();
-        return orderTable;
+        return new OrderTableServiceRs(orderTable);
     }
 
     @Transactional
-    public OrderTable clear(final UUID orderTableId) {
+    public OrderTableServiceRs clear(final UUID orderTableId) {
         final OrderTable orderTable = orderTableRepository.findById(orderTableId)
                 .orElseThrow(NoSuchElementException::new);
         orderTableOccupationManager.release(new ReleaseOrderTableEvent(orderTable));
-        return orderTable;
+        return new OrderTableServiceRs(orderTable);
     }
 
     @Transactional
-    public OrderTable changeNumberOfGuests(final UUID orderTableId, final OrderTable request) {
+    public OrderTableServiceRs changeNumberOfGuests(final UUID orderTableId, final OrderTable request) {
         final int numberOfGuests = request.getNumberOfGuests();
         final OrderTable orderTable = orderTableRepository.findById(orderTableId)
                 .orElseThrow(NoSuchElementException::new);
         orderTable.changeNumberOfGuests(numberOfGuests);
-        return orderTable;
+        return new OrderTableServiceRs(orderTable);
     }
 
     @Transactional(readOnly = true)
-    public List<OrderTable> findAll() {
-        return orderTableRepository.findAll();
+    public List<OrderTableServiceRs> findAll() {
+        return orderTableRepository.findAll().stream()
+                .map(OrderTableServiceRs::new)
+                .toList();
     }
 }

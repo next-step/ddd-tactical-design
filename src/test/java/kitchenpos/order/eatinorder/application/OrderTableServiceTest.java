@@ -16,7 +16,6 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import kitchenpos.order.eatinorder.domain.model.EatInOrder;
 import kitchenpos.order.eatinorder.domain.model.EatInOrderFlow;
 import kitchenpos.order.eatinorder.domain.model.OrderTable;
@@ -25,7 +24,7 @@ import kitchenpos.order.eatinorder.domain.repository.OrderTableRepository;
 import kitchenpos.order.eatinorder.domain.service.OrderTableOccupationManager;
 import kitchenpos.order.eatinorder.infra.persistence.FakeEatInOrderRepository;
 import kitchenpos.order.eatinorder.service.dto.CreateOrderTableServiceRq;
-import kitchenpos.order.eatinorder.service.dto.CreateOrderTableServiceRs;
+import kitchenpos.order.eatinorder.service.dto.OrderTableServiceRs;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -56,7 +55,7 @@ class OrderTableServiceTest {
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
         // when
-        CreateOrderTableServiceRs result = orderTableService.create(request);
+        OrderTableServiceRs result = orderTableService.create(request);
 
         // then
         assertThat(result).isNotNull();
@@ -89,10 +88,10 @@ class OrderTableServiceTest {
         when(orderTableRepository.findAll()).thenReturn(orderTables);
 
         // when
-        List<OrderTable> found = orderTableService.findAll();
+        List<OrderTableServiceRs> result = orderTableService.findAll();
 
         // then
-        assertThat(found).hasSize(2);
+        assertThat(result).hasSize(2);
     }
 
     @Test
@@ -103,10 +102,10 @@ class OrderTableServiceTest {
         when(orderTableRepository.findById(any())).thenReturn(Optional.of(orderTable));
 
         // when
-        OrderTable occupied = orderTableService.sit(orderTable.getId());
+        OrderTableServiceRs result = orderTableService.sit(orderTable.getId());
 
         // then
-        assertThat(occupied.isOccupied()).isTrue();
+        assertThat(result.isOccupied()).isTrue();
     }
 
     @Test
@@ -122,11 +121,11 @@ class OrderTableServiceTest {
         when(orderTableRepository.findById(any())).thenReturn(Optional.of(orderTable));
 
         // when
-        OrderTable clearedOrderTable = orderTableService.clear(orderTable.getId());
+        OrderTableServiceRs result = orderTableService.clear(orderTable.getId());
 
         // then
-        assertThat(clearedOrderTable.isOccupied()).isFalse();
-        assertThat(clearedOrderTable.getNumberOfGuests()).isZero();
+        assertThat(result.isOccupied()).isFalse();
+        assertThat(result.getNumberOfGuests()).isZero();
     }
 
     @Test
@@ -157,10 +156,11 @@ class OrderTableServiceTest {
         when(orderTableRepository.findById(any())).thenReturn(Optional.of(orderTable));
 
         // when
-        OrderTable changed = orderTableService.changeNumberOfGuests(orderTable.getId(), orderTable);
+        OrderTableServiceRs result = orderTableService.changeNumberOfGuests(orderTable.getId(),
+                orderTable);
 
         // then
-        assertThat(changed.getNumberOfGuests()).isEqualTo(4);
+        assertThat(result.getNumberOfGuests()).isEqualTo(4);
     }
 
     @Test

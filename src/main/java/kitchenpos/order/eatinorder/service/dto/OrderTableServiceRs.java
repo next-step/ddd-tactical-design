@@ -1,29 +1,26 @@
-package kitchenpos.order.eatinorder.ui.dto;
+package kitchenpos.order.eatinorder.service.dto;
 
 import java.util.UUID;
-import kitchenpos.order.eatinorder.service.dto.CreateOrderTableServiceRs;
+import kitchenpos.order.eatinorder.domain.model.OrderTable;
 
-public class CreateOrderTableRs {
+public class OrderTableServiceRs {
     private UUID id;
     private String name;
     private int numberOfGuests;
     private boolean occupied;
 
-    public CreateOrderTableRs(UUID id, String name, int numberOfGuests, boolean occupied) {
+    public OrderTableServiceRs(UUID id, String name, int numberOfGuests, boolean occupied) {
         this.id = id;
         this.name = name;
         this.numberOfGuests = numberOfGuests;
         this.occupied = occupied;
     }
 
-    public CreateOrderTableRs(CreateOrderTableServiceRs rs) {
-        this.id = rs.getId();
-        this.name = rs.getName();
-        this.numberOfGuests = rs.getNumberOfGuests();
-        this.occupied = rs.isOccupied();
-    }
-
-    public CreateOrderTableRs() {
+    public OrderTableServiceRs(OrderTable orderTable) {
+        this.id = orderTable.getId();
+        this.name = orderTable.getInnerName();
+        this.numberOfGuests = orderTable.getNumberOfGuests();
+        this.occupied = orderTable.isOccupied();
     }
 
     public UUID getId() {
