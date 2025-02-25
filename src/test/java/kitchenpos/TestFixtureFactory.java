@@ -1,7 +1,5 @@
 package kitchenpos;
 
-import static org.hamcrest.text.MatchesPattern.matchesPattern;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,11 +13,11 @@ import kitchenpos.order.common.model.Order;
 import kitchenpos.order.common.model.OrderLineItem;
 import kitchenpos.order.common.model.OrderStatus;
 import kitchenpos.order.common.model.OrderType;
+import kitchenpos.order.eatinorder.application.dto.CreateEatInOrderServiceRq;
+import kitchenpos.order.eatinorder.application.dto.CreateEatInOrderServiceRq.OrderLineItemServiceDto;
 import kitchenpos.order.eatinorder.domain.model.EatInOrder;
 import kitchenpos.order.eatinorder.domain.model.EatInOrderFlow;
 import kitchenpos.order.eatinorder.domain.model.OrderTable;
-import kitchenpos.order.eatinorder.application.dto.CreateEatInOrderServiceRq;
-import kitchenpos.order.eatinorder.application.dto.CreateEatInOrderServiceRq.OrderLineItemServiceDto;
 import kitchenpos.order.eatinorder.ui.dto.CreateEatInOrderRq;
 import kitchenpos.order.eatinorder.ui.dto.CreateEatInOrderRq.OrderLineItemDto;
 import kitchenpos.product.domain.model.Product;
@@ -107,12 +105,6 @@ public class TestFixtureFactory {
     public static Order createOrderWithTakeOutType(OrderLineItem orderLineItem, OrderTable orderTable,
                                                    OrderStatus status) {
         return new Order(OrderType.TAKEOUT, status, LocalDateTime.now(), List.of(orderLineItem),
-                "주소", orderTable, orderTable.getId());
-    }
-
-    public static Order createOrderWithEatInType(OrderLineItem orderLineItem, OrderTable orderTable,
-                                                 OrderStatus status) {
-        return new Order(OrderType.EAT_IN, status, LocalDateTime.now(), List.of(orderLineItem),
                 "주소", orderTable, orderTable.getId());
     }
 

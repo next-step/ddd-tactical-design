@@ -192,8 +192,4 @@ class OrderTableServiceTest {
         }).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("손님 수가 음수일 수 없습니다!");
     }
-
-    private OrderTable createOrderTableRequest() {
-        return new OrderTable("1번 테이블", 0, false);
-    }
 }

@@ -134,8 +134,4 @@ class ProductServiceTest {
         // then
         assertThat(result).hasSize(2);
     }
-
-    private Product createProductRequest(String name, long price) {
-        return createProduct(name, price);
-    }
 }

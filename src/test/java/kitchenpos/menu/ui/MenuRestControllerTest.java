@@ -182,12 +182,6 @@ class MenuRestControllerTest {
                 .andExpect(jsonPath("$.length()").value(2));
     }
 
-    private Menu createMenuRequest(MenuGroup menuGroup, Product product) {
-        MenuProduct menuProduct = new MenuProduct(1, product, product.getId());
-        return new Menu("김치찌개", BigDecimal.valueOf(8000), true, List.of(menuProduct), menuGroup,
-                menuGroup.getId());
-    }
-
     private MenuGroup createAndSaveMenuGroup() {
         return menuGroupRepository.save(createMenuGroup());
     }

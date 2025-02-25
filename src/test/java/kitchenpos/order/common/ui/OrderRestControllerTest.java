@@ -185,17 +185,6 @@ class OrderRestControllerTest {
                 .andExpect(jsonPath("$.length()").value(2));
     }
 
-    private Order createOrderRequestWithDeliveryType() {
-        MenuGroup menuGroup = createAndSaveMenuGroup();
-        Product product = createAndSaveProduct();
-        Menu menu = createAndSaveMenu(menuGroup, product);
-
-        OrderLineItem orderLineItem = createOrderLineItem(menu);
-        OrderTable orderTable = createAndSaveOrderTable();
-
-        return createOrderWithDeliveryType(orderLineItem, orderTable, OrderStatus.WAITING);
-    }
-
     private Order createAndSaveOrderWithDeliveryType() {
         MenuGroup menuGroup = createAndSaveMenuGroup();
         Product product = createAndSaveProduct();

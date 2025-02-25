@@ -247,12 +247,6 @@ class MenuServiceTest {
         return new MenuGroup("한식");
     }
 
-    private Menu createMenuRequest(String name, int price, MenuGroup menuGroup, Product product) {
-        MenuProduct menuProduct = new MenuProduct(1, product, product.getId());
-        return new Menu(name, BigDecimal.valueOf(price), true, List.of(menuProduct), menuGroup,
-                menuGroup.getId());
-    }
-
     private CreateMenuServiceRq createMenuServiceRequest(String name, int price, UUID menuGroupId, UUID productId) {
         return new CreateMenuServiceRq(name, BigDecimal.valueOf(price), true, menuGroupId,
                 List.of(new MenuProductServiceRq(productId, 2)));
