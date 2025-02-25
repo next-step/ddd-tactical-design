@@ -26,6 +26,7 @@ import kitchenpos.order.eatinorder.domain.repository.EatInOrderRepository;
 import kitchenpos.order.eatinorder.domain.repository.OrderTableRepository;
 import kitchenpos.order.eatinorder.domain.service.OrderTableOccupationManager;
 import kitchenpos.order.eatinorder.service.dto.CreateEatInOrderServiceRq;
+import kitchenpos.order.eatinorder.service.dto.EatInOrderServiceRs;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -83,14 +84,14 @@ class EatInOrderServiceTest {
         // given
         Menu menu = createMenuWithProductAndGroup();
         OrderTable orderTable = createUsingOrderTable();
-        EatInOrder order = createEatInOrderRequestWithEmptyTable(menu, EatInOrderFlow.SERVED);
-        order.occupyOrderTable(orderTable);
+        EatInOrder eatInOrder = createEatInOrderRequestWithEmptyTable(menu, EatInOrderFlow.SERVED);
+        eatInOrder.occupyOrderTable(orderTable);
 
-        when(eatInOrderRepository.findById(any())).thenReturn(Optional.of(order));
+        when(eatInOrderRepository.findById(any())).thenReturn(Optional.of(eatInOrder));
         when(eatInOrderRepository.existsByOrderTableAndEatInOrderFlowNot(any(), any())).thenReturn(false);
 
         // when
-        EatInOrder eatInOrder = eatInOrderService.complete(order.getId());
+        EatInOrderServiceRs result = eatInOrderService.complete(eatInOrder.getId());
         orderTableOccupationManager.release(new ReleaseOrderTableEvent(orderTable));
 
         // then
@@ -101,6 +102,7 @@ class EatInOrderServiceTest {
 
         assertThat(orderTable.isOccupied()).isFalse();
         assertThat(orderTable.getNumberOfGuests()).isZero();
+        assertThat(result.getEatInOrderFlow()).isEqualTo(EatInOrderFlow.COMPLETED);
     }
 
     private List<Object> getEvents(EatInOrder eatInOrder) {
@@ -133,12 +135,12 @@ class EatInOrderServiceTest {
         // given
         Menu menu = createMenuWithProductAndGroup();
         OrderTable orderTable = createUsingOrderTable();
-        EatInOrder order = createEatInOrderRequestWithEmptyTable(menu, EatInOrderFlow.WAITING);
-        order.occupyOrderTable(orderTable);
-        when(eatInOrderRepository.findById(any())).thenReturn(Optional.of(order));
+        EatInOrder eatInOrder = createEatInOrderRequestWithEmptyTable(menu, EatInOrderFlow.WAITING);
+        eatInOrder.occupyOrderTable(orderTable);
+        when(eatInOrderRepository.findById(any())).thenReturn(Optional.of(eatInOrder));
 
         // when
-        EatInOrder result = eatInOrderService.accept(order.getId());
+        EatInOrderServiceRs result = eatInOrderService.accept(eatInOrder.getId());
 
         // then
         assertThat(result.getEatInOrderFlow()).isEqualTo(EatInOrderFlow.ACCEPTED);
@@ -150,12 +152,12 @@ class EatInOrderServiceTest {
         // given
         Menu menu = createMenuWithProductAndGroup();
         OrderTable orderTable = createUsingOrderTable();
-        EatInOrder order = createEatInOrderRequestWithEmptyTable(menu, EatInOrderFlow.SERVED);
-        order.occupyOrderTable(orderTable);
-        when(eatInOrderRepository.findById(any())).thenReturn(Optional.of(order));
+        EatInOrder eatInOrder = createEatInOrderRequestWithEmptyTable(menu, EatInOrderFlow.SERVED);
+        eatInOrder.occupyOrderTable(orderTable);
+        when(eatInOrderRepository.findById(any())).thenReturn(Optional.of(eatInOrder));
 
         // when
-        EatInOrder result = eatInOrderService.complete(order.getId());
+        EatInOrderServiceRs result = eatInOrderService.complete(eatInOrder.getId());
 
         // then
         assertThat(result.getEatInOrderFlow()).isEqualTo(EatInOrderFlow.COMPLETED);

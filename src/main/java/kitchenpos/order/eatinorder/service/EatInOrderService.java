@@ -12,6 +12,7 @@ import kitchenpos.order.eatinorder.domain.model.EatInOrderStatus;
 import kitchenpos.order.eatinorder.domain.repository.EatInOrderRepository;
 import kitchenpos.order.eatinorder.service.dto.CreateEatInOrderServiceRq;
 import kitchenpos.order.eatinorder.service.dto.CreateEatInOrderServiceRq.OrderLineItemServiceDto;
+import kitchenpos.order.eatinorder.service.dto.EatInOrderServiceRs;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,32 +50,34 @@ public class EatInOrderService {
     }
 
     @Transactional
-    public EatInOrder accept(final UUID orderId) {
+    public EatInOrderServiceRs accept(final UUID orderId) {
         final EatInOrder eatInOrder = eatInOrderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
         eatInOrder.processOrderFlow(EatInOrderStatus.ACCEPTED);
-        return eatInOrder;
+        return new EatInOrderServiceRs(eatInOrder);
     }
 
     @Transactional
-    public EatInOrder serve(final UUID orderId) {
+    public EatInOrderServiceRs serve(final UUID orderId) {
         final EatInOrder eatInOrder = eatInOrderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
         eatInOrder.processOrderFlow(EatInOrderStatus.SERVED);
-        return eatInOrder;
+        return new EatInOrderServiceRs(eatInOrder);
     }
 
     @Transactional
-    public EatInOrder complete(final UUID orderId) {
+    public EatInOrderServiceRs complete(final UUID orderId) {
         final EatInOrder eatInOrder = eatInOrderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
         eatInOrder.processOrderFlow(EatInOrderStatus.COMPLETED);
 
-        return eatInOrder;
+        return new EatInOrderServiceRs(eatInOrder);
     }
 
     @Transactional(readOnly = true)
-    public List<EatInOrder> findAll() {
-        return eatInOrderRepository.findAll();
+    public List<EatInOrderServiceRs> findAll() {
+        return eatInOrderRepository.findAll().stream()
+                .map(EatInOrderServiceRs::new)
+                .toList();
     }
 }

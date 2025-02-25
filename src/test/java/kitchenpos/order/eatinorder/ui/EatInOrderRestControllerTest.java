@@ -98,7 +98,7 @@ class EatInOrderRestControllerTest {
 
         // then
         result.andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(savedOrder.getId().toString()))
+                .andExpect(jsonPath("$.eatInOrderId").value(savedOrder.getId().toString()))
                 .andExpect(jsonPath("$.eatInOrderFlow").value(EatInOrderFlow.ACCEPTED.toString()));
     }
 
@@ -113,7 +113,7 @@ class EatInOrderRestControllerTest {
 
         // then
         result.andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(savedOrder.getId().toString()))
+                .andExpect(jsonPath("$.eatInOrderId").value(savedOrder.getId().toString()))
                 .andExpect(jsonPath("$.eatInOrderFlow").value(EatInOrderFlow.SERVED.toString()));
     }
 
@@ -128,7 +128,7 @@ class EatInOrderRestControllerTest {
 
         // then
         result.andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(savedOrder.getId().toString()))
+                .andExpect(jsonPath("$.eatInOrderId").value(savedOrder.getId().toString()))
                 .andExpect(jsonPath("$.eatInOrderFlow").value(EatInOrderFlow.COMPLETED.toString()));
     }
 

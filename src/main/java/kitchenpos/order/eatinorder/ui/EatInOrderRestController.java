@@ -3,9 +3,10 @@ package kitchenpos.order.eatinorder.ui;
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
-import kitchenpos.order.eatinorder.domain.model.EatInOrder;
 import kitchenpos.order.eatinorder.service.EatInOrderService;
+import kitchenpos.order.eatinorder.service.dto.EatInOrderServiceRs;
 import kitchenpos.order.eatinorder.ui.dto.CreateEatInOrderRq;
+import kitchenpos.order.eatinorder.ui.dto.EatInOrderRs;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,22 +33,30 @@ public class EatInOrderRestController {
     }
 
     @PutMapping("/{eatInOrderId}/accept")
-    public ResponseEntity<EatInOrder> accept(@PathVariable("eatInOrderId") final UUID eatInOrderId) {
-        return ResponseEntity.ok(eatInOrderService.accept(eatInOrderId));
+    public ResponseEntity<EatInOrderRs> accept(@PathVariable("eatInOrderId") final UUID eatInOrderId) {
+        EatInOrderServiceRs response = eatInOrderService.accept(eatInOrderId);
+        return ResponseEntity.ok(new EatInOrderRs(response));
     }
 
     @PutMapping("/{eatInOrderId}/serve")
-    public ResponseEntity<EatInOrder> serve(@PathVariable("eatInOrderId") final UUID eatInOrderId) {
-        return ResponseEntity.ok(eatInOrderService.serve(eatInOrderId));
+    public ResponseEntity<EatInOrderRs> serve(@PathVariable("eatInOrderId") final UUID eatInOrderId) {
+        EatInOrderServiceRs response = eatInOrderService.serve(eatInOrderId);
+        return ResponseEntity.ok(new EatInOrderRs(response));
     }
 
     @PutMapping("/{eatInOrderId}/complete")
-    public ResponseEntity<EatInOrder> complete(@PathVariable("eatInOrderId") final UUID eatInOrderId) {
-        return ResponseEntity.ok(eatInOrderService.complete(eatInOrderId));
+    public ResponseEntity<EatInOrderRs> complete(@PathVariable("eatInOrderId") final UUID eatInOrderId) {
+        EatInOrderServiceRs response = eatInOrderService.complete(eatInOrderId);
+        return ResponseEntity.ok(new EatInOrderRs(response));
     }
 
     @GetMapping
-    public ResponseEntity<List<EatInOrder>> findAll() {
-        return ResponseEntity.ok(eatInOrderService.findAll());
+    public ResponseEntity<List<EatInOrderRs>> findAll() {
+        List<EatInOrderServiceRs> response = eatInOrderService.findAll();
+        return ResponseEntity.ok(
+                response.stream()
+                        .map(EatInOrderRs::new)
+                        .toList()
+        );
     }
 }
