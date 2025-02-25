@@ -54,44 +54,44 @@ public class JdbcTemplateMenuDao implements MenuDao {
     }
 
     @Override
-    public Menu findById(final UUID id, final List<MenuProduct> menuProducts) {
-        final Map<UUID, List<MenuProduct>> menuProductMap = menuProductMap(menuProducts);
+    public Menu findById(final MenuId id, final List<MenuProduct> menuProducts) {
+        final Map<MenuId, List<MenuProduct>> menuProductMap = menuProductMap(menuProducts);
         final String sql = "SELECT id, name, price, menu_group_id, displayed FROM menu WHERE id = :id";
-        final SqlParameterSource parameterSource = new MapSqlParameterSource().addValue("id", id);
+        final SqlParameterSource parameterSource = new MapSqlParameterSource().addValue("id", id.getValue());
         return jdbcTemplate.queryForObject(sql, parameterSource, (resultSet, rowNumber) -> toEntity(resultSet, menuProductMap));
     }
 
     @Override
-    public Menu findAllById(final UUID id, final List<MenuProduct> menuProducts) {
-        final Map<UUID, List<MenuProduct>> menuProductMap = menuProductMap(menuProducts);
+    public Menu findAllById(final MenuId id, final List<MenuProduct> menuProducts) {
+        final Map<MenuId, List<MenuProduct>> menuProductMap = menuProductMap(menuProducts);
 
         final String sql = "SELECT id, name, price, menu_group_id, displayed FROM menu WHERE id = :id";
-        final SqlParameterSource parameterSource = new MapSqlParameterSource().addValue("id", id);
+        final SqlParameterSource parameterSource = new MapSqlParameterSource().addValue("id", id.getValue());
         return jdbcTemplate.queryForObject(sql, parameterSource, (resultSet, rowNumber) -> toEntity(resultSet, menuProductMap));
     }
 
     @Override
-    public List<Menu> findAllByIds(final List<UUID> ids, final List<MenuProduct> menuProducts) {
-        final Map<UUID, List<MenuProduct>> menuProductMap = menuProductMap(menuProducts);
+    public List<Menu> findAllByIds(final List<MenuId> ids, final List<MenuProduct> menuProducts) {
+        final Map<MenuId, List<MenuProduct>> menuProductMap = menuProductMap(menuProducts);
         final String sql = "SELECT id, name, price, menu_group_id, displayed FROM menu WHERE id IN (:ids)";
-        final SqlParameterSource parameterSource = new MapSqlParameterSource().addValue("ids", ids);
+        final SqlParameterSource parameterSource = new MapSqlParameterSource().addValue("ids", ids.stream().map(MenuId::getValue).toList());
         return jdbcTemplate.query(sql, parameterSource, (resultSet, rowNumber) -> toEntity(resultSet, menuProductMap));
     }
 
-    private Menu toEntity(final ResultSet resultSet, final Map<UUID, List<MenuProduct>> menuProductMap) throws SQLException {
+    private Menu toEntity(final ResultSet resultSet, final Map<MenuId, List<MenuProduct>> menuProductMap) throws SQLException {
         return new Menu(
                 new MenuId(resultSet.getString(ID)),
                 resultSet.getString(NAME),
                 new EmptyProfanities(),
                 resultSet.getLong(PRICE),
                 new MenuGroupId(resultSet.getString(MENU_GROUP_ID)),
-                menuProductMap.get(UUID.fromString(resultSet.getString(ID))),
+                menuProductMap.get(new MenuId(resultSet.getString(ID))),
                 resultSet.getBoolean(DISPLAYED)
         );
     }
 
-    private Map<UUID, List<MenuProduct>> menuProductMap(final List<MenuProduct> menuProducts) {
+    private Map<MenuId, List<MenuProduct>> menuProductMap(final List<MenuProduct> menuProducts) {
         return menuProducts.stream()
-                .collect(groupingBy(MenuProduct::menuIdValue));
+                .collect(groupingBy(MenuProduct::menuId));
     }
 }

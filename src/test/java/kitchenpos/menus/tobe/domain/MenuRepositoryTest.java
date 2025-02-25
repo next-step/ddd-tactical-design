@@ -1,6 +1,7 @@
 package kitchenpos.menus.tobe.domain;
 
 import kitchenpos.menus.tobe.domain.vo.EmptyProfanities;
+import kitchenpos.menus.tobe.domain.vo.MenuId;
 import kitchenpos.menus.tobe.domain.vo.Profanities;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -41,67 +42,67 @@ public class MenuRepositoryTest {
     @DisplayName("매뉴를 저장할 수 있다.")
     @Test
     void save() {
-        final Menu menu = menuRepository.save(new Menu(name, profanities, price, menuGroup.idValue(), menuProducts, false));
+        final Menu menu = menuRepository.save(new Menu(name, profanities, price, menuGroup.id(), menuProducts, false));
 
         assertAll(
                 () -> assertThat(menu).isNotNull(),
                 () -> assertThat(menu.menuProducts()).hasSize(menuProducts.size()),
-                () -> assertThat(menu.menuProducts()).allMatch(menuProduct -> menuProduct.menuIdValue() != null)
+                () -> assertThat(menu.menuProducts()).allMatch(menuProduct -> menuProduct.menuId() != null)
         );
     }
 
     @DisplayName("메뉴를 조회할 수 있다.")
     @Test
     void findById() {
-        final Menu menu = menuRepository.save(new Menu(name, profanities, price, menuGroup.idValue(), menuProducts, false));
+        final Menu menu = menuRepository.save(new Menu(name, profanities, price, menuGroup.id(), menuProducts, false));
 
-        final Menu actual = menuRepository.findById(menu.idValue()).get();
+        final Menu actual = menuRepository.findById(menu.id()).get();
         assertAll(
                 () -> assertThat(actual).isNotNull(),
-                () -> assertThat(actual.idValue()).isEqualTo(menu.idValue()),
+                () -> assertThat(actual.id()).isEqualTo(menu.id()),
                 () -> assertThat(actual.menuProducts()).hasSize(menu.menuProducts().size()),
-                () -> assertThat(actual.menuProducts()).allMatch(menuProduct -> menuProduct.menuIdValue() != null)
+                () -> assertThat(actual.menuProducts()).allMatch(menuProduct -> menuProduct.menuId() != null)
         );
     }
 
     @DisplayName("메뉴를 조회할 수 없다.")
     @Test
     void findByIdWithNotExists() {
-        assertThat(menuRepository.findById(UUID.randomUUID())).isEmpty();
+        assertThat(menuRepository.findById(new MenuId())).isEmpty();
     }
 
     @DisplayName("모든 메뉴를 조회할 수 있다.")
     @Test
     void findAll() {
-        final Menu savedMenu = menuRepository.save(new Menu(name, profanities, price, menuGroup.idValue(), menuProducts, false));
+        final Menu savedMenu = menuRepository.save(new Menu(name, profanities, price, menuGroup.id(), menuProducts, false));
 
         final List<Menu> actual = menuRepository.findAll();
         assertAll(
                 () -> assertThat(actual).hasSize(1),
-                () -> assertThat(actual.get(0).idValue()).isEqualTo(savedMenu.idValue()),
+                () -> assertThat(actual.get(0).id()).isEqualTo(savedMenu.id()),
                 () -> assertThat(actual.get(0).menuProducts()).hasSize(savedMenu.menuProducts().size()),
-                () -> assertThat(actual.get(0).menuProducts()).allMatch(menuProduct -> menuProduct.menuIdValue() != null)
+                () -> assertThat(actual.get(0).menuProducts()).allMatch(menuProduct -> menuProduct.menuId() != null)
         );
     }
 
     @DisplayName("여러 메뉴를 조회할 수 있다.")
     @Test
     void findAllByIdIn() {
-        final Menu savedMenu = menuRepository.save(new Menu(name, profanities, price, menuGroup.idValue(), menuProducts, false));
+        final Menu savedMenu = menuRepository.save(new Menu(name, profanities, price, menuGroup.id(), menuProducts, false));
 
-        final List<Menu> actual = menuRepository.findAllByIdIn(List.of(savedMenu.idValue()));
+        final List<Menu> actual = menuRepository.findAllByIdIn(List.of(savedMenu.id()));
         assertAll(
                 () -> assertThat(actual).hasSize(1),
-                () -> assertThat(actual.get(0).idValue()).isEqualTo(savedMenu.idValue()),
+                () -> assertThat(actual.get(0).id()).isEqualTo(savedMenu.id()),
                 () -> assertThat(actual.get(0).menuProducts()).hasSize(savedMenu.menuProducts().size()),
-                () -> assertThat(actual.get(0).menuProducts()).allMatch(menuProduct -> menuProduct.menuIdValue() != null)
+                () -> assertThat(actual.get(0).menuProducts()).allMatch(menuProduct -> menuProduct.menuId() != null)
         );
     }
 
     @DisplayName("상품 ID로 메뉴를 조회할 수 있다.")
     @Test
     void findAllByProductId() {
-        final Menu savedMenu = menuRepository.save(new Menu(name, profanities, price, menuGroup.idValue(), menuProducts, false));
+        final Menu savedMenu = menuRepository.save(new Menu(name, profanities, price, menuGroup.id(), menuProducts, false));
         final Long productId = savedMenu.menuProducts().stream()
                 .map(MenuProduct::productId)
                 .findFirst()
@@ -110,9 +111,9 @@ public class MenuRepositoryTest {
         final List<Menu> actual = menuRepository.findAllByProductId(productId);
         assertAll(
                 () -> assertThat(actual).hasSize(1),
-                () -> assertThat(actual.get(0).idValue()).isEqualTo(savedMenu.idValue()),
+                () -> assertThat(actual.get(0).id()).isEqualTo(savedMenu.id()),
                 () -> assertThat(actual.get(0).menuProducts()).hasSize(savedMenu.menuProducts().size()),
-                () -> assertThat(actual.get(0).menuProducts()).allMatch(menuProduct -> menuProduct.menuIdValue() != null)
+                () -> assertThat(actual.get(0).menuProducts()).allMatch(menuProduct -> menuProduct.menuId() != null)
         );
     }
 }

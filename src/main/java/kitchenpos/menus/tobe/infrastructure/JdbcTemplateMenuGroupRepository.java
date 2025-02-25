@@ -4,6 +4,7 @@ import kitchenpos.menus.tobe.domain.MenuGroup;
 import kitchenpos.menus.tobe.domain.MenuGroupRepository;
 import kitchenpos.menus.tobe.domain.vo.MenuGroupId;
 import kitchenpos.menus.tobe.domain.vo.MenuGroupName;
+import kitchenpos.menus.tobe.domain.vo.MenuId;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -40,11 +41,11 @@ public class JdbcTemplateMenuGroupRepository implements MenuGroupRepository {
     public MenuGroup save(final MenuGroup menuGroup) {
         final SqlParameterSource parameters = new BeanPropertySqlParameterSource(menuGroup);
         final KeyHolder keyHolder = menuGroupJdbcInsert.executeAndReturnKeyHolder(parameters);
-        return select(keyHolder.getKeyAs(UUID.class));
+        return select(new MenuGroupId(keyHolder.getKeyAs(UUID.class)));
     }
 
     @Override
-    public Optional<MenuGroup> findById(final UUID id) {
+    public Optional<MenuGroup> findById(final MenuGroupId id) {
         try {
             return Optional.of(select(id));
         } catch (final EmptyResultDataAccessException e) {
@@ -58,10 +59,10 @@ public class JdbcTemplateMenuGroupRepository implements MenuGroupRepository {
         return jdbcTemplate.query(sql, (resultSet, rowNumber) -> toEntity(resultSet));
     }
 
-    private MenuGroup select(final UUID id) {
+    private MenuGroup select(final MenuGroupId id) {
         final String sql = "SELECT id, name FROM menu_group WHERE id = :id";
         final SqlParameterSource parameters = new MapSqlParameterSource()
-                .addValue("id", id);
+                .addValue("id", id.getValue());
         return jdbcTemplate.queryForObject(sql, parameters, (resultSet, rowNumber) -> toEntity(resultSet));
     }
 

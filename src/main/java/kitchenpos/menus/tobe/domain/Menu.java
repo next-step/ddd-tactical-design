@@ -17,8 +17,8 @@ public class Menu {
     private MenuProducts menuProducts;
     private boolean displayed;
 
-    public Menu(final String name, final Profanities profanities, final long price, final UUID menuGroupId, final List<MenuProduct> menuProducts, final boolean displayed) {
-        this(new MenuId(), new MenuName(name, profanities), new MenuPrice(price), new MenuGroupId(menuGroupId), new MenuProducts(menuProducts), displayed);
+    public Menu(final String name, final Profanities profanities, final long price, final MenuGroupId menuGroupId, final List<MenuProduct> menuProducts, final boolean displayed) {
+        this(new MenuId(), new MenuName(name, profanities), new MenuPrice(price), menuGroupId, new MenuProducts(menuProducts), displayed);
     }
 
     public Menu(final MenuId id, final String name, final Profanities profanities, final long price, final MenuGroupId menuGroupId, final List<MenuProduct> menuProducts, final boolean displayed) {
@@ -77,8 +77,8 @@ public class Menu {
         return displayed;
     }
 
-    public UUID idValue() {
-        return id.getValue();
+    public MenuId id() {
+        return id;
     }
 
     public boolean hasProduct(final Long productId) {

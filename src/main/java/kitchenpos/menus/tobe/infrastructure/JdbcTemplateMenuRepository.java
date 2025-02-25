@@ -3,12 +3,12 @@ package kitchenpos.menus.tobe.infrastructure;
 import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuProduct;
 import kitchenpos.menus.tobe.domain.MenuRepository;
+import kitchenpos.menus.tobe.domain.vo.MenuId;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Component
 public class JdbcTemplateMenuRepository implements MenuRepository {
@@ -34,12 +34,12 @@ public class JdbcTemplateMenuRepository implements MenuRepository {
     public Menu save(final Menu menu) {
         menuDao.save(menu);
         menuProductDao.saveAll(menu.menuProducts());
-        final List<MenuProduct> menuProducts = menuProductDao.findAllByMenuId(menu.idValue());
-        return menuDao.findAllById(menu.idValue(), menuProducts);
+        final List<MenuProduct> menuProducts = menuProductDao.findAllByMenuId(menu.id());
+        return menuDao.findAllById(menu.id(), menuProducts);
     }
 
     @Override
-    public Optional<Menu> findById(final UUID id) {
+    public Optional<Menu> findById(final MenuId id) {
         final List<MenuProduct> menuProducts = menuProductDao.findAllByMenuId(id);
         return Optional.ofNullable(menuDao.findById(id, menuProducts));
     }
@@ -47,25 +47,25 @@ public class JdbcTemplateMenuRepository implements MenuRepository {
     @Override
     public List<Menu> findAll() {
         final List<MenuProduct> menuProducts = menuProductDao.findAll();
-        final List<UUID> menuIds = getMenuIds(menuProducts);
+        final List<MenuId> menuIds = getMenuIds(menuProducts);
         return menuDao.findAllByIds(menuIds, menuProducts);
     }
 
     @Override
-    public List<Menu> findAllByIdIn(final List<UUID> ids) {
+    public List<Menu> findAllByIdIn(final List<MenuId> ids) {
         final List<MenuProduct> menuProducts = menuProductDao.findAllByMenuIds(ids);
-        final List<UUID> menuIds = getMenuIds(menuProducts);
+        final List<MenuId> menuIds = getMenuIds(menuProducts);
         return menuDao.findAllByIds(menuIds, menuProducts);
     }
 
     @Override
     public List<Menu> findAllByProductId(final Long productId) {
         final List<MenuProduct> menuProducts = menuProductDao.findAllBySeq(productId);
-        final List<UUID> menuIds = getMenuIds(menuProducts);
+        final List<MenuId> menuIds = getMenuIds(menuProducts);
         return menuDao.findAllByIds(menuIds, menuProducts);
     }
 
-    private List<UUID> getMenuIds(final List<MenuProduct> menuProducts) {
-        return menuProducts.stream().map(MenuProduct::menuIdValue).toList();
+    private List<MenuId> getMenuIds(final List<MenuProduct> menuProducts) {
+        return menuProducts.stream().map(MenuProduct::menuId).toList();
     }
 }

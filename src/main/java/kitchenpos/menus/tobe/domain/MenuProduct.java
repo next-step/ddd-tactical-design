@@ -51,8 +51,8 @@ public class MenuProduct {
         return productId;
     }
 
-    public UUID menuIdValue() {
-        return menuId.getValue();
+    public MenuId menuId() {
+        return menuId;
     }
 
     public void setMenuId(final MenuId menuId) {

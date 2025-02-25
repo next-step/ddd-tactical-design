@@ -13,7 +13,6 @@ import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.UUID;
 
 @Component
 public class JdbcTemplateMenuProductDao implements MenuProductDao {
@@ -40,7 +39,7 @@ public class JdbcTemplateMenuProductDao implements MenuProductDao {
     public void saveAll(final List<MenuProduct> menuProducts) {
         final List<MapSqlParameterSource> mapSqlParameterSources = menuProducts.stream()
                 .map(menuProduct -> new MapSqlParameterSource()
-                        .addValue(MENU_ID, menuProduct.menuIdValue())
+                        .addValue(MENU_ID, menuProduct.menuId())
                         .addValue(PRODUCT_ID, menuProduct.productId())
                         .addValue(QUANTITY, menuProduct.quantityValue())
                         .addValue(PRODUCT_PRICE, menuProduct.priceValue())
@@ -52,10 +51,10 @@ public class JdbcTemplateMenuProductDao implements MenuProductDao {
     }
 
     @Override
-    public List<MenuProduct> findAllByMenuId(final UUID menuId) {
+    public List<MenuProduct> findAllByMenuId(final MenuId menuId) {
         final String sql = "SELECT seq, menu_id, product_id, quantity, product_price FROM menu_product WHERE menu_id = :menu_id";
         final SqlParameterSource parameterSource = new MapSqlParameterSource()
-                .addValue("menu_id", menuId);
+                .addValue("menu_id", menuId.getValue());
         return jdbcTemplate.query(sql, parameterSource, (resultSet, rowNumber) -> toMenuProduct(resultSet));
     }
 
@@ -66,10 +65,10 @@ public class JdbcTemplateMenuProductDao implements MenuProductDao {
     }
 
     @Override
-    public List<MenuProduct> findAllByMenuIds(final List<UUID> ids) {
+    public List<MenuProduct> findAllByMenuIds(final List<MenuId> ids) {
         final String sql = "SELECT seq, menu_id, product_id, quantity, product_price FROM menu_product WHERE menu_id IN (:ids)";
         final SqlParameterSource parameterSource = new MapSqlParameterSource()
-                .addValue("ids", ids);
+                .addValue("ids", ids.stream().map(MenuId::getValue).toList());
         return jdbcTemplate.query(sql, parameterSource, (resultSet, rowNumber) -> toMenuProduct(resultSet));
     }
 

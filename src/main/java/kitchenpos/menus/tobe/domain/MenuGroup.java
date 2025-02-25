@@ -20,8 +20,8 @@ public class MenuGroup {
         this.name = name;
     }
 
-    public UUID idValue() {
-        return id.getValue();
+    public MenuGroupId id() {
+        return id;
     }
 
     @Override
