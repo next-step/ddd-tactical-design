@@ -72,7 +72,8 @@ public class OrderServiceImpl implements OrderService {
             if (!menu.isDisplayed()) {
                 throw new IllegalStateException();
             }
-            if (menu.getPrice().price().compareTo(orderLineItemRequest.getPrice()) != 0) {
+
+            if (!menu.isEqual(orderLineItemRequest.getPrice())) {
                 throw new IllegalArgumentException();
             }
             final OrderLineItem orderLineItem = new OrderLineItem();

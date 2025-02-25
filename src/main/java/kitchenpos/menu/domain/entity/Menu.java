@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 import kitchenpos.menu.domain.model.MenuName;
@@ -110,5 +111,13 @@ public class Menu {
 
     public void updatePrice(MenuPrice price) {
         this.price = price;
+    }
+
+    public boolean isLessThanOrEqual(BigDecimal diff) {
+        return price.isLessThanOrEqual(diff);
+    }
+
+    public boolean isEqual(BigDecimal diff) {
+        return price.isEqual(diff);
     }
 }

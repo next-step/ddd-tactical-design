@@ -14,4 +14,16 @@ public record MenuPrice(BigDecimal price) {
         }
         return new MenuPrice(price);
     }
+
+    public boolean isEqual(BigDecimal diff) {
+        return price.compareTo(diff) == 0;
+    }
+
+    public boolean isLessThanOrEqual(BigDecimal diff) {
+        return price.compareTo(diff) <= 0;
+    }
+
+    public boolean isGreaterThan(BigDecimal diff) {
+        return price.compareTo(diff) > 0;
+    }
 }

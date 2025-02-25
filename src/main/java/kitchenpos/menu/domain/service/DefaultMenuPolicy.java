@@ -73,7 +73,7 @@ public class DefaultMenuPolicy implements MenuPolicy {
     private void changeMenuDisplay(Menu menu) {
         BigDecimal totalMenuProductPrice = calculateTotalMenuProductPrice(menu.getMenuProducts());
 
-        boolean shouldBeDisplayed = menu.getPrice().price().compareTo(totalMenuProductPrice) <= 0;
+        boolean shouldBeDisplayed = menu.isLessThanOrEqual(totalMenuProductPrice);
         menu.setDisplayed(shouldBeDisplayed);
     }
 
@@ -94,7 +94,7 @@ public class DefaultMenuPolicy implements MenuPolicy {
         Function<BigDecimal, RuntimeException> exceptionFunction
     ) {
         BigDecimal total = calculateTotalMenuProductPrice(menuProducts);
-        if (newPrice.price().compareTo(total) > 0) {
+        if (newPrice.isGreaterThan(total)) {
             throw exceptionFunction.apply(total);
         }
     }
