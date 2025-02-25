@@ -32,4 +32,26 @@ class PriceTest {
         assertThat(price.add(otherPrice2)).isEqualTo(new Price(2000));
         assertThat(price.add(otherPrice3)).isEqualTo(new Price(2000));
     }
+    
+    @DisplayName("금액을 곱할 수 있다")
+    @Test
+    void multiply(){
+        Price price = new Price(1000);
+
+        Price result1 = price.multiply(2);
+        Price result2 = price.multiply(new PositiveNumber(3));
+
+        assertThat(result1).isEqualTo(new Price(2000));
+        assertThat(result2).isEqualTo(new Price(3000));
+    }
+
+    @DisplayName("어느 가격이 더 큰지 비교할 수 있다")
+    @Test
+    void isGreaterThan(){
+        Price price = new Price(2000);
+
+        boolean result = price.isGreaterThan(new Price(1000));
+
+        assertThat(result).isTrue();
+    }
 }
