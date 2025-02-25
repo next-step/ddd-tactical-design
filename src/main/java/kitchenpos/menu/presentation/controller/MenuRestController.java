@@ -41,7 +41,7 @@ public class MenuRestController {
     @PutMapping("/{menuId}/price")
     public ResponseEntity<MenuResponse.GetMenu> changePrice(
         @PathVariable final UUID menuId,
-        @RequestBody final MenuRequest.UpdatePrice request
+        @RequestBody @Valid final MenuRequest.UpdatePrice request
     ) {
         return ResponseEntity.ok(menuFacade.changePrice(new UpdatePrice(menuId, request.price())));
     }

@@ -1,5 +1,6 @@
 package kitchenpos.menu.presentation.controller;
 
+import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import kitchenpos.menu.application.dto.MenuGroupRequest;
@@ -26,7 +27,7 @@ public class MenuGroupRestController {
 
     @PostMapping
     public ResponseEntity<MenuGroupResponse.GetGroup> create(
-        @RequestBody final MenuGroupRequest.Create request
+        @RequestBody @Valid final MenuGroupRequest.Create request
     ) {
         final MenuGroupResponse.GetGroup response = menuGroupFacade.create(request);
         return ResponseEntity.created(URI.create("/api/menu-groups/" + response.id()))

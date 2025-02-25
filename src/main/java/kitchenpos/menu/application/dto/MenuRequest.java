@@ -3,6 +3,7 @@ package kitchenpos.menu.application.dto;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
@@ -30,7 +31,12 @@ public record MenuRequest() {
         }
     }
 
-    public record UpdatePrice(UUID menuId, BigDecimal price) {
+    public record UpdatePrice(
+        UUID menuId,
+
+        @PositiveOrZero(message = "상품가격은 0원 이상이어야 합니다.")
+        BigDecimal price
+    ) {
 
         public MenuVo.Update toVo() {
             return new MenuVo.Update(menuId, MenuPrice.of(price));
