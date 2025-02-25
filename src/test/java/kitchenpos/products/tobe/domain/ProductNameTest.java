@@ -8,11 +8,11 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 class ProductNameTest {
 
-    @DisplayName("상품의 이름이 없으면 예외가 발생한다.")
+    @DisplayName("상품의 이름이 존재하지 않으면 안된다.")
     @ParameterizedTest
     @NullAndEmptySource
     @ValueSource(strings = {"", " ", "   "})
-    void 상품의_이름이_없으면_안된다(final String invalidProductName) {
+    void 상품의_이름이_존재하지_않으면_안된다(final String invalidProductName) {
         // given & when & then
         assertThatThrownBy(() -> new ProductName(invalidProductName))
                 .isInstanceOf(IllegalArgumentException.class)
