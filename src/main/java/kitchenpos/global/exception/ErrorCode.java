@@ -20,7 +20,9 @@ public enum ErrorCode implements ErrorType {
     MENU_NAME_NOT_ALLOWED("400", "메뉴명은 필수값 입니다."),
     MENU_NAME_PROFANITY_NOT_ALLOWED("400", "메뉴명은 비속어를 포함할 수 없습니다."),
     MENU_PRICE_NOT_ALLOWED("400", "메뉴가격은 0원 이상이어야 합니다."),
-    MENU_PRICE_OVER_TOTAL_PRODUCTS_NOT_ALLOWED("400", "메뉴가격은 구성 상품의 총 금액보다 클 수 없습니다.");
+    MENU_PRICE_OVER_TOTAL_PRODUCTS_NOT_ALLOWED("400", "메뉴가격은 구성 상품의 총 금액보다 클 수 없습니다."),
+
+    MENU_PRODUCT_QTY_NOT_ALLOWED("400", "메뉴가격은 구성 상품의 총 금액보다 클 수 없습니다.");
 
     private final String code;
     private final String message;

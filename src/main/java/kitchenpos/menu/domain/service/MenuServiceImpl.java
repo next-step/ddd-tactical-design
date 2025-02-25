@@ -57,7 +57,7 @@ public class MenuServiceImpl implements MenuService {
                 UUID.randomUUID(),
                 name,
                 price,
-                request.menuGroupId(),
+                menuGroup.getId(),
                 request.displayed(),
                 menuProducts
             ))
@@ -116,7 +116,7 @@ public class MenuServiceImpl implements MenuService {
     }
 
     private MenuProduct createMenuProduct(MenuProduct request, List<Product> products) {
-        if (request.getQuantity() < 0) {
+        if (request.getQuantity().isNegative()) {
             throw new IllegalArgumentException(ErrorCode.PRODUCT_QTY_NOT_ALLOWED.toString());
         }
 

@@ -73,13 +73,13 @@ public class DefaultMenuPolicy implements MenuPolicy {
     private void changeMenuDisplay(Menu menu) {
         BigDecimal totalMenuProductPrice = calculateTotalMenuProductPrice(menu.getMenuProducts());
 
-        boolean shouldBeDisplayed = menu.isLessThanOrEqual(totalMenuProductPrice);
+        boolean shouldBeDisplayed = menu.isPriceLessThanOrEqual(totalMenuProductPrice);
         menu.updateDisplayed(shouldBeDisplayed);
     }
 
     private BigDecimal calculateTotalMenuProductPrice(List<MenuProduct> menuProducts) {
         return menuProducts.stream()
-            .map(menuProduct -> productContextService.getTotalPrice(menuProduct.getProductId(), BigDecimal.valueOf(menuProduct.getQuantity())))
+            .map(menuProduct -> productContextService.getTotalPrice(menuProduct.getProductId(), BigDecimal.valueOf(menuProduct.getQuantity().quantity())))
             .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 

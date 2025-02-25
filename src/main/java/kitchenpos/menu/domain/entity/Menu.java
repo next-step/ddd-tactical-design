@@ -89,11 +89,11 @@ public class Menu {
         this.price = price;
     }
 
-    public boolean isLessThanOrEqual(BigDecimal diff) {
+    public boolean isPriceLessThanOrEqual(BigDecimal diff) {
         return price.isLessThanOrEqual(diff);
     }
 
-    public boolean isEqual(BigDecimal diff) {
+    public boolean isPriceEqual(BigDecimal diff) {
         return price.isEqual(diff);
     }
 }
