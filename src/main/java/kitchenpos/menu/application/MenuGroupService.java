@@ -1,6 +1,8 @@
 package kitchenpos.menu.application;
 
 import java.util.List;
+import kitchenpos.menu.application.dto.CreateMenuGroupServiceRq;
+import kitchenpos.menu.application.dto.MenuGroupServiceRs;
 import kitchenpos.menu.domain.model.MenuGroup;
 import kitchenpos.menu.domain.model.MenuGroupName;
 import kitchenpos.menu.domain.model.MenuGroupNameCreationService;
@@ -20,15 +22,17 @@ public class MenuGroupService {
     }
 
     @Transactional
-    public MenuGroup create(final MenuGroup request) {
+    public MenuGroupServiceRs create(final CreateMenuGroupServiceRq request) {
         final String name = request.getName();
         MenuGroupName menuGroupName = menuGroupNameCreationService.createName(name);
-        final MenuGroup menuGroup = new MenuGroup(menuGroupName);
-        return menuGroupRepository.save(menuGroup);
+        MenuGroup menuGroup = menuGroupRepository.save(new MenuGroup(menuGroupName));
+        return new MenuGroupServiceRs(menuGroup);
     }
 
     @Transactional(readOnly = true)
-    public List<MenuGroup> findAll() {
-        return menuGroupRepository.findAll();
+    public List<MenuGroupServiceRs> findAll() {
+        return menuGroupRepository.findAll().stream()
+                .map(MenuGroupServiceRs::new)
+                .toList();
     }
 }
