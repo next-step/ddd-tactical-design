@@ -47,7 +47,7 @@ public class MenuServiceImpl implements MenuService {
     public MenuVo.MenuInfo create(final MenuVo.Create request) {
         final MenuPrice price = request.price();
         final MenuName name = MenuName.of(request.name(), purgomalumClient);
-        final MenuGroup menuGroup = getMenuGroup(request.menuGroupId());
+        final MenuGroup menuGroup = validateMenuGroup(request.menuGroupId());
         final List<MenuProduct> menuProducts = createMenuProducts(request.menuProducts());
 
         menuPolicy.validateMenuPrice(price, menuProducts);
@@ -92,7 +92,7 @@ public class MenuServiceImpl implements MenuService {
             .toList();
     }
 
-    private MenuGroup getMenuGroup(UUID menuGroupId) {
+    private MenuGroup validateMenuGroup(UUID menuGroupId) {
         return menuGroupRepository.findById(menuGroupId)
             .orElseThrow(() -> new NoSuchElementException(ErrorCode.NOT_FOUND_MENU_GROUP.toString()));
     }
