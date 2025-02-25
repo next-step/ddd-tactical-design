@@ -1,13 +1,13 @@
-package kitchenpos.menus.ui.tobe;
+package kitchenpos.menus.presentation.tobe;
 
 
 import kitchenpos.menus.application.tobe.MenuService;
 import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuId;
-import kitchenpos.menus.ui.dto.MenuChangePriceRequest;
-import kitchenpos.menus.ui.dto.MenuChangePriceResponse;
-import kitchenpos.menus.ui.dto.MenuCreateRequest;
-import kitchenpos.menus.ui.dto.MenuCreateResponse;
+import kitchenpos.menus.presentation.dto.MenuChangePriceRequest;
+import kitchenpos.menus.presentation.dto.MenuChangePriceResponse;
+import kitchenpos.menus.presentation.dto.MenuCreateRequest;
+import kitchenpos.menus.presentation.dto.MenuCreateResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

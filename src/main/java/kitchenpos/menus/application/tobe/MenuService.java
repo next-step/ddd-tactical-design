@@ -2,10 +2,10 @@ package kitchenpos.menus.application.tobe;
 
 import kitchenpos.common.vo.Price;
 import kitchenpos.menus.tobe.domain.*;
-import kitchenpos.menus.ui.dto.MenuChangePriceRequest;
-import kitchenpos.menus.ui.dto.MenuChangePriceResponse;
-import kitchenpos.menus.ui.dto.MenuCreateRequest;
-import kitchenpos.menus.ui.dto.MenuCreateResponse;
+import kitchenpos.menus.presentation.dto.MenuChangePriceRequest;
+import kitchenpos.menus.presentation.dto.MenuChangePriceResponse;
+import kitchenpos.menus.presentation.dto.MenuCreateRequest;
+import kitchenpos.menus.presentation.dto.MenuCreateResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
