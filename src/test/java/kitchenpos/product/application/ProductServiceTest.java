@@ -15,6 +15,9 @@ import kitchenpos.common.application.PurgomalumClient;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.repository.MenuRepository;
 import kitchenpos.menu.domain.service.MarginValidator;
+import kitchenpos.product.application.dto.ChangeProductPriceServiceRq;
+import kitchenpos.product.application.dto.CreateProductServiceRq;
+import kitchenpos.product.application.dto.ProductServiceRs;
 import kitchenpos.product.domain.model.Product;
 import kitchenpos.product.domain.model.ProductNameCreationService;
 import kitchenpos.product.domain.repository.ProductRepository;
@@ -43,25 +46,29 @@ class ProductServiceTest {
     @DisplayName("상품을 등록할 수 있다")
     void create() {
         // given
-        Product request = createProductRequest("김치", 5000);
+        CreateProductServiceRq request = new CreateProductServiceRq("김치", BigDecimal.valueOf(5000));
         when(purgomalumClient.containsProfanity(any())).thenReturn(false);
         when(productRepository.save(any(Product.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         // when
-        Product result = productService.create(request);
+        ProductServiceRs result = productService.create(request);
 
         // then
         assertThat(result.getId()).isNotNull();
-        assertThat(result.getInnerName()).isEqualTo("김치");
-        assertThat(result.getInnerPrice()).isEqualTo(BigDecimal.valueOf(5000));
+        assertThat(result.getName()).isEqualTo("김치");
+        assertThat(result.getPrice()).isEqualTo(BigDecimal.valueOf(5000));
     }
 
     @Test
     @DisplayName("상품 가격은 0원 미만이면 예외가 발생한다.")
     void product_price_exception() {
+        // given
+        CreateProductServiceRq request = new CreateProductServiceRq("김치", BigDecimal.valueOf(-1000));
+
         // when // then
-        assertThatThrownBy(() -> productService.create(createProductRequest("김치", -1000)))
-                .isInstanceOf(IllegalArgumentException.class)
+        assertThatThrownBy(() -> {
+            productService.create(request);
+        }).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("상품 가격을 채워주세요!");
     }
 
@@ -69,7 +76,7 @@ class ProductServiceTest {
     @DisplayName("상품 이름에 비속어를 넣으면 예외가 발생한다.")
     void product_name_exception() {
         // given
-        Product request = createProductRequest("fuck", 5000);
+        CreateProductServiceRq request = new CreateProductServiceRq("fuck", BigDecimal.valueOf(5000));
         when(purgomalumClient.containsProfanity("fuck")).thenReturn(true);
 
         // when // then
@@ -82,15 +89,15 @@ class ProductServiceTest {
     void change_price() {
         // given
         Product product = createProduct("김치", 5000);
-        Product request = createProductRequest("김치", 6000);
+        ChangeProductPriceServiceRq request = new ChangeProductPriceServiceRq(BigDecimal.valueOf(6000));
         when(productRepository.findById(any())).thenReturn(Optional.of(product));
         when(menuRepository.findAllByProductId(any())).thenReturn(List.of());
 
         // when
-        Product result = productService.changePrice(product.getId(), request);
+        ProductServiceRs result = productService.changePrice(product.getId(), request);
 
         // then
-        assertThat(result.getInnerPrice()).isEqualTo(BigDecimal.valueOf(6000));
+        assertThat(result.getPrice()).isEqualTo(BigDecimal.valueOf(6000));
     }
 
     @Test
@@ -99,7 +106,7 @@ class ProductServiceTest {
         // given
         Product product = createProduct("김치", 5000);
         Menu menu = TestFixtureFactory.createMenuWithProductAndGroup("김치찌개", 7000, product);
-        Product request = createProductRequest("김치", 8000);
+        ChangeProductPriceServiceRq request = new ChangeProductPriceServiceRq(new BigDecimal(8000));
 
         when(productRepository.findById(any())).thenReturn(Optional.of(product));
         when(menuRepository.findAllByProductId(any())).thenReturn(List.of(menu));
@@ -122,7 +129,7 @@ class ProductServiceTest {
         when(productRepository.findAll()).thenReturn(products);
 
         // when
-        List<Product> result = productService.findAll();
+        List<ProductServiceRs> result = productService.findAll();
 
         // then
         assertThat(result).hasSize(2);

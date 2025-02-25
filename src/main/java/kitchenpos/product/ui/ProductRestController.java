@@ -4,7 +4,12 @@ import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 import kitchenpos.product.application.ProductService;
-import kitchenpos.product.domain.model.Product;
+import kitchenpos.product.application.dto.ChangeProductPriceServiceRq;
+import kitchenpos.product.application.dto.CreateProductServiceRq;
+import kitchenpos.product.application.dto.ProductServiceRs;
+import kitchenpos.product.ui.dto.ChangeProductPriceRq;
+import kitchenpos.product.ui.dto.CreateProductRq;
+import kitchenpos.product.ui.dto.ProductRs;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,20 +29,30 @@ public class ProductRestController {
     }
 
     @PostMapping
-    public ResponseEntity<Product> create(@RequestBody final Product request) {
-        final Product response = productService.create(request);
+    public ResponseEntity<ProductRs> create(@RequestBody final CreateProductRq request) {
+        ProductServiceRs response = productService.create(
+                new CreateProductServiceRq(request.getName(), request.getPrice()));
         return ResponseEntity.created(URI.create("/api/products/" + response.getId()))
-                .body(response);
+                .body(new ProductRs(response));
     }
 
     @PutMapping("/{productId}/price")
-    public ResponseEntity<Product> changePrice(@PathVariable("productId") final UUID productId,
-                                               @RequestBody final Product request) {
-        return ResponseEntity.ok(productService.changePrice(productId, request));
+    public ResponseEntity<ProductRs> changePrice(@PathVariable("productId") final UUID productId,
+                                                 @RequestBody final ChangeProductPriceRq request) {
+        ProductServiceRs response = productService.changePrice(
+                productId,
+                new ChangeProductPriceServiceRq(request.getPrice())
+        );
+        return ResponseEntity.ok(new ProductRs(response));
     }
 
     @GetMapping
-    public ResponseEntity<List<Product>> findAll() {
-        return ResponseEntity.ok(productService.findAll());
+    public ResponseEntity<List<ProductRs>> findAll() {
+        List<ProductServiceRs> response = productService.findAll();
+        return ResponseEntity.ok(
+                response.stream()
+                        .map(ProductRs::new)
+                        .toList()
+        );
     }
 }
