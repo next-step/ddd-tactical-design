@@ -8,8 +8,8 @@ import kitchenpos.order.eatinorder.domain.model.OrderTableName;
 import kitchenpos.order.eatinorder.domain.model.ReleaseOrderTableEvent;
 import kitchenpos.order.eatinorder.domain.repository.OrderTableRepository;
 import kitchenpos.order.eatinorder.domain.service.OrderTableOccupationManager;
-import kitchenpos.order.eatinorder.service.dto.CreateOrderTableServiceRq;
-import kitchenpos.order.eatinorder.service.dto.OrderTableServiceRs;
+import kitchenpos.order.eatinorder.application.dto.CreateOrderTableServiceRq;
+import kitchenpos.order.eatinorder.application.dto.OrderTableServiceRs;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

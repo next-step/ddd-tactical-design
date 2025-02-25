@@ -2,7 +2,7 @@ package kitchenpos.order.eatinorder.ui.dto;
 
 import java.util.UUID;
 import kitchenpos.order.eatinorder.domain.model.EatInOrderFlow;
-import kitchenpos.order.eatinorder.service.dto.EatInOrderServiceRs;
+import kitchenpos.order.eatinorder.application.dto.EatInOrderServiceRs;
 
 public class EatInOrderRs {
     private UUID eatInOrderId;

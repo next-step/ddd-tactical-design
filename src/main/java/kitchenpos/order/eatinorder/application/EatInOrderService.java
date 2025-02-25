@@ -1,4 +1,4 @@
-package kitchenpos.order.eatinorder.service;
+package kitchenpos.order.eatinorder.application;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -10,9 +10,9 @@ import kitchenpos.order.eatinorder.domain.model.EatInOrder;
 import kitchenpos.order.eatinorder.domain.model.EatInOrderFactory;
 import kitchenpos.order.eatinorder.domain.model.EatInOrderStatus;
 import kitchenpos.order.eatinorder.domain.repository.EatInOrderRepository;
-import kitchenpos.order.eatinorder.service.dto.CreateEatInOrderServiceRq;
-import kitchenpos.order.eatinorder.service.dto.CreateEatInOrderServiceRq.OrderLineItemServiceDto;
-import kitchenpos.order.eatinorder.service.dto.EatInOrderServiceRs;
+import kitchenpos.order.eatinorder.application.dto.CreateEatInOrderServiceRq;
+import kitchenpos.order.eatinorder.application.dto.CreateEatInOrderServiceRq.OrderLineItemServiceDto;
+import kitchenpos.order.eatinorder.application.dto.EatInOrderServiceRs;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

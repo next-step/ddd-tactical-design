@@ -1,4 +1,4 @@
-package kitchenpos.order.eatinorder.service.dto;
+package kitchenpos.order.eatinorder.application.dto;
 
 import java.math.BigDecimal;
 import java.util.List;

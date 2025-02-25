@@ -18,16 +18,14 @@ import kitchenpos.order.common.model.OrderType;
 import kitchenpos.order.eatinorder.domain.model.EatInOrder;
 import kitchenpos.order.eatinorder.domain.model.EatInOrderFlow;
 import kitchenpos.order.eatinorder.domain.model.OrderTable;
-import kitchenpos.order.eatinorder.service.dto.CreateEatInOrderServiceRq;
-import kitchenpos.order.eatinorder.service.dto.CreateEatInOrderServiceRq.OrderLineItemServiceDto;
+import kitchenpos.order.eatinorder.application.dto.CreateEatInOrderServiceRq;
+import kitchenpos.order.eatinorder.application.dto.CreateEatInOrderServiceRq.OrderLineItemServiceDto;
 import kitchenpos.order.eatinorder.ui.dto.CreateEatInOrderRq;
 import kitchenpos.order.eatinorder.ui.dto.CreateEatInOrderRq.OrderLineItemDto;
 import kitchenpos.product.domain.model.Product;
 import kitchenpos.product.domain.model.ProductName;
 import kitchenpos.product.domain.model.ProductNameCreationService;
 import kitchenpos.product.domain.model.ProductPrice;
-import org.hamcrest.Matcher;
-import org.jetbrains.annotations.NotNull;
 
 public class TestFixtureFactory {
 

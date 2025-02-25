@@ -1,7 +1,7 @@
 package kitchenpos.order.eatinorder.ui.dto;
 
 import java.util.UUID;
-import kitchenpos.order.eatinorder.service.dto.OrderTableServiceRs;
+import kitchenpos.order.eatinorder.application.dto.OrderTableServiceRs;
 
 public class OrderTableRs {
     private UUID id;

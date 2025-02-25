@@ -3,8 +3,8 @@ package kitchenpos.order.eatinorder.ui.dto;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
-import kitchenpos.order.eatinorder.service.dto.CreateEatInOrderServiceRq;
-import kitchenpos.order.eatinorder.service.dto.CreateEatInOrderServiceRq.OrderLineItemServiceDto;
+import kitchenpos.order.eatinorder.application.dto.CreateEatInOrderServiceRq;
+import kitchenpos.order.eatinorder.application.dto.CreateEatInOrderServiceRq.OrderLineItemServiceDto;
 
 public class CreateEatInOrderRq {
     private List<OrderLineItemDto> orderLineItemDtos;
