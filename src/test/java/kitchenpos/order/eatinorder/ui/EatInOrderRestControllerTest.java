@@ -6,7 +6,6 @@ import static kitchenpos.TestFixtureFactory.createMenuGroup;
 import static kitchenpos.TestFixtureFactory.createOrderLineItem;
 import static kitchenpos.TestFixtureFactory.createProduct;
 import static kitchenpos.TestFixtureFactory.createUsingOrderTable;
-import static kitchenpos.TestFixtureFactory.matchUUID;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -84,7 +83,8 @@ class EatInOrderRestControllerTest {
         result.andExpect(status().isCreated())
                 .andExpect(header().exists("Location"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().string(matchUUID()));
+                .andExpect(jsonPath("$.eatInOrderId").isNotEmpty())
+                .andExpect(jsonPath("$.eatInOrderFlow").value(EatInOrderFlow.WAITING.toString()));
     }
 
     @Test

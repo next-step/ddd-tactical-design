@@ -33,10 +33,11 @@ public class EatInOrderService {
     }
 
     @Transactional
-    public UUID create(final CreateEatInOrderServiceRq request) {
+    public EatInOrderServiceRs create(final CreateEatInOrderServiceRq request) {
         final List<OrderLineItem> orderLineItems = toOrderLineItems(request.getOrderLineItemDtos());
         EatInOrder eatInOrder = eatInOrderFactory.create(orderLineItems, request.getOrderTableId());
-        return eatInOrderRepository.save(eatInOrder).getId();
+        eatInOrderRepository.save(eatInOrder);
+        return new EatInOrderServiceRs(eatInOrder);
     }
 
     private List<OrderLineItem> toOrderLineItems(List<OrderLineItemServiceDto> request) {

@@ -26,10 +26,10 @@ public class EatInOrderRestController {
     }
 
     @PostMapping
-    public ResponseEntity<UUID> create(@RequestBody final CreateEatInOrderRq request) {
-        final UUID eatInOrderId = eatInOrderService.create(request.createServiceRq());
-        return ResponseEntity.created(URI.create("/api/orders/" + eatInOrderId))
-                .body(eatInOrderId);
+    public ResponseEntity<EatInOrderRs> create(@RequestBody final CreateEatInOrderRq request) {
+        EatInOrderServiceRs response = eatInOrderService.create(request.createServiceRq());
+        return ResponseEntity.created(URI.create("/api/orders/" + response.getEatInOrderId()))
+                .body(new EatInOrderRs(response));
     }
 
     @PutMapping("/{eatInOrderId}/accept")

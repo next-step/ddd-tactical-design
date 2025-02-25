@@ -151,9 +151,4 @@ public class TestFixtureFactory {
                         .toList(),
                 orderTableId);
     }
-
-    public static @NotNull Matcher<String> matchUUID() {
-        return matchesPattern(
-                "\"[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}\"");
-    }
 }
