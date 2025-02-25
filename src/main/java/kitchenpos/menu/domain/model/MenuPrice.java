@@ -14,7 +14,6 @@ public class MenuPrice {
     @Column(name = "price", nullable = false)
     private final BigDecimal value;
 
-    @JsonCreator
     public MenuPrice(BigDecimal value) {
         validatePrice(value);
         this.value = value;

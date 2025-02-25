@@ -13,7 +13,6 @@ public class MenuGroupName {
     @Column(name = "name", nullable = false)
     private final String value;
 
-    @JsonCreator
     protected MenuGroupName(String value) {
         validateMenuGroupName(value);
         this.value = value;

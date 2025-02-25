@@ -17,7 +17,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class MenuProductValidatorTest {
+class MenuProductRsValidatorTest {
 
     private MenuProductValidator menuProductValidator;
     private ProductRepository productRepository;

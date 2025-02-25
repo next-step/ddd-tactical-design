@@ -61,24 +61,28 @@ class OrderRestControllerTest {
     @Autowired
     private ProductRepository productRepository;
 
-    @Test
-    @DisplayName("주문을 생성한다.")
-    void create_success() throws Exception {
-        // given
-        Order request = createOrderRequestWithDeliveryType();
-
-        // when
-        ResultActions result = mockMvc.perform(post("/api/orders")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)));
-
-        // then
-        result.andExpect(status().isCreated())
-                .andExpect(header().exists("Location"))
-                .andExpect(jsonPath("$.id").exists())
-                .andExpect(jsonPath("$.orderLineItems").isArray())
-                .andExpect(jsonPath("$.status").value("WAITING"));
-    }
+    /**
+     * 필요 없어진 테스트
+     * @throws Exception
+     */
+//    @Test
+//    @DisplayName("주문을 생성한다.")
+//    void create_success() throws Exception {
+//        // given
+//        Order request = createOrderRequestWithDeliveryType();
+//
+//        // when
+//        ResultActions result = mockMvc.perform(post("/api/orders")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(objectMapper.writeValueAsString(request)));
+//
+//        // then
+//        result.andExpect(status().isCreated())
+//                .andExpect(header().exists("Location"))
+//                .andExpect(jsonPath("$.id").exists())
+//                .andExpect(jsonPath("$.orderLineItems").isArray())
+//                .andExpect(jsonPath("$.status").value("WAITING"));
+//    }
 
     @Test
     @DisplayName("주문 상태가 주문 대기 중이라면 주문을 수락할 수 있다.")

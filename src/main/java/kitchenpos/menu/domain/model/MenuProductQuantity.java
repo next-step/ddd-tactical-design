@@ -13,7 +13,6 @@ public class MenuProductQuantity {
     @Column(name = "quantity", nullable = false)
     private final Long value;
 
-    @JsonCreator
     public MenuProductQuantity(long value) {
         validateMenuProductQuantity(value);
         this.value = value;

@@ -6,7 +6,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -15,11 +14,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.UUID;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.model.MenuGroup;
 import kitchenpos.menu.domain.model.MenuProduct;
 import kitchenpos.menu.domain.repository.MenuGroupRepository;
 import kitchenpos.menu.domain.repository.MenuRepository;
+import kitchenpos.menu.ui.dto.CreateMenuRq;
+import kitchenpos.menu.ui.dto.CreateMenuRq.MenuProductRq;
 import kitchenpos.product.domain.model.Product;
 import kitchenpos.product.domain.repository.ProductRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -56,7 +58,9 @@ class MenuRestControllerTest {
     @DisplayName("메뉴를 생성한다")
     void create_menu_success() throws Exception {
         // given
-        Menu request = createMenuRequest(createAndSaveMenuGroup(), createAndSaveProduct());
+        MenuGroup menuGroup = createAndSaveMenuGroup();
+        Product product = createAndSaveProduct();
+        CreateMenuRq request = createMenuRequest("김치찌개", 12000, menuGroup.getId(), product.getId());
 
         // when
         ResultActions result = mockMvc.perform(post("/api/menus")
@@ -68,10 +72,9 @@ class MenuRestControllerTest {
                 .andExpect(header().exists("Location"))
                 .andExpect(jsonPath("$.id").exists())
                 .andExpect(jsonPath("$.name").value("김치찌개"))
-                .andExpect(jsonPath("$.price").value(8000))
-                .andExpect(jsonPath("$.menuGroup").exists())
-                .andExpect(jsonPath("$.menuProducts").isNotEmpty())
-                .andDo(print());
+                .andExpect(jsonPath("$.price").value(12000))
+                .andExpect(jsonPath("$.menuGroupId").exists())
+                .andExpect(jsonPath("$.menuProductRsList").isNotEmpty());
     }
 
     @Test
@@ -200,5 +203,10 @@ class MenuRestControllerTest {
         Menu menu = new Menu("김치찌개", BigDecimal.valueOf(8000), displayed, List.of(menuProduct), menuGroup,
                 menuGroup.getId());
         return menuRepository.save(menu);
+    }
+
+    private CreateMenuRq createMenuRequest(String name, int price, UUID menuGroupId, UUID productId) {
+        return new CreateMenuRq(name, BigDecimal.valueOf(price), true, menuGroupId,
+                List.of(new MenuProductRq(productId, 2)));
     }
 }

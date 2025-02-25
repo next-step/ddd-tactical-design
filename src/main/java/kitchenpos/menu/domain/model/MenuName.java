@@ -13,7 +13,6 @@ public class MenuName {
     @Column(name = "name", nullable = false)
     private final String value;
 
-    @JsonCreator
     public MenuName(String value) {
         validateName(value);
         this.value = value;
