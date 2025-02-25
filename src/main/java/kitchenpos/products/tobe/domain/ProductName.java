@@ -19,8 +19,8 @@ public class ProductName {
     }
 
     private String checkProductName(final String name) {
-        if (name.isBlank()) {
-            throw new IllegalArgumentException("상품의 이름이 없으면 안된다");
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("상품의 이름이 존재해야 한다.");
         }
         return name;
     }
