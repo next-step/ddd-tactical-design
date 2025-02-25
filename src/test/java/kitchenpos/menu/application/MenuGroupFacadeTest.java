@@ -17,8 +17,9 @@ import kitchenpos.menu.domain.entity.MenuGroup;
 import kitchenpos.menu.domain.exception.MenuGroupNameException;
 import kitchenpos.menu.domain.fixture.MenuGroupFixture;
 import kitchenpos.menu.domain.repository.MenuGroupRepository;
-import kitchenpos.menu.domain.service.MenuGroupService;
-import kitchenpos.menu.domain.service.MenuGroupServiceImpl;
+import kitchenpos.menu.domain.service.MenuGroupCommandService;
+import kitchenpos.menu.domain.service.DefaultMenuGroupService;
+import kitchenpos.menu.domain.service.MenuGroupQueryService;
 import kitchenpos.menu.domain.service.MenuPurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -36,16 +37,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class MenuGroupFacadeTest {
 
-    @InjectMocks
     private MenuGroupFacade menuGroupFacade;
-
-    @Mock
-    private MenuGroupService menuGroupService;
-
+    private MenuGroupQueryService menuGroupQueryService;
+    private MenuGroupCommandService menuGroupCommandService;
+    private final MenuPurgomalumClient purgomalumClient = new FakeProfanityClient(List.of("나쁜", "XXX"));
     @Mock
     private MenuGroupRepository menuGroupRepository;
-
-    private final MenuPurgomalumClient purgomalumClient = new FakeProfanityClient(List.of("나쁜", "XXX"));
 
     private MenuGroupRequest.Create menuGroup;
 
@@ -53,8 +50,9 @@ class MenuGroupFacadeTest {
 
     @BeforeEach
     void setUp() {
-        menuGroupService = new MenuGroupServiceImpl(menuGroupRepository, purgomalumClient);
-        menuGroupFacade = new MenuGroupFacade(menuGroupService);
+        menuGroupQueryService = new DefaultMenuGroupService(menuGroupRepository, purgomalumClient);
+        menuGroupCommandService = new DefaultMenuGroupService(menuGroupRepository, purgomalumClient);
+        menuGroupFacade = new MenuGroupFacade(menuGroupQueryService, menuGroupCommandService);
         menuGroup = MenuGroupFixture.init().create();
         menuGroupEntity = MenuGroupFixture.init().toEntity();
     }

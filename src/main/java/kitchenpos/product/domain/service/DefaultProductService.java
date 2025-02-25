@@ -15,13 +15,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Service
-public class ProductServiceImpl implements ProductService {
+public class DefaultProductService implements ProductQueryService, ProductCommandService {
 
     private final ProductRepository productRepository;
     private final ProductPurgomalumClient purgomalumClient;
     private final ProductEventPublisher productEventPublisher;
 
-    public ProductServiceImpl(
+    public DefaultProductService(
         final ProductRepository productRepository,
         final ProductPurgomalumClient purgomalumClient,
         final ProductEventPublisher defaultProductEventPublisher

@@ -1,35 +1,36 @@
 package kitchenpos.product.application.facade;
 
 import java.util.List;
-import java.util.UUID;
 import kitchenpos.product.application.dto.ProductRequest;
 import kitchenpos.product.application.dto.ProductResponse;
-import kitchenpos.product.domain.entity.Product;
-import kitchenpos.product.domain.service.ProductPurgomalumClient;
-import kitchenpos.product.domain.service.ProductService;
+import kitchenpos.product.domain.service.ProductCommandService;
+import kitchenpos.product.domain.service.ProductQueryService;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ProductFacade {
 
-    private final ProductService productService;
+    private final ProductQueryService productQuryService;
+    private final ProductCommandService productCommandService;
 
     public ProductFacade(
-        ProductService productService
+        ProductQueryService productQuryService,
+        ProductCommandService productCommandService
     ) {
-        this.productService = productService;
+        this.productQuryService = productQuryService;
+        this.productCommandService = productCommandService;
     }
 
     public ProductResponse.GetProduct create(ProductRequest.Create request) {
-        return ProductResponse.GetProduct.fromVo(productService.create(request.toVo()));
+        return ProductResponse.GetProduct.fromVo(productCommandService.create(request.toVo()));
     }
 
     public ProductResponse.GetProduct changePrice(ProductRequest.UpdatePrice request) {
-        return ProductResponse.GetProduct.fromVo(productService.changePrice(request.toVo()));
+        return ProductResponse.GetProduct.fromVo(productCommandService.changePrice(request.toVo()));
     }
 
     public List<ProductResponse.GetProduct> findAll() {
-       return productService.findAll()
+       return productQuryService.findAll()
            .stream()
            .map(ProductResponse.GetProduct::fromVo)
            .toList();

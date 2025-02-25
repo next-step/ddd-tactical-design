@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.function.Function;
+import kitchenpos.menu.application.ProductContextProvider;
 import kitchenpos.menu.domain.entity.Menu;
 import kitchenpos.menu.domain.entity.MenuProduct;
 import kitchenpos.menu.domain.exception.MenuPriceInvalidException;
@@ -19,14 +20,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @Component
 public class DefaultMenuPolicy implements MenuPolicy {
-    private final ProductContextService productContextService;
+    private final ProductContextProvider productContextProvider;
     private final MenuRepository menuRepository;
 
     public DefaultMenuPolicy(
-        final ProductContextService productContextService,
+        final ProductContextProvider productContextProvider,
         final MenuRepository menuRepository
     ) {
-        this.productContextService = productContextService;
+        this.productContextProvider = productContextProvider;
         this.menuRepository = menuRepository;
     }
 
@@ -80,7 +81,7 @@ public class DefaultMenuPolicy implements MenuPolicy {
 
     private BigDecimal calculateTotalMenuProductPrice(List<MenuProduct> menuProducts) {
         return menuProducts.stream()
-            .map(menuProduct -> productContextService.getTotalPrice(menuProduct.getProductId(), BigDecimal.valueOf(menuProduct.getQuantity().quantity())))
+            .map(menuProduct -> productContextProvider.getTotalPrice(menuProduct.getProductId(), BigDecimal.valueOf(menuProduct.getQuantity().quantity())))
             .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 

@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.UUID;
 import kitchenpos.global.exception.ErrorCode;
 import kitchenpos.global.exception.NotFoundException;
+import kitchenpos.menu.application.ProductContextProvider;
 import kitchenpos.menu.domain.entity.Menu;
 import kitchenpos.menu.domain.entity.MenuGroup;
 import kitchenpos.menu.domain.entity.MenuProduct;
@@ -21,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class MenuServiceImpl implements MenuService {
+public class DefaultMenuService implements MenuQueryService, MenuCommandService {
 
     private final MenuRepository menuRepository;
     private final MenuGroupRepository menuGroupRepository;
@@ -29,20 +30,20 @@ public class MenuServiceImpl implements MenuService {
 
     private final MenuPolicy menuPolicy;
 
-    private final ProductContextService productContextService;
+    private final ProductContextProvider productContextProvider;
 
-    public MenuServiceImpl(
+    public DefaultMenuService(
         final MenuRepository menuRepository,
         final MenuGroupRepository menuGroupRepository,
         final MenuPurgomalumClient purgomalumClient,
         final MenuPolicy menuPolicy,
-        final ProductContextService productContextService
+        final ProductContextProvider productContextProvider
     ) {
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
         this.purgomalumClient = purgomalumClient;
         this.menuPolicy = menuPolicy;
-        this.productContextService = productContextService;
+        this.productContextProvider = productContextProvider;
     }
 
     @Override
@@ -104,7 +105,7 @@ public class MenuServiceImpl implements MenuService {
             throw new NotFoundException(ErrorCode.NOT_FOUND_MENU_PRODUCT.toString());
         }
 
-        final List<Product> products = productContextService.findAllByIds(
+        final List<Product> products = productContextProvider.findAllByIds(
             menuProductRequests.stream().map(MenuProduct::getProductId).toList()
         );
 

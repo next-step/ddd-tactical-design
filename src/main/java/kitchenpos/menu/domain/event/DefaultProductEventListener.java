@@ -3,6 +3,8 @@ package kitchenpos.menu.domain.event;
 import kitchenpos.global.event.ProductEvent;
 import kitchenpos.menu.domain.service.MenuPolicy;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
@@ -14,6 +16,7 @@ public class DefaultProductEventListener implements ProductEventListener {
         this.menuPolicy = menuPolicy;
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener
     @Override
     public void handle(ProductEvent event) {

@@ -34,11 +34,11 @@ import kitchenpos.menu.domain.model.MenuProductQty;
 import kitchenpos.menu.domain.repository.InMemoryMenuRepository;
 import kitchenpos.menu.domain.repository.MenuGroupRepository;
 import kitchenpos.menu.domain.repository.MenuRepository;
+import kitchenpos.menu.domain.service.DefaultMenuService;
 import kitchenpos.menu.domain.service.FakeMenuPolicy;
+import kitchenpos.menu.domain.service.MenuCommandService;
 import kitchenpos.menu.domain.service.MenuPurgomalumClient;
-import kitchenpos.menu.domain.service.MenuService;
-import kitchenpos.menu.domain.service.MenuServiceImpl;
-import kitchenpos.menu.domain.service.ProductContextService;
+import kitchenpos.menu.domain.service.MenuQueryService;
 import kitchenpos.product.domain.entity.Product;
 import kitchenpos.product.domain.fixture.ProductFixture;
 import kitchenpos.product.domain.model.ProductName;
@@ -54,7 +54,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -62,18 +61,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class MenuFacadeTest {
 
-    @InjectMocks
     private MenuFacade menuFacade;
-
-    @Mock
-    private MenuService menuService;
+    private MenuQueryService menuQueryService;
+    private MenuCommandService menuCommandService;
+    private ProductRepository productRepository;
+    private MenuRepository menuRepository;
 
     @Mock
     private MenuGroupRepository menuGroupRepository;
-
-    private ProductRepository productRepository;
-
-    private MenuRepository menuRepository;
 
     private final MenuPurgomalumClient purgomalumClient = new FakeProfanityClient(List.of("나쁜", "XXX"));
 
@@ -82,7 +77,7 @@ class MenuFacadeTest {
     private FakeMenuPolicy menuPolicy;
 
     @Mock
-    private ProductContextService productContextService;
+    private ProductContextProvider productContextProvider;
 
     private MenuRequest.Create createMenu;
     private MenuRequest.UpdatePrice updatePriceMenu;
@@ -95,8 +90,9 @@ class MenuFacadeTest {
         menuRepository = new InMemoryMenuRepository();
         productRepository = new InMemoryProductRepository();
         menuPolicy = new FakeMenuPolicy(menuRepository);
-        menuService = new MenuServiceImpl(menuRepository, menuGroupRepository, purgomalumClient, menuPolicy, productContextService);
-        menuFacade = new MenuFacade(menuService);
+        menuQueryService = new DefaultMenuService(menuRepository, menuGroupRepository, purgomalumClient, menuPolicy, productContextProvider);
+        menuCommandService = new DefaultMenuService(menuRepository, menuGroupRepository, purgomalumClient, menuPolicy, productContextProvider);
+        menuFacade = new MenuFacade(menuQueryService, menuCommandService);
 
         createMenu = MenuFixture.init().create();
 
@@ -138,12 +134,12 @@ class MenuFacadeTest {
         void 메뉴등록_성공() {
 
             mockCreateMenu();
-            var result = menuService.create(createMenu.toVo());
+            var result = menuFacade.create(createMenu);
 
             assertAll(
                 () -> assertNotNull(result),
-                () -> assertEquals(result.name().name(), createMenu.name()),
-                () -> assertEquals(result.price().price(), createMenu.price()),
+                () -> assertEquals(result.name(), createMenu.name()),
+                () -> assertEquals(result.price(), createMenu.price()),
                 () -> assertEquals(result.displayed(), createMenu.displayed())
             );
 
@@ -222,7 +218,7 @@ class MenuFacadeTest {
             menuPolicy.setExceptionStatus(isOver(BigDecimal.valueOf(price1)));
 
             assertThatExceptionOfType(MenuPriceInvalidException.class)
-                .isThrownBy(() -> menuService.create(createMenu.toVo()))
+                .isThrownBy(() -> menuFacade.create(createMenu))
                 .withMessage(ErrorCode.MENU_PRICE_OVER_TOTAL_PRODUCTS_NOT_ALLOWED.toString());
         }
 
@@ -260,7 +256,7 @@ class MenuFacadeTest {
 
                     mockCreateMenu();
 
-                    menuService.create(createMenu.toVo());
+                    menuFacade.create(createMenu);
                 })
                 .withMessage(ErrorCode.MENU_PRODUCT_QTY_NOT_ALLOWED.toString());
         }
@@ -277,7 +273,7 @@ class MenuFacadeTest {
         void 메뉴_노출_성공() {
 
             assertThatCode(() -> {
-                menuService.display(defaultMenu.getId());
+                menuFacade.display(defaultMenu.getId());
             }).doesNotThrowAnyException();
 
         }
@@ -307,7 +303,7 @@ class MenuFacadeTest {
             menuPolicy.setExceptionStatus(isOver(BigDecimal.valueOf(price1)));
 
             assertThatExceptionOfType(MenuStateInvalidException.class)
-                .isThrownBy(() -> menuService.display(defaultMenu.getId()))
+                .isThrownBy(() -> menuFacade.display(defaultMenu.getId()))
                 .withMessage(ErrorCode.MENU_PRICE_OVER_TOTAL_PRODUCTS_NOT_ALLOWED.toString());
         }
     }
@@ -320,7 +316,7 @@ class MenuFacadeTest {
         @DisplayName("성공 : 등록 메뉴를 숨긴다.")
         void 메뉴_숨김_성공() {
 
-            menuService.hide(defaultMenu.getId());
+            menuFacade.hide(defaultMenu.getId());
 
             assertThat(defaultMenu.isDisplayed()).isFalse();
         }
@@ -372,7 +368,7 @@ class MenuFacadeTest {
             menuPolicy.setExceptionStatus(isOver(BigDecimal.valueOf(price)));
 
             assertThatExceptionOfType(MenuPriceInvalidException.class)
-                .isThrownBy(() -> menuService.changePrice(updatePriceMenu.toVo()))
+                .isThrownBy(() -> menuFacade.changePrice(updatePriceMenu))
                 .withMessage(ErrorCode.MENU_PRICE_OVER_TOTAL_PRODUCTS_NOT_ALLOWED.toString());
         }
     }
@@ -388,13 +384,13 @@ class MenuFacadeTest {
     }
 
     private void mockFindAllByProductContext() {
-    when(productContextService.findAllByIds(anyList()))
-        .thenAnswer(invocation -> {
-            List<UUID> requestedProductIds = invocation.getArgument(0);
-            return requestedProductIds.stream()
-                .map(id -> new Product(id, ProductName.of("치킨", menuPurgomalumClient), ProductPrice.of(BigDecimal.TEN))) // UUID 일치하는 Product 생성
-                .toList();
-        });
+        when(productContextProvider.findAllByIds(anyList()))
+            .thenAnswer(invocation -> {
+                List<UUID> requestedProductIds = invocation.getArgument(0);
+                return requestedProductIds.stream()
+                    .map(id -> new Product(id, ProductName.of("치킨", menuPurgomalumClient), ProductPrice.of(BigDecimal.TEN))) // UUID 일치하는 Product 생성
+                    .toList();
+            });
     }
 
     private boolean isOver(BigDecimal price) {

@@ -11,12 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Service
-public class MenuGroupServiceImpl implements MenuGroupService {
+public class DefaultMenuGroupService implements MenuGroupQueryService, MenuGroupCommandService {
 
     private final MenuGroupRepository menuGroupRepository;
     private final MenuPurgomalumClient menuPurgomalumClient;
 
-    public MenuGroupServiceImpl(
+    public DefaultMenuGroupService(
         final MenuGroupRepository menuGroupRepository,
         final MenuPurgomalumClient menuPurgomalumClient
     ) {

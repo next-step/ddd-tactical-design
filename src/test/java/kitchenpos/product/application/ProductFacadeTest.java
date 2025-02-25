@@ -29,10 +29,10 @@ import kitchenpos.product.domain.fixture.ProductFixture;
 import kitchenpos.product.domain.repository.InMemoryMenuRepository;
 import kitchenpos.product.domain.repository.InMemoryProductRepository;
 import kitchenpos.product.domain.repository.ProductRepository;
-import kitchenpos.menu.domain.service.ProductContextService;
+import kitchenpos.product.domain.service.ProductCommandService;
 import kitchenpos.product.domain.service.ProductPurgomalumClient;
-import kitchenpos.product.domain.service.ProductService;
-import kitchenpos.product.domain.service.ProductServiceImpl;
+import kitchenpos.product.domain.service.ProductQueryService;
+import kitchenpos.product.domain.service.DefaultProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -41,29 +41,20 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class ProductFacadeTest {
 
-    @InjectMocks
     private ProductFacade productFacade;
-
-    @Mock
-    private ProductService productService;
-
     @Mock
     private ProductEventPublisher productEventPublisher;
 
-    @Mock
-    private ProductContextService productContextService;
-
+    private ProductQueryService productQueryService;
+    private ProductCommandService productCommandService;
     private FakeMenuPolicy menuPolicy;
-
     private ProductRepository productRepository;
-
     private MenuRepository menuRepository;
 
     private final ProductPurgomalumClient purgomalumClient = new FakeProfanityClient(List.of("나쁜", "XXX"));
@@ -78,8 +69,9 @@ class ProductFacadeTest {
         productRepository = new InMemoryProductRepository();
         menuPolicy = new FakeMenuPolicy(menuRepository);
 
-        productService = new ProductServiceImpl(productRepository, purgomalumClient, productEventPublisher);
-        productFacade = new ProductFacade(productService);
+        productQueryService = new DefaultProductService(productRepository, purgomalumClient, productEventPublisher);
+        productCommandService = new DefaultProductService(productRepository, purgomalumClient, productEventPublisher);
+        productFacade = new ProductFacade(productQueryService, productCommandService);
 
         chicken = ProductFixture.init().create();
         updateChicken = ProductFixture.init().update();
@@ -94,14 +86,14 @@ class ProductFacadeTest {
         @DisplayName("성공")
         void 상품등록_성공() {
 
-            var result = productService.create(chicken.toVo());
+            var result = productFacade.create(chicken);
 
             assertAll(
                 () -> assertNotNull(result),
-                () -> assertEquals(result.name().name(), chicken.name()),
-                () -> assertEquals(result.price().price(), chicken.price()),
+                () -> assertEquals(result.name(), chicken.name()),
+                () -> assertEquals(result.price(), chicken.price()),
                 () -> assertThatCode(() -> {
-                    productService.create(chicken.toVo());
+                    productFacade.create(chicken);
                 }).doesNotThrowAnyException()
             );
 
@@ -114,7 +106,7 @@ class ProductFacadeTest {
             chicken = ProductFixture.test(name, null).create();
 
             assertThatExceptionOfType(ProfanityException.class)
-                .isThrownBy(() -> productService.create(chicken.toVo()))
+                .isThrownBy(() -> productFacade.create(chicken))
                 .withMessage(ErrorCode.PRODUCT_NAME_PROFANITY_NOT_ALLOWED.toString());
         }
 
@@ -142,14 +134,14 @@ class ProductFacadeTest {
         @ValueSource(ints = {0, 1000, 10000})
         void 상품수정_성공(final int price) {
 
-            final UUID productId = productService.create(chicken.toVo()).productId();
+            final UUID productId = productFacade.create(chicken).id();
 
             updateChicken = new ProductRequest.UpdatePrice(productId, BigDecimal.valueOf(price));
 
-            var result = productService.changePrice(updateChicken.toVo());
+            var result = productFacade.changePrice(updateChicken);
 
             assertAll(
-                () -> assertEquals(BigDecimal.valueOf(price), result.price().price())
+                () -> assertEquals(BigDecimal.valueOf(price), result.price())
             );
 
         }
@@ -175,7 +167,6 @@ class ProductFacadeTest {
 
             var product = productRepository.findById(productId);
 
-
             updateChicken = new UpdatePrice(productId, BigDecimal.valueOf(price));
 
             chickenMenu = MenuFixture.test(
@@ -190,7 +181,7 @@ class ProductFacadeTest {
             ).toEntity();
             var menu = menuRepository.save(chickenMenu);
 
-            productService.changePrice(updateChicken.toVo());
+            productFacade.changePrice(updateChicken);
 
             menuPolicy.hideMenu(productId);
 

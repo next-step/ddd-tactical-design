@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.UUID;
 import kitchenpos.global.exception.ErrorCode;
 import kitchenpos.global.exception.NotFoundException;
-import kitchenpos.menu.domain.service.ProductContextService;
+import kitchenpos.menu.application.ProductContextProvider;
 import kitchenpos.product.domain.entity.Product;
 import kitchenpos.product.domain.repository.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -13,11 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class ProductContextServiceImpl implements ProductContextService {
+public class ProductContextService implements ProductContextProvider {
 
     private final ProductRepository productRepository;
 
-    public ProductContextServiceImpl(ProductRepository productRepository) {
+    public ProductContextService(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 
