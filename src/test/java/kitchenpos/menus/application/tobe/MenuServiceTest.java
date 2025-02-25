@@ -3,7 +3,7 @@ package kitchenpos.menus.application.tobe;
 import kitchenpos.common.vo.Price;
 import kitchenpos.menus.infra.InMemoryMenuGroupRepository;
 import kitchenpos.menus.infra.InMemoryMenuRepository;
-import kitchenpos.menus.infra.MenuProductsValidatorService;
+import kitchenpos.menus.tobe.domain.MenuProductsValidatorService;
 import kitchenpos.menus.presentation.dto.*;
 import kitchenpos.menus.tobe.domain.*;
 import kitchenpos.menus.tobe.domain.exception.InvalidMenuProductsException;

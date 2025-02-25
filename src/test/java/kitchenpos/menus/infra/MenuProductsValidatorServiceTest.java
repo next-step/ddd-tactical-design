@@ -4,6 +4,7 @@ import kitchenpos.common.vo.Price;
 import kitchenpos.menus.tobe.domain.MenuProduct;
 import kitchenpos.menus.tobe.domain.MenuProducts;
 import kitchenpos.menus.tobe.domain.MenuProductsValidator;
+import kitchenpos.menus.tobe.domain.MenuProductsValidatorService;
 import kitchenpos.menus.tobe.domain.exception.InvalidMenuProductsException;
 import kitchenpos.products.infra.tobe.InMemoryProductRepository;
 import kitchenpos.products.tobe.domain.Product;

@@ -1,7 +1,5 @@
-package kitchenpos.menus.infra;
+package kitchenpos.menus.tobe.domain;
 
-import kitchenpos.menus.tobe.domain.MenuProducts;
-import kitchenpos.menus.tobe.domain.MenuProductsValidator;
 import kitchenpos.menus.tobe.domain.exception.InvalidMenuProductsException;
 import kitchenpos.products.tobe.domain.ProductId;
 import kitchenpos.products.tobe.domain.ProductRepository;
