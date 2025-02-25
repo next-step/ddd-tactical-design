@@ -1,12 +1,13 @@
 package kitchenpos.product.tobe.application;
 
-import kitchenpos.fake.repository.InMemoryMenuRepository;
+
 import kitchenpos.common.tobe.Profanities;
+import kitchenpos.menu.tobe.fake.InMemoryMenuRepository;
 import kitchenpos.product.tobe.domain.*;
 import kitchenpos.product.tobe.fake.FakePurogmalumClient;
 import kitchenpos.product.tobe.fake.InMemoryProductRepository;
 import kitchenpos.product.tobe.fixture.ProductFixture;
-import kitchenpos.menu.domain.MenuRepository;
+import kitchenpos.menu.tobe.domain.menu.MenuRepository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -32,7 +33,7 @@ class ProductServiceTest {
         MenuRepository menuRepository = new InMemoryMenuRepository();
         profanities = new FakePurogmalumClient("바보");
         productValidator = new ProductPriceValidator(menuRepository);
-        productService = new ProductService(productRepository, menuRepository, profanities, productValidator);
+        productService = new ProductService(productRepository, profanities, productValidator);
     }
 
     @Nested

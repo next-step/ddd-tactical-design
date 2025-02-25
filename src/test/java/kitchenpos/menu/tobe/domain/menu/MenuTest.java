@@ -161,7 +161,7 @@ class MenuTest {
     void hideMenu() {
         // given
         String menuName = "메뉴";
-        Long menuPrice = 15000L;
+        Long menuPrice = 12000L;
         List<MenuProduct> menuProducts = Arrays.asList(
                 new MenuProduct(1L, 1, 5000L, productId),
                 new MenuProduct(2L, 1, 8000L, productId2));

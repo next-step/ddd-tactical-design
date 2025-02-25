@@ -19,18 +19,15 @@ import java.util.UUID;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
-    private final MenuRepository menuRepository;
     private final Profanities profanities;
     private final ProductValidator productValidator;
 
     public ProductService(
             final ProductRepository productRepository,
-            final MenuRepository menuRepository,
             final Profanities profanities,
             final ProductValidator productValidator
-            ) {
+    ) {
         this.productRepository = productRepository;
-        this.menuRepository = menuRepository;
         this.profanities = profanities;
         this.productValidator = productValidator;
     }
