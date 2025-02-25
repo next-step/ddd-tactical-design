@@ -1,7 +1,9 @@
 package kitchenpos.fixtures;
 
 import static java.math.BigDecimal.valueOf;
-import kitchenpos.products.domain.Product;
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductName;
+import kitchenpos.products.tobe.domain.ProductPrice;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -18,27 +20,16 @@ public class ProductFixtures {
     public static final BigDecimal 양념치킨_가격 = valueOf(17000);
 
     public static Product 후라이드치킨() {
-        Product product = new Product();
-        product.setId(후라이드치킨_ID);
-        product.setName(후라이드치킨_이름);
-        product.setPrice(후라이드치킨_가격);
-
+        Product product = new Product(new ProductName(후라이드치킨_이름), new ProductPrice(후라이드치킨_가격));
         return product;
     }
 
     public static Product 양념치킨() {
-        Product product = new Product();
-        product.setId(양념치킨_ID);
-        product.setName(양념치킨_이름);
-        product.setPrice(양념치킨_가격);
-
+        Product product = new Product(new ProductName(양념치킨_이름), new ProductPrice(양념치킨_가격));
         return product;
     }
     public static Product createProduct(final String name, final BigDecimal price) {
-        Product product = new Product();
-        product.setId(UUID.randomUUID());
-        product.setName(name);
-        product.setPrice(price);
+        Product product = new Product(new ProductName(name), new ProductPrice(price));
         return product;
     }
 
@@ -50,10 +41,7 @@ public class ProductFixtures {
     }
 
     public static Product product(final String name, final long price) {
-        final Product product = new Product();
-        product.setId(UUID.randomUUID());
-        product.setName(name);
-        product.setPrice(BigDecimal.valueOf(price));
+        final Product product = new Product(new ProductName(name), new ProductPrice(BigDecimal.valueOf(price)));
         return product;
     }
 }
