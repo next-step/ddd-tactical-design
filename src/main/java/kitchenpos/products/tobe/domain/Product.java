@@ -61,4 +61,8 @@ public class Product {
     public void updatePrice(final BigDecimal price) {
         this.price = new ProductPrice(price);
     }
+
+    public void updateName(final String name) {
+        this.name = new ProductName(name);
+    }
 }
