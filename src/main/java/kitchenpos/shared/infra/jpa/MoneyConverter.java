@@ -8,11 +8,11 @@ import kitchenpos.shared.domain.Money;
 public class MoneyConverter implements AttributeConverter<Money, Long> {
     @Override
     public Long convertToDatabaseColumn(Money money) {
-        return money.amount().longValue();
+        return money.getAmount().longValue();
     }
 
     @Override
     public Money convertToEntityAttribute(Long amount) {
-        return Money.of(amount);
+        return Money.wons(amount);
     }
 }

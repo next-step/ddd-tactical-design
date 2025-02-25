@@ -7,7 +7,7 @@ import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.shared.domain.ProfanityChecker;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,18 +23,18 @@ public class MenuService {
     private final MenuRepository menuRepository;
     private final MenuGroupRepository menuGroupRepository;
     private final ProductRepository productRepository;
-    private final PurgomalumClient purgomalumClient;
+    private final ProfanityChecker profanityChecker;
 
     public MenuService(
         final MenuRepository menuRepository,
         final MenuGroupRepository menuGroupRepository,
         final ProductRepository productRepository,
-        final PurgomalumClient purgomalumClient
+        final ProfanityChecker profanityChecker
     ) {
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
         this.productRepository = productRepository;
-        this.purgomalumClient = purgomalumClient;
+        this.profanityChecker = profanityChecker;
     }
 
     @Transactional
@@ -79,7 +79,7 @@ public class MenuService {
             throw new IllegalArgumentException();
         }
         final String name = request.getName();
-        if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
+        if (Objects.isNull(name) || profanityChecker.containsProfanity(name)) {
             throw new IllegalArgumentException();
         }
         final Menu menu = new Menu();
