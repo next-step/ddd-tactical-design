@@ -30,7 +30,7 @@ class ProductServiceTest {
     }
 
     @Test
-    @DisplayName("상품생성 / 성공")
+    @DisplayName("`Product`를 등록한다")
     fun createProduct() {
         // given
         val request = CreateProductReq("양념치킨", BigDecimal.valueOf(16000))
@@ -44,7 +44,7 @@ class ProductServiceTest {
     }
 
     @Test
-    @DisplayName("상품목록조회 / 성공")
+    @DisplayName("`Product`를 전체 조회한다")
     fun findAll() {
         // given
         val request1 = CreateProductReq("양념치킨", BigDecimal.valueOf(16000))
@@ -60,7 +60,7 @@ class ProductServiceTest {
     }
 
     @Test
-    @DisplayName("상품가격변경 / 성공")
+    @DisplayName("`Product`의 `price`를 변경한다")
     fun changePrice() {
         // given
         val product = productRepository.save(Fixtures.product(name = "양념치킨", price = 16000))
@@ -73,7 +73,7 @@ class ProductServiceTest {
     }
 
     @Test
-    @DisplayName("메뉴상품가격합 초과 / 상품가격변경 / 메뉴가 비노출된다")
+    @DisplayName("`Product`의 `price`를 변경 할 때 `Product`를 포함한 `Menu`들 중 `Menu Price > Menu Amount`인 `Menu`는 `Not Displayed`된다")
     fun changePriceMenuNotDisplayed() {
         // given
         val product = productRepository.save(Fixtures.product(name = "양념치킨", price = 16000))

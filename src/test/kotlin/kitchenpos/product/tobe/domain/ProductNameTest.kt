@@ -12,7 +12,7 @@ import org.junit.jupiter.params.provider.EmptySource
 class ProductNameTest {
 
     @Test
-    @DisplayName("상품이름 생성 / 성공")
+    @DisplayName("`ProductName`을 생성한다")
     fun createProductName() {
         val name = "양념치킨"
         val productName = ProductName(productNamePolicy = ProductNamePolicy(FakeProfanities()), name = name)
@@ -20,7 +20,7 @@ class ProductNameTest {
         assertEquals(name, productName.name)
     }
 
-    @DisplayName("빈 이름 / 상품이름 생성 / 실패")
+    @DisplayName("`ProductName`은 필수값이다")
     @EmptySource
     @ParameterizedTest
     fun createProductNameFail(name: String) {
@@ -29,7 +29,7 @@ class ProductNameTest {
         }
     }
 
-    @DisplayName("욕설 / 상품이름 생성 / 실패")
+    @DisplayName("`Profanities`의 `Profanity`가 포함된 `ProductName`은 생성할 수 없다")
     @ParameterizedTest
     @CsvSource(value = ["욕설상품", "비속어"])
     fun createProductNameProfanityFail(name: String) {

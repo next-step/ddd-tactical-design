@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 
 class ProductTest {
     @Test
-    @DisplayName("상품생성 / 성공")
+    @DisplayName("`Product`를 등록한다")
     fun createProduct() {
         val product = Product(
             productName = ProductName(ProductNamePolicy(FakeProfanities()), "양념치킨"),
@@ -22,7 +22,7 @@ class ProductTest {
     }
 
     @Test
-    @DisplayName("상품가격 0원 미만 / 상품생성 / 실패")
+    @DisplayName("`Product`를 등록할 때 `price`는 0원 미만일 수 없다")
     fun createProductPriceFail() {
         assertThatIllegalArgumentException().isThrownBy {
             Product(
@@ -33,7 +33,7 @@ class ProductTest {
     }
 
     @Test
-    @DisplayName("상품가격 변경 / 성공")
+    @DisplayName("`Product`의 `price`를 변경한다")
     fun changePrice() {
         val product = Product(
             productName = ProductName(ProductNamePolicy(FakeProfanities()), "양념치킨"),
@@ -46,7 +46,7 @@ class ProductTest {
     }
 
     @Test
-    @DisplayName("상품가격 0원 미만/ 상품가격 변경 / 실패")
+    @DisplayName("`Product`의 `price`를 변경할 때 `price`는 0원 미만일 수 없다")
     fun changePriceFail() {
         val product = Product(
             productName = ProductName(ProductNamePolicy(FakeProfanities()), "양념치킨"),

@@ -105,15 +105,16 @@ docker compose -p kitchenpos up -d
 
 ### 메뉴
 
-| 한글명 | 영문명 | 설명                                             |
-| --- | --- |------------------------------------------------|
-| 금액 | amount | 메뉴상품가격 * 수량                                    |
-| 메뉴 | menu | 메뉴 그룹에 속하는 실제 주문 가능 단위                         |
-| 메뉴 그룹 | menu group | 각각의 메뉴를 성격에 따라 분류하여 묶어둔 그룹                     |
-| 메뉴 상품 | menu product | 메뉴에 속하는 수량이 있는 상품                              |
-| 노출 메뉴   | Displayed Menu           | 손님에게 보이는 메뉴         |
-| 비노출 메뉴  | Not Displayed Menu       | 손님에게 보이지 않는 메뉴   |
-| 이름 | displayed name | 음식을 상상하게 만드는 중요한 요소                            |
+| 한글명   | 영문명                | 설명                        |
+|-------|--------------------|---------------------------|
+| 메뉴    | menu               | 메뉴 그룹에 속하는 실제 주문 가능 단위    |
+| 메뉴가격  | menu price         | 메뉴의 가격                    |
+| 메뉴금액  | menu amount        | 메뉴상품가격 * 수량               |
+| 메뉴 그룹 | menu group         | 각각의 메뉴를 성격에 따라 분류하여 묶어둔 그룹 |
+| 메뉴 상품 | menu product       | 메뉴에 속하는 수량이 있는 상품         |
+| 노출 메뉴 | displayed menu     | 손님에게 보이는 메뉴               |
+| 비노출 메뉴 | not displayed menu | 손님에게 보이지 않는 메뉴            |
+| 이름    | displayed name     | 음식을 상상하게 만드는 중요한 요소       |
 
 ### 매장 주문
 
@@ -169,7 +170,7 @@ docker compose -p kitchenpos up -d
 - `Product`를 등록
 - `Product`를 전체조회
 - `Product`의 `price`를 변경
-  - `Product`를 포함한 `Menu`들 중  `MenuPrice <= MenuAmount`를 만족하지 못하는 `Menu`는 `Not Displayed`된다
+  - `Product`를 포함한 `Menu`들 중  `MenuPrice > MenuAmount`인 `Menu`는 `Not Displayed`된다
 
 ### 메뉴
 - `MenuGroup`은 식별자와 이름을 가진다.

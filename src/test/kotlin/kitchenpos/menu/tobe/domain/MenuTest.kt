@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 
 class MenuTest {
     @Test
-    @DisplayName("메뉴 금액 계산")
+    @DisplayName("`Menu`의 `amount`를 계산한다")
     fun amount() {
         val 양념치킨 = Fixtures.product(name = "양념치킨", price = 16000)
         val 후라이드치킨 = Fixtures.product(name = "후라이드치킨", price = 17000)
