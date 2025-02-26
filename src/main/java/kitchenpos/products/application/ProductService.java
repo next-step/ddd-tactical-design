@@ -79,7 +79,10 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public List<Product> findAll() {
-        return productRepository.findAll();
+    public List<FindProductResponse> findAll() {
+        return productRepository.findAll()
+                .stream()
+                .map(product -> FindProductResponse.from(product))
+                .toList();
     }
 }
