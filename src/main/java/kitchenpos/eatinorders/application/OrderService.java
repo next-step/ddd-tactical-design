@@ -50,14 +50,14 @@ public class OrderService {
         if (Objects.isNull(orderLineItemRequests) || orderLineItemRequests.isEmpty()) {
             throw new IllegalArgumentException();
         }
-        final List<Menu> menus = menuRepository.findAllByIdIn(
-            orderLineItemRequests.stream()
-                .map(OrderLineItem::getMenuId)
-                .toList()
-        );
-        if (menus.size() != orderLineItemRequests.size()) {
-            throw new IllegalArgumentException();
-        }
+//        final List<Menu> menus = menuRepository.findAllByIdIn(
+//            orderLineItemRequests.stream()
+//                .map(OrderLineItem::getMenuId)
+//                .toList()
+//        );
+//        if (menus.size() != orderLineItemRequests.size()) {
+//            throw new IllegalArgumentException();
+//        }
         final List<OrderLineItem> orderLineItems = new ArrayList<>();
         for (final OrderLineItem orderLineItemRequest : orderLineItemRequests) {
             final long quantity = orderLineItemRequest.getQuantity();
