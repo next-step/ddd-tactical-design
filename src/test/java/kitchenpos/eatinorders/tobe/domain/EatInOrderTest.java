@@ -31,7 +31,7 @@ public class EatInOrderTest {
                 UUID.randomUUID(), "후라이드 치킨", 16_000
         ));
 
-        assertThatThrownBy(() -> new EatInOrder(List.of(eatInOrderLineItem)), orderTableId)
+        assertThatThrownBy(() -> new EatInOrder(List.of(eatInOrderLineItem), orderTableId))
                 .isExactlyInstanceOf(IllegalArgumentException.class);
     }
 }
