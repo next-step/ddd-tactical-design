@@ -3,6 +3,7 @@ package kitchenpos.products.application;
 import static java.math.BigDecimal.valueOf;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.products.application.exception.InvalidProductServiceException;
 import kitchenpos.products.ui.dto.ChangeProductRequest;
 import kitchenpos.products.ui.dto.ChangeProductResponse;
 import kitchenpos.products.ui.dto.CreateProductRequest;
@@ -85,7 +86,7 @@ class ProductServiceTest {
 
         // when & then
         assertThatThrownBy(() -> productService.changePrice(nonExistentProductUd, request))
-                .isInstanceOf(NoSuchElementException.class);
+                .isInstanceOf(InvalidProductServiceException.class);
     }
 
     @Test

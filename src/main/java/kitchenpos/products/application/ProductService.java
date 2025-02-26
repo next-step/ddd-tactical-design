@@ -3,6 +3,7 @@ package kitchenpos.products.application;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.products.application.exception.InvalidProductServiceException;
 import kitchenpos.products.ui.dto.ChangeProductRequest;
 import kitchenpos.products.ui.dto.ChangeProductResponse;
 import kitchenpos.products.ui.dto.CreateProductRequest;
@@ -46,7 +47,7 @@ public class ProductService {
 
     private void validateProfanity(final String name) {
         if (purgomalumClient.containsProfanity(name)) {
-            throw new IllegalArgumentException("상품의 이름에 부적절한 단어(비속어가) 포함되면 안됩니다.");
+            throw new InvalidProductServiceException("상품의 이름에 부적절한 단어(비속어가) 포함되면 안됩니다.");
         }
     }
 
@@ -55,7 +56,7 @@ public class ProductService {
         final ProductPrice price = new ProductPrice(request.price());
 
         final Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new NoSuchElementException("해당 상품이 존재하지 않습니다"));
+                .orElseThrow(() -> new InvalidProductServiceException("해당 상품이 존재하지 않습니다"));
         product.updatePrice(price.getPrice());
 
         final List<Menu> menus = menuRepository.findAllByProductId(productId);

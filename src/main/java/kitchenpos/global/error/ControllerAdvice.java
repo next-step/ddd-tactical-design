@@ -34,6 +34,13 @@ public class ControllerAdvice {
         return new ResponseEntity<>(apiResultResponse, e.getHttpStatus());
     }
 
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ApiResultResponse<ErrorResponse>> handleBusinessException(final BusinessException e) {
+        ErrorResponse errorResponse = new ErrorResponse(e.getErrorCode(), e.getMessage());
+        ApiResultResponse<ErrorResponse> apiResultResponse = ApiResultResponse.failure(errorResponse, ERROR);
+        return new ResponseEntity<>(apiResultResponse, e.getHttpStatus());
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResultResponse<ErrorResponse>> handleMethodArgumentException(final MethodArgumentNotValidException e) {
         FieldError firstFieldError = e.getFieldErrors().get(0);
