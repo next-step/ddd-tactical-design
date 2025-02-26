@@ -13,7 +13,7 @@ class ProductTest {
     @DisplayName("상품생성 / 성공")
     fun createProduct() {
         val product = Product(
-            productName = ProductName(FakeProfanities(), "양념치킨"),
+            productName = ProductName(ProductNamePolicy(FakeProfanities()), "양념치킨"),
             price = BigDecimal.valueOf(16000)
         )
 
@@ -26,7 +26,7 @@ class ProductTest {
     fun createProductPriceFail() {
         assertThatIllegalArgumentException().isThrownBy {
             Product(
-                productName = ProductName(FakeProfanities(), "양념치킨"),
+                productName = ProductName(ProductNamePolicy(FakeProfanities()), "양념치킨"),
                 price = BigDecimal.valueOf(-1)
             )
         }
@@ -36,7 +36,7 @@ class ProductTest {
     @DisplayName("상품가격 변경 / 성공")
     fun changePrice() {
         val product = Product(
-            productName = ProductName(FakeProfanities(), "양념치킨"),
+            productName = ProductName(ProductNamePolicy(FakeProfanities()), "양념치킨"),
             price = BigDecimal.valueOf(16000)
         )
 
@@ -49,7 +49,7 @@ class ProductTest {
     @DisplayName("상품가격 0원 미만/ 상품가격 변경 / 실패")
     fun changePriceFail() {
         val product = Product(
-            productName = ProductName(FakeProfanities(), "양념치킨"),
+            productName = ProductName(ProductNamePolicy(FakeProfanities()), "양념치킨"),
             price = BigDecimal.valueOf(16000)
         )
 

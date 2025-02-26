@@ -6,6 +6,7 @@ import kitchenpos.menu.tobe.domain.Menu
 import kitchenpos.menu.tobe.domain.MenuProduct
 import kitchenpos.product.tobe.domain.Product
 import kitchenpos.product.tobe.domain.ProductName
+import kitchenpos.product.tobe.domain.ProductNamePolicy
 import kitchenpos.product.tobe.infra.FakeProfanities
 
 class Fixtures {
@@ -17,7 +18,7 @@ class Fixtures {
         ): Product {
             return Product(
                 id = id,
-                productName = ProductName(FakeProfanities(), name),
+                productName = ProductName(ProductNamePolicy(FakeProfanities()), name),
                 price = price.toBigDecimal()
             )
         }

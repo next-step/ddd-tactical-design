@@ -8,6 +8,7 @@ import kitchenpos.product.tobe.application.dto.CreateProductReq
 import kitchenpos.product.tobe.application.dto.ProductResp
 import kitchenpos.product.tobe.domain.Product
 import kitchenpos.product.tobe.domain.ProductName
+import kitchenpos.product.tobe.domain.ProductNamePolicy
 import kitchenpos.product.tobe.domain.ProductRepository
 import org.springframework.stereotype.Service
 
@@ -21,7 +22,7 @@ class ProductService(
     fun create(request: CreateProductReq): ProductResp {
         val product = productRepository.save(
             Product(
-                productName = ProductName(profanities, request.name), price = request.price
+                productName = ProductName(ProductNamePolicy(profanities), request.name), price = request.price
             )
         )
         return ProductResp.of(product)
