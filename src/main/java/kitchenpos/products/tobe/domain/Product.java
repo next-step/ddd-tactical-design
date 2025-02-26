@@ -5,7 +5,6 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import kitchenpos.common.infra.PurgomalumClient;
 
 import java.math.BigDecimal;
 import java.util.Objects;
