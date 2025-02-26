@@ -14,7 +14,7 @@ class EatInOrderLineItemsTest {
 
     @DisplayName("메뉴의 가격과 주문 항목 메뉴의 가격이 일치하면 true 를 반환한다.")
     @CsvSource(value = {"1000:1000", "10_000:10_000", "16_000:16_000"}, delimiter = ':')
-    @ParameterizedTest
+    @ParameterizedTest(name = "{index}. 메뉴 가격: {0}, 주문 항목 메뉴 가격: {1}")
     void isSamePrice(final int menuPrice, final int expectedPrice) {
         // given
         final UUID menuId = UUID.randomUUID();

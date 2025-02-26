@@ -1,6 +1,5 @@
 package kitchenpos.eatinorders.tobe.domain;
 
-import kitchenpos.eatinorders.domain.OrderLineItem;
 import kitchenpos.eatinorders.tobe.domain.vo.OrderTableId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -27,9 +26,11 @@ public class EatInOrderTest {
     @NullSource
     @ParameterizedTest(name = "주문 테이블: {0}")
     void createWithoutOrderTable(final OrderTableId orderTableId) {
-        final EatInOrderLineItem eatInOrderLineItem = new EatInOrderLineItem(new EatInOrderLineItemMenu(
-                UUID.randomUUID(), "후라이드 치킨", 16_000
-        ));
+        final EatInOrderLineItem eatInOrderLineItem = new EatInOrderLineItem(
+                1L,
+                new EatInOrderLineItemMenu(UUID.randomUUID(), "후라이드 치킨", 16_000),
+                1
+        );
 
         assertThatThrownBy(() -> new EatInOrder(List.of(eatInOrderLineItem), orderTableId))
                 .isExactlyInstanceOf(IllegalArgumentException.class);

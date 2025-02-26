@@ -3,6 +3,8 @@ package kitchenpos.eatinorders.tobe.domain;
 import kitchenpos.eatinorders.tobe.domain.vo.EatInOrderLineItemSeq;
 import kitchenpos.eatinorders.tobe.domain.vo.Quantity;
 
+import java.util.UUID;
+
 public class EatInOrderLineItem {
 
     private final EatInOrderLineItemSeq seq;
@@ -21,5 +23,13 @@ public class EatInOrderLineItem {
         this.seq = seq;
         this.eatInOrderLineItemMenu = eatInOrderLineItemMenu;
         this.quantity = quantity;
+    }
+
+    public boolean isSameMenu(final UUID menuId) {
+        return eatInOrderLineItemMenu.isSameMenu(menuId);
+    }
+
+    public boolean isSamePrice(final int menuPrice) {
+        return eatInOrderLineItemMenu.isSamePrice(menuPrice);
     }
 }

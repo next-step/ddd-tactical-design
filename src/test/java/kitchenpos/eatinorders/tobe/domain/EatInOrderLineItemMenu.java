@@ -12,4 +12,12 @@ public class EatInOrderLineItemMenu {
         this.name = name;
         this.price = price;
     }
+
+    public boolean isSameMenu(final UUID menuId) {
+        return this.menuId.equals(menuId);
+    }
+
+    public boolean isSamePrice(final int menuPrice) {
+        return price == menuPrice;
+    }
 }
