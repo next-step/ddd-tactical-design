@@ -3,14 +3,15 @@ package kitchenpos.products.application;
 import static java.math.BigDecimal.valueOf;
 import static kitchenpos.fixtures.ProductFixtures.양념치킨;
 import static kitchenpos.fixtures.ProductFixtures.후라이드치킨;
-import static kitchenpos.fixtures.ProductFixtures.후라이드치킨_가격;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.products.application.dto.CreateProductServiceRequest;
+import kitchenpos.products.application.dto.CreateProductServiceResponse;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductName;
 import kitchenpos.products.tobe.domain.ProductPrice;
 import kitchenpos.products.tobe.domain.ProductRepository;
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.common.infra.PurgomalumClient;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -41,16 +42,18 @@ class ProductServiceTest {
     @Test
     void 상품을_등록할_수_있다() {
         // given
-        Product request = 후라이드치킨();
+        String name = "후라이드치킨";
+        BigDecimal price = BigDecimal.valueOf(16000);
+        CreateProductServiceRequest request = new CreateProductServiceRequest(name, price)
 
         // when
-        Product savedProduct = productService.create(request);
+        CreateProductServiceResponse savedProduct = productService.create(request);
 
         // then
         assertThat(savedProduct).isNotNull();
-        assertThat(savedProduct.getId()).isNotNull();
-        assertThat(savedProduct.getName()).isEqualTo("후라이드치킨");
-        assertThat(savedProduct.getPrice()).isEqualTo(valueOf(16000));
+        assertThat(savedProduct.id()).isNotNull();
+        assertThat(savedProduct.name()).isEqualTo("후라이드치킨");
+        assertThat(savedProduct.price()).isEqualTo(valueOf(16000));
     }
     @Test
     void 상품의_가격을_변경할_수_있다() {
