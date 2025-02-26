@@ -36,6 +36,21 @@ public class OrderTable {
         );
     }
 
+    public static OrderTable create(
+            final UUID id,
+            final String name,
+            final int numberOfGuests,
+            final boolean occupied,
+            final Profanities profanities
+    ) {
+        return new OrderTable(
+                id,
+                OrderTableName.of(name, profanities),
+                NumberOfGuests.of(numberOfGuests),
+                OrderTableOccupiedState.of(occupied)
+        );
+    }
+
     public void sit() {
         orderTableOccupiedState = orderTableOccupiedState.occupy();
     }

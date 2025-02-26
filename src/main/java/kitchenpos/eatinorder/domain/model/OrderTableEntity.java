@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import kitchenpos.eatinorder.domain.model.todo.OrderTable;
+import kitchenpos.shared.domain.Profanities;
 
 import java.util.UUID;
 
@@ -34,6 +35,10 @@ public class OrderTableEntity {
         orderTableEntity.setNumberOfGuests(orderTable.getNumberOfGuests());
         orderTableEntity.setOccupied(orderTable.isOccupied());
         return orderTableEntity;
+    }
+
+    public OrderTable toDomain(Profanities profanities) {
+        return OrderTable.create(this.id, this.name, this.numberOfGuests, this.occupied, profanities);
     }
 
     public UUID getId() {

@@ -37,10 +37,11 @@ public class OrderTableService {
 
     @Transactional
     public OrderTableEntity sit(final UUID orderTableId) {
-        final OrderTableEntity orderTableEntity = orderTableRepository.findById(orderTableId)
-            .orElseThrow(NoSuchElementException::new);
-        orderTableEntity.setOccupied(true);
-        return orderTableEntity;
+        final OrderTable orderTable = orderTableRepository.findById(orderTableId)
+                .map(orderTableEntity -> orderTableEntity.toDomain(profanities))
+                .orElseThrow(NoSuchElementException::new);
+        orderTable.sit();
+        return orderTableRepository.save(OrderTableEntity.of(orderTable));
     }
 
     @Transactional
