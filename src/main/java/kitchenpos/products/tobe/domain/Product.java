@@ -1,6 +1,7 @@
 package kitchenpos.products.tobe.domain;
 
 import jakarta.persistence.*;
+import kitchenpos.products.domain.ProductAsis;
 
 @Entity
 @Table(name="product")
@@ -48,11 +49,4 @@ public class Product {
         this.price = price;
     }
 
-    public static kitchenpos.products.domain.Product convertAsisDomain(Product product){
-        kitchenpos.products.domain.Product asisProduct = new kitchenpos.products.domain.Product();
-        asisProduct.setId(product.productId.getId());
-        asisProduct.setName(product.productName.getValue());
-        asisProduct.setPrice(product.price.getPrice());
-        return asisProduct;
-    }
 }
