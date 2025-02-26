@@ -33,6 +33,9 @@ public class OrderTable {
         if (numberOfGuests < 0) {
             throw new IllegalArgumentException();
         }
+        if (!occupied) {
+            throw new IllegalArgumentException();
+        }
         this.numberOfGuests = numberOfGuests;
     }
 }
