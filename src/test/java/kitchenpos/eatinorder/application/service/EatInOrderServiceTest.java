@@ -115,11 +115,11 @@ public class EatInOrderServiceTest {
         @Test
         void create_eat_in_order_successfully() {
             // given
-            OrderTable orderTable = createOrderTable(테이블_1_ORDER_TABLE_UUID, "테이블 1", 0, true);
-            orderTableRepository.save(orderTable);
+            OrderTableEntity orderTableEntity = createOrderTable(테이블_1_ORDER_TABLE_UUID, "테이블 1", 0, true);
+            orderTableRepository.save(orderTableEntity);
 
             List<OrderLineItem> orderLineItems = List.of(createOrderLineItem(후라이드치킨_MENU_UUID, 2, 후라이드치킨_MENU_DEFAULT_PRICE));
-            Order request = createOrder(OrderType.EAT_IN, orderLineItems, null, 테이블_1_ORDER_TABLE_UUID, orderTable);
+            Order request = createOrder(OrderType.EAT_IN, orderLineItems, null, 테이블_1_ORDER_TABLE_UUID, orderTableEntity);
 
             // when
             Order order = orderService.create(request);
@@ -219,11 +219,11 @@ public class EatInOrderServiceTest {
         @Test
         void table_must_be_occupied_for_eat_in_order() {
             // given
-            OrderTable orderTable = createOrderTable(테이블_1_ORDER_TABLE_UUID, "테이블 1", 0, false);
-            orderTableRepository.save(orderTable);
+            OrderTableEntity orderTableEntity = createOrderTable(테이블_1_ORDER_TABLE_UUID, "테이블 1", 0, false);
+            orderTableRepository.save(orderTableEntity);
 
             List<OrderLineItem> orderLineItems = List.of(createOrderLineItem(후라이드치킨_MENU_UUID, 2, 후라이드치킨_MENU_DEFAULT_PRICE));
-            Order request = createOrder(OrderType.EAT_IN, orderLineItems, null, 테이블_1_ORDER_TABLE_UUID, orderTable);
+            Order request = createOrder(OrderType.EAT_IN, orderLineItems, null, 테이블_1_ORDER_TABLE_UUID, orderTableEntity);
 
             // when
             ThrowableAssert.ThrowingCallable throwingCallable = () -> orderService.create(request);
@@ -598,11 +598,11 @@ public class EatInOrderServiceTest {
     }
 
     private Order createEeaInOrder() {
-        OrderTable orderTable = createOrderTable(테이블_1_ORDER_TABLE_UUID, "테이블 1", 0, true);
-        orderTableRepository.save(orderTable);
+        OrderTableEntity orderTableEntity = createOrderTable(테이블_1_ORDER_TABLE_UUID, "테이블 1", 0, true);
+        orderTableRepository.save(orderTableEntity);
 
         List<OrderLineItem> orderLineItems = List.of(createOrderLineItem(후라이드치킨_MENU_UUID, 2, 후라이드치킨_MENU_DEFAULT_PRICE));
-        Order request = createOrder(OrderType.EAT_IN, orderLineItems, "서울시 강남구", 테이블_1_ORDER_TABLE_UUID, orderTable);
+        Order request = createOrder(OrderType.EAT_IN, orderLineItems, "서울시 강남구", 테이블_1_ORDER_TABLE_UUID, orderTableEntity);
         return orderService.create(request);
     }
 
@@ -638,13 +638,13 @@ public class EatInOrderServiceTest {
         return createOrder(type, orderLineItems, deliveryAddress, null, null);
     }
 
-    private static Order createOrder(OrderType type, List<OrderLineItem> orderLineItems, String deliveryAddress, UUID orderTableUuid, OrderTable orderTable) {
+    private static Order createOrder(OrderType type, List<OrderLineItem> orderLineItems, String deliveryAddress, UUID orderTableUuid, OrderTableEntity orderTableEntity) {
         Order order = new Order();
         order.setType(type);
         order.setOrderLineItems(orderLineItems);
         order.setDeliveryAddress(deliveryAddress);
         order.setOrderTableId(orderTableUuid);
-        order.setOrderTable(orderTable);
+        order.setOrderTable(orderTableEntity);
         return order;
     }
 
@@ -668,13 +668,13 @@ public class EatInOrderServiceTest {
         return menu;
     }
 
-    private static OrderTable createOrderTable(UUID id, String name, int numberOfGuests, boolean occupied) {
-        OrderTable orderTable = new OrderTable();
-        orderTable.setId(id);
-        orderTable.setOccupied(occupied);
-        orderTable.setNumberOfGuests(numberOfGuests);
-        orderTable.setName(name);
-        return orderTable;
+    private static OrderTableEntity createOrderTable(UUID id, String name, int numberOfGuests, boolean occupied) {
+        OrderTableEntity orderTableEntity = new OrderTableEntity();
+        orderTableEntity.setId(id);
+        orderTableEntity.setOccupied(occupied);
+        orderTableEntity.setNumberOfGuests(numberOfGuests);
+        orderTableEntity.setName(name);
+        return orderTableEntity;
     }
 
     private static final UUID 후라이드치킨_PRODUCT_UUID = UUID.randomUUID();

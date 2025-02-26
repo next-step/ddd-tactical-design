@@ -34,6 +34,10 @@ public class EatInOrderService {
 
     @Transactional
     public Order create(final Order request) {
+        final OrderType type = request.getType();
+        if (Objects.isNull(type)) {
+            throw new IllegalArgumentException();
+        }
         final List<OrderLineItem> orderLineItemRequests = request.getOrderLineItems();
         if (Objects.isNull(orderLineItemRequests) || orderLineItemRequests.isEmpty()) {
             throw new IllegalArgumentException();
@@ -49,6 +53,11 @@ public class EatInOrderService {
         final List<OrderLineItem> orderLineItems = new ArrayList<>();
         for (final OrderLineItem orderLineItemRequest : orderLineItemRequests) {
             final long quantity = orderLineItemRequest.getQuantity();
+            if (type != OrderType.EAT_IN) {
+                if (quantity < 0) {
+                    throw new IllegalArgumentException();
+                }
+            }
             final MenuEntity menu = menuEntityRepository.findById(orderLineItemRequest.getMenuId())
                 .orElseThrow(NoSuchElementException::new);
             if (!menu.isDisplayed()) {
@@ -64,17 +73,25 @@ public class EatInOrderService {
         }
         Order order = new Order();
         order.setId(UUID.randomUUID());
+        order.setType(type);
         order.setStatus(OrderStatus.WAITING);
         order.setOrderDateTime(LocalDateTime.now());
         order.setOrderLineItems(orderLineItems);
-
-        final OrderTable orderTable = orderTableRepository.findById(request.getOrderTableId())
-            .orElseThrow(NoSuchElementException::new);
-        if (!orderTable.isOccupied()) {
-            throw new IllegalStateException();
+        if (type == OrderType.DELIVERY) {
+            final String deliveryAddress = request.getDeliveryAddress();
+            if (Objects.isNull(deliveryAddress) || deliveryAddress.isEmpty()) {
+                throw new IllegalArgumentException();
+            }
+            order.setDeliveryAddress(deliveryAddress);
         }
-        order.setOrderTable(orderTable);
-
+        if (type == OrderType.EAT_IN) {
+            final OrderTableEntity orderTable = orderTableRepository.findById(request.getOrderTableId())
+                .orElseThrow(NoSuchElementException::new);
+            if (!orderTable.isOccupied()) {
+                throw new IllegalStateException();
+            }
+            order.setOrderTable(orderTable);
+        }
         return orderRepository.save(order);
     }
 
@@ -152,7 +169,7 @@ public class EatInOrderService {
         }
         order.setStatus(OrderStatus.COMPLETED);
         if (type == OrderType.EAT_IN) {
-            final OrderTable orderTable = order.getOrderTable();
+            final OrderTableEntity orderTable = order.getOrderTable();
             if (!orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
                 orderTable.setNumberOfGuests(0);
                 orderTable.setOccupied(false);

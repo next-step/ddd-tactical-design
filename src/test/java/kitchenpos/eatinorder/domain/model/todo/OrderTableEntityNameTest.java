@@ -10,7 +10,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-class OrderTableNameTest {
+class OrderTableEntityNameTest {
     @DisplayName("OrderTableName을 생성한다.")
     @Test
     void create() {

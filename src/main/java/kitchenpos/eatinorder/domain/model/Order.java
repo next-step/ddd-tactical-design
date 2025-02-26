@@ -53,7 +53,7 @@ public class Order {
         columnDefinition = "binary(16)",
         foreignKey = @ForeignKey(name = "fk_orders_to_order_table")
     )
-    private OrderTable orderTable;
+    private OrderTableEntity orderTable;
 
     @Transient
     private UUID orderTableId;
@@ -109,12 +109,12 @@ public class Order {
         this.deliveryAddress = deliveryAddress;
     }
 
-    public OrderTable getOrderTable() {
+    public OrderTableEntity getOrderTable() {
         return orderTable;
     }
 
-    public void setOrderTable(final OrderTable orderTable) {
-        this.orderTable = orderTable;
+    public void setOrderTable(final OrderTableEntity orderTableEntity) {
+        this.orderTable = orderTableEntity;
     }
 
     public UUID getOrderTableId() {

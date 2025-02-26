@@ -1,16 +1,16 @@
 package kitchenpos.eatinorder.application.port.out;
 
-import kitchenpos.eatinorder.domain.model.OrderTable;
+import kitchenpos.eatinorder.domain.model.OrderTableEntity;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 public interface OrderTableRepository {
-    OrderTable save(OrderTable orderTable);
+    OrderTableEntity save(OrderTableEntity orderTableEntity);
 
-    Optional<OrderTable> findById(UUID id);
+    Optional<OrderTableEntity> findById(UUID id);
 
-    List<OrderTable> findAll();
+    List<OrderTableEntity> findAll();
 }
 

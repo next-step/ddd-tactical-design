@@ -2,7 +2,7 @@ package kitchenpos.eatinorder.application.port.out;
 
 import kitchenpos.eatinorder.domain.model.Order;
 import kitchenpos.eatinorder.domain.model.OrderStatus;
-import kitchenpos.eatinorder.domain.model.OrderTable;
+import kitchenpos.eatinorder.domain.model.OrderTableEntity;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +15,6 @@ public interface OrderRepository {
 
     List<Order> findAll();
 
-    boolean existsByOrderTableAndStatusNot(OrderTable orderTable, OrderStatus status);
+    boolean existsByOrderTableAndStatusNot(OrderTableEntity orderTableEntity, OrderStatus status);
 }
 

@@ -85,12 +85,12 @@ public class TakeOutOrderService {
             order.setDeliveryAddress(deliveryAddress);
         }
         if (type == OrderType.EAT_IN) {
-            final OrderTable orderTable = orderTableRepository.findById(request.getOrderTableId())
+            final OrderTableEntity orderTableEntity = orderTableRepository.findById(request.getOrderTableId())
                 .orElseThrow(NoSuchElementException::new);
-            if (!orderTable.isOccupied()) {
+            if (!orderTableEntity.isOccupied()) {
                 throw new IllegalStateException();
             }
-            order.setOrderTable(orderTable);
+            order.setOrderTable(orderTableEntity);
         }
         return orderRepository.save(order);
     }
@@ -169,10 +169,10 @@ public class TakeOutOrderService {
         }
         order.setStatus(OrderStatus.COMPLETED);
         if (type == OrderType.EAT_IN) {
-            final OrderTable orderTable = order.getOrderTable();
-            if (!orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
-                orderTable.setNumberOfGuests(0);
-                orderTable.setOccupied(false);
+            final OrderTableEntity orderTableEntity = order.getOrderTable();
+            if (!orderRepository.existsByOrderTableAndStatusNot(orderTableEntity, OrderStatus.COMPLETED)) {
+                orderTableEntity.setNumberOfGuests(0);
+                orderTableEntity.setOccupied(false);
             }
         }
         return order;

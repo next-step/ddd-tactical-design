@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-class OrderTableTest {
+class OrderTableEntityTest {
     @DisplayName("OrderTable을 생성한다")
     @Test
     void create() {

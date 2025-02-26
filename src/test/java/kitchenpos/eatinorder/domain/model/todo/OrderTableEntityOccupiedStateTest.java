@@ -8,7 +8,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-class OrderTableOccupiedStateTest {
+class OrderTableEntityOccupiedStateTest {
     @DisplayName("OrderTableOccupiedState를 생성한다.")
     @ValueSource(booleans = {true, false})
     @ParameterizedTest

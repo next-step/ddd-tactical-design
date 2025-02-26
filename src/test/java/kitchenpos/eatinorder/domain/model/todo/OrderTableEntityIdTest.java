@@ -8,7 +8,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-class OrderTableIdTest {
+class OrderTableEntityIdTest {
     @DisplayName("OrderTableId를 생성한다.")
     @Test
     void create() {
