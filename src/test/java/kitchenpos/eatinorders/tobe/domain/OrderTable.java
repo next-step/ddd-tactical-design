@@ -5,9 +5,9 @@ import kitchenpos.eatinorders.tobe.domain.vo.OrderTableName;
 import java.util.UUID;
 
 public class OrderTable {
-    private UUID id;
-    private OrderTableName name;
-    private int numberOfGuests;
+    private final UUID id;
+    private final OrderTableName name;
+    private final int numberOfGuests;
     private boolean occupied;
 
     public OrderTable(final UUID id, final String name, final int numberOfGuests, final boolean occupied) {
@@ -19,5 +19,13 @@ public class OrderTable {
         this.name = name;
         this.numberOfGuests = numberOfGuests;
         this.occupied = occupied;
+    }
+
+    public void sit() {
+        this.occupied = true;
+    }
+
+    public boolean isOccupied() {
+        return occupied;
     }
 }

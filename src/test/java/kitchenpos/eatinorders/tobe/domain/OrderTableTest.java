@@ -27,6 +27,6 @@ public class OrderTableTest {
         final OrderTable orderTable = new OrderTable(UUID.randomUUID(), "1번", 0, false);
         orderTable.sit();
 
-        assertThat(orderTable.isOccupied()).isTure();
+        assertThat(orderTable.isOccupied()).isTrue();
     }
 }
