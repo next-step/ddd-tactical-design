@@ -274,7 +274,7 @@ class MenuFacadeTest {
         void 메뉴_노출_성공() {
 
             assertThatCode(() -> {
-                menuFacade.display(defaultMenu.getMenuId());
+                menuFacade.display(defaultMenu.getMenuId().get());
             }).doesNotThrowAnyException();
 
         }
@@ -304,7 +304,7 @@ class MenuFacadeTest {
             menuPolicy.setExceptionStatus(isOver(BigDecimal.valueOf(price1)));
 
             assertThatExceptionOfType(MenuStateInvalidException.class)
-                .isThrownBy(() -> menuFacade.display(defaultMenu.getMenuId()))
+                .isThrownBy(() -> menuFacade.display(defaultMenu.getMenuId().get()))
                 .withMessage(ErrorCode.MENU_PRICE_OVER_TOTAL_PRODUCTS_NOT_ALLOWED.toString());
         }
     }
@@ -317,7 +317,7 @@ class MenuFacadeTest {
         @DisplayName("성공 : 등록 메뉴를 숨긴다.")
         void 메뉴_숨김_성공() {
 
-            menuFacade.hide(defaultMenu.getMenuId());
+            menuFacade.hide(defaultMenu.getMenuId().get());
 
             assertThat(defaultMenu.isDisplayed()).isFalse();
         }

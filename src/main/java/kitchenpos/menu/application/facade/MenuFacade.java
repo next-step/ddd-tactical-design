@@ -1,6 +1,7 @@
 package kitchenpos.menu.application.facade;
 
 import java.util.List;
+import java.util.UUID;
 import kitchenpos.menu.application.dto.MenuRequest;
 import kitchenpos.menu.application.dto.MenuResponse;
 import kitchenpos.menu.domain.model.MenuId;
@@ -30,12 +31,12 @@ public class MenuFacade {
         return MenuResponse.GetMenu.fromVo(menuCommandService.changePrice(request.toVo()));
     }
 
-    public MenuResponse.GetMenu display(MenuId menuId) {
-        return MenuResponse.GetMenu.fromVo(menuCommandService.display(menuId));
+    public MenuResponse.GetMenu display(UUID menuId) {
+        return MenuResponse.GetMenu.fromVo(menuCommandService.display(MenuId.of(menuId)));
     }
 
-    public MenuResponse.GetMenu hide(MenuId menuId) {
-        return MenuResponse.GetMenu.fromVo(menuCommandService.hide(menuId));
+    public MenuResponse.GetMenu hide(UUID menuId) {
+        return MenuResponse.GetMenu.fromVo(menuCommandService.hide(MenuId.of(menuId)));
     }
 
     public List<MenuResponse.GetMenu> findAll() {

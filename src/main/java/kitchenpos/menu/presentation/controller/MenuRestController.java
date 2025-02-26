@@ -51,14 +51,14 @@ public class MenuRestController {
     public ResponseEntity<MenuResponse.GetMenu> display(
         @PathVariable final UUID menuId
     ) {
-        return ResponseEntity.ok(menuFacade.display(MenuId.of(menuId)));
+        return ResponseEntity.ok(menuFacade.display(menuId));
     }
 
     @PutMapping("/{menuId}/hide")
     public ResponseEntity<MenuResponse.GetMenu> hide(
         @PathVariable final UUID menuId
     ) {
-        return ResponseEntity.ok(menuFacade.hide(MenuId.of(menuId)));
+        return ResponseEntity.ok(menuFacade.hide(menuId));
     }
 
     @GetMapping
