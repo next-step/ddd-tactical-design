@@ -1,0 +1,17 @@
+package kitchenpos.products.ui.dto;
+
+import kitchenpos.products.tobe.domain.Product;
+
+import java.math.BigDecimal;
+import java.util.UUID;
+
+public record FindProductResponse(UUID id, String name, BigDecimal price) {
+
+    public static FindProductResponse from(final Product product) {
+        return new FindProductResponse(
+                product.getId(),
+                product.getName(),
+                product.getPrice()
+        );
+    }
+}

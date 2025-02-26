@@ -44,7 +44,7 @@ public class ProductRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Product>> findAll() {
+    public ResponseEntity<List<FindProductResponse>> findAll() {
         return ResponseEntity.ok(productService.findAll());
     }
 }

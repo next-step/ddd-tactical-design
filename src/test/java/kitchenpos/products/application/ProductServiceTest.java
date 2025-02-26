@@ -93,16 +93,16 @@ class ProductServiceTest {
     @Test
     void 등록된_상품을_전체_조회할_수_있다() {
         // given
-        Product burger = 후라이드치킨();
-        Product pizza = 양념치킨();
+        ProductName name = new ProductName("후라이드치킨");
+        ProductPrice price = new ProductPrice(valueOf(16000));
+        CreateProductRequest request = new CreateProductRequest(name.getName(), price.getPrice());
 
         // when
-        productService.create(burger);
-        productService.create(pizza);
+        productService.create(request);
 
         // then
         List<Product> products = productRepository.findAll();
         assertNotNull(products);
-        assertThat(products).hasSize(2);
+        assertThat(products).hasSize(1);
     }
 }
