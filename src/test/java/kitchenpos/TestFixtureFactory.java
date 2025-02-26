@@ -3,6 +3,7 @@ package kitchenpos;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import kitchenpos.common.infra.external.FakePurgomalumClient;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.model.MenuGroup;
@@ -12,7 +13,13 @@ import kitchenpos.order.common.model.Order;
 import kitchenpos.order.common.model.OrderLineItem;
 import kitchenpos.order.common.model.OrderStatus;
 import kitchenpos.order.common.model.OrderType;
+import kitchenpos.order.eatinorder.application.dto.CreateEatInOrderServiceRq;
+import kitchenpos.order.eatinorder.application.dto.CreateEatInOrderServiceRq.OrderLineItemServiceDto;
+import kitchenpos.order.eatinorder.domain.model.EatInOrder;
+import kitchenpos.order.eatinorder.domain.model.EatInOrderFlow;
 import kitchenpos.order.eatinorder.domain.model.OrderTable;
+import kitchenpos.order.eatinorder.ui.dto.CreateEatInOrderRq;
+import kitchenpos.order.eatinorder.ui.dto.CreateEatInOrderRq.OrderLineItemDto;
 import kitchenpos.product.domain.model.Product;
 import kitchenpos.product.domain.model.ProductName;
 import kitchenpos.product.domain.model.ProductNameCreationService;
@@ -101,12 +108,6 @@ public class TestFixtureFactory {
                 "주소", orderTable, orderTable.getId());
     }
 
-    public static Order createOrderWithEatInType(OrderLineItem orderLineItem, OrderTable orderTable,
-                                                 OrderStatus status) {
-        return new Order(OrderType.EAT_IN, status, LocalDateTime.now(), List.of(orderLineItem),
-                "주소", orderTable, orderTable.getId());
-    }
-
     public static Order createOrder(OrderLineItem orderLineItem, OrderTable orderTable, OrderType orderType,
                                     OrderStatus orderStatus, String address) {
         return new Order(orderType, orderStatus, LocalDateTime.now(), List.of(orderLineItem),
@@ -115,5 +116,29 @@ public class TestFixtureFactory {
 
     public static OrderLineItem createOrderLineItem(Menu menu) {
         return new OrderLineItem(menu, 2, menu.getId(), BigDecimal.valueOf(8000));
+    }
+
+    public static EatInOrder createEatInOrderRequestWithEmptyTable(Menu menu,
+                                                                   EatInOrderFlow eatInOrderFlow) {
+        return new EatInOrder(LocalDateTime.now(),
+                List.of(new OrderLineItem(menu, 1, menu.getId(), BigDecimal.valueOf(8000))), eatInOrderFlow);
+    }
+
+    public static CreateEatInOrderServiceRq createEatInOrderServiceRq(Menu menu, UUID orderTableId) {
+        return new CreateEatInOrderServiceRq(
+                List.of(new OrderLineItemServiceDto(menu.getId(), 1, BigDecimal.valueOf(8000))), orderTableId);
+    }
+
+    public static CreateEatInOrderRq createEatInOrderRq(Menu menu, UUID orderTableId) {
+        return new CreateEatInOrderRq(
+                List.of(new OrderLineItemDto(menu.getId(), 1, BigDecimal.valueOf(8000))), orderTableId);
+    }
+
+    public static CreateEatInOrderRq createEatInOrderRq(List<UUID> menuIds, UUID orderTableId) {
+        return new CreateEatInOrderRq(
+                menuIds.stream()
+                        .map(id -> new OrderLineItemDto(id, 2, BigDecimal.valueOf(8000)))
+                        .toList(),
+                orderTableId);
     }
 }

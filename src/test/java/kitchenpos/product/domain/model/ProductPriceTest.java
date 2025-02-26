@@ -10,6 +10,13 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 class ProductPriceTest {
 
+    private static Stream<BigDecimal> invalidProductPriceProvider() {
+        return Stream.of(
+                null,
+                BigDecimal.valueOf(-1)
+        );
+    }
+
     @DisplayName("가격은 비어있거나 null이면 예외가 발생한다")
     @ParameterizedTest
     @MethodSource("invalidProductPriceProvider")
@@ -17,12 +24,5 @@ class ProductPriceTest {
         assertThatThrownBy(() -> new ProductPrice(value))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("상품 가격을 채워주세요!");
-    }
-
-    private static Stream<BigDecimal> invalidProductPriceProvider() {
-        return Stream.of(
-                null,
-                BigDecimal.valueOf(-1)
-        );
     }
 }

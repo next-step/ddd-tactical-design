@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kitchenpos.order.eatinorder.domain.model.OrderTable;
 import kitchenpos.order.eatinorder.domain.repository.OrderTableRepository;
+import kitchenpos.order.eatinorder.ui.dto.CreateOrderTableRq;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ class OrderTableRestControllerTest {
     @DisplayName("주문 테이블을 생성한다")
     void create_orderTable() throws Exception {
         // given
-        OrderTable request = createOrderTableRequest(0);
+        CreateOrderTableRq request = new CreateOrderTableRq("1번 테이블");
 
         // when
         ResultActions perform = mockMvc.perform(post("/api/order-tables")
@@ -73,7 +74,7 @@ class OrderTableRestControllerTest {
     void clear_orderTable() throws Exception {
         // given
         OrderTable orderTable = createAndSaveOrderTable(4);
-        orderTable.setOccupied(true);
+        orderTable.occupyTable();
         orderTableRepository.save(orderTable);
 
         // when
@@ -91,7 +92,7 @@ class OrderTableRestControllerTest {
     void change_numberOfGuests() throws Exception {
         // given
         OrderTable orderTable = createAndSaveOrderTable(4);
-        orderTable.setOccupied(true);
+        orderTable.occupyTable();
         orderTableRepository.save(orderTable);
 
         OrderTable request = createOrderTableRequest(6);

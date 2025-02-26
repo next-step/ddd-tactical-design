@@ -21,18 +21,18 @@ public class Product {
     @Embedded
     private ProductPrice price;
 
-    public Product(ProductName name, ProductPrice price, UUID id) {
+    public Product(ProductName name, ProductPrice price) {
         this.name = name;
         this.price = price;
-        this.id = id;
-    }
-
-    public Product(ProductName name, ProductPrice price) {
-        this(name, price, UUID.randomUUID());
+        this.id = UUID.randomUUID();
     }
 
     protected Product() {
 
+    }
+
+    public Product(String name, BigDecimal price) {
+        this(new ProductName(name), new ProductPrice(price));
     }
 
     public UUID getId() {
@@ -51,10 +51,6 @@ public class Product {
         return name;
     }
 
-//    public void setName(final String name) {
-//        this.name = name;
-//    }
-
     public BigDecimal getInnerPrice() {
         return price.getValue();
     }
@@ -66,8 +62,4 @@ public class Product {
     public void changePrice(BigDecimal price) {
         this.price = new ProductPrice(price);
     }
-
-//    public void setPrice(final BigDecimal price) {
-//        this.price = price;
-//    }
 }

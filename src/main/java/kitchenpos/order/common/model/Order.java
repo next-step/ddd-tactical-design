@@ -38,7 +38,7 @@ public class Order {
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(
             name = "order_id",
-            nullable = false,
+//            nullable = false,
             columnDefinition = "binary(16)",
             foreignKey = @ForeignKey(name = "fk_order_line_item_to_orders")
     )
@@ -102,10 +102,6 @@ public class Order {
         this.status = status;
     }
 
-    public LocalDateTime getOrderDateTime() {
-        return orderDateTime;
-    }
-
     public void setOrderDateTime(final LocalDateTime orderDateTime) {
         this.orderDateTime = orderDateTime;
     }
@@ -136,9 +132,5 @@ public class Order {
 
     public UUID getOrderTableId() {
         return orderTableId;
-    }
-
-    public void setOrderTableId(final UUID orderTableId) {
-        this.orderTableId = orderTableId;
     }
 }

@@ -74,8 +74,8 @@ public class OrderService {
                 throw new IllegalArgumentException();
             }
             final OrderLineItem orderLineItem = new OrderLineItem();
-            orderLineItem.setMenu(menu);
-            orderLineItem.setQuantity(quantity);
+            orderLineItem.addMenu(menu);
+            orderLineItem.addQuantity(quantity);
             orderLineItems.add(orderLineItem);
         }
         Order order = new Order();
@@ -178,8 +178,7 @@ public class OrderService {
         if (type == OrderType.EAT_IN) {
             final OrderTable orderTable = order.getOrderTable();
             if (!orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
-                orderTable.setNumberOfGuests(0);
-                orderTable.setOccupied(false);
+                orderTable.releaseTable();
             }
         }
         return order;

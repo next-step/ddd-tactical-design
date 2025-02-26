@@ -1,5 +1,7 @@
 package kitchenpos.product.domain.model;
 
+import static kitchenpos.product.exception.ProductExceptionMessage.PRODUCT_PRICE_CREATION_EXCEPTION;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import java.math.BigDecimal;
@@ -7,8 +9,6 @@ import java.util.Objects;
 
 @Embeddable
 public class ProductPrice {
-    private static final String PRODUCT_PRICE_CREATION_EXCEPTION = "상품 가격을 채워주세요!";
-
     @Column(name = "price", nullable = false)
     private final BigDecimal value;
 
@@ -23,7 +23,7 @@ public class ProductPrice {
 
     private void validatePrice(BigDecimal value) {
         if (Objects.isNull(value) || value.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException(PRODUCT_PRICE_CREATION_EXCEPTION);
+            throw new IllegalArgumentException(PRODUCT_PRICE_CREATION_EXCEPTION.getMessage());
         }
     }
 

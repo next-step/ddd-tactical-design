@@ -1,5 +1,8 @@
 package kitchenpos.menu.domain.model;
 
+import static kitchenpos.menu.exception.MenuExceptionMessage.MENU_GROUP_EXISTS_EXCEPTION;
+import static kitchenpos.menu.exception.MenuExceptionMessage.MENU_PRODUCTS_EXISTS_EXCEPTION;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -19,9 +22,6 @@ import java.util.UUID;
 @Table(name = "menu")
 @Entity
 public class Menu {
-    private static final String MENU_PRODUCTS_EXISTS_EXCEPTION = "메뉴 상품이 존재하지 않습니다!";
-    private static final String MENU_GROUP_EXISTS_EXCEPTION = "메뉴 그룹이 존재하지 않습니다!";
-
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
     private UUID id;
@@ -58,11 +58,18 @@ public class Menu {
     public Menu() {
     }
 
-    public Menu(UUID id, MenuName name, MenuPrice price, MenuGroup menuGroup, boolean displayed,
+    public Menu(String name, BigDecimal price, boolean displayed) {
+        this.id = UUID.randomUUID();
+        this.name = new MenuName(name);
+        this.price = new MenuPrice(price);
+        this.displayed = displayed;
+    }
+
+    public Menu(MenuName name, MenuPrice price, MenuGroup menuGroup, boolean displayed,
                 List<MenuProduct> menuProducts, UUID menuGroupId) {
         validateMenuGroupExists(menuGroup);
         validateMenuProductsExists(menuProducts);
-        this.id = id;
+        this.id = UUID.randomUUID();
         this.name = name;
         this.price = price;
         this.menuGroup = menuGroup;
@@ -71,27 +78,21 @@ public class Menu {
         this.menuGroupId = menuGroupId;
     }
 
-    public Menu(UUID id, String name, BigDecimal price, boolean displayed, List<MenuProduct> menuProducts,
+    public Menu(String name, BigDecimal price, boolean displayed, List<MenuProduct> menuProducts,
                 MenuGroup menuGroup,
                 UUID menuGroupId) {
-        this(id, new MenuName(name), new MenuPrice(price), menuGroup, displayed, menuProducts, menuGroupId);
-    }
-
-    public Menu(String name, BigDecimal price, boolean displayed, List<MenuProduct> menuProducts, MenuGroup menuGroup,
-                UUID menuGroupId) {
-        this(UUID.randomUUID(), new MenuName(name), new MenuPrice(price), menuGroup, displayed, menuProducts,
-                menuGroupId);
+        this(new MenuName(name), new MenuPrice(price), menuGroup, displayed, menuProducts, menuGroupId);
     }
 
     private void validateMenuGroupExists(MenuGroup menuGroup) {
         if (menuGroup == null) {
-            throw new NoSuchElementException(MENU_GROUP_EXISTS_EXCEPTION);
+            throw new NoSuchElementException(MENU_GROUP_EXISTS_EXCEPTION.getMessage());
         }
     }
 
     private void validateMenuProductsExists(List<MenuProduct> menuProducts) {
         if (menuProducts == null || menuProducts.isEmpty()) {
-            throw new NoSuchElementException(MENU_PRODUCTS_EXISTS_EXCEPTION);
+            throw new NoSuchElementException(MENU_PRODUCTS_EXISTS_EXCEPTION.getMessage());
         }
     }
 

@@ -1,5 +1,13 @@
 package kitchenpos.menu.domain.model;
 
+import static kitchenpos.TestFixtureFactory.createMenuGroup;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.UUID;
+import java.util.stream.Stream;
 import kitchenpos.common.infra.external.FakePurgomalumClient;
 import kitchenpos.product.domain.model.Product;
 import kitchenpos.product.domain.model.ProductName;
@@ -10,23 +18,21 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.UUID;
-import java.util.stream.Stream;
-
-import static kitchenpos.TestFixtureFactory.createMenuGroup;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 class MenuTest {
+
+    private static Stream<List<MenuProduct>> invalidMenuProductProvider() {
+        return Stream.of(
+                null,
+                List.of()
+        );
+    }
 
     @Test
     @DisplayName("메뉴가 생성될 때, 메뉴 그룹이 포함되지 않으면 예외가 발생한다.")
     void validate_menu_group_exists_exception() {
         // given
         ProductName productName = new ProductNameCreationService(new FakePurgomalumClient()).createName("배추");
-        Product product = new Product(productName, new ProductPrice(BigDecimal.ONE), UUID.randomUUID());
+        Product product = new Product(productName, new ProductPrice(BigDecimal.ONE));
         MenuProduct menuProduct = new MenuProduct(
                 product,
                 new MenuProductQuantity(1),
@@ -35,7 +41,6 @@ class MenuTest {
 
         // when // then
         assertThatThrownBy(() -> new Menu(
-                UUID.randomUUID(),
                 new MenuName("김치"),
                 new MenuPrice(BigDecimal.ONE),
                 null,
@@ -55,7 +60,6 @@ class MenuTest {
 
         // when // then
         assertThatThrownBy(() -> new Menu(
-                UUID.randomUUID(),
                 new MenuName("김치"),
                 new MenuPrice(BigDecimal.ONE),
                 menuGroup,
@@ -64,12 +68,5 @@ class MenuTest {
                 menuGroup.getId()
         )).isInstanceOf(NoSuchElementException.class)
                 .hasMessage("메뉴 상품이 존재하지 않습니다!");
-    }
-
-    private static Stream<List<MenuProduct>> invalidMenuProductProvider() {
-        return Stream.of(
-                null,
-                List.of()
-        );
     }
 }

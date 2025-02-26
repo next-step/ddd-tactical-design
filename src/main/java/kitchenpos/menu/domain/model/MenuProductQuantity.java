@@ -1,14 +1,15 @@
 package kitchenpos.menu.domain.model;
 
+import static kitchenpos.menu.exception.MenuExceptionMessage.MENU_PRODUCT_QUANTITY_CREATION_EXCEPTION;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-
 import java.util.Objects;
 
 @Embeddable
 public class MenuProductQuantity {
-    private static final String MENU_PRODUCT_QUANTITY_CREATION_EXCEPTION = "메뉴 상품의 수량은 0보다 커야 합니다!";
-
     @Column(name = "quantity", nullable = false)
     private final Long value;
 
@@ -17,23 +18,26 @@ public class MenuProductQuantity {
         this.value = value;
     }
 
-    private void validateMenuProductQuantity(long value) {
-        if (value <= 0) {
-            throw new IllegalArgumentException(MENU_PRODUCT_QUANTITY_CREATION_EXCEPTION);
-        }
-    }
-
     protected MenuProductQuantity() {
         this.value = null;
     }
 
+    private void validateMenuProductQuantity(long value) {
+        if (value <= 0) {
+            throw new IllegalArgumentException(MENU_PRODUCT_QUANTITY_CREATION_EXCEPTION.getMessage());
+        }
+    }
+
+    @JsonValue
     public Long getValue() {
         return value;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         MenuProductQuantity that = (MenuProductQuantity) o;
         return Objects.equals(value, that.value);
     }

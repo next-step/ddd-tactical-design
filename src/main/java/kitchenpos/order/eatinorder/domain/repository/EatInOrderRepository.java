@@ -1,4 +1,18 @@
 package kitchenpos.order.eatinorder.domain.repository;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import kitchenpos.order.eatinorder.domain.model.EatInOrder;
+import kitchenpos.order.eatinorder.domain.model.EatInOrderFlow;
+import kitchenpos.order.eatinorder.domain.model.OrderTable;
+
 public interface EatInOrderRepository {
+    Optional<EatInOrder> findById(UUID eatInOrderId);
+
+    EatInOrder save(EatInOrder eatInOrder);
+
+    boolean existsByOrderTableAndEatInOrderFlowNot(OrderTable orderTable, EatInOrderFlow eatInOrderFlow);
+
+    List<EatInOrder> findAll();
 }

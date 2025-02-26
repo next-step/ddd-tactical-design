@@ -1,13 +1,13 @@
 package kitchenpos.product.domain.model;
 
+import static kitchenpos.product.exception.ProductExceptionMessage.PRODUCT_NAME_CREATION_EXCEPTION;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
 public class ProductName {
-    private static final String PRODUCT_NAME_CREATION_EXCEPTION = "상품 이름을 채워주세요!";
-
     @Column(name = "name", nullable = false)
     private final String value;
 
@@ -22,7 +22,7 @@ public class ProductName {
 
     private void validateName(String name) {
         if (Objects.isNull(name) || name.isEmpty()) {
-            throw new IllegalArgumentException(PRODUCT_NAME_CREATION_EXCEPTION);
+            throw new IllegalArgumentException(PRODUCT_NAME_CREATION_EXCEPTION.getMessage());
         }
     }
 

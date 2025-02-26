@@ -1,5 +1,9 @@
 package kitchenpos.order.common.model;
 
+import static kitchenpos.order.common.exception.OrderLineItemExceptionMessage.ORDER_LINE_ITEM_MENU_DISPLAY_EXCEPTION;
+import static kitchenpos.order.common.exception.OrderLineItemExceptionMessage.ORDER_LINE_ITEM_PRICE_EXCEPTION;
+import static kitchenpos.order.common.exception.OrderLineItemExceptionMessage.ORDER_LINE_ITEM_QUANTITY_EXCEPTION;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
@@ -43,25 +47,38 @@ public class OrderLineItem {
     }
 
     public OrderLineItem(Menu menu, long quantity, UUID menuId, BigDecimal price) {
+        validateQuantity(quantity);
+        validateMenuDisplay(menu);
+        validatePrice(menu, price);
         this.menu = menu;
         this.quantity = quantity;
         this.menuId = menuId;
         this.price = price;
     }
 
-    public Long getSeq() {
-        return seq;
+    private void validateQuantity(long quantity) {
+        if (quantity <= 0) {
+            throw new IllegalArgumentException(ORDER_LINE_ITEM_QUANTITY_EXCEPTION.getMessage());
+        }
     }
 
-    public void setSeq(final Long seq) {
-        this.seq = seq;
+    private void validateMenuDisplay(Menu menu) {
+        if (!menu.isDisplayed()) {
+            throw new IllegalStateException(ORDER_LINE_ITEM_MENU_DISPLAY_EXCEPTION.getMessage());
+        }
+    }
+
+    private void validatePrice(Menu menu, BigDecimal price) {
+        if (menu.getInnerPrice().compareTo(price) != 0) {
+            throw new IllegalArgumentException(ORDER_LINE_ITEM_PRICE_EXCEPTION.getMessage());
+        }
     }
 
     public Menu getMenu() {
         return menu;
     }
 
-    public void setMenu(final Menu menu) {
+    public void addMenu(final Menu menu) {
         this.menu = menu;
     }
 
@@ -69,16 +86,12 @@ public class OrderLineItem {
         return quantity;
     }
 
-    public void setQuantity(final long quantity) {
+    public void addQuantity(final long quantity) {
         this.quantity = quantity;
     }
 
     public UUID getMenuId() {
         return menuId;
-    }
-
-    public void setMenuId(final UUID menuId) {
-        this.menuId = menuId;
     }
 
     public BigDecimal getPrice() {

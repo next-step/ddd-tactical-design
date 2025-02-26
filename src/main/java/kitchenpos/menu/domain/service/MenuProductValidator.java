@@ -1,11 +1,10 @@
 package kitchenpos.menu.domain.service;
 
+import java.util.List;
 import kitchenpos.menu.domain.model.MenuProduct;
 import kitchenpos.product.domain.model.Product;
 import kitchenpos.product.domain.repository.ProductRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class MenuProductValidator {

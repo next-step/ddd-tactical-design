@@ -1,11 +1,11 @@
 package kitchenpos.menu.domain.model;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
-class MenuProductQuantityTest {
+class MenuProductRsQuantityTest {
 
     @Test
     @DisplayName("메뉴 상품의 수량이 1 이상이 아니면 예외를 던진다.")

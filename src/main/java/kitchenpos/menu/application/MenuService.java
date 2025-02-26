@@ -1,13 +1,23 @@
 package kitchenpos.menu.application;
 
+import static kitchenpos.menu.exception.MenuExceptionMessage.NONE_MARGIN_EXCEPTION;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
-import java.util.stream.Collectors;
-
-import kitchenpos.common.application.PurgomalumClient;
-import kitchenpos.menu.domain.model.*;
+import kitchenpos.menu.application.dto.ChangeMenuPriceServiceRq;
+import kitchenpos.menu.application.dto.CreateMenuServiceRq;
+import kitchenpos.menu.application.dto.CreateMenuServiceRq.MenuProductServiceRq;
+import kitchenpos.menu.application.dto.MenuServiceRs;
+import kitchenpos.menu.application.dto.SimpleMenuServiceRs;
+import kitchenpos.menu.domain.model.Menu;
+import kitchenpos.menu.domain.model.MenuGroup;
+import kitchenpos.menu.domain.model.MenuName;
+import kitchenpos.menu.domain.model.MenuNameCreationService;
+import kitchenpos.menu.domain.model.MenuPrice;
+import kitchenpos.menu.domain.model.MenuProduct;
+import kitchenpos.menu.domain.model.MenuProductQuantity;
 import kitchenpos.menu.domain.repository.MenuGroupRepository;
 import kitchenpos.menu.domain.repository.MenuRepository;
 import kitchenpos.menu.domain.service.MarginValidator;
@@ -19,8 +29,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class MenuService {
-    private static final String NONE_MARGIN_EXCEPTION = "마진이 남지 않습니다! 마진을 남기게 만들어주세요!";
-
     private final MenuRepository menuRepository;
     private final MenuGroupRepository menuGroupRepository;
     private final ProductRepository productRepository;
@@ -45,30 +53,32 @@ public class MenuService {
     }
 
     @Transactional
-    public Menu create(final Menu request) {
-        final BigDecimal price = request.getInnerPrice();
+    public MenuServiceRs create(final CreateMenuServiceRq request) {
+        final BigDecimal price = request.getPrice();
         final MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
                 .orElseThrow(NoSuchElementException::new);
 
-        final List<MenuProduct> menuProductRequests = request.getMenuProducts();
-        menuProductValidator.validateMenuProduct(menuProductRequests);
+        List<MenuProductServiceRq> menuProductRequests = request.getMenuProductDtos();
         final List<MenuProduct> menuProducts = createMenuProductsByRequest(menuProductRequests);
+        menuProductValidator.validateMenuProduct(menuProducts);
 
-        final String name = request.getInnerName();
+        final String name = request.getName();
         MenuName menuName = menuNameCreationService.createName(name);
 
-        final Menu menu = new Menu(UUID.randomUUID(), menuName, new MenuPrice(price), menuGroup, request.isDisplayed(), menuProducts, menuGroup.getId());
+        final Menu menu = new Menu(menuName, new MenuPrice(price), menuGroup, request.isDisplayed(), menuProducts,
+                menuGroup.getId());
         validateMargin(menu);
+        menuRepository.save(menu);
 
-        return menuRepository.save(menu);
+        return new MenuServiceRs(menu);
     }
 
-    private List<MenuProduct> createMenuProductsByRequest(List<MenuProduct> menuProductRequests) {
+    private List<MenuProduct> createMenuProductsByRequest(List<MenuProductServiceRq> menuProductRequests) {
         return menuProductRequests.stream().map(this::createMenuProductByRequest).toList();
     }
 
-    private MenuProduct createMenuProductByRequest(MenuProduct request) {
-        final long quantity = request.getInnerQuantity();
+    private MenuProduct createMenuProductByRequest(MenuProductServiceRq request) {
+        final long quantity = request.getQuantity();
         final Product product = productRepository.findById(request.getProductId())
                 .orElseThrow(NoSuchElementException::new);
         return new MenuProduct(product, new MenuProductQuantity(quantity), product.getId());
@@ -77,39 +87,41 @@ public class MenuService {
     private void validateMargin(Menu menu) {
         boolean hasMargin = marginValidator.checkMargin(menu);
         if (!hasMargin) {
-            throw new IllegalStateException(NONE_MARGIN_EXCEPTION);
+            throw new IllegalStateException(NONE_MARGIN_EXCEPTION.getMessage());
         }
     }
 
     @Transactional
-    public Menu changePrice(final UUID menuId, final Menu request) {
-        final BigDecimal price = request.getInnerPrice();
+    public SimpleMenuServiceRs changePrice(final UUID menuId, final ChangeMenuPriceServiceRq request) {
+        final BigDecimal price = request.getPrice();
         final Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(NoSuchElementException::new);
         menu.changePrice(price);
         validateMargin(menu);
-        return menu;
+        return new SimpleMenuServiceRs(menu);
     }
 
     @Transactional
-    public Menu display(final UUID menuId) {
+    public SimpleMenuServiceRs display(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(NoSuchElementException::new);
         validateMargin(menu);
         menu.changeDisplay(true);
-        return menu;
+        return new SimpleMenuServiceRs(menu);
     }
 
     @Transactional
-    public Menu hide(final UUID menuId) {
+    public SimpleMenuServiceRs hide(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(NoSuchElementException::new);
         menu.changeDisplay(false);
-        return menu;
+        return new SimpleMenuServiceRs(menu);
     }
 
     @Transactional(readOnly = true)
-    public List<Menu> findAll() {
-        return menuRepository.findAll();
+    public List<MenuServiceRs> findAll() {
+        return menuRepository.findAll().stream()
+                .map(MenuServiceRs::new)
+                .toList();
     }
 }

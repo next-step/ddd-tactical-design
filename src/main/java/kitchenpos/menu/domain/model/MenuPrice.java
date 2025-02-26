@@ -1,5 +1,9 @@
 package kitchenpos.menu.domain.model;
 
+import static kitchenpos.menu.exception.MenuExceptionMessage.MENU_PRICE_CREATION_EXCEPTION;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import java.math.BigDecimal;
@@ -7,8 +11,6 @@ import java.util.Objects;
 
 @Embeddable
 public class MenuPrice {
-    private static final String MENU_PRICE_CREATION_EXCEPTION = "메뉴 가격을 채워주세요!";
-
     @Column(name = "price", nullable = false)
     private final BigDecimal value;
 
@@ -23,10 +25,11 @@ public class MenuPrice {
 
     private void validatePrice(BigDecimal value) {
         if (Objects.isNull(value) || value.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException(MENU_PRICE_CREATION_EXCEPTION);
+            throw new IllegalArgumentException(MENU_PRICE_CREATION_EXCEPTION.getMessage());
         }
     }
 
+    @JsonValue
     public BigDecimal getValue() {
         return value;
     }

@@ -8,15 +8,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.UUID;
-
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.repository.MenuRepository;
-import kitchenpos.product.domain.model.Product;
 import kitchenpos.menu.infra.persistence.FakeMenuRepository;
+import kitchenpos.product.domain.model.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.thymeleaf.engine.IterationStatusVar;
 
 class MarginValidatorTest {
 

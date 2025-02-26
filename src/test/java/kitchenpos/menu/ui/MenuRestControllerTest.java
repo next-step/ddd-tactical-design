@@ -1,11 +1,27 @@
 package kitchenpos.menu.ui;
 
+import static kitchenpos.TestFixtureFactory.createMenuGroup;
+import static kitchenpos.TestFixtureFactory.createProduct;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.UUID;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.model.MenuGroup;
 import kitchenpos.menu.domain.model.MenuProduct;
 import kitchenpos.menu.domain.repository.MenuGroupRepository;
 import kitchenpos.menu.domain.repository.MenuRepository;
+import kitchenpos.menu.ui.dto.CreateMenuRq;
+import kitchenpos.menu.ui.dto.CreateMenuRq.MenuProductRq;
 import kitchenpos.product.domain.model.Product;
 import kitchenpos.product.domain.repository.ProductRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -17,16 +33,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.NoSuchElementException;
-
-import static kitchenpos.TestFixtureFactory.createMenuGroup;
-import static kitchenpos.TestFixtureFactory.createProduct;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -54,7 +60,7 @@ class MenuRestControllerTest {
         // given
         MenuGroup menuGroup = createAndSaveMenuGroup();
         Product product = createAndSaveProduct();
-        Menu request = createMenuRequest(menuGroup, product);
+        CreateMenuRq request = createMenuRequest("김치찌개", 12000, menuGroup.getId(), product.getId());
 
         // when
         ResultActions result = mockMvc.perform(post("/api/menus")
@@ -65,10 +71,10 @@ class MenuRestControllerTest {
         result.andExpect(status().isCreated())
                 .andExpect(header().exists("Location"))
                 .andExpect(jsonPath("$.id").exists())
-                .andExpect(jsonPath("$.name.value").value("김치찌개"))
-                .andExpect(jsonPath("$.price.value").value(8000))
-                .andExpect(jsonPath("$.menuGroup").exists())
-                .andExpect(jsonPath("$.menuProducts").isNotEmpty());
+                .andExpect(jsonPath("$.name").value("김치찌개"))
+                .andExpect(jsonPath("$.price").value(12000))
+                .andExpect(jsonPath("$.menuGroupId").exists())
+                .andExpect(jsonPath("$.menuProductRsList").isNotEmpty());
     }
 
     @Test
@@ -106,7 +112,7 @@ class MenuRestControllerTest {
         // then
         result.andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(menu.getId().toString()))
-                .andExpect(jsonPath("$.price.value").value(8001));
+                .andExpect(jsonPath("$.price").value(8001));
     }
 
     @Test
@@ -176,12 +182,6 @@ class MenuRestControllerTest {
                 .andExpect(jsonPath("$.length()").value(2));
     }
 
-    private Menu createMenuRequest(MenuGroup menuGroup, Product product) {
-        MenuProduct menuProduct = new MenuProduct(1, product, product.getId());
-        return new Menu("김치찌개", BigDecimal.valueOf(8000), true, List.of(menuProduct), menuGroup,
-                menuGroup.getId());
-    }
-
     private MenuGroup createAndSaveMenuGroup() {
         return menuGroupRepository.save(createMenuGroup());
     }
@@ -197,5 +197,10 @@ class MenuRestControllerTest {
         Menu menu = new Menu("김치찌개", BigDecimal.valueOf(8000), displayed, List.of(menuProduct), menuGroup,
                 menuGroup.getId());
         return menuRepository.save(menu);
+    }
+
+    private CreateMenuRq createMenuRequest(String name, int price, UUID menuGroupId, UUID productId) {
+        return new CreateMenuRq(name, BigDecimal.valueOf(price), true, menuGroupId,
+                List.of(new MenuProductRq(productId, 2)));
     }
 }
