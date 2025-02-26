@@ -1,5 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
+import kitchenpos.products.tobe.domain.exception.InvalidProductException;
 import kitchenpos.products.tobe.domain.vo.ProductPrice;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.DisplayName;
@@ -16,7 +17,7 @@ class ProductPriceTest {
     void 상품의_가격이_존재해야_한다() {
         // given & when & then
         assertThatThrownBy(() -> new ProductPrice(null))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(InvalidProductException.class)
                 .hasMessage("상품의 가격은 존재해야 한다.");
      }
 
@@ -29,7 +30,7 @@ class ProductPriceTest {
 
          // when & then
          assertThatThrownBy(() -> new ProductPrice(price))
-                 .isInstanceOf(IllegalArgumentException.class)
+                 .isInstanceOf(InvalidProductException.class)
                  .hasMessage("상품의 가격은 0보다 커야 한다.");
       }
 

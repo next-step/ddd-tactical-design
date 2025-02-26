@@ -2,6 +2,7 @@ package kitchenpos.products.tobe.domain.vo;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import kitchenpos.products.tobe.domain.exception.InvalidProductException;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -21,11 +22,11 @@ public class ProductPrice {
 
     private BigDecimal checkProductPrice(final BigDecimal price) {
         if (price == null) {
-            throw new IllegalArgumentException("상품의 가격은 존재해야 한다.");
+            throw new InvalidProductException("상품의 가격은 존재해야 한다.");
         }
 
         if (price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("상품의 가격은 0보다 커야 한다.");
+            throw new InvalidProductException("상품의 가격은 0보다 커야 한다.");
         }
         return price;
     }

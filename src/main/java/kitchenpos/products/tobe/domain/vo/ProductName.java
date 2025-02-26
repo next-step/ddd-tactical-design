@@ -2,6 +2,7 @@ package kitchenpos.products.tobe.domain.vo;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import kitchenpos.products.tobe.domain.exception.InvalidProductException;
 
 import java.util.Objects;
 
@@ -20,7 +21,7 @@ public class ProductName {
 
     private String checkProductName(final String name) {
         if (name == null || name.isBlank()) {
-            throw new IllegalArgumentException("상품의 이름이 존재해야 한다.");
+            throw new InvalidProductException("상품의 이름이 존재해야 한다.");
         }
         return name;
     }

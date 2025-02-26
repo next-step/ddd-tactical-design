@@ -1,5 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
+import kitchenpos.products.tobe.domain.exception.InvalidProductException;
 import kitchenpos.products.tobe.domain.vo.ProductName;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.DisplayName;
@@ -16,7 +17,7 @@ class ProductNameTest {
     void 상품의_이름이_존재하지_않으면_안된다(final String invalidProductName) {
         // given & when & then
         assertThatThrownBy(() -> new ProductName(invalidProductName))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(InvalidProductException.class)
                 .hasMessage("상품의 이름이 존재해야 한다.");
     }
 }
