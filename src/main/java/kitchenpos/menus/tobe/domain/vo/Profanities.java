@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain.vo;
+package kitchenpos.menus.tobe.domain.vo;
 
 @FunctionalInterface
 public interface Profanities {

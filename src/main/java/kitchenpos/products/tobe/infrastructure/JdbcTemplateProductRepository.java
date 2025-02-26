@@ -3,6 +3,7 @@ package kitchenpos.products.tobe.infrastructure;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.products.tobe.domain.vo.EmptyProfanities;
+import kitchenpos.products.tobe.domain.vo.ProductId;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -75,7 +76,7 @@ public class JdbcTemplateProductRepository implements ProductRepository {
 
     private Product toEntity(final ResultSet resultSet) throws SQLException {
         return new Product(
-                resultSet.getLong(KEY_COLUMN),
+                new ProductId(resultSet.getLong(KEY_COLUMN)),
                 resultSet.getString(NAME_COLUMN),
                 new EmptyProfanities(),
                 resultSet.getLong(PRICE_COLUMN)

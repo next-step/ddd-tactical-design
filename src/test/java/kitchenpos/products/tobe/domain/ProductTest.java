@@ -53,9 +53,9 @@ public class ProductTest {
 
         assertAll(
                 () -> assertThat(product).isEqualTo(new Product(productId, displayedName, price)),
-                () -> assertThat(product.getId()).isEqualTo(productId),
-                () -> assertThat(product.getName()).isEqualTo(displayedName),
-                () -> assertThat(product.getPrice()).isEqualTo(price)
+                () -> assertThat(product.id()).isEqualTo(productId),
+                () -> assertThat(product.displayedName()).isEqualTo(displayedName),
+                () -> assertThat(product.price()).isEqualTo(price)
         );
     }
 
@@ -76,6 +76,6 @@ public class ProductTest {
 
         final Product actual = product.changePrice(changedPrice);
 
-        assertThat(actual.getPrice()).isEqualTo(changedPrice);
+        assertThat(actual.price()).isEqualTo(changedPrice);
     }
 }

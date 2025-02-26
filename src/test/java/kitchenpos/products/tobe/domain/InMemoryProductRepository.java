@@ -7,7 +7,7 @@ public class InMemoryProductRepository implements ProductRepository {
 
     @Override
     public Product save(final Product product) {
-        products.put(product.getId(), product);
+        products.put(product.id(), product);
         return product;
     }
 
@@ -25,7 +25,7 @@ public class InMemoryProductRepository implements ProductRepository {
     public List<Product> findAllByIdIn(final List<Long> ids) {
         return products.values()
                 .stream()
-                .filter(product -> ids.contains(product.getId()))
+                .filter(product -> ids.contains(product.id()))
                 .toList();
     }
 }

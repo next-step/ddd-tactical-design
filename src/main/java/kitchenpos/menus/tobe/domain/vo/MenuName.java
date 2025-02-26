@@ -1,19 +1,20 @@
-package kitchenpos.products.tobe.domain.vo;
+package kitchenpos.menus.tobe.domain.vo;
 
-import kitchenpos.products.tobe.domain.exception.DisplayedNameContainsProfanityException;
-import kitchenpos.products.tobe.domain.exception.InvalidDisplayedNameException;
+import kitchenpos.menus.tobe.domain.exception.InvalidMenuNameException;
+import kitchenpos.menus.tobe.domain.exception.MenuNameContainsProfanityException;
 
 import java.util.Objects;
 
-public class DisplayedName {
+public class MenuName {
+
     private final String value;
 
-    public DisplayedName(final String value, final Profanities profanities) {
+    public MenuName(final String value, final Profanities profanities) {
         if (Objects.isNull(value) || value.isBlank()) {
-            throw new InvalidDisplayedNameException();
+            throw new InvalidMenuNameException();
         }
         if (profanities.contains(value)) {
-            throw new DisplayedNameContainsProfanityException();
+            throw new MenuNameContainsProfanityException();
         }
         this.value = value;
     }
@@ -26,7 +27,7 @@ public class DisplayedName {
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        final DisplayedName that = (DisplayedName) o;
+        final MenuName that = (MenuName) o;
         return Objects.equals(value, that.value);
     }
 
@@ -35,5 +36,3 @@ public class DisplayedName {
         return Objects.hashCode(value);
     }
 }
-
-

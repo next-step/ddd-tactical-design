@@ -1,6 +1,6 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.menus.tobe.domain;
 
-import kitchenpos.products.tobe.domain.vo.Profanities;
+import kitchenpos.menus.tobe.domain.vo.Profanities;
 
 import java.util.List;
 import java.util.Objects;
