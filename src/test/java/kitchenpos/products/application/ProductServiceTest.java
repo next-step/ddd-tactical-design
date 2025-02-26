@@ -58,36 +58,35 @@ class ProductServiceTest {
     @Test
     void 상품의_가격을_변경할_수_있다() {
         // given
-        Product request = 후라이드치킨();
-        productRepository.save(request);
+        ProductName name = new ProductName("후라이드치킨");
+        ProductPrice price = new ProductPrice(valueOf(16000));
+        Product product = new Product(name, price);
+        productRepository.save(product);
 
-        UUID productId = request.getId();
+        UUID productId = product.getId();
         BigDecimal 변경할_가격 = valueOf(17000);
+        ChangeProductRequest request = new ChangeProductRequest(변경할_가격);
 
         // when
-        productService.changePrice(productId, new Product(new ProductName("양념치킨"), new ProductPrice(변경할_가격)));
+        ChangeProductResponse response = productService.changePrice(productId, request);
 
         // then
         Product updatedProduct = productRepository.findById(productId).orElseThrow();
-        // 값만 비교
-        assertThat(updatedProduct.getPrice().compareTo(변경할_가격)).isEqualTo(0);
 
-        // scale 제거하고 비교
-        assertThat(updatedProduct.getPrice().stripTrailingZeros())
-                .isEqualTo(변경할_가격.stripTrailingZeros()); // stripTrailingZeros()를 사용하면 소수점이 필요 없는 경우 자동으로 정리함
+        assertThat(updatedProduct.getPrice().compareTo(변경할_가격)).isEqualTo(0);
+        assertThat(response.productId()).isEqualTo(productId);
+        assertThat(response.price()).isEqualTo(변경할_가격);
     }
 
     @Test
     void 존재하지_않은_상품_ID로_가격을_변경할_수_없다() {
         // given
         UUID nonExistentProductUd = UUID.randomUUID();
-        BigDecimal changedPrice = valueOf(20000);
-
-        Product updateProduct = new Product(new ProductName("후라이드치킨"), new ProductPrice(valueOf(16000)));
-        updateProduct.updatePrice(changedPrice);
+        BigDecimal 변경할_가격 = valueOf(20000);
+        ChangeProductRequest request = new ChangeProductRequest(변경할_가격);
 
         // when & then
-        assertThatThrownBy(() -> productService.changePrice(nonExistentProductUd, updateProduct))
+        assertThatThrownBy(() -> productService.changePrice(nonExistentProductUd, request))
                 .isInstanceOf(NoSuchElementException.class);
     }
 
