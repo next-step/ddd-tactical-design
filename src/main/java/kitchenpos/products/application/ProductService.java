@@ -3,11 +3,13 @@ package kitchenpos.products.application;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.products.application.dto.CreateProductServiceRequest;
+import kitchenpos.products.application.dto.CreateProductServiceResponse;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductName;
 import kitchenpos.products.tobe.domain.ProductPrice;
 import kitchenpos.products.tobe.domain.ProductRepository;
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.common.infra.PurgomalumClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,17 +36,19 @@ public class ProductService {
     }
 
     @Transactional
-    public Product create(final Product request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
+    public CreateProductServiceResponse create(final CreateProductServiceRequest request) {
+        validateProfanity(request.name());
+        final ProductName name = new ProductName(request.name());
+        final ProductPrice price = new ProductPrice(request.price());
+        final Product product = new Product(name, price);
+
+        return CreateProductServiceResponse.from(productRepository.save(product));
+    }
+
+    private void validateProfanity(final String name) {
+        if (purgomalumClient.containsProfanity(name)) {
+            throw new IllegalArgumentException("상품의 이름에 부적절한 단어(비속어가) 포함되면 안됩니다.");
         }
-        final String name = request.getName();
-        if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
-            throw new IllegalArgumentException();
-        }
-        final Product product = new Product(new ProductName(name), new ProductPrice(price));
-        return productRepository.save(product);
     }
 
     @Transactional

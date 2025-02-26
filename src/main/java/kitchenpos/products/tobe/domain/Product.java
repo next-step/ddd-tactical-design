@@ -5,6 +5,7 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import kitchenpos.common.infra.PurgomalumClient;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -27,7 +28,8 @@ public class Product {
     protected Product() {
     }
 
-    public Product(final ProductName name, final ProductPrice price) {
+    public Product(final ProductName name,
+                   final ProductPrice price) {
         this.id = UUID.randomUUID();
         this.name = new ProductName(name.getName());
         this.price = new ProductPrice(price.getPrice());

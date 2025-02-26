@@ -17,5 +17,5 @@ class ProductNameTest {
         assertThatThrownBy(() -> new ProductName(invalidProductName))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("상품의 이름이 존재해야 한다.");
-     }
+    }
 }
