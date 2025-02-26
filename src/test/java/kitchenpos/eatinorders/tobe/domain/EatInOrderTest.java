@@ -13,7 +13,7 @@ public class EatInOrderTest {
     @DisplayName("주문 항목이 없거나 비어있으면 매장 주문을 생성할 수 없다.")
     @ParameterizedTest(name = "주문 항목: {0}")
     @NullAndEmptySource
-    void createOrderWithoutEatInOrderLineItems(final List<EatInOrderLineItem> eatInOrderLineItems) {
+    void createWithoutEatInOrderLineItems(final List<EatInOrderLineItem> eatInOrderLineItems) {
 
         assertThatThrownBy(() -> new EatInOrder(eatInOrderLineItems))
                 .isExactlyInstanceOf(IllegalArgumentException.class);
