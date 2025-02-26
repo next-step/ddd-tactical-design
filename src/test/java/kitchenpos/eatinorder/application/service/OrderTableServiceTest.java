@@ -149,6 +149,7 @@ public class OrderTableServiceTest {
         void number_of_guests_must_be_positive() {
             // given
             OrderTableEntity orderTableEntity = createInitializedOrderTable();
+            orderTableService.sit(orderTableEntity.getId());
             OrderTableEntity request = new OrderTableEntity();
             request.setNumberOfGuests(-1);
 
