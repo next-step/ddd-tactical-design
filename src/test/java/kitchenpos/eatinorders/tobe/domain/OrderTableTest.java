@@ -48,4 +48,14 @@ public class OrderTableTest {
         assertThatThrownBy(() -> orderTable.changeNumberOfGuests(numberOfGuests))
                 .isInstanceOf(IllegalArgumentException.class);
     }
+
+    @DisplayName("사용중인 테이블의 손님 수를 변경한다.")
+    @ValueSource(ints = {0, 1, 10, 100})
+    @ParameterizedTest(name = "{index}. 방문한 손님 수 : {0}")
+    void changeNumberOfGuests(final int numberOfGuests) {
+        final OrderTable orderTable = new OrderTable(UUID.randomUUID(), "1번", 0, true);
+        orderTable.changeNumberOfGuests(numberOfGuests);
+
+        assertThat(orderTable.numberOfGuests()).isEqualTo(numberOfGuests);
+    }
 }
