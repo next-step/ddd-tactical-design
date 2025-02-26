@@ -1,11 +1,13 @@
 package kitchenpos.eatinorders.tobe.domain;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("주문 테이블 테스트")
@@ -17,5 +19,14 @@ public class OrderTableTest {
     void createOrderTableWithEmptyName(final String name) {
         assertThatThrownBy(() -> new OrderTable(UUID.randomUUID(), name, 0, false))
                 .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @DisplayName("빈 테이블을 사용중인 테이블로 변경한다.")
+    @Test
+    void sit() {
+        final OrderTable orderTable = new OrderTable(UUID.randomUUID(), "1번", 0, false);
+        orderTable.sit();
+
+        assertThat(orderTable.isOccupied()).isTure();
     }
 }
