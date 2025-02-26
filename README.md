@@ -19,7 +19,7 @@ docker compose -p kitchenpos up -d
 - 상품의 가격을 변경할 수 있다.
 - 상품의 가격이 올바르지 않으면 변경할 수 없다.
   - 상품의 가격은 0원 이상이어야 한다.
-- 상품의 가격이 변경될 때 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 크면 메뉴가 숨겨진다.
+- 상품의 가격이 변경될 때 메뉴가격이 메뉴금액보다 크면 메뉴가 비노출된다.
 - 상품의 목록을 조회할 수 있다.
 
 ### 메뉴 그룹
@@ -101,18 +101,20 @@ docker compose -p kitchenpos up -d
 | 한글명 | 영문명 | 설명 |
 | --- | --- | --- |
 | 상품 | product | 메뉴를 관리하는 기준이 되는 데이터 |
-| 이름 | displayed name | 음식을 상상하게 만드는 중요한 요소 |
+| 이름 | name | 음식을 상상하게 만드는 중요한 요소 |
 
 ### 메뉴
 
-| 한글명 | 영문명 | 설명 |
-| --- | --- | --- |
-| 금액 | amount | 가격 * 수량 |
-| 메뉴 | menu | 메뉴 그룹에 속하는 실제 주문 가능 단위 |
-| 메뉴 그룹 | menu group | 각각의 메뉴를 성격에 따라 분류하여 묶어둔 그룹 |
-| 메뉴 상품 | menu product | 메뉴에 속하는 수량이 있는 상품 |
-| 숨겨진 메뉴 | not displayed menu | 주문할 수 없는 숨겨진 메뉴 |
-| 이름 | displayed name | 음식을 상상하게 만드는 중요한 요소 |
+| 한글명   | 영문명                | 설명                        |
+|-------|--------------------|---------------------------|
+| 메뉴    | menu               | 메뉴 그룹에 속하는 실제 주문 가능 단위    |
+| 메뉴가격  | menu price         | 메뉴의 가격                    |
+| 메뉴금액  | menu amount        | 메뉴상품가격 * 수량               |
+| 메뉴 그룹 | menu group         | 각각의 메뉴를 성격에 따라 분류하여 묶어둔 그룹 |
+| 메뉴 상품 | menu product       | 메뉴에 속하는 수량이 있는 상품         |
+| 노출 메뉴 | displayed menu     | 손님에게 보이는 메뉴               |
+| 비노출 메뉴 | not displayed menu | 손님에게 보이지 않는 메뉴            |
+| 이름    | displayed name     | 음식을 상상하게 만드는 중요한 요소       |
 
 ### 매장 주문
 
@@ -159,12 +161,18 @@ docker compose -p kitchenpos up -d
 ## 모델링
 
 ### 상품
-
-- `Product`는 식별자와 `DisplayedName`, 가격을 가진다.
-- `DisplayedName`에는 `Profanity`가 포함될 수 없다.
+#### 속성
+- `Product`는 식별자와 `price`, `name`을 가진다.
+#### 공통 정책
+- `Product`의 `name`은 필수값이고, `Profanities`를 통해 `Profanity`가 포함되어 있지 않은지 확인한다.
+- `Product`의 `price`는 0원 이상이어야 한다.
+#### 기능
+- `Product`를 등록
+- `Product`를 전체조회
+- `Product`의 `price`를 변경
+  - `Product`를 포함한 `Menu`들 중  `MenuPrice > MenuAmount`인 `Menu`는 `Not Displayed`된다
 
 ### 메뉴
-
 - `MenuGroup`은 식별자와 이름을 가진다.
 - `Menu`는 식별자와 `Displayed Name`, 가격, `MenuProducts`를 가진다.
 - `Menu`는 특정 `MenuGroup`에 속한다.
