@@ -3,20 +3,22 @@ package kitchenpos.products.application;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.application.dto.CreateProductServiceRequest;
-import kitchenpos.products.application.dto.CreateProductServiceResponse;
+import kitchenpos.products.ui.dto.ChangeProductRequest;
+import kitchenpos.products.ui.dto.ChangeProductResponse;
+import kitchenpos.products.ui.dto.CreateProductRequest;
+import kitchenpos.products.ui.dto.CreateProductResponse;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductName;
 import kitchenpos.products.tobe.domain.ProductPrice;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.common.infra.PurgomalumClient;
+import kitchenpos.products.ui.dto.FindProductResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -36,13 +38,13 @@ public class ProductService {
     }
 
     @Transactional
-    public CreateProductServiceResponse create(final CreateProductServiceRequest request) {
+    public CreateProductResponse create(final CreateProductRequest request) {
         validateProfanity(request.name());
         final ProductName name = new ProductName(request.name());
         final ProductPrice price = new ProductPrice(request.price());
         final Product product = new Product(name, price);
 
-        return CreateProductServiceResponse.from(productRepository.save(product));
+        return CreateProductResponse.from(productRepository.save(product));
     }
 
     private void validateProfanity(final String name) {
