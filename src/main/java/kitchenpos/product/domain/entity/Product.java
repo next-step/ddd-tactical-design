@@ -4,6 +4,7 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import java.math.BigDecimal;
 import kitchenpos.product.domain.model.ProductId;
 import kitchenpos.product.domain.model.ProductName;
 import kitchenpos.product.domain.model.ProductPrice;
@@ -45,6 +46,10 @@ public class Product {
 
     public ProductPrice getPrice() {
         return price;
+    }
+
+    public BigDecimal getTotalPrice(long qty) {
+        return price.multiply(qty).get();
     }
 
     public void updatePrice(ProductPrice price) {

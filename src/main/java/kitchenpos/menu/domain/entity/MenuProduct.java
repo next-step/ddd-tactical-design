@@ -27,7 +27,6 @@ public class MenuProduct {
     @Embedded
     private MenuProductQty quantity;
 
-
     protected MenuProduct() {}
 
     public MenuProduct(ProductId productId, MenuProductQty quantity) {

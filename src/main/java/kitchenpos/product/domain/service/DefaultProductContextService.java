@@ -5,6 +5,7 @@ import java.util.List;
 import kitchenpos.global.exception.ErrorCode;
 import kitchenpos.global.exception.NotFoundException;
 import kitchenpos.menu.application.ProductContextProvider;
+import kitchenpos.menu.domain.model.MenuProductQty;
 import kitchenpos.product.domain.entity.Product;
 import kitchenpos.product.domain.model.ProductId;
 import kitchenpos.product.domain.repository.ProductRepository;
@@ -29,12 +30,10 @@ public class DefaultProductContextService implements ProductContextProvider {
 
     @Transactional(readOnly = true)
     @Override
-    public BigDecimal getTotalPrice(ProductId productId, BigDecimal qty) {
+    public BigDecimal getTotalPrice(ProductId productId, MenuProductQty qty) {
         Product product = productRepository.findByProductId(productId)
             .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_PRODUCT.toString()));
 
-        return product.getPrice()
-            .price()
-            .multiply(qty);
+        return product.getTotalPrice(qty.get());
     }
 }

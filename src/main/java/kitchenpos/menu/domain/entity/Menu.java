@@ -73,10 +73,6 @@ public class Menu {
         return menuProducts;
     }
 
-//    public BigDecimal getTotalMenuPrice() {
-//        return menuProducts.calculateTotalPrice();
-//    }
-
     public void updateDisplayed(boolean displayed) {
         this.displayed = displayed;
     }

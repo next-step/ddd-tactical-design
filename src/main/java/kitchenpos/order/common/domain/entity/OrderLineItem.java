@@ -21,20 +21,12 @@ public class OrderLineItem {
     @Id
     private Long seq;
 
-//    @ManyToOne(optional = false)
-//    @JoinColumn(
-//        name = "menu_id",
-//        columnDefinition = "binary(16)",
-//        foreignKey = @ForeignKey(name = "fk_order_line_item_to_menu")
-//    )
-//    private Menu menu;
-
-    @Column(name = "quantity", nullable = false)
-    private long quantity;
-
     @Embedded
     @AttributeOverride(name = "id", column = @Column(name = "menu_id"))
     private MenuId menuId;
+
+    @Column(name = "quantity", nullable = false)
+    private long quantity;
 
     @Transient
     private BigDecimal price;

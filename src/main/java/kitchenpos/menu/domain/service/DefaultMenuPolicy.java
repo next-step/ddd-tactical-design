@@ -2,8 +2,9 @@ package kitchenpos.menu.domain.service;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.function.Function;
+import kitchenpos.global.exception.ErrorCode;
+import kitchenpos.global.exception.NotFoundException;
 import kitchenpos.menu.application.ProductContextProvider;
 import kitchenpos.menu.domain.entity.Menu;
 import kitchenpos.menu.domain.entity.MenuProduct;
@@ -73,7 +74,6 @@ public class DefaultMenuPolicy implements MenuPolicy {
             total -> new MenuPriceInvalidException());
     }
 
-
     private void changeMenuDisplay(Menu menu) {
         BigDecimal totalMenuProductPrice = calculateTotalMenuProductPrice(menu.getMenuProducts().get());
 
@@ -83,13 +83,13 @@ public class DefaultMenuPolicy implements MenuPolicy {
 
     private BigDecimal calculateTotalMenuProductPrice(List<MenuProduct> menuProducts) {
         return menuProducts.stream()
-            .map(menuProduct -> productContextProvider.getTotalPrice(menuProduct.getProductId(), BigDecimal.valueOf(menuProduct.getQuantity().quantity())))
+            .map(menuProduct -> productContextProvider.getTotalPrice(menuProduct.getProductId(), menuProduct.getQuantity()))
             .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     private Menu getMenu(MenuId menuId) {
         return menuRepository.findByMenuId(menuId)
-            .orElseThrow(NoSuchElementException::new);
+            .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_PRODUCT.toString()));
     }
 
     private void diffMenuAndTotalMenuProductPrice(

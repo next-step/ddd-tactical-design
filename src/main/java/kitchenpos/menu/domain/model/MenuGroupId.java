@@ -8,7 +8,6 @@ import kitchenpos.global.exception.NotFoundException;
 
 @Embeddable
 public record MenuGroupId(
-    @Column(name = "id", columnDefinition = "binary(16)")
     UUID id
 ) {
 

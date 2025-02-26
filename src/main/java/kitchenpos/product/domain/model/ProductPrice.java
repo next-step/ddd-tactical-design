@@ -18,4 +18,8 @@ public record ProductPrice(BigDecimal price) {
     public BigDecimal get() {
         return price;
     }
+
+    public ProductPrice multiply(long quantity) {
+        return new ProductPrice(price.multiply(BigDecimal.valueOf(quantity)));
+    }
 }

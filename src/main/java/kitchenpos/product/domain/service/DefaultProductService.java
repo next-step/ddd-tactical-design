@@ -1,9 +1,10 @@
 package kitchenpos.product.domain.service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.UUID;
 import kitchenpos.global.event.ProductEvent.ProductPriceChangedEvent;
+import kitchenpos.global.exception.ErrorCode;
+import kitchenpos.global.exception.NotFoundException;
 import kitchenpos.product.domain.entity.Product;
 import kitchenpos.product.domain.event.ProductEventPublisher;
 import kitchenpos.product.domain.model.ProductId;
@@ -47,7 +48,7 @@ public class DefaultProductService implements ProductQueryService, ProductComman
         final ProductId productId = request.productId();
         final ProductPrice price = request.price();
         final Product product = productRepository.findByProductId(productId)
-            .orElseThrow(NoSuchElementException::new);
+                                        .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_PRODUCT.toString()));
 
         product.updatePrice(price);
 

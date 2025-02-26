@@ -35,8 +35,7 @@ public record MenuFixture(UUID id, String 메뉴명, BigDecimal 메뉴가격,
             UUID.randomUUID(),
             Objects.requireNonNullElse(메뉴명, DEFAULT_MENU_NAME),
             Objects.requireNonNullElse(메뉴가격, DEFAULT_MENU_PRICE),
-            Objects.requireNonNullElse(메뉴그룹아이디, MenuGroupFixture.init().toEntity().getMenuGroupId()
-                .get()),
+            Objects.requireNonNullElse(메뉴그룹아이디, MenuGroupFixture.init().toEntity().getMenuGroupId().get()),
             노출여부,
             Objects.requireNonNullElse(메뉴구성품, List.of(MenuProductFixture.init().toEntity()))
         );

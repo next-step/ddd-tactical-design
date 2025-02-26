@@ -21,14 +21,8 @@ public record MenuProducts(
     List<MenuProduct> menuProducts
 ) {
     public MenuProducts(List<MenuProduct> menuProducts) {
-        this.menuProducts = List.copyOf(menuProducts); // 불변 리스트 유지
+        this.menuProducts = List.copyOf(menuProducts);
     }
-
-//    public BigDecimal getTotalPrice() {
-//        return menuProducts.stream()
-//            .map(MenuProduct::)
-//            .reduce(BigDecimal.ZERO, BigDecimal::add);
-//    }
 
     public List<MenuProduct> get() {
         return Collections.unmodifiableList(menuProducts);

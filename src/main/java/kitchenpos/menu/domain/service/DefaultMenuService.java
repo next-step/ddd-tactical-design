@@ -1,7 +1,6 @@
 package kitchenpos.menu.domain.service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.UUID;
 import kitchenpos.global.exception.ErrorCode;
@@ -85,7 +84,7 @@ public class DefaultMenuService implements MenuQueryService, MenuCommandService 
     @Override
     public MenuVo.MenuInfo hide(final MenuId menuId) {
         final Menu menu = menuRepository.findByMenuId(menuId)
-            .orElseThrow(NoSuchElementException::new);
+            .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_MENU.toString()));
         menu.updateDisplayed(false);
         return MenuVo.MenuInfo.fromEntity(menu);
     }

@@ -16,7 +16,6 @@ public class DefaultProductEventListener implements ProductEventListener {
         this.menuPolicy = menuPolicy;
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener
     @Override
     public void handle(ProductEvent event) {
