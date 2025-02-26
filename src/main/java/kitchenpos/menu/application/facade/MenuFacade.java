@@ -1,9 +1,9 @@
 package kitchenpos.menu.application.facade;
 
 import java.util.List;
-import java.util.UUID;
 import kitchenpos.menu.application.dto.MenuRequest;
 import kitchenpos.menu.application.dto.MenuResponse;
+import kitchenpos.menu.domain.model.MenuId;
 import kitchenpos.menu.domain.service.MenuCommandService;
 import kitchenpos.menu.domain.service.MenuQueryService;
 import org.springframework.stereotype.Component;
@@ -30,11 +30,11 @@ public class MenuFacade {
         return MenuResponse.GetMenu.fromVo(menuCommandService.changePrice(request.toVo()));
     }
 
-    public MenuResponse.GetMenu display(UUID menuId) {
+    public MenuResponse.GetMenu display(MenuId menuId) {
         return MenuResponse.GetMenu.fromVo(menuCommandService.display(menuId));
     }
 
-    public MenuResponse.GetMenu hide(UUID menuId) {
+    public MenuResponse.GetMenu hide(MenuId menuId) {
         return MenuResponse.GetMenu.fromVo(menuCommandService.hide(menuId));
     }
 

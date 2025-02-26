@@ -1,16 +1,15 @@
 package kitchenpos.menu.domain.service;
 
-import java.util.List;
-import java.util.UUID;
-import kitchenpos.menu.domain.entity.Menu;
-import kitchenpos.menu.domain.entity.MenuProduct;
+import kitchenpos.menu.domain.model.MenuId;
 import kitchenpos.menu.domain.model.MenuPrice;
+import kitchenpos.menu.domain.model.MenuProducts;
 import kitchenpos.menu.domain.model.MenuVo;
+import kitchenpos.product.domain.model.ProductId;
 
 public interface MenuPolicy {
-    void hideMenu(UUID productId);
-    MenuVo.MenuInfo changePrice(UUID menuId, MenuPrice price);
-    MenuVo.MenuInfo display(UUID menuId);
+    void hideMenu(ProductId productId);
+    MenuVo.MenuInfo changePrice(MenuId menuId, MenuPrice price);
+    MenuVo.MenuInfo display(MenuId menuId);
 
-    void validateMenuPrice(MenuPrice price, List<MenuProduct> menuProducts);
+    void validateMenuPrice(MenuPrice price, MenuProducts menuProducts);
 }

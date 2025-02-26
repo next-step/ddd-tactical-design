@@ -1,19 +1,17 @@
 package kitchenpos.menu.domain.entity;
 
-import jakarta.persistence.CascadeType;
+import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.UUID;
+import kitchenpos.menu.domain.model.MenuGroupId;
+import kitchenpos.menu.domain.model.MenuId;
 import kitchenpos.menu.domain.model.MenuName;
 import kitchenpos.menu.domain.model.MenuPrice;
+import kitchenpos.menu.domain.model.MenuProducts;
 import org.hibernate.annotations.DynamicUpdate;
 
 @Table(name = "menu")
@@ -21,9 +19,8 @@ import org.hibernate.annotations.DynamicUpdate;
 @DynamicUpdate
 public class Menu {
 
-    @Column(name = "id", columnDefinition = "binary(16)")
-    @Id
-    private UUID id;
+    @EmbeddedId
+    private MenuId menuId;
 
     @Embedded
     private MenuName name;
@@ -31,25 +28,20 @@ public class Menu {
     @Embedded
     private MenuPrice price;
 
-    @Column(name = "menu_group_id", columnDefinition = "binary(16)", nullable = false)
-    private UUID menuGroupId;
+    @Embedded
+    @AttributeOverride(name = "id", column = @Column(name = "menu_group_id"))
+    private MenuGroupId menuGroupId;
 
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(
-        name = "menu_id",
-        nullable = false,
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
-    )
-    private List<MenuProduct> menuProducts;
+    @Embedded
+    private MenuProducts menuProducts;
 
     protected Menu() {}
 
-    public Menu(UUID uuid, MenuName name, MenuPrice price, UUID menuGroupId, boolean displayed, List<MenuProduct> menuProducts) {
-        this.id = uuid;
+    public Menu(MenuId menuId, MenuName name, MenuPrice price, MenuGroupId menuGroupId, boolean displayed, MenuProducts menuProducts) {
+        this.menuId = menuId;
         this.name = name;
         this.price = price;
         this.menuGroupId = menuGroupId;
@@ -57,12 +49,12 @@ public class Menu {
         this.menuProducts = menuProducts;
     }
 
-    public UUID getId() {
-        return id;
+    public MenuId getMenuId() {
+        return menuId;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
+    public void setMenuId(MenuId menuId) {
+        this.menuId = menuId;
     }
 
     public MenuName getName() {
@@ -77,9 +69,13 @@ public class Menu {
         return displayed;
     }
 
-    public List<MenuProduct> getMenuProducts() {
+    public MenuProducts getMenuProducts() {
         return menuProducts;
     }
+
+//    public BigDecimal getTotalMenuPrice() {
+//        return menuProducts.calculateTotalPrice();
+//    }
 
     public void updateDisplayed(boolean displayed) {
         this.displayed = displayed;

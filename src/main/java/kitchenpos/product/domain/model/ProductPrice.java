@@ -14,4 +14,8 @@ public record ProductPrice(BigDecimal price) {
         }
         return new ProductPrice(price);
     }
+
+    public BigDecimal get() {
+        return price;
+    }
 }

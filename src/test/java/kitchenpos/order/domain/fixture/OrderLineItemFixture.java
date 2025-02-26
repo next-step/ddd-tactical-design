@@ -29,7 +29,7 @@ public record OrderLineItemFixture(Menu 메뉴, long 주문수량, BigDecimal �
 
     public OrderLineItem create() {
         var orderLineItem = new OrderLineItem();
-        orderLineItem.setMenu(메뉴);
+//        orderLineItem.setMenu(메뉴);
         orderLineItem.setQuantity(주문수량);
         orderLineItem.setPrice(주문가격);
         return orderLineItem;

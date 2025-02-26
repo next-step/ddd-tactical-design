@@ -41,6 +41,7 @@ import kitchenpos.menu.domain.service.MenuPurgomalumClient;
 import kitchenpos.menu.domain.service.MenuQueryService;
 import kitchenpos.product.domain.entity.Product;
 import kitchenpos.product.domain.fixture.ProductFixture;
+import kitchenpos.product.domain.model.ProductId;
 import kitchenpos.product.domain.model.ProductName;
 import kitchenpos.product.domain.model.ProductPrice;
 import kitchenpos.product.domain.repository.InMemoryProductRepository;
@@ -102,7 +103,7 @@ class MenuFacadeTest {
             null,
             null,
             true,
-            List.of(new MenuProductFixture(chicken.getId(), MenuProductQty.of(10)).toEntity())
+            List.of(new MenuProductFixture(chicken.getProductId().get(), MenuProductQty.of(10)).toEntity())
         ).toEntity();
 
         productRepository.save(chicken);
@@ -207,10 +208,10 @@ class MenuFacadeTest {
                 BigDecimal.valueOf(price1),
                 null,
                 true,
-                List.of(new MenuProductFixture(chicken.getId(), MenuProductQty.of(100)).toEntity())
+                List.of(new MenuProductFixture(chicken.getProductId().get(), MenuProductQty.of(100)).toEntity())
             ).create();
 
-            chicken = new Product(chicken.getId(), chicken.getName(), ProductPrice.of(BigDecimal.valueOf(price2)));
+            chicken = new Product(chicken.getProductId(), chicken.getName(), ProductPrice.of(BigDecimal.valueOf(price2)));
 
             productRepository.save(chicken);
 
@@ -251,7 +252,7 @@ class MenuFacadeTest {
                         null,
                         null,
                         true,
-                        List.of(new MenuProductFixture(chicken.getId(), MenuProductQty.of(qty)).toEntity())
+                        List.of(new MenuProductFixture(chicken.getProductId().get(), MenuProductQty.of(qty)).toEntity())
                     ).create();
 
                     mockCreateMenu();
@@ -273,7 +274,7 @@ class MenuFacadeTest {
         void 메뉴_노출_성공() {
 
             assertThatCode(() -> {
-                menuFacade.display(defaultMenu.getId());
+                menuFacade.display(defaultMenu.getMenuId());
             }).doesNotThrowAnyException();
 
         }
@@ -283,7 +284,7 @@ class MenuFacadeTest {
         @CsvSource({"100000, 100"})
         void 변경가격_비교_검사(final int price1, final int price2) {
             chicken = new ProductFixture(
-                        null,
+                        UUID.randomUUID(),
                         null,
                         BigDecimal.valueOf(price2)
                     ).toEntity();
@@ -295,7 +296,7 @@ class MenuFacadeTest {
                 BigDecimal.valueOf(price1),
                 null,
                 true,
-                List.of(new MenuProductFixture(chicken.getId(), MenuProductQty.of(100)).toEntity())
+                List.of(new MenuProductFixture(chicken.getProductId().get(), MenuProductQty.of(100)).toEntity())
             ).toEntity();
 
             menuRepository.save(defaultMenu);
@@ -303,7 +304,7 @@ class MenuFacadeTest {
             menuPolicy.setExceptionStatus(isOver(BigDecimal.valueOf(price1)));
 
             assertThatExceptionOfType(MenuStateInvalidException.class)
-                .isThrownBy(() -> menuFacade.display(defaultMenu.getId()))
+                .isThrownBy(() -> menuFacade.display(defaultMenu.getMenuId()))
                 .withMessage(ErrorCode.MENU_PRICE_OVER_TOTAL_PRODUCTS_NOT_ALLOWED.toString());
         }
     }
@@ -316,7 +317,7 @@ class MenuFacadeTest {
         @DisplayName("성공 : 등록 메뉴를 숨긴다.")
         void 메뉴_숨김_성공() {
 
-            menuFacade.hide(defaultMenu.getId());
+            menuFacade.hide(defaultMenu.getMenuId());
 
             assertThat(defaultMenu.isDisplayed()).isFalse();
         }
@@ -331,7 +332,7 @@ class MenuFacadeTest {
         @ValueSource(ints = {0, 1000, 10000})
         void 메뉴_가격변경_성공(final int price) {
 
-            updatePriceMenu = new UpdatePrice(defaultMenu.getId(), BigDecimal.valueOf(price));
+            updatePriceMenu = new UpdatePrice(defaultMenu.getMenuId().get(), BigDecimal.valueOf(price));
 
             assertThatCode(() -> {
                 menuFacade.changePrice(updatePriceMenu);
@@ -363,7 +364,7 @@ class MenuFacadeTest {
         @ValueSource(ints = {250000, 300000})
         void 변경가격_비교_검사(final int price) {
 
-            updatePriceMenu = new UpdatePrice(defaultMenu.getId(), BigDecimal.valueOf(price));
+            updatePriceMenu = new UpdatePrice(defaultMenu.getMenuId().get(), BigDecimal.valueOf(price));
 
             menuPolicy.setExceptionStatus(isOver(BigDecimal.valueOf(price)));
 
@@ -379,22 +380,23 @@ class MenuFacadeTest {
     }
 
     private void mockFindByMenuGroup() {
-        when(menuGroupRepository.findById(Mockito.any()))
+        when(menuGroupRepository.findByMenuGroupId(Mockito.any()))
             .thenReturn(Optional.of(MenuGroupFixture.init().toEntity()));
     }
 
     private void mockFindAllByProductContext() {
-        when(productContextProvider.findAllByIds(anyList()))
+        when(productContextProvider.findAllByProductIds(anyList()))
             .thenAnswer(invocation -> {
-                List<UUID> requestedProductIds = invocation.getArgument(0);
+                List<ProductId> requestedProductIds = invocation.getArgument(0);
                 return requestedProductIds.stream()
-                    .map(id -> new Product(id, ProductName.of("치킨", menuPurgomalumClient), ProductPrice.of(BigDecimal.TEN))) // UUID 일치하는 Product 생성
+                    .map(id -> new Product(
+                        id, ProductName.of("치킨", menuPurgomalumClient), ProductPrice.of(BigDecimal.TEN))) // UUID 일치하는 Product 생성
                     .toList();
             });
     }
 
     private boolean isOver(BigDecimal price) {
-        return defaultMenu.getMenuProducts().stream()
+        return defaultMenu.getMenuProducts().menuProducts().stream()
             .map(mp -> {
                 return chicken.getPrice().price().multiply(BigDecimal.valueOf(mp.getQuantity().quantity()));
             })

@@ -11,7 +11,7 @@ public record ProductResponse() {
         BigDecimal price
     ) {
         public static GetProduct fromVo(ProductVo.ProductInfo vo) {
-            return new GetProduct(vo.productId(), vo.name().name(), vo.price().price());
+            return new GetProduct(vo.getProductId(), vo.getProductName(), vo.getProductPrice());
         }
     }
 }

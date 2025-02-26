@@ -26,4 +26,8 @@ public record MenuPrice(BigDecimal price) {
     public boolean isGreaterThan(BigDecimal diff) {
         return price.compareTo(diff) > 0;
     }
+
+    public BigDecimal get() {
+        return price;
+    }
 }

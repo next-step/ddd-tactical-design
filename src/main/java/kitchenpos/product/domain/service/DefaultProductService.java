@@ -6,6 +6,7 @@ import java.util.UUID;
 import kitchenpos.global.event.ProductEvent.ProductPriceChangedEvent;
 import kitchenpos.product.domain.entity.Product;
 import kitchenpos.product.domain.event.ProductEventPublisher;
+import kitchenpos.product.domain.model.ProductId;
 import kitchenpos.product.domain.model.ProductName;
 import kitchenpos.product.domain.model.ProductPrice;
 import kitchenpos.product.domain.model.ProductVo;
@@ -37,14 +38,15 @@ public class DefaultProductService implements ProductQueryService, ProductComman
         final ProductName name = ProductName.of(request.name(), purgomalumClient);
 
         return ProductVo.ProductInfo.fromEntity(
-            productRepository.save(new Product(UUID.randomUUID(), name, price))
+            productRepository.save(new Product(ProductId.of(UUID.randomUUID()), name, price))
         );
     }
 
     @Override
     public ProductVo.ProductInfo changePrice(final ProductVo.Update request) {
+        final ProductId productId = request.productId();
         final ProductPrice price = request.price();
-        final Product product = productRepository.findById(request.productId())
+        final Product product = productRepository.findByProductId(productId)
             .orElseThrow(NoSuchElementException::new);
 
         product.updatePrice(price);

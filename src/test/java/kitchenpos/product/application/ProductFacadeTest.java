@@ -26,6 +26,7 @@ import kitchenpos.product.application.facade.ProductFacade;
 import kitchenpos.product.domain.event.ProductEventPublisher;
 import kitchenpos.product.domain.exception.ProductPriceException;
 import kitchenpos.product.domain.fixture.ProductFixture;
+import kitchenpos.product.domain.model.ProductId;
 import kitchenpos.product.domain.repository.InMemoryMenuRepository;
 import kitchenpos.product.domain.repository.InMemoryProductRepository;
 import kitchenpos.product.domain.repository.ProductRepository;
@@ -165,7 +166,7 @@ class ProductFacadeTest {
         void 가격비교_숨김처리(final int price) {
             final UUID productId = productFacade.create(chicken).id();
 
-            var product = productRepository.findById(productId);
+            var product = productRepository.findByProductId(ProductId.of(productId));
 
             updateChicken = new UpdatePrice(productId, BigDecimal.valueOf(price));
 
@@ -183,9 +184,9 @@ class ProductFacadeTest {
 
             productFacade.changePrice(updateChicken);
 
-            menuPolicy.hideMenu(productId);
+            menuPolicy.hideMenu(ProductId.of(productId));
 
-            var result = menuRepository.findById(menu.getId()).orElseThrow();
+            var result = menuRepository.findByMenuId(menu.getMenuId()).orElseThrow();
 
             assertThat(result.isDisplayed()).isFalse();
         }

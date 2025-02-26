@@ -8,6 +8,7 @@ import kitchenpos.menu.application.dto.MenuRequest;
 import kitchenpos.menu.application.dto.MenuRequest.UpdatePrice;
 import kitchenpos.menu.application.dto.MenuResponse;
 import kitchenpos.menu.application.facade.MenuFacade;
+import kitchenpos.menu.domain.model.MenuId;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -50,14 +51,14 @@ public class MenuRestController {
     public ResponseEntity<MenuResponse.GetMenu> display(
         @PathVariable final UUID menuId
     ) {
-        return ResponseEntity.ok(menuFacade.display(menuId));
+        return ResponseEntity.ok(menuFacade.display(MenuId.of(menuId)));
     }
 
     @PutMapping("/{menuId}/hide")
     public ResponseEntity<MenuResponse.GetMenu> hide(
         @PathVariable final UUID menuId
     ) {
-        return ResponseEntity.ok(menuFacade.hide(menuId));
+        return ResponseEntity.ok(menuFacade.hide(MenuId.of(menuId)));
     }
 
     @GetMapping

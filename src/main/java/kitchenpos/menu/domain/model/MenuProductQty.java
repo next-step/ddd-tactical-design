@@ -16,5 +16,9 @@ public record MenuProductQty(long quantity) {
     public boolean isNegative() {
         return this.quantity < 0;
     }
+
+    public long get() {
+        return quantity;
+    }
 }
 

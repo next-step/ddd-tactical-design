@@ -13,27 +13,25 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import kitchenpos.menu.domain.entity.Menu;
 import kitchenpos.menu.domain.fixture.MenuFixture;
 import kitchenpos.menu.domain.repository.MenuRepository;
 import kitchenpos.order.common.domain.entity.Order;
 import kitchenpos.order.common.domain.entity.OrderLineItem;
 import kitchenpos.order.common.domain.entity.OrderStatus;
-import kitchenpos.order.eatin.domain.entity.OrderTable;
 import kitchenpos.order.common.domain.entity.OrderType;
+import kitchenpos.order.common.domain.repository.OrderRepository;
+import kitchenpos.order.common.domain.repository.OrderTableRepository;
+import kitchenpos.order.common.domain.service.OrderService;
+import kitchenpos.order.delivery.domain.service.DeliveryKitchenridersClient;
 import kitchenpos.order.domain.fixture.OrderFixture;
 import kitchenpos.order.domain.fixture.OrderLineItemFixture;
 import kitchenpos.order.domain.fixture.OrderTableFixture;
-import kitchenpos.order.common.domain.repository.OrderRepository;
-import kitchenpos.order.common.domain.repository.OrderTableRepository;
-import kitchenpos.order.delivery.domain.service.DeliveryKitchenridersClient;
-import kitchenpos.order.common.domain.service.OrderService;
+import kitchenpos.order.eatin.domain.entity.OrderTable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.NullSource;
@@ -41,9 +39,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 
-@ExtendWith(MockitoExtension.class)
+//@ExtendWith(MockitoExtension.class)
 class OrderFacadeTest {
 
     @InjectMocks
@@ -452,15 +449,12 @@ class OrderFacadeTest {
     }
 
     private void mockFindAllByMenu(Order order) {
-        when(menuRepository.findAllByIdIn(Mockito.any()))
-            .thenReturn(order.getOrderLineItems()
-                .stream()
-                .map(OrderLineItem::getMenu)
-                .collect(Collectors.toList()));
+        when(menuRepository.findAllByMenuIdIn(Mockito.any()))
+            .thenReturn(null);
     }
 
     private void mockFindByMenu(Menu menu) {
-        when(menuRepository.findById(Mockito.any()))
+        when(menuRepository.findByMenuId(Mockito.any()))
             .thenReturn(Optional.of(chickenMenu));
     }
 

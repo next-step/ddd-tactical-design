@@ -7,8 +7,11 @@ import java.util.UUID;
 import kitchenpos.menu.application.dto.MenuRequest;
 import kitchenpos.menu.domain.entity.Menu;
 import kitchenpos.menu.domain.entity.MenuProduct;
+import kitchenpos.menu.domain.model.MenuGroupId;
+import kitchenpos.menu.domain.model.MenuId;
 import kitchenpos.menu.domain.model.MenuName;
 import kitchenpos.menu.domain.model.MenuPrice;
+import kitchenpos.menu.domain.model.MenuProducts;
 
 public record MenuFixture(UUID id, String 메뉴명, BigDecimal 메뉴가격,
                           UUID 메뉴그룹아이디, boolean 노출여부, List<MenuProduct> 메뉴구성품) {
@@ -21,7 +24,7 @@ public record MenuFixture(UUID id, String 메뉴명, BigDecimal 메뉴가격,
             UUID.randomUUID(),
             DEFAULT_MENU_NAME,
             DEFAULT_MENU_PRICE,
-            MenuGroupFixture.init().toEntity().getId(),
+            MenuGroupFixture.init().toEntity().getMenuGroupId().get(),
             true,
             List.of(MenuProductFixture.init().toEntity()));
     }
@@ -32,14 +35,15 @@ public record MenuFixture(UUID id, String 메뉴명, BigDecimal 메뉴가격,
             UUID.randomUUID(),
             Objects.requireNonNullElse(메뉴명, DEFAULT_MENU_NAME),
             Objects.requireNonNullElse(메뉴가격, DEFAULT_MENU_PRICE),
-            Objects.requireNonNullElse(메뉴그룹아이디, MenuGroupFixture.init().toEntity().getId()),
+            Objects.requireNonNullElse(메뉴그룹아이디, MenuGroupFixture.init().toEntity().getMenuGroupId()
+                .get()),
             노출여부,
             Objects.requireNonNullElse(메뉴구성품, List.of(MenuProductFixture.init().toEntity()))
         );
     }
 
     public Menu toEntity() {
-        return new Menu(id, new MenuName(메뉴명), MenuPrice.of(메뉴가격), 메뉴그룹아이디, 노출여부, 메뉴구성품);
+        return new Menu(MenuId.of(id), new MenuName(메뉴명), MenuPrice.of(메뉴가격), MenuGroupId.of(메뉴그룹아이디), 노출여부, new MenuProducts(메뉴구성품));
     }
 
     public MenuRequest.Create create() {

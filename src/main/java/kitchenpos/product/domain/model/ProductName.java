@@ -19,4 +19,8 @@ public record ProductName(String name) {
         }
         return new ProductName(name);
     }
+
+    public String get() {
+        return name;
+    }
 }

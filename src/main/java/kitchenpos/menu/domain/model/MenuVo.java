@@ -1,31 +1,42 @@
 package kitchenpos.menu.domain.model;
 
-import java.util.List;
+import java.math.BigDecimal;
 import java.util.UUID;
 import kitchenpos.menu.domain.entity.Menu;
-import kitchenpos.menu.domain.entity.MenuProduct;
 
 public record MenuVo() {
 
     public record MenuInfo(
-        UUID id,
+        MenuId id,
         MenuName name,
         MenuPrice price,
         boolean displayed
     ) {
         public static MenuInfo fromEntity(Menu entity) {
-            return new MenuInfo(entity.getId(), entity.getName(), entity.getPrice(), entity.isDisplayed());
+            return new MenuInfo(entity.getMenuId(), entity.getName(), entity.getPrice(), entity.isDisplayed());
+        }
+
+        public UUID getMenuId() {
+            return id.get();
+        }
+
+        public String getMenuName() {
+            return name.get();
+        }
+
+        public BigDecimal getMenuPrice() {
+            return price.get();
         }
     }
 
     public record Create(
         String name,
         MenuPrice price,
-        UUID menuGroupId,
+        MenuGroupId menuGroupId,
         boolean displayed,
-        List<MenuProduct> menuProducts
+        MenuProducts menuProducts
     ) {
     }
 
-    public record Update(UUID menuId, MenuPrice price) {}
+    public record Update(MenuId menuId, MenuPrice price) {}
 }

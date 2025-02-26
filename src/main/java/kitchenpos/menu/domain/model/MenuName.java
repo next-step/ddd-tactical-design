@@ -19,4 +19,8 @@ public record MenuName(String name) {
         }
         return new MenuName(name);
     }
+
+    public String get() {
+        return name;
+    }
 }

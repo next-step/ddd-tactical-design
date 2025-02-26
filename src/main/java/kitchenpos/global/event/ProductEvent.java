@@ -1,12 +1,12 @@
 package kitchenpos.global.event;
 
-import java.util.UUID;
+import kitchenpos.product.domain.model.ProductId;
 
 public sealed interface ProductEvent permits
     ProductEvent.ProductPriceChangedEvent
 {
 
-    UUID productId();
+    ProductId productId();
 
-    record ProductPriceChangedEvent(UUID productId) implements ProductEvent {}
+    record ProductPriceChangedEvent(ProductId productId) implements ProductEvent {}
 }

@@ -19,4 +19,8 @@ public record MenuGroupName(String name) {
         }
         return new MenuGroupName(name);
     }
+
+    public String get() {
+        return name;
+    }
 }

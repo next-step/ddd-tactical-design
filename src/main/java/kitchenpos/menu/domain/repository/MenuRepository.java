@@ -2,19 +2,20 @@ package kitchenpos.menu.domain.repository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import kitchenpos.menu.domain.entity.Menu;
+import kitchenpos.menu.domain.model.MenuId;
+import kitchenpos.product.domain.model.ProductId;
 
 public interface MenuRepository {
 
     Menu save(Menu menu);
 
-    Optional<Menu> findById(UUID id);
+    Optional<Menu> findByMenuId(MenuId id);
 
     List<Menu> findAll();
 
-    List<Menu> findAllByIdIn(List<UUID> ids);
+    List<Menu> findAllByMenuIdIn(List<MenuId> ids);
 
-    List<Menu> findAllByProductId(UUID productId);
+    List<Menu> findAllByProductId(ProductId productId);
 }
 

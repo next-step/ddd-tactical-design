@@ -6,6 +6,7 @@ public enum ErrorCode implements ErrorType {
 
     NOT_FOUND_PRODUCT("404", "상품을 찾을 수 없습니다."),
     NOT_FOUND_ANY_PRODUCT("404", "일부상품을 찾을 수 없습니다."),
+    NOT_FOUND_MENU("404", "메뉴를 찾을 수 없습니다."),
     NOT_FOUND_MENU_GROUP("404", "메뉴그룹을 찾을 수 없습니다."),
     NOT_FOUND_MENU_PRODUCT("404", "메뉴상품을 찾을 수 없습니다."),
 

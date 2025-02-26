@@ -51,7 +51,7 @@ public class OrderServiceImpl implements OrderService {
         if (Objects.isNull(orderLineItemRequests) || orderLineItemRequests.isEmpty()) {
             throw new IllegalArgumentException();
         }
-        final List<Menu> menus = menuRepository.findAllByIdIn(
+        final List<Menu> menus = menuRepository.findAllByMenuIdIn(
             orderLineItemRequests.stream()
                 .map(OrderLineItem::getMenuId)
                 .toList()
@@ -67,7 +67,7 @@ public class OrderServiceImpl implements OrderService {
                     throw new IllegalArgumentException();
                 }
             }
-            final Menu menu = menuRepository.findById(orderLineItemRequest.getMenuId())
+            final Menu menu = menuRepository.findByMenuId(orderLineItemRequest.getMenuId())
                 .orElseThrow(NoSuchElementException::new);
             if (!menu.isDisplayed()) {
                 throw new IllegalStateException();
@@ -77,7 +77,7 @@ public class OrderServiceImpl implements OrderService {
                 throw new IllegalArgumentException();
             }
             final OrderLineItem orderLineItem = new OrderLineItem();
-            orderLineItem.setMenu(menu);
+            orderLineItem.setMenuId(menu.getMenuId());
             orderLineItem.setQuantity(quantity);
             orderLineItems.add(orderLineItem);
         }
@@ -114,13 +114,15 @@ public class OrderServiceImpl implements OrderService {
         }
         if (order.getType() == OrderType.DELIVERY) {
             BigDecimal sum = BigDecimal.ZERO;
-            for (final OrderLineItem orderLineItem : order.getOrderLineItems()) {
-                sum = orderLineItem.getMenu()
-                    .getPrice()
-                    .price()
-                    .multiply(BigDecimal.valueOf(orderLineItem.getQuantity()));
-            }
-            deliveryKitchenridersClient.requestDelivery(orderId, sum, order.getDeliveryAddress());
+
+            // TODO: step3 보완
+//            for (final OrderLineItem orderLineItem : order.getOrderLineItems()) {
+//                sum = orderLineItem.getMenu()
+//                    .getPrice()
+//                    .price()
+//                    .multiply(BigDecimal.valueOf(orderLineItem.getQuantity()));
+//            }
+//            deliveryKitchenridersClient.requestDelivery(orderId, sum, order.getDeliveryAddress());
         }
         order.setStatus(OrderStatus.ACCEPTED);
         return order;

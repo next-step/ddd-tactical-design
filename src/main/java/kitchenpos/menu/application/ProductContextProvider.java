@@ -2,10 +2,10 @@ package kitchenpos.menu.application;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.UUID;
 import kitchenpos.product.domain.entity.Product;
+import kitchenpos.product.domain.model.ProductId;
 
 public interface ProductContextProvider {
-    List<Product> findAllByIds(List<UUID> productIds);
-    BigDecimal getTotalPrice(UUID productId, BigDecimal qty);
+    List<Product> findAllByProductIds(List<ProductId> productIds);
+    BigDecimal getTotalPrice(ProductId productId, BigDecimal qty);
 }

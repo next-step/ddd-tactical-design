@@ -8,7 +8,10 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 import kitchenpos.menu.domain.entity.MenuProduct;
+import kitchenpos.menu.domain.model.MenuGroupId;
+import kitchenpos.menu.domain.model.MenuId;
 import kitchenpos.menu.domain.model.MenuPrice;
+import kitchenpos.menu.domain.model.MenuProducts;
 import kitchenpos.menu.domain.model.MenuVo;
 
 public record MenuRequest() {
@@ -27,7 +30,7 @@ public record MenuRequest() {
     ) {
 
         public MenuVo.Create toVo() {
-            return new MenuVo.Create(name, MenuPrice.of(price), menuGroupId, displayed, menuProducts);
+            return new MenuVo.Create(name, MenuPrice.of(price), MenuGroupId.of(menuGroupId), displayed, new MenuProducts(menuProducts));
         }
     }
 
@@ -39,7 +42,7 @@ public record MenuRequest() {
     ) {
 
         public MenuVo.Update toVo() {
-            return new MenuVo.Update(menuId, MenuPrice.of(price));
+            return new MenuVo.Update(MenuId.of(menuId), MenuPrice.of(price));
         }
     }
 }

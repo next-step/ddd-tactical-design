@@ -2,15 +2,16 @@ package kitchenpos.menu.domain.service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.UUID;
 import java.util.function.Function;
 import kitchenpos.menu.domain.entity.Menu;
-import kitchenpos.menu.domain.entity.MenuProduct;
 import kitchenpos.menu.domain.exception.MenuPriceInvalidException;
 import kitchenpos.menu.domain.exception.MenuStateInvalidException;
+import kitchenpos.menu.domain.model.MenuId;
 import kitchenpos.menu.domain.model.MenuPrice;
+import kitchenpos.menu.domain.model.MenuProducts;
 import kitchenpos.menu.domain.model.MenuVo.MenuInfo;
 import kitchenpos.menu.domain.repository.MenuRepository;
+import kitchenpos.product.domain.model.ProductId;
 
 public class FakeMenuPolicy implements MenuPolicy {
 
@@ -27,7 +28,7 @@ public class FakeMenuPolicy implements MenuPolicy {
     }
 
     @Override
-    public void hideMenu(UUID productId) {
+    public void hideMenu(ProductId productId) {
         List<Menu> menus = menuRepository.findAllByProductId(productId);
 
         menus.forEach(menu -> {
@@ -36,21 +37,21 @@ public class FakeMenuPolicy implements MenuPolicy {
     }
 
     @Override
-    public MenuInfo changePrice(UUID menuId, MenuPrice price) {
+    public MenuInfo changePrice(MenuId menuId, MenuPrice price) {
         var menu = getMenu(menuId);
         fakePriceValidation(exceptionStatus -> new MenuPriceInvalidException());
         return MenuInfo.fromEntity(menu);
     }
 
     @Override
-    public MenuInfo display(UUID menuId) {
+    public MenuInfo display(MenuId menuId) {
         var menu = getMenu(menuId);
         fakePriceValidation(exceptionStatus -> new MenuStateInvalidException());
         return MenuInfo.fromEntity(menu);
     }
 
     @Override
-    public void validateMenuPrice(MenuPrice price, List<MenuProduct> menuProducts) {
+    public void validateMenuPrice(MenuPrice price, MenuProducts menuProducts) {
         fakePriceValidation(exceptionStatus -> new MenuPriceInvalidException());
     }
 
@@ -60,8 +61,8 @@ public class FakeMenuPolicy implements MenuPolicy {
         }
     }
 
-    private Menu getMenu(UUID menuId) {
-        return menuRepository.findById(menuId)
+    private Menu getMenu(MenuId menuId) {
+        return menuRepository.findByMenuId(menuId)
             .orElseThrow(NoSuchElementException::new);
     }
 }

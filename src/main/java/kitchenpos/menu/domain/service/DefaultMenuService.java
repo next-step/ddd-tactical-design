@@ -11,8 +11,11 @@ import kitchenpos.menu.domain.entity.Menu;
 import kitchenpos.menu.domain.entity.MenuGroup;
 import kitchenpos.menu.domain.entity.MenuProduct;
 import kitchenpos.menu.domain.exception.MenuProductQtyException;
+import kitchenpos.menu.domain.model.MenuGroupId;
+import kitchenpos.menu.domain.model.MenuId;
 import kitchenpos.menu.domain.model.MenuName;
 import kitchenpos.menu.domain.model.MenuPrice;
+import kitchenpos.menu.domain.model.MenuProducts;
 import kitchenpos.menu.domain.model.MenuVo;
 import kitchenpos.menu.domain.repository.MenuGroupRepository;
 import kitchenpos.menu.domain.repository.MenuRepository;
@@ -51,16 +54,16 @@ public class DefaultMenuService implements MenuQueryService, MenuCommandService 
         final MenuPrice price = request.price();
         final MenuName name = MenuName.of(request.name(), purgomalumClient);
         final MenuGroup menuGroup = validateMenuGroup(request.menuGroupId());
-        final List<MenuProduct> menuProducts = createMenuProducts(request.menuProducts());
+        final MenuProducts menuProducts = createMenuProducts(request.menuProducts().get());
 
         menuPolicy.validateMenuPrice(price, menuProducts);
 
         return MenuVo.MenuInfo.fromEntity(
             menuRepository.save(new Menu(
-                UUID.randomUUID(),
+                MenuId.of(UUID.randomUUID()),
                 name,
                 price,
-                menuGroup.getId(),
+                menuGroup.getMenuGroupId(),
                 request.displayed(),
                 menuProducts
             ))
@@ -75,13 +78,13 @@ public class DefaultMenuService implements MenuQueryService, MenuCommandService 
     }
 
     @Override
-    public MenuVo.MenuInfo display(final UUID menuId) {
+    public MenuVo.MenuInfo display(final MenuId menuId) {
         return menuPolicy.display(menuId);
     }
 
     @Override
-    public MenuVo.MenuInfo hide(final UUID menuId) {
-        final Menu menu = menuRepository.findById(menuId)
+    public MenuVo.MenuInfo hide(final MenuId menuId) {
+        final Menu menu = menuRepository.findByMenuId(menuId)
             .orElseThrow(NoSuchElementException::new);
         menu.updateDisplayed(false);
         return MenuVo.MenuInfo.fromEntity(menu);
@@ -95,17 +98,17 @@ public class DefaultMenuService implements MenuQueryService, MenuCommandService 
             .toList();
     }
 
-    private MenuGroup validateMenuGroup(UUID menuGroupId) {
-        return menuGroupRepository.findById(menuGroupId)
+    private MenuGroup validateMenuGroup(MenuGroupId menuGroupId) {
+        return menuGroupRepository.findByMenuGroupId(menuGroupId)
             .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_MENU_GROUP.toString()));
     }
 
-    private List<MenuProduct> createMenuProducts(List<MenuProduct> menuProductRequests) {
+    private MenuProducts createMenuProducts(List<MenuProduct> menuProductRequests) {
         if (Objects.isNull(menuProductRequests) || menuProductRequests.isEmpty()) {
             throw new NotFoundException(ErrorCode.NOT_FOUND_MENU_PRODUCT.toString());
         }
 
-        final List<Product> products = productContextProvider.findAllByIds(
+        final List<Product> products = productContextProvider.findAllByProductIds(
             menuProductRequests.stream().map(MenuProduct::getProductId).toList()
         );
 
@@ -113,9 +116,9 @@ public class DefaultMenuService implements MenuQueryService, MenuCommandService 
             throw new NotFoundException(ErrorCode.NOT_FOUND_ANY_PRODUCT.toString());
         }
 
-        return menuProductRequests.stream()
-            .map(request -> createMenuProduct(request, products))
-            .toList();
+        return new MenuProducts(menuProductRequests.stream()
+                                    .map(request -> createMenuProduct(request, products))
+                                    .toList());
     }
 
     private MenuProduct createMenuProduct(MenuProduct request, List<Product> products) {
@@ -124,11 +127,11 @@ public class DefaultMenuService implements MenuQueryService, MenuCommandService 
         }
 
         final Product product = products.stream()
-            .filter(p -> p.getId().equals(request.getProductId()))
+            .filter(p -> p.getProductId().equals(request.getProductId()))
             .findFirst()
             .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_PRODUCT.toString()));
 
-        return new MenuProduct(product.getId(), request.getQuantity());
+        return new MenuProduct(product.getProductId(), request.getQuantity());
     }
 
 }
