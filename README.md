@@ -114,7 +114,7 @@ docker compose -p kitchenpos up -d
 | 메뉴 상품 | menu product       | 메뉴에 속하는 수량이 있는 상품         |
 | 노출 메뉴 | displayed menu     | 손님에게 보이는 메뉴               |
 | 비노출 메뉴 | not displayed menu | 손님에게 보이지 않는 메뉴            |
-| 이름    | displayed name     | 음식을 상상하게 만드는 중요한 요소       |
+| 이름    | name     | 음식을 상상하게 만드는 중요한 요소       |
 
 ### 매장 주문
 
@@ -172,13 +172,33 @@ docker compose -p kitchenpos up -d
 - `Product`의 `price`를 변경
   - `Product`를 포함한 `Menu`들 중  `MenuPrice > MenuAmount`인 `Menu`는 `Not Displayed`된다
 
+### 메뉴그룹
+#### 속성
+- `MenuGroup`는 식별자와 `name`을 가진다.
+#### 공통 정책
+- `MenuGroup`의 `name`은 필수값이다.
+#### 기능
+- `MenuGroup`를 등록
+- `MenuGroup`를 전체조회
+-
 ### 메뉴
-- `MenuGroup`은 식별자와 이름을 가진다.
-- `Menu`는 식별자와 `Displayed Name`, 가격, `MenuProducts`를 가진다.
-- `Menu`는 특정 `MenuGroup`에 속한다.
-- `Menu`의 가격은 `MenuProducts`의 금액의 합보다 적거나 같아야 한다.
-- `Menu`의 가격이 `MenuProducts`의 금액의 합보다 크면 `NotDisplayedMenu`가 된다.
-- `MenuProduct`는 가격과 수량을 가진다.
+#### 속성
+- `Menu`는 식별자와 `MenuGroup`, `price`, `name`, `displayed`, `MenuProduct`를 가진다.
+- `MenuProduct`은 `seq`와 `quantity`를 가진다.
+#### 공통 정책
+- `Product`의 `name`은 필수값이고, `Profanities`를 통해 `Profanity`가 포함되어 있지 않은지 확인한다.
+- `Menu`는 1개의 `MenuGroup`에 반드시 속한다.
+- `Menu`의 `MenuProduct`는 1개 이상이어야 한다.
+- `MenuProduct`의 `quantity`는 0개 이상이어야 한다.
+#### 기능
+- `Menu`를 전체조회
+- `Menu`를 생성
+    - `MenuPrice <= MenuAmount`를 만족하지 못하면 `Menu`는 생성되지 못한다
+- `Menu`의 `price`를 변경
+    - `MenuPrice <= MenuAmount`를 만족하지 못하면 `price`는 변경되지 못한다
+- `Menu`를 `Displayed`한다
+    - `MenuPrice <= MenuAmount`를 만족하지 못하면 `Displayed`할 수 없다
+- `Menu`를 `NotDisplayed`한다
 
 ### 매장 주문
 
