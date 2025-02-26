@@ -2,21 +2,20 @@ package kitchenpos.eatinorders.tobe.domain;
 
 import kitchenpos.eatinorders.tobe.domain.vo.NumberOfGuests;
 import kitchenpos.eatinorders.tobe.domain.vo.Occupied;
+import kitchenpos.eatinorders.tobe.domain.vo.OrderTableId;
 import kitchenpos.eatinorders.tobe.domain.vo.OrderTableName;
 
-import java.util.UUID;
-
 public class OrderTable {
-    private final UUID id;
+    private final OrderTableId id;
     private final OrderTableName name;
     private NumberOfGuests numberOfGuests;
     private Occupied occupied;
 
-    public OrderTable(final UUID id, final String name, final int numberOfGuests, final boolean occupied) {
-        this(id, new OrderTableName(name), new NumberOfGuests(numberOfGuests), new Occupied(occupied));
+    public OrderTable(final String name, final int numberOfGuests, final boolean occupied) {
+        this(new OrderTableId(), new OrderTableName(name), new NumberOfGuests(numberOfGuests), new Occupied(occupied));
     }
 
-    public OrderTable(final UUID id, final OrderTableName name, final NumberOfGuests numberOfGuests, final Occupied occupied) {
+    public OrderTable(final OrderTableId id, final OrderTableName name, final NumberOfGuests numberOfGuests, final Occupied occupied) {
         this.id = id;
         this.name = name;
         this.numberOfGuests = numberOfGuests;

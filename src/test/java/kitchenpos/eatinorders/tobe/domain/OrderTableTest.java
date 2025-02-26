@@ -6,8 +6,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.UUID;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -18,14 +16,14 @@ public class OrderTableTest {
     @ParameterizedTest(name = "주문 테이블 이름 : {0}")
     @NullAndEmptySource
     void createOrderTableWithEmptyName(final String name) {
-        assertThatThrownBy(() -> new OrderTable(UUID.randomUUID(), name, 0, false))
+        assertThatThrownBy(() -> new OrderTable(name, 0, false))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("빈 테이블을 사용중인 테이블로 변경한다.")
     @Test
     void sit() {
-        final OrderTable orderTable = new OrderTable(UUID.randomUUID(), "1번", 0, false);
+        final OrderTable orderTable = new OrderTable("1번", 0, false);
         orderTable.sit();
 
         assertThat(orderTable.isOccupiedValue()).isTrue();
@@ -35,7 +33,7 @@ public class OrderTableTest {
     @ValueSource(ints = {-1, -10, -1000})
     @ParameterizedTest(name = "{index}. 방문한 손님 수 : {0}")
     void changeNumberOfGuestsWithNegativeNumberOfGuests(final int numberOfGuests) {
-        final OrderTable orderTable = new OrderTable(UUID.randomUUID(), "1번", 0, true);
+        final OrderTable orderTable = new OrderTable("1번", 0, true);
         assertThatThrownBy(() -> orderTable.changeNumberOfGuests(numberOfGuests))
                 .isInstanceOf(IllegalArgumentException.class);
     }
@@ -44,7 +42,7 @@ public class OrderTableTest {
     @ValueSource(ints = {0, 1, 10, 100})
     @ParameterizedTest(name = "{index}. 방문한 손님 수 : {0}")
     void changeNumberOfGuestsWithNotOccupied(final int numberOfGuests) {
-        final OrderTable orderTable = new OrderTable(UUID.randomUUID(), "1번", numberOfGuests, false);
+        final OrderTable orderTable = new OrderTable("1번", numberOfGuests, false);
         assertThatThrownBy(() -> orderTable.changeNumberOfGuests(numberOfGuests))
                 .isInstanceOf(IllegalArgumentException.class);
     }
@@ -53,7 +51,7 @@ public class OrderTableTest {
     @ValueSource(ints = {0, 1, 10, 100})
     @ParameterizedTest(name = "{index}. 방문한 손님 수 : {0}")
     void changeNumberOfGuests(final int numberOfGuests) {
-        final OrderTable orderTable = new OrderTable(UUID.randomUUID(), "1번", 0, true);
+        final OrderTable orderTable = new OrderTable("1번", 0, true);
         orderTable.changeNumberOfGuests(numberOfGuests);
 
         assertThat(orderTable.numberOfGuests()).isEqualTo(numberOfGuests);
