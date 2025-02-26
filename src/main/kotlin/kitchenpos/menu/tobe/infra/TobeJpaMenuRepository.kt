@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 
-interface JpaMenuRepository : MenuRepository, JpaRepository<Menu, UUID> {
+interface TobeJpaMenuRepository : MenuRepository, JpaRepository<Menu, UUID> {
 
     @Query("select m from Menu m join m.menuProducts mp where mp.product.id = :productId")
     override fun findAllByProductId(@Param("productId") productId: UUID): List<Menu>

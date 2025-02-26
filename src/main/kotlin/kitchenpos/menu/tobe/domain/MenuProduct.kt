@@ -14,7 +14,7 @@ import java.util.*
 import kitchenpos.product.tobe.domain.Product
 
 @Table(name = "menu_product")
-@Entity
+@Entity(name = "TobeMenuProduct")
 class MenuProduct(
     @Column(name = "seq")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

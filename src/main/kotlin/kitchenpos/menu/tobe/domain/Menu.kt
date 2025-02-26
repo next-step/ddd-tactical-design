@@ -15,7 +15,7 @@ import java.util.*
 import kitchenpos.menu.domain.MenuGroup
 
 @Table(name = "menu")
-@Entity
+@Entity(name = "TobeMenu")
 class Menu(
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id

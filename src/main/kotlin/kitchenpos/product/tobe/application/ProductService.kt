@@ -11,7 +11,7 @@ import kitchenpos.product.tobe.domain.ProductName
 import kitchenpos.product.tobe.domain.ProductRepository
 import org.springframework.stereotype.Service
 
-@Service
+@Service("tobeProductService")
 class ProductService(
     private val productRepository: ProductRepository,
     private val menuRepository: MenuRepository,

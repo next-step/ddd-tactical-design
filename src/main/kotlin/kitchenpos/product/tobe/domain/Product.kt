@@ -9,7 +9,7 @@ import java.math.BigDecimal
 import java.util.*
 
 @Table(name = "product")
-@Entity
+@Entity(name = "TobeProduct")
 class Product(
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
