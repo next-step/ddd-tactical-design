@@ -37,4 +37,8 @@ public class OrderTable {
         }
         this.numberOfGuests = new NumberOfGuests(numberOfGuests);
     }
+
+    public int numberOfGuests() {
+        return numberOfGuests.getValue();
+    }
 }

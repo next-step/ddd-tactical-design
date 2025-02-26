@@ -14,6 +14,10 @@ public class NumberOfGuests {
         this.value = value;
     }
 
+    public int getValue() {
+        return value;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;

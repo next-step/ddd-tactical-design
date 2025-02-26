@@ -31,7 +31,7 @@ public class OrderTableTest {
         assertThat(orderTable.isOccupiedValue()).isTrue();
     }
 
-    @DisplayName("방문한 손님 수가 0명 미만이라면 주문 테이블의 손님 수를 변경할 수 없다.")
+    @DisplayName("방문한 손님 수가 0명 미만이라면 사용중인 테이블의 손님 수를 변경할 수 없다.")
     @ValueSource(ints = {-1, -10, -1000})
     @ParameterizedTest(name = "{index}. 방문한 손님 수 : {0}")
     void changeNumberOfGuestsWithNegativeNumberOfGuests(final int numberOfGuests) {
