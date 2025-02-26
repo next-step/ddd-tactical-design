@@ -54,14 +54,13 @@ public class ProductService {
     }
 
     @Transactional
-    public Product changePrice(final UUID productId, final Product request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
+    public ChangeProductResponse changePrice(final UUID productId, final ChangeProductRequest request) {
+        final ProductPrice price = new ProductPrice(request.price());
+
         final Product product = productRepository.findById(productId)
-                .orElseThrow(NoSuchElementException::new);
-        product.updatePrice(price);
+                .orElseThrow(() -> new NoSuchElementException("해당 상품이 존재하지 않습니다"));
+        product.updatePrice(price.getPrice());
+
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         for (final Menu menu : menus) {
             BigDecimal sum = BigDecimal.ZERO;
@@ -76,7 +75,7 @@ public class ProductService {
                 menu.setDisplayed(false);
             }
         }
-        return product;
+        return ChangeProductResponse.from(product);
     }
 
     @Transactional(readOnly = true)
