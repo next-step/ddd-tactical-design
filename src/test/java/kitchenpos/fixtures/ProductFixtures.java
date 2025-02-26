@@ -1,15 +1,13 @@
 package kitchenpos.fixtures;
 
 import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductName;
-import kitchenpos.products.tobe.domain.ProductPrice;
 
 import java.math.BigDecimal;
 
 public class ProductFixtures {
 
     public static Product createProduct(final String name, final BigDecimal price) {
-        Product product = new Product(new ProductName(name), new ProductPrice(price));
+        Product product = new Product(name, price);
         return product;
     }
 
@@ -21,7 +19,7 @@ public class ProductFixtures {
     }
 
     public static Product product(final String name, final long price) {
-        final Product product = new Product(new ProductName(name), new ProductPrice(BigDecimal.valueOf(price)));
+        final Product product = new Product(name, BigDecimal.valueOf(price));
         return product;
     }
 }

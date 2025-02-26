@@ -58,9 +58,7 @@ class ProductServiceTest {
     @Test
     void 상품의_가격을_변경할_수_있다() {
         // given
-        ProductName name = new ProductName("후라이드치킨");
-        ProductPrice price = new ProductPrice(valueOf(16000));
-        Product product = new Product(name, price);
+        Product product = new Product("후라이드치킨", valueOf(16000));
         productRepository.save(product);
 
         UUID productId = product.getId();

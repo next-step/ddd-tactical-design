@@ -27,11 +27,11 @@ public class Product {
     protected Product() {
     }
 
-    public Product(final ProductName name,
-                   final ProductPrice price) {
+    public Product(final String name,
+                   final BigDecimal price) {
         this.id = UUID.randomUUID();
-        this.name = new ProductName(name.getName());
-        this.price = new ProductPrice(price.getPrice());
+        this.name = new ProductName(name);
+        this.price = new ProductPrice(price);
     }
 
     @Override

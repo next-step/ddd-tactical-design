@@ -40,9 +40,7 @@ public class ProductService {
     @Transactional
     public CreateProductResponse create(final CreateProductRequest request) {
         validateProfanity(request.name());
-        final ProductName name = new ProductName(request.name());
-        final ProductPrice price = new ProductPrice(request.price());
-        final Product product = new Product(name, price);
+        final Product product = new Product(request.name(), request.price());
 
         return CreateProductResponse.from(productRepository.save(product));
     }
