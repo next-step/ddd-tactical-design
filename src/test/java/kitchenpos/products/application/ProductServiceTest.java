@@ -56,7 +56,6 @@ class ProductServiceTest {
         assertThat(savedProduct.name()).isEqualTo("후라이드치킨");
         assertThat(savedProduct.price()).isEqualTo(valueOf(16000));
     }
-
     @Test
     void 상품의_가격을_변경할_수_있다() {
         // given
