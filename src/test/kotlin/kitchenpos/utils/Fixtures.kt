@@ -11,6 +11,8 @@ import kitchenpos.product.tobe.infra.FakeProfanities
 
 class Fixtures {
     companion object {
+        val INVALID_UUID = UUID(0L, 0L);
+
         fun product(
             id: UUID = UUID.randomUUID(),
             name: String,

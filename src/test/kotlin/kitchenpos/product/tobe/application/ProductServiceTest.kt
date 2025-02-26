@@ -10,6 +10,7 @@ import kitchenpos.product.tobe.domain.ProductRepository
 import kitchenpos.product.tobe.infra.FakeProductRepository
 import kitchenpos.product.tobe.infra.FakeProfanities
 import kitchenpos.utils.Fixtures
+import org.assertj.core.api.Assertions
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -70,6 +71,15 @@ class ProductServiceTest {
 
         // then
         assertThat(changedProduct.price).isEqualTo(BigDecimal.valueOf(17000))
+    }
+
+    @Test
+    @DisplayName("등록되지 않는 `Product`의 `price`는 변경할 수 없다")
+    fun changePriceFail() {
+        // when then
+        Assertions.assertThatThrownBy {
+            productService.changePrice(Fixtures.INVALID_UUID, ChangeProductPriceReq(BigDecimal.valueOf(17000)))
+        }.isInstanceOf(NoSuchElementException::class.java)
     }
 
     @Test
