@@ -1,12 +1,14 @@
 package kitchenpos.menu.ui;
 
 import java.net.URI;
+import java.util.List;
 import kitchenpos.menu.application.MenuGroupService;
 import kitchenpos.menu.application.dto.CreateMenuGroupServiceRq;
 import kitchenpos.menu.application.dto.MenuGroupServiceRs;
 import kitchenpos.menu.ui.dto.CreateMenuGroupRq;
 import kitchenpos.menu.ui.dto.MenuGroupRs;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,12 +31,12 @@ public class MenuGroupRestController {
                 .body(new MenuGroupRs(response));
     }
 
-//    @GetMapping
-//    public ResponseEntity<List<MenuGroupRs>> findAll() {
-//        return ResponseEntity.ok(
-//                menuGroupService.findAll().stream()
-//                        .map(MenuGroupRs::new)
-//                        .toList()
-//        );
-//    }
+    @GetMapping
+    public ResponseEntity<List<MenuGroupRs>> findAll() {
+        return ResponseEntity.ok(
+                menuGroupService.findAll().stream()
+                        .map(MenuGroupRs::new)
+                        .toList()
+        );
+    }
 }
