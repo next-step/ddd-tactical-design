@@ -336,7 +336,6 @@ public class OrderTableServiceTest {
         order.setOrderLineItems(orderLineItems);
         order.setDeliveryAddress(deliveryAddress);
         order.setOrderTableId(orderTableUuid);
-        order.setOrderTable(orderTableEntity);
         return order;
     }
 

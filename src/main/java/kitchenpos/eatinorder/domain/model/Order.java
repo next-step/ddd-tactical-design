@@ -1,17 +1,8 @@
 package kitchenpos.eatinorder.domain.model;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
+import kitchenpos.eatinorder.domain.model.todo.EatInOrder;
+import kitchenpos.eatinorder.domain.model.todo.EatInOrderStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,7 +21,7 @@ public class Order {
 
     @Column(name = "status", nullable = false, columnDefinition = "varchar(255)")
     @Enumerated(EnumType.STRING)
-    private OrderStatus status;
+    private EatInOrderStatus status;
 
     @Column(name = "order_date_time", nullable = false)
     private LocalDateTime orderDateTime;
@@ -47,18 +38,25 @@ public class Order {
     @Column(name = "delivery_address")
     private String deliveryAddress;
 
-    @ManyToOne
-    @JoinColumn(
-        name = "order_table_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_orders_to_order_table")
-    )
-    private OrderTableEntity orderTable;
-
-    @Transient
+    @Column(name = "order_table_id", nullable = false)
     private UUID orderTableId;
 
     public Order() {
+    }
+
+    public static Order of(EatInOrder eatInOrder) {
+        Order order = new Order();
+        order.setId(eatInOrder.getId());
+        order.setType(OrderType.EAT_IN);
+        order.setStatus(eatInOrder.getStatus());
+        order.setOrderDateTime(LocalDateTime.now());
+        order.setOrderTableId(eatInOrder.getOrderTableId());
+        order.setOrderLineItems(
+                eatInOrder.getLineItems()
+                .stream()
+                .map(OrderLineItem::of)
+                .toList());
+        return order;
     }
 
     public UUID getId() {
@@ -77,11 +75,11 @@ public class Order {
         this.type = type;
     }
 
-    public OrderStatus getStatus() {
+    public EatInOrderStatus getStatus() {
         return status;
     }
 
-    public void setStatus(final OrderStatus status) {
+    public void setStatus(final EatInOrderStatus status) {
         this.status = status;
     }
 
@@ -107,14 +105,6 @@ public class Order {
 
     public void setDeliveryAddress(final String deliveryAddress) {
         this.deliveryAddress = deliveryAddress;
-    }
-
-    public OrderTableEntity getOrderTable() {
-        return orderTable;
-    }
-
-    public void setOrderTable(final OrderTableEntity orderTableEntity) {
-        this.orderTable = orderTableEntity;
     }
 
     public UUID getOrderTableId() {

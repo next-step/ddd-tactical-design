@@ -2,6 +2,7 @@ package kitchenpos.eatinorder.application.service;
 
 import kitchenpos.eatinorder.application.port.out.OrderTableRepository;
 import kitchenpos.eatinorder.domain.model.*;
+import kitchenpos.eatinorder.domain.model.todo.EatInOrderStatus;
 import kitchenpos.menu.adapter.out.persistance.JpaMenuEntityEntityRepository;
 import kitchenpos.menu.adapter.out.persistance.JpaMenuGroupEntityRepository;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuEntity;
@@ -86,7 +87,7 @@ public class EatInOrderServiceTest {
             assertAll(
                     () -> assertThat(order.getId()).isNotNull(),
                     () -> assertThat(order.getType()).isEqualTo(request.getType()),
-                    () -> assertThat(order.getStatus()).isEqualTo(OrderStatus.WAITING),
+                    () -> assertThat(order.getStatus()).isEqualTo(EatInOrderStatus.WAITING),
                     () -> assertThat(order.getOrderLineItems()).hasSize(orderLineItems.size()),
                     () -> assertThat(order.getDeliveryAddress()).isEqualTo(request.getDeliveryAddress())
             );
@@ -97,8 +98,11 @@ public class EatInOrderServiceTest {
         @Test
         void menu_should_be_displayed() {
             // given
+            OrderTableEntity orderTableEntity = createOrderTable(테이블_1_ORDER_TABLE_UUID, "테이블 1", 0, true);
+            orderTableRepository.save(orderTableEntity);
+
             List<OrderLineItem> orderLineItems = List.of(createOrderLineItem(후라이드치킨_NO_DISPLAY_MENU_UUID, 2, 후라이드치킨_MENU_DEFAULT_PRICE));
-            Order request = createOrder(OrderType.DELIVERY, orderLineItems, "서울시 강남구");
+            Order request = createOrder(OrderType.EAT_IN, orderLineItems, "서울시 강남구", orderTableEntity.getId(), orderTableEntity);
 
             // when
             ThrowableAssert.ThrowingCallable throwingCallable = () -> orderService.create(request);
@@ -114,7 +118,9 @@ public class EatInOrderServiceTest {
         @Test
         void order_must_contain_at_least_one_item() {
             // given
-            Order request = createOrder(OrderType.DELIVERY, Collections.emptyList(), "서울시 강남구");
+            OrderTableEntity orderTableEntity = createOrderTable(테이블_1_ORDER_TABLE_UUID, "테이블 1", 0, true);
+            orderTableRepository.save(orderTableEntity);
+            Order request = createOrder(OrderType.EAT_IN, Collections.emptyList(), "서울시 강남구", orderTableEntity.getId(), orderTableEntity);
 
             // when
             ThrowableAssert.ThrowingCallable throwingCallable = () -> orderService.create(request);
@@ -175,7 +181,7 @@ public class EatInOrderServiceTest {
             Order acceptedOrder = orderService.accept(order.getId());
 
             // then
-            assertThat(acceptedOrder.getStatus()).isEqualTo(OrderStatus.ACCEPTED);
+            assertThat(acceptedOrder.getStatus()).isEqualTo(EatInOrderStatus.ACCEPTED);
         }
 
         @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
@@ -211,7 +217,7 @@ public class EatInOrderServiceTest {
             Order servedOrder = orderService.serve(order.getId());
 
             // then
-            assertThat(servedOrder.getStatus()).isEqualTo(OrderStatus.SERVED);
+            assertThat(servedOrder.getStatus()).isEqualTo(EatInOrderStatus.SERVED);
         }
 
         @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
@@ -247,7 +253,7 @@ public class EatInOrderServiceTest {
             Order completedOrder = orderService.complete(order.getId());
 
             // then
-            assertThat(completedOrder.getStatus()).isEqualTo(OrderStatus.COMPLETED);
+            assertThat(completedOrder.getStatus()).isEqualTo(EatInOrderStatus.COMPLETED);
         }
 
         @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
@@ -269,7 +275,7 @@ public class EatInOrderServiceTest {
     @DisplayName("주문 목록 조회하기")
     @Nested
     class FindAllOrdersTest {
-        private static final int TOTAL_ORDER_COUNT = 3;
+        private static final int TOTAL_ORDER_COUNT = 2;
 
         @SqlGroup({
                 @Sql(value = "/setup.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
@@ -317,17 +323,12 @@ public class EatInOrderServiceTest {
         return menuGroup;
     }
 
-    private static Order createOrder(OrderType type, List<OrderLineItem> orderLineItems, String deliveryAddress) {
-        return createOrder(type, orderLineItems, deliveryAddress, null, null);
-    }
-
     private static Order createOrder(OrderType type, List<OrderLineItem> orderLineItems, String deliveryAddress, UUID orderTableUuid, OrderTableEntity orderTableEntity) {
         Order order = new Order();
         order.setType(type);
         order.setOrderLineItems(orderLineItems);
         order.setDeliveryAddress(deliveryAddress);
         order.setOrderTableId(orderTableUuid);
-        order.setOrderTable(orderTableEntity);
         return order;
     }
 

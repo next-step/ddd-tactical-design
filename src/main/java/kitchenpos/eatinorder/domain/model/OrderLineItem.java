@@ -1,6 +1,7 @@
 package kitchenpos.eatinorder.domain.model;
 
 import jakarta.persistence.*;
+import kitchenpos.eatinorder.domain.model.todo.EatInOrderLineItem;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuEntity;
 
 import java.math.BigDecimal;
@@ -14,24 +15,29 @@ public class OrderLineItem {
     @Id
     private Long seq;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(
-        name = "menu_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_order_line_item_to_menu")
-    )
-    private MenuEntity menu;
-
     @Column(name = "quantity", nullable = false)
     private long quantity;
 
-    @Transient
+    @Column(name = "menu_id", nullable = false, updatable = false)
     private UUID menuId;
 
-    @Transient
+    @Column(name = "price", nullable = false, updatable = false)
     private BigDecimal price;
 
     public OrderLineItem() {
+    }
+
+    public static OrderLineItem of(EatInOrderLineItem eatInOrderLineItem) {
+        OrderLineItem orderLineItem = new OrderLineItem();
+        orderLineItem.setSeq(eatInOrderLineItem.getSeq());
+        orderLineItem.setQuantity(eatInOrderLineItem.getQuantity());
+        orderLineItem.setMenuId(eatInOrderLineItem.getMenuId());
+        orderLineItem.setPrice(BigDecimal.valueOf(eatInOrderLineItem.getPrice()));
+        return orderLineItem;
+    }
+
+    public EatInOrderLineItem toDomain(boolean isDisplayedMenu) {
+        return EatInOrderLineItem.of(this.seq, this.menuId, this.quantity, this.price.longValue(), isDisplayedMenu);
     }
 
     public Long getSeq() {
@@ -40,14 +46,6 @@ public class OrderLineItem {
 
     public void setSeq(final Long seq) {
         this.seq = seq;
-    }
-
-    public MenuEntity getMenu() {
-        return menu;
-    }
-
-    public void setMenu(final MenuEntity menu) {
-        this.menu = menu;
     }
 
     public long getQuantity() {

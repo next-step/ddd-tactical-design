@@ -4,6 +4,7 @@ import kitchenpos.eatinorder.application.port.out.OrderRepository;
 import kitchenpos.eatinorder.application.port.out.OrderTableRepository;
 import kitchenpos.eatinorder.domain.model.OrderStatus;
 import kitchenpos.eatinorder.domain.model.OrderTableEntity;
+import kitchenpos.eatinorder.domain.model.todo.EatInOrderStatus;
 import kitchenpos.eatinorder.domain.model.todo.OrderTable;
 import kitchenpos.shared.domain.Profanities;
 import org.springframework.stereotype.Service;
@@ -48,7 +49,7 @@ public class OrderTableService {
     public OrderTableEntity clear(final UUID orderTableId) {
         final OrderTableEntity orderTableEntity = orderTableRepository.findById(orderTableId)
                 .orElseThrow(NoSuchElementException::new);
-        if (orderRepository.existsByOrderTableAndStatusNot(orderTableEntity, OrderStatus.COMPLETED)) {
+        if (orderRepository.existsByOrderTableAndStatusNot(orderTableEntity.getId(), EatInOrderStatus.COMPLETED)) {
             throw new IllegalStateException();
         }
         final OrderTable orderTable = orderTableEntity.toDomain(profanities);
