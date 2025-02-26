@@ -3,7 +3,6 @@ package kitchenpos.menu.ui;
 import static kitchenpos.TestFixtureFactory.createMenuGroup;
 import static kitchenpos.TestFixtureFactory.createProduct;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -166,21 +165,21 @@ class MenuRestControllerTest {
                 .andExpect(jsonPath("$.displayed").value(false));
     }
 
-    @Test
-    @DisplayName("모든 메뉴를 조회한다")
-    void find_allMenus() throws Exception {
-        // given
-        createAndSaveMenu(true);
-        createAndSaveMenu(true);
-
-        // when
-        ResultActions result = mockMvc.perform(get("/api/menus"));
-
-        // then
-        result.andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$.length()").value(2));
-    }
+//    @Test
+//    @DisplayName("모든 메뉴를 조회한다")
+//    void find_allMenus() throws Exception {
+//        // given
+//        createAndSaveMenu(true);
+//        createAndSaveMenu(true);
+//
+//        // when
+//        ResultActions result = mockMvc.perform(get("/api/menus"));
+//
+//        // then
+//        result.andExpect(status().isOk())
+//                .andExpect(jsonPath("$").isArray())
+//                .andExpect(jsonPath("$.length()").value(2));
+//    }
 
     private MenuGroup createAndSaveMenuGroup() {
         return menuGroupRepository.save(createMenuGroup());

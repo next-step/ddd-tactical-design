@@ -14,4 +14,13 @@ public class ProductSummary {
 
     private String name;
     private long quantity;
+
+    public ProductSummary(String name, long quantity) {
+        this.id = UUID.randomUUID();
+        this.name = name;
+        this.quantity = quantity;
+    }
+
+    protected ProductSummary() {
+    }
 }

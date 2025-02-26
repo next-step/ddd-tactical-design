@@ -3,10 +3,12 @@ package kitchenpos.menu.ui;
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
+import kitchenpos.menu.application.MenuQueryService;
 import kitchenpos.menu.application.MenuService;
 import kitchenpos.menu.application.dto.ChangeMenuPriceServiceRq;
 import kitchenpos.menu.application.dto.MenuServiceRs;
 import kitchenpos.menu.application.dto.SimpleMenuServiceRs;
+import kitchenpos.menu.domain.model.MenuSummary;
 import kitchenpos.menu.ui.dto.ChangeMenuPriceRq;
 import kitchenpos.menu.ui.dto.CreateMenuRq;
 import kitchenpos.menu.ui.dto.MenuRs;
@@ -24,9 +26,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MenuRestController {
     private final MenuService menuService;
+    private final MenuQueryService menuQueryService;
 
-    public MenuRestController(final MenuService menuService) {
+    public MenuRestController(final MenuService menuService, MenuQueryService menuQueryService) {
         this.menuService = menuService;
+        this.menuQueryService = menuQueryService;
     }
 
     @PostMapping
@@ -59,11 +63,7 @@ public class MenuRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<MenuRs>> findAll() {
-        return ResponseEntity.ok(
-                menuService.findAll().stream()
-                        .map(MenuRs::new)
-                        .toList()
-        );
+    public ResponseEntity<List<MenuSummary>> findAll() {
+        return ResponseEntity.ok(menuQueryService.findAll());
     }
 }
