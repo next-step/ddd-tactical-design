@@ -26,6 +26,14 @@ public class ControllerAdvice {
     private static final Logger log = LoggerFactory.getLogger(ControllerAdvice.class);
 
     private static final String INVALID_DTO_FIELD_ERROR_MESSAGE_FORMAT = "The %s field is %s (provided value: %s)"; // %s 필드는 %s (전달된 값: %s)
+
+    @ExceptionHandler(DomainException.class)
+    public ResponseEntity<ApiResultResponse<ErrorResponse>> handleDomainException(final DomainException e) {
+        ErrorResponse errorResponse = new ErrorResponse(e.getErrorCode(), e.getMessage());
+        ApiResultResponse<ErrorResponse> apiResultResponse = ApiResultResponse.failure(errorResponse, ERROR);
+        return new ResponseEntity<>(apiResultResponse, e.getHttpStatus());
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResultResponse<ErrorResponse>> handleMethodArgumentException(final MethodArgumentNotValidException e) {
         FieldError firstFieldError = e.getFieldErrors().get(0);
