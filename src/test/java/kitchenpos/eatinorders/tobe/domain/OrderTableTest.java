@@ -35,7 +35,7 @@ public class OrderTableTest {
     @ValueSource(ints = {-1, -10, -1000})
     @ParameterizedTest(name = "{index}. 방문한 손님 수 : {0}")
     void changeNumberOfGuestsWithNegativeNumberOfGuests(final int numberOfGuests) {
-        final OrderTable orderTable = new OrderTable(UUID.randomUUID(), "1번", 0, false);
+        final OrderTable orderTable = new OrderTable(UUID.randomUUID(), "1번", 0, true);
         assertThatThrownBy(() -> orderTable.changeNumberOfGuests(numberOfGuests))
                 .isInstanceOf(IllegalArgumentException.class);
     }

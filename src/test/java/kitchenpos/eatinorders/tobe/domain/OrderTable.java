@@ -7,7 +7,7 @@ import java.util.UUID;
 public class OrderTable {
     private final UUID id;
     private final OrderTableName name;
-    private final int numberOfGuests;
+    private int numberOfGuests;
     private boolean occupied;
 
     public OrderTable(final UUID id, final String name, final int numberOfGuests, final boolean occupied) {
@@ -27,5 +27,12 @@ public class OrderTable {
 
     public boolean isOccupied() {
         return occupied;
+    }
+
+    public void changeNumberOfGuests(final int numberOfGuests) {
+        if (numberOfGuests < 0) {
+            throw new IllegalArgumentException();
+        }
+        this.numberOfGuests = numberOfGuests;
     }
 }
