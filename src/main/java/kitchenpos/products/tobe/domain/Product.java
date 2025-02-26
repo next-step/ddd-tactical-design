@@ -5,6 +5,8 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import kitchenpos.products.tobe.domain.vo.ProductName;
+import kitchenpos.products.tobe.domain.vo.ProductPrice;
 
 import java.math.BigDecimal;
 import java.util.Objects;
