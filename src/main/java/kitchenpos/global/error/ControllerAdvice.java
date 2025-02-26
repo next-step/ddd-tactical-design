@@ -52,14 +52,14 @@ public class ControllerAdvice {
         return new ResponseEntity<>(apiResultResponse, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler (HttpMessageNotReadableException.class) // 잘못된 요청 본문 형식에 대한 에러 메시지를 클라이언트에 반환
+    @ExceptionHandler(HttpMessageNotReadableException.class) // 잘못된 요청 본문 형식에 대한 에러 메시지를 클라이언트에 반환
     public ResponseEntity<ApiResultResponse<ErrorResponse>> handleInvalidRequestBodyException() {
         ErrorResponse errorResponse = new ErrorResponse(ErrorCode.INVALID_REQUEST_BODY); // 잘못된 형식의 RequestBody 입니다.
         ApiResultResponse<ErrorResponse> apiResultResponse = ApiResultResponse.failure(errorResponse, ERROR);
         return new ResponseEntity<>(apiResultResponse, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler (MissingServletRequestParameterException.class) // @RequestParam의 누락된 파라미터를 처리
+    @ExceptionHandler(MissingServletRequestParameterException.class) // @RequestParam의 누락된 파라미터를 처리
     public ResponseEntity<ApiResultResponse<ErrorResponse>> handleInvalidRequestParamException() {
         ErrorResponse errorResponse = new ErrorResponse(ErrorCode.INVALID_REQUEST_PARAM); // 잘못된 형식의 RequestBody 입니다.
         ApiResultResponse<ErrorResponse> apiResultResponse = ApiResultResponse.failure(errorResponse, ERROR);

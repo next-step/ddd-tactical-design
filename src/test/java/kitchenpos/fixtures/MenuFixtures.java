@@ -33,11 +33,11 @@ public class MenuFixtures {
 
 
     public static Menu createMenu(
-        final String name,
-        final BigDecimal price,
-        final boolean displayed,
-        final MenuGroup menuGroup,
-        final List<MenuProduct> menuProducts
+            final String name,
+            final BigDecimal price,
+            final boolean displayed,
+            final MenuGroup menuGroup,
+            final List<MenuProduct> menuProducts
     ) {
         Menu menu = new Menu();
         menu.setId(UUID.randomUUID());
@@ -51,12 +51,12 @@ public class MenuFixtures {
     }
 
     public static Menu createMenuWithoutMenuGroupId(
-        final String name,
-        final BigDecimal price,
-        final boolean displayed,
-        final List<MenuProduct> menuProducts
+            final String name,
+            final BigDecimal price,
+            final boolean displayed,
+            final List<MenuProduct> menuProducts
     ) {
-        Menu menu  = new Menu();
+        Menu menu = new Menu();
         menu.setId(UUID.randomUUID());
         menu.setName(name);
         menu.setPrice(price);
@@ -72,6 +72,7 @@ public class MenuFixtures {
     public static Menu menu() {
         return menu(19_000L, true, menuProduct());
     }
+
     public static Menu menu(final long price, final boolean displayed, final MenuProduct... menuProducts) {
         final Menu menu = new Menu();
         menu.setId(UUID.randomUUID());

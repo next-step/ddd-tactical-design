@@ -34,6 +34,7 @@ class OrderTableServiceTest {
         orderRepository = new InMemoryOrderRepository();
         orderTableService = new OrderTableService(orderTableRepository, orderRepository);
     }
+
     @Test
     void 주문_테이블을_등록하면_손님_수는_0명이고_사용_가능_상태여야_한다() {
         // given
@@ -149,9 +150,9 @@ class OrderTableServiceTest {
     @Test
     void 등록된_주문_테이블을_모두_조회할_수_있다() {
         // given
-        OrderTable orderTable1 = createOrderTable(UUID.randomUUID(),"1번 테이블");
+        OrderTable orderTable1 = createOrderTable(UUID.randomUUID(), "1번 테이블");
         orderTableRepository.save(orderTable1);
-        OrderTable orderTable2 = createOrderTable(UUID.randomUUID(),"2번 테이블");
+        OrderTable orderTable2 = createOrderTable(UUID.randomUUID(), "2번 테이블");
         orderTableRepository.save(orderTable2);
 
         // when

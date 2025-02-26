@@ -19,20 +19,20 @@ class ProductPriceTest {
         assertThatThrownBy(() -> new ProductPrice(null))
                 .isInstanceOf(InvalidProductException.class)
                 .hasMessage("상품의 가격은 존재해야 한다.");
-     }
+    }
 
-     @DisplayName("상품의 가격이 0보다 작으면 예외가 발생한다.")
-     @ParameterizedTest
-     @ValueSource(longs = {-1, -100, -99999})
-     void 상품의_가격이_0보다_커야한다(final long negativePrice) {
-         // given
-         BigDecimal price = BigDecimal.valueOf(negativePrice);
+    @DisplayName("상품의 가격이 0보다 작으면 예외가 발생한다.")
+    @ParameterizedTest
+    @ValueSource(longs = {-1, -100, -99999})
+    void 상품의_가격이_0보다_커야한다(final long negativePrice) {
+        // given
+        BigDecimal price = BigDecimal.valueOf(negativePrice);
 
-         // when & then
-         assertThatThrownBy(() -> new ProductPrice(price))
-                 .isInstanceOf(InvalidProductException.class)
-                 .hasMessage("상품의 가격은 0보다 커야 한다.");
-      }
+        // when & then
+        assertThatThrownBy(() -> new ProductPrice(price))
+                .isInstanceOf(InvalidProductException.class)
+                .hasMessage("상품의 가격은 0보다 커야 한다.");
+    }
 
 
 }

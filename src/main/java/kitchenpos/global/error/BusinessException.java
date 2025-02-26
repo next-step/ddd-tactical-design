@@ -1,4 +1,3 @@
-// 📌 응용 서비스 예외의 부모 클래스
 package kitchenpos.global.error;
 
 import org.springframework.http.HttpStatus;
