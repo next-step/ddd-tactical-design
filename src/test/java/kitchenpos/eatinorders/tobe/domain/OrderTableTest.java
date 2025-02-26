@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.UUID;
 
@@ -28,5 +29,14 @@ public class OrderTableTest {
         orderTable.sit();
 
         assertThat(orderTable.isOccupied()).isTrue();
+    }
+
+    @DisplayName("방문한 손님 수가 0명 미만이라면 주문 테이블의 손님 수를 변경할 수 없다.")
+    @ValueSource(ints = {-1, -10, -1000})
+    @ParameterizedTest(name = "{index}. 방문한 손님 수 : {0}")
+    void changeNumberOfGuestsWithNegativeNumberOfGuests(final int numberOfGuests) {
+        final OrderTable orderTable = new OrderTable(UUID.randomUUID(), "1번", 0, false);
+        assertThatThrownBy(() -> orderTable.changeNumberOfGuests(numberOfGuests))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 }
