@@ -46,14 +46,11 @@ public class OrderTableService {
 
     @Transactional
     public OrderTableEntity clear(final UUID orderTableId) {
-        final OrderTableEntity orderTableEntity = orderTableRepository.findById(orderTableId)
-            .orElseThrow(NoSuchElementException::new);
-        if (orderRepository.existsByOrderTableAndStatusNot(orderTableEntity, OrderStatus.COMPLETED)) {
-            throw new IllegalStateException();
-        }
-        orderTableEntity.setNumberOfGuests(0);
-        orderTableEntity.setOccupied(false);
-        return orderTableEntity;
+        final OrderTable orderTable = orderTableRepository.findById(orderTableId)
+                .map(orderTableEntity -> orderTableEntity.toDomain(profanities))
+                .orElseThrow(NoSuchElementException::new);
+        orderTable.clear();
+        return orderTableRepository.save(OrderTableEntity.of(orderTable));
     }
 
     @Transactional
