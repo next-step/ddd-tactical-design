@@ -28,7 +28,7 @@ public class OrderTableTest {
         final OrderTable orderTable = new OrderTable(UUID.randomUUID(), "1번", 0, false);
         orderTable.sit();
 
-        assertThat(orderTable.isOccupied()).isTrue();
+        assertThat(orderTable.isOccupiedValue()).isTrue();
     }
 
     @DisplayName("방문한 손님 수가 0명 미만이라면 주문 테이블의 손님 수를 변경할 수 없다.")
