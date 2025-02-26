@@ -39,4 +39,13 @@ public class OrderTableTest {
         assertThatThrownBy(() -> orderTable.changeNumberOfGuests(numberOfGuests))
                 .isInstanceOf(IllegalArgumentException.class);
     }
+
+    @DisplayName("사용중인 테이블이 아니라면 주문 테이블의 손님 수를 변경할 수 없다.")
+    @ValueSource(ints = {0, 1, 10, 100})
+    @ParameterizedTest(name = "{index}. 방문한 손님 수 : {0}")
+    void changeNumberOfGuestsWithNotOccupied(final int numberOfGuests) {
+        final OrderTable orderTable = new OrderTable(UUID.randomUUID(), "1번", numberOfGuests, false);
+        assertThatThrownBy(() -> orderTable.changeNumberOfGuests(numberOfGuests))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
 }
