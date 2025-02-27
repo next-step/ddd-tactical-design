@@ -1,35 +1,23 @@
 package kitchenpos.menu.domain.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import kitchenpos.product.domain.model.ProductSummary;
 
-@Entity
-public class MenuSummary {
+public class MenuSummaryEvent {
 
-    @Id
-    @Column(name = "id")
     private UUID id;
     private String menuName;
     private BigDecimal price;
     private boolean isDisplayed;
     private UUID menuGroupId;
     private String menuGroupName;
+    private List<ProductSummary> productSummaries;
 
-    @OneToMany
-    @JoinColumn(name = "menu_summary_id")
-    private List<ProductSummary> productSummaries = new ArrayList<>();
-
-    public MenuSummary(UUID menuId, String menuName, BigDecimal price, boolean isDisplayed, UUID menuGroupId,
-                       String menuGroupName, List<ProductSummary> productSummaries) {
-        this.id = menuId;
+    private MenuSummaryEvent(UUID id, String menuName, BigDecimal price, boolean isDisplayed, UUID menuGroupId,
+                             String menuGroupName, List<ProductSummary> productSummaries) {
+        this.id = id;
         this.menuName = menuName;
         this.price = price;
         this.isDisplayed = isDisplayed;
@@ -38,17 +26,19 @@ public class MenuSummary {
         this.productSummaries = productSummaries;
     }
 
-    protected MenuSummary() {
-    }
-
-    public MenuSummary(MenuSummaryEvent event) {
-        this.id = event.getId();
-        this.menuName = event.getMenuName();
-        this.price = event.getPrice();
-        this.isDisplayed = event.isDisplayed();
-        this.menuGroupId = event.getMenuGroupId();
-        this.menuGroupName = event.getMenuGroupName();
-        this.productSummaries = event.getProductSummaries();
+    public static MenuSummaryEvent from(Menu menu) {
+        return new MenuSummaryEvent(
+                menu.getId(),
+                menu.getInnerName(),
+                menu.getInnerPrice(),
+                menu.isDisplayed(),
+                menu.getMenuGroupId(),
+                menu.getMenuGroup().getName(),
+                menu.getMenuProducts().stream()
+                        .map(mp -> new ProductSummary(mp.getProductId(), mp.getProduct().getInnerName(),
+                                mp.getInnerQuantity()))
+                        .toList()
+        );
     }
 
     public UUID getId() {
@@ -79,5 +69,3 @@ public class MenuSummary {
         return productSummaries;
     }
 }
-
-

@@ -18,10 +18,11 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
 @Table(name = "menu")
 @Entity
-public class Menu {
+public class Menu extends AbstractAggregateRoot<Menu> {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
     private UUID id;
@@ -63,6 +64,8 @@ public class Menu {
         this.name = new MenuName(name);
         this.price = new MenuPrice(price);
         this.displayed = displayed;
+        // test 용 생성자
+//        registerEvent(MenuSummaryEvent.from(this));
     }
 
     public Menu(MenuName name, MenuPrice price, MenuGroup menuGroup, boolean displayed,
@@ -76,6 +79,7 @@ public class Menu {
         this.displayed = displayed;
         this.menuProducts = menuProducts;
         this.menuGroupId = menuGroupId;
+        registerEvent(MenuSummaryEvent.from(this));
     }
 
     public Menu(String name, BigDecimal price, boolean displayed, List<MenuProduct> menuProducts,
@@ -102,6 +106,7 @@ public class Menu {
 
     public void setId(final UUID id) {
         this.id = id;
+        registerEvent(MenuSummaryEvent.from(this));
     }
 
     public String getInnerName() {
@@ -114,6 +119,7 @@ public class Menu {
 
     public void setName(final String name) {
         this.name = new MenuName(name);
+        registerEvent(MenuSummaryEvent.from(this));
     }
 
     public BigDecimal getInnerPrice() {
@@ -126,6 +132,7 @@ public class Menu {
 
     public void changePrice(final BigDecimal price) {
         this.price = new MenuPrice(price);
+        registerEvent(MenuSummaryEvent.from(this));
     }
 
     public MenuGroup getMenuGroup() {
@@ -138,10 +145,12 @@ public class Menu {
 
     public void changeDisplay(final boolean displayed) {
         this.displayed = displayed;
+        registerEvent(MenuSummaryEvent.from(this));
     }
 
     public void changeDisplay() {
         this.displayed = !this.displayed;
+        registerEvent(MenuSummaryEvent.from(this));
     }
 
     public List<MenuProduct> getMenuProducts() {
