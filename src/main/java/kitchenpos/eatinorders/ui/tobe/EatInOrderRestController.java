@@ -1,17 +1,12 @@
 package kitchenpos.eatinorders.ui.tobe;
 
 import kitchenpos.eatinorders.application.tobe.EatInOrderService;
-import kitchenpos.eatinorders.domain.Order;
 import kitchenpos.eatinorders.tobe.domain.common.OrderId;
-import kitchenpos.eatinorders.ui.dto.EatInOrderAcceptResponse;
-import kitchenpos.eatinorders.ui.dto.EatInOrderCreateRequest;
-import kitchenpos.eatinorders.ui.dto.EatInOrderCreateResponse;
-import kitchenpos.eatinorders.ui.dto.EatInOrderServedResponse;
+import kitchenpos.eatinorders.ui.dto.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.UUID;
 
 @RequestMapping("/api/eatinorders")
 @RestController
@@ -38,5 +33,10 @@ public class EatInOrderRestController {
     @PutMapping("/{orderId}/serve")
     public ResponseEntity<EatInOrderServedResponse> serve(@PathVariable final OrderId orderId) {
         return ResponseEntity.ok(eatInOrderService.serve(orderId));
+    }
+
+    @PutMapping("/{orderId}/complete")
+    public ResponseEntity<EatInOrderCompletedResponse> complete(@PathVariable final OrderId orderId) {
+        return ResponseEntity.ok(eatInOrderService.complete(orderId));
     }
 }

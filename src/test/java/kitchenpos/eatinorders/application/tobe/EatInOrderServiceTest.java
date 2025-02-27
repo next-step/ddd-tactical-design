@@ -7,10 +7,7 @@ import kitchenpos.eatinorders.infra.InMemoryOrderTableRepository;
 import kitchenpos.eatinorders.tobe.domain.*;
 import kitchenpos.eatinorders.tobe.domain.common.*;
 import kitchenpos.eatinorders.tobe.domain.exception.InvalidOrderStatusException;
-import kitchenpos.eatinorders.ui.dto.EatInOrderAcceptResponse;
-import kitchenpos.eatinorders.ui.dto.EatInOrderCreateRequest;
-import kitchenpos.eatinorders.ui.dto.EatInOrderCreateResponse;
-import kitchenpos.eatinorders.ui.dto.EatInOrderServedResponse;
+import kitchenpos.eatinorders.ui.dto.*;
 import kitchenpos.menus.infra.InMemoryMenuRepository;
 import kitchenpos.menus.tobe.domain.*;
 import kitchenpos.products.tobe.domain.ProductId;
@@ -34,6 +31,7 @@ class EatInOrderServiceTest {
     private OrderTableRepository orderTableRepository;
 
     private OrderLineItemsValidator orderLineItemsValidator;
+    private ClearOrderTableService clearOrderTableService;
 
     private EatInOrderService eatInOrderService;
 
@@ -43,7 +41,9 @@ class EatInOrderServiceTest {
         this.orderRepository = new InMemoryOrderRepository();
         this.orderTableRepository = new InMemoryOrderTableRepository();
         this.orderLineItemsValidator = new OrderLineItemsValidator(menuRepository);
-        this.eatInOrderService = new EatInOrderService(orderRepository, orderTableRepository, orderLineItemsValidator);
+        this.clearOrderTableService = new ClearOrderTableService(orderRepository, orderTableRepository);
+
+        this.eatInOrderService = new EatInOrderService(orderRepository, orderTableRepository, orderLineItemsValidator, clearOrderTableService);
 
         menuRepository.save(createMenu(CHICKEN, "후라이드치킨", 25_000, true));
         menuRepository.save(createMenu(COKE, "콜라", 3_000, true));
@@ -147,6 +147,47 @@ class EatInOrderServiceTest {
         EatInOrderServedResponse result = eatInOrderService.serve(order.id());
 
         assertThat(result.getStatus()).isEqualTo(OrderStatus.SERVED);
+    }
+
+    @DisplayName("서빙된 주문이 아니면 주문 완료 시 예외 발생한다")
+    @EnumSource(value = OrderStatus.class, names = "SERVED", mode = EnumSource.Mode.EXCLUDE)
+    @ParameterizedTest
+    void validateCompleted(OrderStatus status) {
+        OrderTable table = orderTableRepository.save(createOrderTable("1번테이블", 4, true));
+        OrderLineItems orderLineItems = new OrderLineItems(
+                new OrderLineItem(1L, CHICKEN, 1, new Price(25_000))
+        );
+        OrderEntity order = orderRepository.save(new OrderEntity(
+                OrderType.EAT_IN,
+                status,
+                orderLineItems,
+                null,
+                table.getId()
+        ));
+
+        assertThatThrownBy(() -> eatInOrderService.complete(order.id()))
+                .isInstanceOf(InvalidOrderStatusException.class);
+    }
+
+    @DisplayName("주문을 완료 처리 한다")
+    @EnumSource(value = OrderStatus.class, names = "SERVED", mode = EnumSource.Mode.INCLUDE)
+    @ParameterizedTest
+    void complete(OrderStatus status) {
+        OrderTable table = orderTableRepository.save(createOrderTable("1번테이블", 4, true));
+        OrderLineItems orderLineItems = new OrderLineItems(
+                new OrderLineItem(1L, CHICKEN, 1, new Price(25_000))
+        );
+        OrderEntity order = orderRepository.save(new OrderEntity(
+                OrderType.EAT_IN,
+                status,
+                orderLineItems,
+                null,
+                table.getId()
+        ));
+
+        EatInOrderCompletedResponse result = eatInOrderService.complete(order.id());
+
+        assertThat(result.getStatus()).isEqualTo(OrderStatus.COMPLETED);
     }
 
     private Menu createMenu(MenuId menuId, String name, int price, boolean displayed) {
