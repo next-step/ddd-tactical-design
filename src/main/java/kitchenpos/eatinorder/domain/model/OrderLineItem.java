@@ -40,6 +40,10 @@ public class OrderLineItem {
         return EatInOrderLineItem.of(this.seq, this.menuId, this.quantity, this.price.longValue(), isDisplayedMenu);
     }
 
+    public EatInOrderLineItem toDomain() {
+        return EatInOrderLineItem.of(this.seq, this.menuId, this.quantity, this.price.longValue());
+    }
+
     public Long getSeq() {
         return seq;
     }

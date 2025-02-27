@@ -59,6 +59,19 @@ public class Order {
         return order;
     }
 
+    public EatInOrder toDomain() {
+        return EatInOrder.create(
+                this.id,
+                this.orderDateTime,
+                this.orderLineItems
+                        .stream()
+                        .map(OrderLineItem::toDomain)
+                        .toList(),
+                this.orderTableId,
+                this.status
+        );
+    }
+
     public UUID getId() {
         return id;
     }

@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public class EatInOrder {
     private final UUID id;
-    private final EatInOrderStatus status;
+    private EatInOrderStatus status;
     private final LocalDateTime orderDateTime;
     private final EatInOrderLineItems lineItems;
     private final OrderTableId orderTableId;
@@ -33,6 +33,23 @@ public class EatInOrder {
             final UUID orderTableId
     ) {
         return new EatInOrder(id, EatInOrderStatus.WAITING, orderDateTime, EatInOrderLineItems.of(eatInOrderLineItems), OrderTableId.of(orderTableId));
+    }
+
+    public static EatInOrder create(
+            final UUID id,
+            final LocalDateTime orderDateTime,
+            final List<EatInOrderLineItem> eatInOrderLineItems,
+            final UUID orderTableId,
+            final EatInOrderStatus status
+    ) {
+        return new EatInOrder(id, status, orderDateTime, EatInOrderLineItems.of(eatInOrderLineItems), OrderTableId.of(orderTableId));
+    }
+
+    public void accept() {
+        if (this.status != EatInOrderStatus.WAITING) {
+            throw new IllegalStateException();
+        }
+        this.status = EatInOrderStatus.ACCEPTED;
     }
 
     public UUID getId() {

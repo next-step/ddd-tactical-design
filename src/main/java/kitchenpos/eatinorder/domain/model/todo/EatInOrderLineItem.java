@@ -34,6 +34,15 @@ public class EatInOrderLineItem {
         return new EatInOrderLineItem(seq, menuId, EatInOrderLineItemQuantity.of(quantity), EatInOrderLineItemPrice.of(menuPrice));
     }
 
+    public static EatInOrderLineItem of(
+            final Long seq,
+            final UUID menuId,
+            final long quantity,
+            final long menuPrice
+    ) {
+        return new EatInOrderLineItem(seq, menuId, EatInOrderLineItemQuantity.of(quantity), EatInOrderLineItemPrice.of(menuPrice));
+    }
+
     public Long getSeq() {
         return seq;
     }
