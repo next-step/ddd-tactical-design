@@ -16,8 +16,8 @@ public class ProductSummary {
     private String name;
     private long quantity;
 
-    public ProductSummary(String name, long quantity) {
-        this.id = UUID.randomUUID();
+    public ProductSummary(UUID productId, String name, long quantity) {
+        this.id = productId;
         this.name = name;
         this.quantity = quantity;
     }

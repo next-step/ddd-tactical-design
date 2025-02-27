@@ -7,6 +7,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 import kitchenpos.menu.domain.model.MenuGroup;
 import kitchenpos.menu.domain.model.MenuSummary;
 import kitchenpos.menu.infra.persistence.QuerydslMenuQueryRepository;
@@ -52,13 +53,13 @@ class MenuQueryRepositoryTest {
         MenuGroup menuGroup2 = createAndSaveMenuGroup();
 
         List<ProductSummary> firstProductSummaries = List.of(createAndSaveProductSummary());
-        MenuSummary menuSummary1 = new MenuSummary("김치찌개1", BigDecimal.valueOf(8000), true, menuGroup1.getId(),
+        MenuSummary menuSummary1 = new MenuSummary(UUID.randomUUID(), "김치찌개1", BigDecimal.valueOf(8000), true, menuGroup1.getId(),
                 menuGroup1.getName(),
                 firstProductSummaries);
         menuSummaryRepository.save(menuSummary1);
 
         List<ProductSummary> secondProductSummaries = List.of(createAndSaveProductSummary());
-        MenuSummary menuSummary2 = new MenuSummary("김치찌개2", BigDecimal.valueOf(8000), true, menuGroup2.getId(),
+        MenuSummary menuSummary2 = new MenuSummary(UUID.randomUUID(),"김치찌개2", BigDecimal.valueOf(8000), true, menuGroup2.getId(),
                 menuGroup2.getName(),
                 secondProductSummaries);
         menuSummaryRepository.save(menuSummary2);
@@ -89,7 +90,7 @@ class MenuQueryRepositoryTest {
     }
 
     private ProductSummary createAndSaveProductSummary() {
-        ProductSummary productSummary = new ProductSummary("김치", 3);
+        ProductSummary productSummary = new ProductSummary(UUID.randomUUID(), "김치", 3);
         productSummaryRepository.save(productSummary);
         return productSummary;
     }

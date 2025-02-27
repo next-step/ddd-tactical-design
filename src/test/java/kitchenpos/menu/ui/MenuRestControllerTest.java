@@ -28,7 +28,6 @@ import kitchenpos.product.domain.model.Product;
 import kitchenpos.product.domain.model.ProductSummary;
 import kitchenpos.product.domain.repository.ProductRepository;
 import kitchenpos.product.domain.repository.ProductSummaryRepository;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -214,7 +213,8 @@ class MenuRestControllerTest {
 
     private MenuSummary createAndSaveMenuSummary(MenuGroup menuGroup) {
         ProductSummary productSummary = createAndSaveProductSummary();
-        MenuSummary menuSummary = new MenuSummary("김치찌개", BigDecimal.valueOf(8000), true, menuGroup.getId(),
+        MenuSummary menuSummary = new MenuSummary(UUID.randomUUID(), "김치찌개", BigDecimal.valueOf(8000), true,
+                menuGroup.getId(),
                 menuGroup.getName(),
                 List.of(productSummary));
         menuSummaryRepository.save(menuSummary);
@@ -222,7 +222,7 @@ class MenuRestControllerTest {
     }
 
     private ProductSummary createAndSaveProductSummary() {
-        ProductSummary productSummary = new ProductSummary("김치", 3);
+        ProductSummary productSummary = new ProductSummary(UUID.randomUUID(), "김치", 3);
         productSummaryRepository.save(productSummary);
         return productSummary;
     }

@@ -8,7 +8,6 @@ import jakarta.persistence.OneToMany;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import kitchenpos.product.domain.model.ProductSummary;
 
@@ -28,9 +27,9 @@ public class MenuSummary {
     @JoinColumn(name = "menu_summary_id")
     private List<ProductSummary> productSummaries = new ArrayList<>();
 
-    public MenuSummary(String menuName, BigDecimal price, boolean isDisplayed, UUID menuGroupId,
+    public MenuSummary(UUID menuId, String menuName, BigDecimal price, boolean isDisplayed, UUID menuGroupId,
                        String menuGroupName, List<ProductSummary> productSummaries) {
-        this.id = UUID.randomUUID();
+        this.id = menuId;
         this.menuName = menuName;
         this.price = price;
         this.isDisplayed = isDisplayed;
@@ -68,25 +67,6 @@ public class MenuSummary {
 
     public List<ProductSummary> getProductSummaries() {
         return productSummaries;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        MenuSummary that = (MenuSummary) o;
-        return isDisplayed == that.isDisplayed && Objects.equals(id, that.id) && Objects.equals(
-                menuName, that.menuName) && Objects.equals(price, that.price) && Objects.equals(
-                menuGroupId, that.menuGroupId) && Objects.equals(menuGroupName, that.menuGroupName);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, menuName, price, isDisplayed, menuGroupId, menuGroupName);
     }
 }
 
