@@ -5,10 +5,9 @@ import kitchenpos.common.vo.Price;
 import kitchenpos.eatinorders.infra.InMemoryOrderRepository;
 import kitchenpos.eatinorders.infra.InMemoryOrderTableRepository;
 import kitchenpos.eatinorders.tobe.domain.*;
-import kitchenpos.eatinorders.tobe.domain.common.OrderLineItem;
-import kitchenpos.eatinorders.tobe.domain.common.OrderLineItems;
-import kitchenpos.eatinorders.tobe.domain.common.OrderStatus;
-import kitchenpos.eatinorders.tobe.domain.common.OrderType;
+import kitchenpos.eatinorders.tobe.domain.common.*;
+import kitchenpos.eatinorders.tobe.domain.exception.InvalidOrderStatusException;
+import kitchenpos.eatinorders.ui.dto.EatInOrderAcceptResponse;
 import kitchenpos.eatinorders.ui.dto.EatInOrderCreateRequest;
 import kitchenpos.eatinorders.ui.dto.EatInOrderCreateResponse;
 import kitchenpos.menus.infra.InMemoryMenuRepository;
@@ -17,8 +16,11 @@ import kitchenpos.products.tobe.domain.ProductId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class EatInOrderServiceTest {
@@ -62,6 +64,47 @@ class EatInOrderServiceTest {
                 () -> assertThat(response.getStatus()).isEqualTo(OrderStatus.WAITING),
                 () -> assertThat(response.getOrderTableId()).isEqualTo(table.getId())
         );
+    }
+
+    @DisplayName("주문 상태가 대기 중이 아니면 주문 수락 시 예외 발생한다")
+    @EnumSource(value = OrderStatus.class, names = "WAITING", mode = EnumSource.Mode.EXCLUDE)
+    @ParameterizedTest
+    void validateAccept(OrderStatus status) {
+        OrderTable table = orderTableRepository.save(createOrderTable("1번테이블", 4, true));
+        OrderLineItems orderLineItems = new OrderLineItems(
+                new OrderLineItem(1L, CHICKEN, 1, new Price(25_000))
+        );
+        OrderEntity order = orderRepository.save(new OrderEntity(
+                OrderType.EAT_IN,
+                status,
+                orderLineItems,
+                null,
+                table.getId()
+        ));
+
+        assertThatThrownBy(() -> eatInOrderService.accept(order.id()))
+                .isInstanceOf(InvalidOrderStatusException.class);
+    }
+
+    @DisplayName("대기 중인 주문을 수락한다")
+    @EnumSource(value = OrderStatus.class, names = "WAITING", mode = EnumSource.Mode.INCLUDE)
+    @ParameterizedTest
+    void accept(OrderStatus status) {
+        OrderTable table = orderTableRepository.save(createOrderTable("1번테이블", 4, true));
+        OrderLineItems orderLineItems = new OrderLineItems(
+                new OrderLineItem(1L, CHICKEN, 1, new Price(25_000))
+        );
+        OrderEntity order = orderRepository.save(new OrderEntity(
+                OrderType.EAT_IN,
+                status,
+                orderLineItems,
+                null,
+                table.getId()
+        ));
+
+        EatInOrderAcceptResponse result = eatInOrderService.accept(order.id());
+
+        assertThat(result.getStatus()).isEqualTo(OrderStatus.ACCEPTED);
     }
 
     private Menu createMenu(MenuId menuId, String name, int price, boolean displayed) {

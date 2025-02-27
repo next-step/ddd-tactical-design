@@ -1,15 +1,12 @@
 package kitchenpos.eatinorders.ui.tobe;
 
-import kitchenpos.eatinorders.application.OrderService;
 import kitchenpos.eatinorders.application.tobe.EatInOrderService;
-import kitchenpos.eatinorders.domain.Order;
+import kitchenpos.eatinorders.tobe.domain.common.OrderId;
+import kitchenpos.eatinorders.ui.dto.EatInOrderAcceptResponse;
 import kitchenpos.eatinorders.ui.dto.EatInOrderCreateRequest;
 import kitchenpos.eatinorders.ui.dto.EatInOrderCreateResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
@@ -28,5 +25,10 @@ public class EatInOrderRestController {
         final EatInOrderCreateResponse response = eatInOrderService.create(request);
         return ResponseEntity.created(URI.create("/api/orders/" + response.getId()))
                 .body(response);
+    }
+
+    @PutMapping("/{orderId}/accept")
+    public ResponseEntity<EatInOrderAcceptResponse> accept(@PathVariable final OrderId orderId) {
+        return ResponseEntity.ok(eatInOrderService.accept(orderId));
     }
 }
