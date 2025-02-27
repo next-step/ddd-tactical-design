@@ -33,7 +33,7 @@ public class EatInOrderRestController {
     }
 
     @PutMapping("/{orderId}/serve")
-    public ResponseEntity<Order> serve(@PathVariable final UUID orderId) {
+    public ResponseEntity<EatInOrder> serve(@PathVariable final UUID orderId) {
         return ResponseEntity.ok(eatInOrderService.serve(orderId));
     }
 

@@ -214,7 +214,7 @@ public class EatInOrderServiceTest {
             orderService.accept(order.getId());
 
             // when
-            Order servedOrder = orderService.serve(order.getId());
+            EatInOrder servedOrder = orderService.serve(order.getId());
 
             // then
             assertThat(servedOrder.getStatus()).isEqualTo(EatInOrderStatus.SERVED);
