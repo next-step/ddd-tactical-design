@@ -22,12 +22,12 @@ public class DatabaseCleaner {
     public DatabaseCleaner(final EntityManager entityManager) {
         this.entityManager = entityManager;
         this.tableNames = entityManager.getMetamodel()
-            .getEntities()
-            .stream()
-            .map(Type::getJavaType)
-            .map(javaType -> javaType.getAnnotation(Table.class))
-            .map(Table::name)
-            .collect(Collectors.toList());
+                .getEntities()
+                .stream()
+                .map(Type::getJavaType)
+                .map(javaType -> javaType.getAnnotation(Table.class))
+                .map(Table::name)
+                .collect(Collectors.toList());
     }
 
     /**

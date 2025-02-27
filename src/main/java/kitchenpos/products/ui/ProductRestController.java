@@ -1,7 +1,11 @@
 package kitchenpos.products.ui;
 
 import kitchenpos.products.application.ProductService;
-import kitchenpos.products.domain.Product;
+import kitchenpos.products.ui.dto.ChangeProductRequest;
+import kitchenpos.products.ui.dto.ChangeProductResponse;
+import kitchenpos.products.ui.dto.CreateProductRequest;
+import kitchenpos.products.ui.dto.CreateProductResponse;
+import kitchenpos.products.ui.dto.FindProductResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,19 +29,22 @@ public class ProductRestController {
     }
 
     @PostMapping
-    public ResponseEntity<Product> create(@RequestBody final Product request) {
-        final Product response = productService.create(request);
-        return ResponseEntity.created(URI.create("/api/products/" + response.getId()))
-            .body(response);
+    public ResponseEntity<CreateProductResponse> create(
+            @RequestBody final CreateProductRequest request) {
+        final CreateProductResponse response = productService.create(request);
+        return ResponseEntity.created(URI.create("/api/products/" + response.id()))
+                .body(response);
     }
 
     @PutMapping("/{productId}/price")
-    public ResponseEntity<Product> changePrice(@PathVariable final UUID productId, @RequestBody final Product request) {
+    public ResponseEntity<ChangeProductResponse> changePrice(
+            @PathVariable final UUID productId,
+            @RequestBody final ChangeProductRequest request) {
         return ResponseEntity.ok(productService.changePrice(productId, request));
     }
 
     @GetMapping
-    public ResponseEntity<List<Product>> findAll() {
+    public ResponseEntity<List<FindProductResponse>> findAll() {
         return ResponseEntity.ok(productService.findAll());
     }
 }
