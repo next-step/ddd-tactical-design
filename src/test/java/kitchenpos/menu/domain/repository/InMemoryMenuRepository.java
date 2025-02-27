@@ -32,8 +32,7 @@ public class InMemoryMenuRepository implements MenuRepository {
     @Override
     public Menu save(Menu menu) {
         final var id = MenuId.of(UUID.randomUUID());
-        menu.setMenuId(id);
-        menus.put(id, menu);
+        menus.put(id, new Menu(id, menu.getName(), menu.getPrice(), menu.getMenuGroupId(), menu.isDisplayed(), menu.getMenuProducts()));
         return menu;
     }
 

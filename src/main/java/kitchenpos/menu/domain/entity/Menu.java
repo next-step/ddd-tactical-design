@@ -53,10 +53,6 @@ public class Menu {
         return menuId;
     }
 
-    public void setMenuId(MenuId menuId) {
-        this.menuId = menuId;
-    }
-
     public MenuName getName() {
         return name;
     }
@@ -67,6 +63,10 @@ public class Menu {
 
     public boolean isDisplayed() {
         return displayed;
+    }
+
+    public MenuGroupId getMenuGroupId() {
+        return menuGroupId;
     }
 
     public MenuProducts getMenuProducts() {
