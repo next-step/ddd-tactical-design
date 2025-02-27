@@ -250,7 +250,7 @@ public class EatInOrderServiceTest {
             orderService.serve(order.getId());
 
             // when
-            Order completedOrder = orderService.complete(order.getId());
+            EatInOrder completedOrder = orderService.complete(order.getId());
 
             // then
             assertThat(completedOrder.getStatus()).isEqualTo(EatInOrderStatus.COMPLETED);

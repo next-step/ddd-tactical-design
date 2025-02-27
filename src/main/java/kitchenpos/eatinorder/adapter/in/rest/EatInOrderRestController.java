@@ -38,7 +38,7 @@ public class EatInOrderRestController {
     }
 
     @PutMapping("/{orderId}/complete")
-    public ResponseEntity<Order> complete(@PathVariable final UUID orderId) {
+    public ResponseEntity<EatInOrder> complete(@PathVariable final UUID orderId) {
         return ResponseEntity.ok(eatInOrderService.complete(orderId));
     }
 

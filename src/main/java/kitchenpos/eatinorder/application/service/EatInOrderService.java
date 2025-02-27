@@ -65,14 +65,14 @@ public class EatInOrderService {
     }
 
     @Transactional
-    public Order complete(final UUID orderId) {
+    public EatInOrder complete(final UUID orderId) {
         final EatInOrder eatInOrder = orderRepository.findById(orderId)
                 .map(Order::toDomain)
                 .orElseThrow(NoSuchElementException::new);
         eatInOrder.complete();
-        Order savedOrder = orderRepository.save(Order.of(eatInOrder));
+        Order save = orderRepository.save(Order.of(eatInOrder));
         orderTableService.clear(eatInOrder.getOrderTableId());
-        return savedOrder;
+        return save.toDomain();
     }
 
     @Transactional(readOnly = true)
