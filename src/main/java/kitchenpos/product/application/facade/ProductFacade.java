@@ -10,14 +10,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProductFacade {
 
-    private final ProductQueryService productQuryService;
+    private final ProductQueryService productQueryService;
     private final ProductCommandService productCommandService;
 
     public ProductFacade(
-        ProductQueryService productQuryService,
+        ProductQueryService productQueryService,
         ProductCommandService productCommandService
     ) {
-        this.productQuryService = productQuryService;
+        this.productQueryService = productQueryService;
         this.productCommandService = productCommandService;
     }
 
@@ -30,7 +30,7 @@ public class ProductFacade {
     }
 
     public List<ProductResponse.GetProduct> findAll() {
-       return productQuryService.findAll()
+       return productQueryService.findAll()
            .stream()
            .map(ProductResponse.GetProduct::fromVo)
            .toList();
