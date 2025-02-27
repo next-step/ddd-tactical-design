@@ -1,15 +1,16 @@
 package kitchenpos.eatinorders.ui.tobe;
 
-
 import kitchenpos.eatinorders.application.tobe.OrderTableService;
+import kitchenpos.eatinorders.tobe.domain.OrderTable;
+import kitchenpos.eatinorders.tobe.domain.OrderTableId;
+import kitchenpos.eatinorders.ui.dto.OrderTableChangeNumberOfGuestsResponse;
 import kitchenpos.eatinorders.ui.dto.OrderTableCreateResponse;
+import kitchenpos.eatinorders.ui.dto.OrderTableSitResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @RequestMapping("/api/order-tables")
 @RestController
@@ -25,5 +26,29 @@ public class OrderTableRestController {
         final OrderTableCreateResponse response = orderTableService.create(taleName);
         return ResponseEntity.created(URI.create("/api/order-tables/" + response.getId()))
                 .body(response);
+    }
+
+    @PutMapping("/{orderTableId}/sit")
+    public ResponseEntity<OrderTableSitResponse> sit(@PathVariable final OrderTableId orderTableId) {
+        return ResponseEntity.ok(orderTableService.sit(orderTableId));
+    }
+
+    //TODO
+    /*@PutMapping("/{orderTableId}/clear")
+    public ResponseEntity<OrderTable> clear(@PathVariable final UUID orderTableId) {
+        return ResponseEntity.ok(orderTableService.clear(orderTableId));
+    }*/
+
+    @PutMapping("/{orderTableId}/number-of-guests")
+    public ResponseEntity<OrderTableChangeNumberOfGuestsResponse> changeNumberOfGuests(
+            @PathVariable final OrderTableId orderTableId,
+            @RequestBody final int numberOfGuests
+    ) {
+        return ResponseEntity.ok(orderTableService.changeNumberOfGuests(orderTableId, numberOfGuests));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<OrderTable>> findAll() {
+        return ResponseEntity.ok(orderTableService.findAll());
     }
 }
