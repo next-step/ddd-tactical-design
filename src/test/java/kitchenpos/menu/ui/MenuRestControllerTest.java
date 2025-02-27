@@ -3,6 +3,7 @@ package kitchenpos.menu.ui;
 import static kitchenpos.TestFixtureFactory.createMenuGroup;
 import static kitchenpos.TestFixtureFactory.createProduct;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -17,12 +18,17 @@ import java.util.UUID;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.model.MenuGroup;
 import kitchenpos.menu.domain.model.MenuProduct;
+import kitchenpos.menu.domain.model.MenuSummary;
 import kitchenpos.menu.domain.repository.MenuGroupRepository;
 import kitchenpos.menu.domain.repository.MenuRepository;
+import kitchenpos.menu.domain.repository.MenuSummaryRepository;
 import kitchenpos.menu.ui.dto.CreateMenuRq;
 import kitchenpos.menu.ui.dto.CreateMenuRq.MenuProductRq;
 import kitchenpos.product.domain.model.Product;
+import kitchenpos.product.domain.model.ProductSummary;
 import kitchenpos.product.domain.repository.ProductRepository;
+import kitchenpos.product.domain.repository.ProductSummaryRepository;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +58,12 @@ class MenuRestControllerTest {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private MenuSummaryRepository menuSummaryRepository;
+
+    @Autowired
+    private ProductSummaryRepository productSummaryRepository;
 
     @Test
     @DisplayName("메뉴를 생성한다")
@@ -165,21 +177,23 @@ class MenuRestControllerTest {
                 .andExpect(jsonPath("$.displayed").value(false));
     }
 
-//    @Test
-//    @DisplayName("모든 메뉴를 조회한다")
-//    void find_allMenus() throws Exception {
-//        // given
-//        createAndSaveMenu(true);
-//        createAndSaveMenu(true);
-//
-//        // when
-//        ResultActions result = mockMvc.perform(get("/api/menus"));
-//
-//        // then
-//        result.andExpect(status().isOk())
-//                .andExpect(jsonPath("$").isArray())
-//                .andExpect(jsonPath("$.length()").value(2));
-//    }
+    @Test
+    @DisplayName("모든 메뉴를 조회한다.")
+    void find_allMenus() throws Exception {
+        // given
+        MenuGroup menuGroup1 = createAndSaveMenuGroup();
+        MenuGroup menuGroup2 = createAndSaveMenuGroup();
+        createAndSaveMenuSummary(menuGroup1);
+        createAndSaveMenuSummary(menuGroup2);
+
+        // when
+        ResultActions result = mockMvc.perform(get("/api/menus"));
+
+        // then
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$.length()").value(2));
+    }
 
     private MenuGroup createAndSaveMenuGroup() {
         return menuGroupRepository.save(createMenuGroup());
@@ -196,6 +210,21 @@ class MenuRestControllerTest {
         Menu menu = new Menu("김치찌개", BigDecimal.valueOf(8000), displayed, List.of(menuProduct), menuGroup,
                 menuGroup.getId());
         return menuRepository.save(menu);
+    }
+
+    private MenuSummary createAndSaveMenuSummary(MenuGroup menuGroup) {
+        ProductSummary productSummary = createAndSaveProductSummary();
+        MenuSummary menuSummary = new MenuSummary("김치찌개", BigDecimal.valueOf(8000), true, menuGroup.getId(),
+                menuGroup.getName(),
+                List.of(productSummary));
+        menuSummaryRepository.save(menuSummary);
+        return menuSummary;
+    }
+
+    private ProductSummary createAndSaveProductSummary() {
+        ProductSummary productSummary = new ProductSummary("김치", 3);
+        productSummaryRepository.save(productSummary);
+        return productSummary;
     }
 
     private CreateMenuRq createMenuRequest(String name, int price, UUID menuGroupId, UUID productId) {
