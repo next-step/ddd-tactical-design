@@ -3,6 +3,7 @@ package kitchenpos.eatinorder.application.service;
 import kitchenpos.eatinorder.application.port.out.MenuEatInOrderLineItemMapper;
 import kitchenpos.eatinorder.application.port.out.OrderRepository;
 import kitchenpos.eatinorder.adapter.out.persistance.entity.Order;
+import kitchenpos.eatinorder.application.service.model.CreateEatInOrderRequest;
 import kitchenpos.eatinorder.domain.model.todo.EatInOrder;
 import kitchenpos.eatinorder.domain.model.todo.EatInOrderLineItem;
 import kitchenpos.eatinorder.domain.model.todo.OrderTable;
@@ -31,13 +32,13 @@ public class EatInOrderService {
     }
 
     @Transactional
-    public Order create(final Order request) {
-        OrderTable orderTable = orderTableService.findById(request.getOrderTableId());
+    public Order create(final CreateEatInOrderRequest request) {
+        OrderTable orderTable = orderTableService.findById(request.orderTableId());
         if (!orderTable.isOccupied()) {
             throw new IllegalStateException();
         }
 
-        List<EatInOrderLineItem> eatInOrderLineItems = menuEatInOrderLineItemMapper.toEatInOrderLines(request.getOrderLineItems());
+        List<EatInOrderLineItem> eatInOrderLineItems = menuEatInOrderLineItemMapper.toEatInOrderLines(request.orderLineItems());
         EatInOrder eatInOrder = EatInOrder.create(UUID.randomUUID(), LocalDateTime.now(), eatInOrderLineItems, orderTable.getId());
         return orderRepository.save(Order.of(eatInOrder));
     }

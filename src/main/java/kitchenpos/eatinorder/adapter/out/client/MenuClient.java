@@ -1,7 +1,7 @@
 package kitchenpos.eatinorder.adapter.out.client;
 
 import kitchenpos.eatinorder.application.port.out.MenuEatInOrderLineItemMapper;
-import kitchenpos.eatinorder.adapter.out.persistance.entity.OrderLineItem;
+import kitchenpos.eatinorder.application.service.model.OrderLineItemRequest;
 import kitchenpos.eatinorder.domain.model.todo.EatInOrderLineItem;
 import kitchenpos.menu.adapter.out.persistance.JpaMenuEntityEntityRepository;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuEntity;
@@ -21,14 +21,14 @@ public class MenuClient implements MenuEatInOrderLineItemMapper {
     }
 
     @Override
-    public List<EatInOrderLineItem> toEatInOrderLines(final List<OrderLineItem> orderLineItemRequests) {
+    public List<EatInOrderLineItem> toEatInOrderLines(final List<OrderLineItemRequest> orderLineItemRequests) {
         if (Objects.isNull(orderLineItemRequests) || orderLineItemRequests.isEmpty()) {
             throw new IllegalArgumentException();
         }
 
         final List<MenuEntity> menus = menuEntityRepository.findAllByIdIn(
                 orderLineItemRequests.stream()
-                        .map(OrderLineItem::getMenuId)
+                        .map(OrderLineItemRequest::getMenuId)
                         .toList()
         );
         if (menus.size() != orderLineItemRequests.size()) {
@@ -36,7 +36,7 @@ public class MenuClient implements MenuEatInOrderLineItemMapper {
         }
 
         final List<EatInOrderLineItem> eatInOrderLineItems = new ArrayList<>();
-        for (final OrderLineItem orderLineItemRequest : orderLineItemRequests) {
+        for (final OrderLineItemRequest orderLineItemRequest : orderLineItemRequests) {
             final long quantity = orderLineItemRequest.getQuantity();
             final MenuEntity menu = menuEntityRepository.findById(orderLineItemRequest.getMenuId())
                     .orElseThrow(NoSuchElementException::new);

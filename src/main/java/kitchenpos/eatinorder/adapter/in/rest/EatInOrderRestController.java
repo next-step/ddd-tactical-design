@@ -2,6 +2,7 @@ package kitchenpos.eatinorder.adapter.in.rest;
 
 import kitchenpos.eatinorder.application.service.EatInOrderService;
 import kitchenpos.eatinorder.adapter.out.persistance.entity.Order;
+import kitchenpos.eatinorder.application.service.model.CreateEatInOrderRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ public class EatInOrderRestController {
     }
 
     @PostMapping
-    public ResponseEntity<Order> create(@RequestBody final Order request) {
+    public ResponseEntity<Order> create(@RequestBody final CreateEatInOrderRequest request) {
         final Order response = eatInOrderService.create(request);
         return ResponseEntity.created(URI.create("/api/orders/" + response.getId()))
             .body(response);

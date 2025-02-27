@@ -5,6 +5,8 @@ import kitchenpos.eatinorder.adapter.out.persistance.entity.Order;
 import kitchenpos.eatinorder.adapter.out.persistance.entity.OrderLineItem;
 import kitchenpos.eatinorder.adapter.out.persistance.entity.OrderTableEntity;
 import kitchenpos.eatinorder.adapter.out.persistance.entity.OrderType;
+import kitchenpos.eatinorder.application.service.model.CreateEatInOrderRequest;
+import kitchenpos.eatinorder.application.service.model.OrderLineItemRequest;
 import kitchenpos.eatinorder.domain.model.todo.EatInOrderStatus;
 import kitchenpos.menu.adapter.out.persistance.JpaMenuEntityEntityRepository;
 import kitchenpos.menu.adapter.out.persistance.JpaMenuGroupEntityRepository;
@@ -26,7 +28,6 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -80,8 +81,8 @@ public class EatInOrderServiceTest {
             OrderTableEntity orderTableEntity = createOrderTable(테이블_1_ORDER_TABLE_UUID, "테이블 1", 0, true);
             orderTableRepository.save(orderTableEntity);
 
-            List<OrderLineItem> orderLineItems = List.of(createOrderLineItem(후라이드치킨_MENU_UUID, 2, 후라이드치킨_MENU_DEFAULT_PRICE));
-            Order request = createOrder(OrderType.EAT_IN, orderLineItems, null, 테이블_1_ORDER_TABLE_UUID, orderTableEntity);
+            List<OrderLineItemRequest> orderLineItems = List.of(new OrderLineItemRequest(2, 후라이드치킨_MENU_UUID, 후라이드치킨_MENU_DEFAULT_PRICE));
+            CreateEatInOrderRequest request = new CreateEatInOrderRequest(테이블_1_ORDER_TABLE_UUID, orderLineItems);
 
             // when
             Order order = orderService.create(request);
@@ -89,10 +90,8 @@ public class EatInOrderServiceTest {
             // then
             assertAll(
                     () -> assertThat(order.getId()).isNotNull(),
-                    () -> assertThat(order.getType()).isEqualTo(request.getType()),
                     () -> assertThat(order.getStatus()).isEqualTo(EatInOrderStatus.WAITING),
-                    () -> assertThat(order.getOrderLineItems()).hasSize(orderLineItems.size()),
-                    () -> assertThat(order.getDeliveryAddress()).isEqualTo(request.getDeliveryAddress())
+                    () -> assertThat(order.getOrderLineItems()).hasSize(orderLineItems.size())
             );
         }
 
@@ -104,8 +103,8 @@ public class EatInOrderServiceTest {
             OrderTableEntity orderTableEntity = createOrderTable(테이블_1_ORDER_TABLE_UUID, "테이블 1", 0, true);
             orderTableRepository.save(orderTableEntity);
 
-            List<OrderLineItem> orderLineItems = List.of(createOrderLineItem(후라이드치킨_NO_DISPLAY_MENU_UUID, 2, 후라이드치킨_MENU_DEFAULT_PRICE));
-            Order request = createOrder(OrderType.EAT_IN, orderLineItems, "서울시 강남구", orderTableEntity.getId(), orderTableEntity);
+            List<OrderLineItemRequest> orderLineItems = List.of(new OrderLineItemRequest(2, 후라이드치킨_NO_DISPLAY_MENU_UUID, 후라이드치킨_MENU_DEFAULT_PRICE));
+            CreateEatInOrderRequest request = new CreateEatInOrderRequest(테이블_1_ORDER_TABLE_UUID, orderLineItems);
 
             // when
             ThrowableAssert.ThrowingCallable throwingCallable = () -> orderService.create(request);
@@ -123,7 +122,7 @@ public class EatInOrderServiceTest {
             // given
             OrderTableEntity orderTableEntity = createOrderTable(테이블_1_ORDER_TABLE_UUID, "테이블 1", 0, true);
             orderTableRepository.save(orderTableEntity);
-            Order request = createOrder(OrderType.EAT_IN, Collections.emptyList(), "서울시 강남구", orderTableEntity.getId(), orderTableEntity);
+            CreateEatInOrderRequest request = new CreateEatInOrderRequest(테이블_1_ORDER_TABLE_UUID, List.of());
 
             // when
             ThrowableAssert.ThrowingCallable throwingCallable = () -> orderService.create(request);
@@ -138,15 +137,15 @@ public class EatInOrderServiceTest {
         @Test
         void order_table_must_be_specified_for_eat_in_order() {
             // given
-            List<OrderLineItem> orderLineItems = List.of(createOrderLineItem(후라이드치킨_MENU_UUID, 2, 후라이드치킨_MENU_DEFAULT_PRICE));
-            Order request = createOrder(OrderType.EAT_IN, orderLineItems, null, 테이블_1_ORDER_TABLE_UUID, null);
+            List<OrderLineItemRequest> orderLineItems = List.of(new OrderLineItemRequest(2, 후라이드치킨_MENU_UUID, 후라이드치킨_MENU_DEFAULT_PRICE));
+            CreateEatInOrderRequest request = new CreateEatInOrderRequest(null, orderLineItems);
 
             // when
             ThrowableAssert.ThrowingCallable throwingCallable = () -> orderService.create(request);
 
             // then
             assertThatThrownBy(throwingCallable)
-                    .isInstanceOf(NoSuchElementException.class);
+                    .isInstanceOf(IllegalArgumentException.class);
         }
 
         @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
@@ -157,8 +156,8 @@ public class EatInOrderServiceTest {
             OrderTableEntity orderTableEntity = createOrderTable(테이블_1_ORDER_TABLE_UUID, "테이블 1", 0, false);
             orderTableRepository.save(orderTableEntity);
 
-            List<OrderLineItem> orderLineItems = List.of(createOrderLineItem(후라이드치킨_MENU_UUID, 2, 후라이드치킨_MENU_DEFAULT_PRICE));
-            Order request = createOrder(OrderType.EAT_IN, orderLineItems, null, 테이블_1_ORDER_TABLE_UUID, orderTableEntity);
+            List<OrderLineItemRequest> orderLineItems = List.of(new OrderLineItemRequest(2, 후라이드치킨_MENU_UUID, 후라이드치킨_MENU_DEFAULT_PRICE));
+            CreateEatInOrderRequest request = new CreateEatInOrderRequest(테이블_1_ORDER_TABLE_UUID, orderLineItems);
 
             // when
             ThrowableAssert.ThrowingCallable throwingCallable = () -> orderService.create(request);
@@ -299,8 +298,9 @@ public class EatInOrderServiceTest {
         OrderTableEntity orderTableEntity = createOrderTable(테이블_1_ORDER_TABLE_UUID, "테이블 1", 0, true);
         orderTableRepository.save(orderTableEntity);
 
-        List<OrderLineItem> orderLineItems = List.of(createOrderLineItem(후라이드치킨_MENU_UUID, 2, 후라이드치킨_MENU_DEFAULT_PRICE));
-        Order request = createOrder(OrderType.EAT_IN, orderLineItems, "서울시 강남구", 테이블_1_ORDER_TABLE_UUID, orderTableEntity);
+        List<OrderLineItemRequest> orderLineItems = List.of(new OrderLineItemRequest(2, 후라이드치킨_MENU_UUID, 후라이드치킨_MENU_DEFAULT_PRICE));
+        CreateEatInOrderRequest request = new CreateEatInOrderRequest(테이블_1_ORDER_TABLE_UUID, orderLineItems);
+
         return orderService.create(request);
     }
 

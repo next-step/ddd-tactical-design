@@ -1,10 +1,10 @@
 package kitchenpos.eatinorder.application.service;
 
-import kitchenpos.eatinorder.application.service.model.ChangeNumberOfGuestsRequest;
-import kitchenpos.eatinorder.application.service.model.CreateOrderTableRequest;
 import kitchenpos.eatinorder.adapter.out.persistance.entity.Order;
-import kitchenpos.eatinorder.adapter.out.persistance.entity.OrderLineItem;
-import kitchenpos.eatinorder.adapter.out.persistance.entity.OrderType;
+import kitchenpos.eatinorder.application.service.model.ChangeNumberOfGuestsRequest;
+import kitchenpos.eatinorder.application.service.model.CreateEatInOrderRequest;
+import kitchenpos.eatinorder.application.service.model.CreateOrderTableRequest;
+import kitchenpos.eatinorder.application.service.model.OrderLineItemRequest;
 import kitchenpos.eatinorder.domain.model.todo.OrderTable;
 import kitchenpos.menu.adapter.out.persistance.JpaMenuEntityEntityRepository;
 import kitchenpos.menu.adapter.out.persistance.JpaMenuGroupEntityRepository;
@@ -273,8 +273,8 @@ public class OrderTableServiceTest {
         MenuEntity menu = createMenu(후라이드치킨_MENU_UUID, 후라이드치킨_MENU_NAME, 후라이드치킨_MENU_DEFAULT_PRICE, 치킨류_MENU_GROUP_UUID, menuGroup, menuProducts);
         menuEntityRepository.save(menu);
 
-        List<OrderLineItem> orderLineItems = List.of(createOrderLineItem(후라이드치킨_MENU_UUID, 2, 후라이드치킨_MENU_DEFAULT_PRICE));
-        Order request = createOrder(OrderType.EAT_IN, orderLineItems, "서울시 강남구", orderTableEntity.getId(), orderTableEntity);
+        List<OrderLineItemRequest> orderLineItems = List.of(createOrderLineItemRequest(후라이드치킨_MENU_UUID, 2, 후라이드치킨_MENU_DEFAULT_PRICE));
+        CreateEatInOrderRequest request = createEatInOrderRequest(orderTableEntity.getId(), orderLineItems);
         return orderService.create(request);
     }
 
@@ -320,21 +320,12 @@ public class OrderTableServiceTest {
         return menuProduct;
     }
 
-    private static OrderLineItem createOrderLineItem(UUID menuId, int quantity, BigDecimal price) {
-        OrderLineItem orderLineItem = new OrderLineItem();
-        orderLineItem.setMenuId(menuId);
-        orderLineItem.setQuantity(quantity);
-        orderLineItem.setPrice(price);
-        return orderLineItem;
+    private static OrderLineItemRequest createOrderLineItemRequest(UUID menuId, int quantity, BigDecimal price) {
+        return new OrderLineItemRequest(quantity, menuId, price);
     }
 
-    private static Order createOrder(OrderType type, List<OrderLineItem> orderLineItems, String deliveryAddress, UUID orderTableUuid, OrderTable orderTableEntity) {
-        Order order = new Order();
-        order.setType(type);
-        order.setOrderLineItems(orderLineItems);
-        order.setDeliveryAddress(deliveryAddress);
-        order.setOrderTableId(orderTableUuid);
-        return order;
+    public static CreateEatInOrderRequest createEatInOrderRequest(UUID orderTableId, List<OrderLineItemRequest> orderLineItems) {
+        return new CreateEatInOrderRequest(orderTableId, orderLineItems);
     }
 
     private static final UUID 후라이드치킨_PRODUCT_UUID = UUID.randomUUID();
