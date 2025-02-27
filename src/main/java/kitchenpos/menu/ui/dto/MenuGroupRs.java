@@ -2,7 +2,6 @@ package kitchenpos.menu.ui.dto;
 
 import java.util.UUID;
 import kitchenpos.menu.application.dto.MenuGroupServiceRs;
-import kitchenpos.menu.domain.model.MenuGroup;
 
 public class MenuGroupRs {
     private UUID id;

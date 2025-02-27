@@ -2,7 +2,6 @@ package kitchenpos.menu.domain.model;
 
 import static kitchenpos.menu.exception.MenuExceptionMessage.MENU_PRICE_CREATION_EXCEPTION;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

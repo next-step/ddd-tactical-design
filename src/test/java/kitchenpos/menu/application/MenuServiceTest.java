@@ -19,7 +19,6 @@ import kitchenpos.menu.application.dto.SimpleMenuServiceRs;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.model.MenuGroup;
 import kitchenpos.menu.domain.model.MenuNameCreationService;
-import kitchenpos.menu.domain.model.MenuProduct;
 import kitchenpos.menu.domain.repository.MenuGroupRepository;
 import kitchenpos.menu.domain.repository.MenuRepository;
 import kitchenpos.menu.domain.service.MarginValidator;

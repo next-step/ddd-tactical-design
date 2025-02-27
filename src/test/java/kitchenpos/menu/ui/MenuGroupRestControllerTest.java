@@ -7,9 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kitchenpos.common.infra.external.FakePurgomalumClient;
 import kitchenpos.menu.domain.model.MenuGroup;
-import kitchenpos.menu.domain.model.MenuGroupNameCreationService;
 import kitchenpos.menu.ui.dto.CreateMenuGroupRq;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

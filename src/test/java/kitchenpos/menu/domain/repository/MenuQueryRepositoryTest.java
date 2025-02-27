@@ -37,14 +37,6 @@ class MenuQueryRepositoryTest {
     @Autowired
     private MenuQueryRepository menuQueryRepository;
 
-    @TestConfiguration
-    static class TestConfig {
-        @Bean
-        public JPAQueryFactory jpaQueryFactory(EntityManager entityManager) {
-            return new JPAQueryFactory(entityManager);
-        }
-    }
-
     @Test
     @DisplayName("메뉴 요약 정보를 조회한다.")
     void find_all() {
@@ -53,13 +45,15 @@ class MenuQueryRepositoryTest {
         MenuGroup menuGroup2 = createAndSaveMenuGroup();
 
         List<ProductSummary> firstProductSummaries = List.of(createAndSaveProductSummary());
-        MenuSummary menuSummary1 = new MenuSummary(UUID.randomUUID(), "김치찌개1", BigDecimal.valueOf(8000), true, menuGroup1.getId(),
+        MenuSummary menuSummary1 = new MenuSummary(UUID.randomUUID(), "김치찌개1", BigDecimal.valueOf(8000), true,
+                menuGroup1.getId(),
                 menuGroup1.getName(),
                 firstProductSummaries);
         menuSummaryRepository.save(menuSummary1);
 
         List<ProductSummary> secondProductSummaries = List.of(createAndSaveProductSummary());
-        MenuSummary menuSummary2 = new MenuSummary(UUID.randomUUID(),"김치찌개2", BigDecimal.valueOf(8000), true, menuGroup2.getId(),
+        MenuSummary menuSummary2 = new MenuSummary(UUID.randomUUID(), "김치찌개2", BigDecimal.valueOf(8000), true,
+                menuGroup2.getId(),
                 menuGroup2.getName(),
                 secondProductSummaries);
         menuSummaryRepository.save(menuSummary2);
@@ -97,5 +91,13 @@ class MenuQueryRepositoryTest {
 
     private MenuGroup createAndSaveMenuGroup() {
         return menuGroupRepository.save(createMenuGroup());
+    }
+
+    @TestConfiguration
+    static class TestConfig {
+        @Bean
+        public JPAQueryFactory jpaQueryFactory(EntityManager entityManager) {
+            return new JPAQueryFactory(entityManager);
+        }
     }
 }

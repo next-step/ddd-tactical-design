@@ -47,7 +47,8 @@ class MenuQueryModelSynchronizerTest {
     @DisplayName("이벤트를 받으면 메뉴 쿼리 모델을 업데이트 한다.")
     void update_model() throws InterruptedException {
         // given
-        MenuQueryModelSynchronizer menuQueryModelSynchronizer = new MenuQueryModelSynchronizer(menuSummaryRepository, productSummaryRepository);
+        MenuQueryModelSynchronizer menuQueryModelSynchronizer = new MenuQueryModelSynchronizer(menuSummaryRepository,
+                productSummaryRepository);
 
         // when
         Menu menu = createAndSaveMenu(true);

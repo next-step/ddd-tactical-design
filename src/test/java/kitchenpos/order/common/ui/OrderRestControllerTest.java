@@ -7,9 +7,7 @@ import static kitchenpos.TestFixtureFactory.createOrderLineItem;
 import static kitchenpos.TestFixtureFactory.createOrderWithDeliveryType;
 import static kitchenpos.TestFixtureFactory.createProduct;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -34,7 +32,6 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,6 +60,7 @@ class OrderRestControllerTest {
 
     /**
      * 필요 없어진 테스트
+     *
      * @throws Exception
      */
 //    @Test
@@ -83,7 +81,6 @@ class OrderRestControllerTest {
 //                .andExpect(jsonPath("$.orderLineItems").isArray())
 //                .andExpect(jsonPath("$.status").value("WAITING"));
 //    }
-
     @Test
     @DisplayName("주문 상태가 주문 대기 중이라면 주문을 수락할 수 있다.")
     void accept_success() throws Exception {
