@@ -9,10 +9,12 @@ import kitchenpos.product.tobe.fake.InMemoryProductRepository;
 import kitchenpos.product.tobe.fixture.ProductFixture;
 import kitchenpos.menu.tobe.domain.menu.MenuRepository;
 
+import kitchenpos.product.tobe.infra.ProductPriceValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -26,6 +28,7 @@ class ProductServiceTest {
     private ProductService productService;
     private ProductValidator productValidator;
     private Profanities profanities;
+    private ApplicationEventPublisher applicationEventPublisher;
 
     @BeforeEach
     void setUp() {
@@ -33,7 +36,7 @@ class ProductServiceTest {
         MenuRepository menuRepository = new InMemoryMenuRepository();
         profanities = new FakePurogmalumClient("바보");
         productValidator = new ProductPriceValidator(menuRepository);
-        productService = new ProductService(productRepository, profanities, productValidator);
+        productService = new ProductService(productRepository, profanities, applicationEventPublisher);
     }
 
     @Nested
@@ -48,7 +51,7 @@ class ProductServiceTest {
             assertAll(
                     () -> assertThat(created.getId()).isNotNull(),
                     () -> assertThat(created.getName()).isEqualTo(new ProductName("후라이드", profanities)),
-                    () -> assertThat(created.getPrice()).isEqualTo(new ProductPrice(16000L))
+                    () -> assertThat(created.getProductPrice()).isEqualTo(new ProductPrice(16000L))
             );
         }
 
@@ -81,7 +84,7 @@ class ProductServiceTest {
 
             Product updated = productService.changePrice(product.getId(), request);
 
-            assertThat(updated.getPrice().equals(new ProductPrice(18000L)));
+            assertThat(updated.getProductPrice().equals(new ProductPrice(18000L)));
         }
 
         @Test

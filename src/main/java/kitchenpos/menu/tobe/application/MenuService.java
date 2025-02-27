@@ -19,15 +19,18 @@ public class MenuService {
     private final MenuRepository menuRepository;
     private final Profanities profanities;
     private final MenuValidator menuValidator;
+    private final ProductClient productClient;
 
     public MenuService(
             final MenuRepository menuRepository,
             final Profanities profanities,
-            final MenuValidator menuValidator
+            final MenuValidator menuValidator,
+            final ProductClient productClient
     ) {
         this.menuRepository = menuRepository;
         this.profanities = profanities;
         this.menuValidator = menuValidator;
+        this.productClient = productClient;
     }
 
     @Transactional
@@ -38,7 +41,8 @@ public class MenuService {
                 request.menuGroupId(),
                 MenuDisplayStatus.from(request.displayed()),
                 MenuProducts.from(request.menuProducts()),
-                menuValidator
+                menuValidator,
+                productClient
         ));
     }
 
@@ -46,7 +50,7 @@ public class MenuService {
     public Menu changePrice(final UUID menuId, final MenuPriceChangeRequest request) {
         final Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(() -> new MenuNotFoundException(MENU_NOT_FOUND));
-        menu.changeMenuPrice(request.price(), menuValidator);
+        menu.changeMenuPrice(request.price(), productClient);
         return menu;
     }
 
@@ -56,7 +60,7 @@ public class MenuService {
                 .orElseThrow(() ->
                         new MenuNotFoundException(MENU_NOT_FOUND)
                 );
-        menu.show(menuValidator);
+        menu.show(productClient);
         return menu;
     }
 

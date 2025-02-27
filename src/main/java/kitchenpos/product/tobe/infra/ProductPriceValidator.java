@@ -1,8 +1,9 @@
-package kitchenpos.product.tobe.domain;
+package kitchenpos.product.tobe.infra;
 
 import kitchenpos.menu.tobe.domain.menu.Menu;
 import kitchenpos.menu.tobe.domain.menu.MenuProduct;
 import kitchenpos.menu.tobe.domain.menu.MenuRepository;
+import kitchenpos.product.tobe.domain.ProductValidator;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 

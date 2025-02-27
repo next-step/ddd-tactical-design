@@ -1,7 +1,6 @@
 package kitchenpos.menu.tobe.domain.menu;
 
 import jakarta.persistence.*;
-import kitchenpos.common.tobe.Profanities;
 
 import java.util.Collections;
 import java.util.List;
@@ -31,9 +30,10 @@ public class Menu {
     protected Menu() {
     }
 
-    public static Menu of(MenuName name, MenuPrice price, UUID menuGroupId, MenuDisplayStatus displayed, MenuProducts menuProducts, MenuValidator menuValidator) {
-        validate(price, menuGroupId, menuProducts, menuValidator);
-
+    public static Menu of(MenuName name, MenuPrice price, UUID menuGroupId, MenuDisplayStatus displayed, MenuProducts menuProducts, MenuValidator menuValidator, ProductClient productClient) {
+        menuValidator.validateMenuGroup(menuGroupId);
+        productClient.validateMenuPrice(menuProducts, price);
+        productClient.validateMenuProductSize(menuProducts);
         return new Menu(
                 name,
                 price,
@@ -41,12 +41,6 @@ public class Menu {
                 displayed,
                 menuProducts
         );
-    }
-
-    private static void validate(MenuPrice price, UUID menuGroupId, MenuProducts menuProducts, MenuValidator menuValidator) {
-        menuValidator.validateMenuProductSize(menuProducts);
-        menuValidator.validateMenuPrice(menuProducts, price);
-        menuValidator.validateMenuGroup(menuGroupId);
     }
 
     private Menu(MenuName name, MenuPrice price, UUID menuGroupId, MenuDisplayStatus displayed, MenuProducts menuProducts) {
@@ -66,17 +60,17 @@ public class Menu {
         return id;
     }
 
-    public void changeMenuPrice(final Long price, final MenuValidator menuValidator) {
+    public void changeMenuPrice(final Long price, final ProductClient productClient) {
 
         MenuPrice newPrice = MenuPrice.from(price);
 
-        menuValidator.validateMenuPrice(menuProducts, newPrice);
+        productClient.validateMenuPrice(menuProducts, newPrice);
 
         this.price = newPrice;
     }
 
-    public void show(MenuValidator menuValidator) {
-        menuValidator.validateMenuPrice(menuProducts, price);
+    public void show(final ProductClient productClient) {
+        productClient.validateMenuPrice(menuProducts, price);
         this.displayed.show();
     }
 
@@ -93,12 +87,9 @@ public class Menu {
     }
 
     public List<MenuProduct> getMenuProducts() {
-        return Collections.unmodifiableList(menuProducts.getProducts());
+        return Collections.unmodifiableList(menuProducts.getMenuProducts());
     }
 
-    public MenuProducts getMenuProduct() {
-        return menuProducts;
-    }
 
     public UUID getMenuGroupId() {
         return menuGroupId;

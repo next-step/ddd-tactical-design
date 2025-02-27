@@ -17,7 +17,7 @@ public class MenuProducts {
             columnDefinition = "binary(16)",
             foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
     )
-    private List<MenuProduct> products;
+    private List<MenuProduct> menuProducts;
 
     public static MenuProducts from(MenuProduct... products) {
         return new MenuProducts(Arrays.asList(products));
@@ -27,11 +27,11 @@ public class MenuProducts {
         return new MenuProducts(products);
     }
 
-    private MenuProducts(List<MenuProduct> products) {
-        if (Objects.isNull(products) || products.isEmpty()) {
+    private MenuProducts(List<MenuProduct> menuProducts) {
+        if (Objects.isNull(menuProducts) || menuProducts.isEmpty()) {
             throw new MenuException(MENU_PRODUCTS_EMPTY);
         }
-        this.products = new ArrayList<>(products);
+        this.menuProducts = new ArrayList<>(menuProducts);
     }
 
     protected MenuProducts() {}
@@ -41,26 +41,26 @@ public class MenuProducts {
     }
 
     public Long calculateTotalPrice() {
-        return products.stream()
+        return menuProducts.stream()
                 .mapToLong(MenuProduct::totalPrice)
                 .sum();
     }
 
-    public List<MenuProduct> getProducts() {
-        return Collections.unmodifiableList(products);
+    public List<MenuProduct> getMenuProducts() {
+        return Collections.unmodifiableList(menuProducts);
     }
 
     public int getProductCount() {
-        return products.size();
+        return menuProducts.size();
     }
 
     public boolean containsProduct(UUID productId) {
-        return products.stream()
+        return menuProducts.stream()
                 .anyMatch(product -> product.getProductId().equals(productId));
     }
 
     public MenuProduct findProduct(UUID productId) {
-        return products.stream()
+        return menuProducts.stream()
                 .filter(product -> product.getProductId().equals(productId))
                 .findFirst()
                 .orElseThrow(() -> new MenuException(MENU_PRODUCT_NOT_FOUND));
@@ -71,7 +71,7 @@ public class MenuProducts {
     }
 
     public MenuProduct getProduct(UUID uuid) {
-        return products.stream()
+        return menuProducts.stream()
                 .filter(it -> it.getProductId().equals(uuid))
                 .findFirst()
                 .orElseThrow();

@@ -1,7 +1,6 @@
 package kitchenpos.menu.tobe.fixture;
 
 import kitchenpos.common.tobe.Profanities;
-import kitchenpos.menu.tobe.application.dto.request.MenuCreateRequest;
 import kitchenpos.menu.tobe.domain.menu.*;
 
 import java.util.Arrays;
@@ -17,23 +16,24 @@ public class MenuFixture {
     private static final UUID DEFAULT_MENU_GROUP_ID = UUID.randomUUID();
     private static final boolean DEFAULT_DISPLAY_STATUS = true;
 
-    public static Menu create(Profanities profanities, MenuValidator menuValidator) {
-        return create(DEFAULT_NAME, DEFAULT_PRICE, DEFAULT_MENU_GROUP_ID, createDefaultMenuProducts(), DEFAULT_DISPLAY_STATUS, profanities, menuValidator);
+    public static Menu create(Profanities profanities, MenuValidator menuValidator, ProductClient productClient) {
+        return create(DEFAULT_NAME, DEFAULT_PRICE, DEFAULT_MENU_GROUP_ID, createDefaultMenuProducts(), DEFAULT_DISPLAY_STATUS, profanities, menuValidator, productClient);
     }
 
-    public static Menu create(MenuProducts menuProducts, Profanities profanities, MenuValidator menuValidator) {
-        return create(DEFAULT_NAME, DEFAULT_PRICE, DEFAULT_MENU_GROUP_ID, menuProducts, DEFAULT_DISPLAY_STATUS, profanities, menuValidator);
-    }
-    public static Menu create(UUID menuGroupId, List<MenuProduct> menuProducts, Profanities profanities, MenuValidator menuValidator) {
-        return create(DEFAULT_NAME, DEFAULT_PRICE, menuGroupId, menuProducts, DEFAULT_DISPLAY_STATUS, profanities, menuValidator);
+    public static Menu create(MenuProducts menuProducts, Profanities profanities, MenuValidator menuValidator, ProductClient productClient) {
+        return create(DEFAULT_NAME, DEFAULT_PRICE, DEFAULT_MENU_GROUP_ID, menuProducts, DEFAULT_DISPLAY_STATUS, profanities, menuValidator, productClient);
     }
 
-    public static Menu create(String name, Long price, UUID menuGroupId, MenuProducts menuProducts, boolean displayed, Profanities profanities, MenuValidator menuValidator) {
-        return Menu.of(MenuName.from(name, profanities), MenuPrice.from(price), menuGroupId, MenuDisplayStatus.from(displayed), menuProducts, menuValidator);
+    public static Menu create(UUID menuGroupId, List<MenuProduct> menuProducts, Profanities profanities, MenuValidator menuValidator, ProductClient productClient) {
+        return create(DEFAULT_NAME, DEFAULT_PRICE, menuGroupId, menuProducts, DEFAULT_DISPLAY_STATUS, profanities, menuValidator, productClient);
     }
 
-    public static Menu create(String name, Long price, UUID menuGroupId, List<MenuProduct> menuProducts, boolean displayed, Profanities profanities, MenuValidator menuValidator) {
-        return Menu.of(MenuName.from(name, profanities), MenuPrice.from(price), menuGroupId, MenuDisplayStatus.from(displayed), MenuProducts.from(menuProducts), menuValidator);
+    public static Menu create(String name, Long price, UUID menuGroupId, MenuProducts menuProducts, boolean displayed, Profanities profanities, MenuValidator menuValidator, ProductClient productClient) {
+        return Menu.of(MenuName.from(name, profanities), MenuPrice.from(price), menuGroupId, MenuDisplayStatus.from(displayed), menuProducts, menuValidator, productClient);
+    }
+
+    public static Menu create(String name, Long price, UUID menuGroupId, List<MenuProduct> menuProducts, boolean displayed, Profanities profanities, MenuValidator menuValidator, ProductClient productClient) {
+        return Menu.of(MenuName.from(name, profanities), MenuPrice.from(price), menuGroupId, MenuDisplayStatus.from(displayed), MenuProducts.from(menuProducts), menuValidator, productClient);
     }
 
     private static List<MenuProduct> createDefaultMenuProducts() {

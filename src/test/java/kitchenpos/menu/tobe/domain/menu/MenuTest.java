@@ -5,6 +5,7 @@ import kitchenpos.common.tobe.Profanities;
 import kitchenpos.menu.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.menu.tobe.domain.menugroup.MenuGroupRepository;
 import kitchenpos.menu.tobe.fake.InMemoryMenuGroupRepository;
+import kitchenpos.menu.tobe.infra.ProductClientImpl;
 import kitchenpos.product.tobe.domain.Product;
 import kitchenpos.product.tobe.domain.ProductRepository;
 import kitchenpos.product.tobe.fake.InMemoryProductRepository;
@@ -22,9 +23,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class MenuTest {
 
-    private ProductRepository productRepository;
-    private MenuGroupRepository menuGroupRepository;
     private MenuValidator menuValidator;
+    private ProductClient productClient;
     private final Profanities profanities = text -> text.equals("바보"); // 테스트용 비속어 설정
 
     private final UUID productId = UUID.randomUUID();
@@ -33,9 +33,10 @@ class MenuTest {
 
     @BeforeEach
     void setUp() {
-        productRepository = new InMemoryProductRepository();
-        menuGroupRepository = new InMemoryMenuGroupRepository();
-        menuValidator = new MenuPriceValidator(productRepository, menuGroupRepository);
+        ProductRepository productRepository = new InMemoryProductRepository();
+        MenuGroupRepository menuGroupRepository = new InMemoryMenuGroupRepository();
+        menuValidator = new MenuPriceValidator(menuGroupRepository);
+        productClient = new ProductClientImpl(productRepository);
 
         menuGroupId = UUID.randomUUID();
         MenuGroup menuGroup = MenuGroup.of("음료");
@@ -64,7 +65,7 @@ class MenuTest {
         boolean displayed = true;
 
         // when
-        Menu menu = Menu.of(MenuName.from(menuName, profanities), MenuPrice.from(menuPrice), menuGroupId, MenuDisplayStatus.from(displayed), MenuProducts.from(menuProducts), menuValidator);
+        Menu menu = Menu.of(MenuName.from(menuName, profanities), MenuPrice.from(menuPrice), menuGroupId, MenuDisplayStatus.from(displayed), MenuProducts.from(menuProducts), menuValidator, productClient);
 
         // then
         assertThat(menu).isNotNull();
@@ -88,7 +89,7 @@ class MenuTest {
         boolean displayed = true;
 
         // when & then
-        assertThatThrownBy(() -> Menu.of(MenuName.from(menuName, profanities), MenuPrice.from(menuPrice), menuGroupId, MenuDisplayStatus.from(displayed), MenuProducts.from(menuProducts), menuValidator))
+        assertThatThrownBy(() -> Menu.of(MenuName.from(menuName, profanities), MenuPrice.from(menuPrice), menuGroupId, MenuDisplayStatus.from(displayed), MenuProducts.from(menuProducts), menuValidator, productClient))
                 .isInstanceOf(MenuException.class);
     }
 
@@ -105,7 +106,7 @@ class MenuTest {
         boolean displayed = true;
 
         // when & then
-        assertThatThrownBy(() ->  Menu.of(MenuName.from(menuName, profanities), MenuPrice.from(menuPrice), menuGroupId, MenuDisplayStatus.from(displayed), MenuProducts.from(menuProducts), menuValidator))
+        assertThatThrownBy(() -> Menu.of(MenuName.from(menuName, profanities), MenuPrice.from(menuPrice), menuGroupId, MenuDisplayStatus.from(displayed), MenuProducts.from(menuProducts), menuValidator, productClient))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("비속어가 포함되어 있습니다.");
     }
@@ -121,11 +122,11 @@ class MenuTest {
                 new MenuProduct(1L, 1, 5000L, productId2));
         boolean displayed = true;
 
-        Menu menu = Menu.of(MenuName.from(menuName, profanities), MenuPrice.from(initialPrice), menuGroupId, MenuDisplayStatus.from(displayed), MenuProducts.from(menuProducts), menuValidator);
+        Menu menu = Menu.of(MenuName.from(menuName, profanities), MenuPrice.from(initialPrice), menuGroupId, MenuDisplayStatus.from(displayed), MenuProducts.from(menuProducts), menuValidator, productClient);
 
         // when
         Long newPrice = 8000L;
-        menu.changeMenuPrice(newPrice, menuValidator);
+        menu.changeMenuPrice(newPrice, productClient);
 
         // then
         assertThat(menu.getMenuPrice()).isEqualTo(newPrice);
@@ -143,12 +144,12 @@ class MenuTest {
 
         boolean displayed = true;
 
-        Menu menu = Menu.of(MenuName.from(menuName, profanities), MenuPrice.from(initialPrice), menuGroupId, MenuDisplayStatus.from(displayed), MenuProducts.from(menuProducts), menuValidator);
+        Menu menu = Menu.of(MenuName.from(menuName, profanities), MenuPrice.from(initialPrice), menuGroupId, MenuDisplayStatus.from(displayed), MenuProducts.from(menuProducts), menuValidator, productClient);
 
         // when & then
         Long invalidPrice = 16000L;
         System.out.println("here");
-        assertThatThrownBy(() -> menu.changeMenuPrice(invalidPrice, menuValidator))
+        assertThatThrownBy(() -> menu.changeMenuPrice(invalidPrice, productClient))
                 .isInstanceOf(MenuException.class);
     }
 
@@ -162,10 +163,10 @@ class MenuTest {
                 new MenuProduct(1L, 1, 5000L, productId),
                 new MenuProduct(2L, 1, 8000L, productId2));
         boolean displayed = false;
-        Menu menu = Menu.of(MenuName.from(menuName, profanities), MenuPrice.from(menuPrice), menuGroupId, MenuDisplayStatus.from(displayed), MenuProducts.from(menuProducts), menuValidator);
+        Menu menu = Menu.of(MenuName.from(menuName, profanities), MenuPrice.from(menuPrice), menuGroupId, MenuDisplayStatus.from(displayed), MenuProducts.from(menuProducts), menuValidator, productClient);
 
         // when
-        menu.show(menuValidator);
+        menu.show(productClient);
 
         // then
         assertThat(menu.isDisplayed()).isTrue();
@@ -181,7 +182,7 @@ class MenuTest {
                 new MenuProduct(1L, 1, 5000L, productId),
                 new MenuProduct(2L, 1, 8000L, productId2));
         boolean displayed = true;
-        Menu menu = Menu.of(MenuName.from(menuName, profanities), MenuPrice.from(menuPrice), menuGroupId, MenuDisplayStatus.from(displayed), MenuProducts.from(menuProducts), menuValidator);
+        Menu menu = Menu.of(MenuName.from(menuName, profanities), MenuPrice.from(menuPrice), menuGroupId, MenuDisplayStatus.from(displayed), MenuProducts.from(menuProducts), menuValidator, productClient);
 
         // when
         menu.hide();

@@ -35,12 +35,14 @@ public class Product {
     }
 
 
-    public ProductPrice getPrice() {
+    public ProductPrice getProductPrice() {
         return price;
     }
+    public Long getPrice() {
+        return price.getPrice();
+    }
 
-    public void updatePrice(final ProductPrice productPrice, final  ProductValidator productValidator) {
+    public void updatePrice(final ProductPrice productPrice) {
         this.price = productPrice;
-        productValidator.validate(this.id, this.price.getPrice());
     }
 }

@@ -12,6 +12,7 @@ import kitchenpos.menu.tobe.fake.InMemoryMenuGroupRepository;
 import kitchenpos.menu.tobe.fake.InMemoryMenuRepository;
 import kitchenpos.menu.tobe.fake.InMemoryProductRepository;
 import kitchenpos.menu.tobe.fixture.MenuFixture;
+import kitchenpos.menu.tobe.infra.ProductClientImpl;
 import kitchenpos.product.tobe.domain.Product;
 import kitchenpos.product.tobe.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,12 +35,11 @@ class MenuServiceTest {
     private ProductRepository productRepository;
     private Profanities profanities;
     private MenuValidator menuValidator;
+    private ProductClient productClient;
 
     private UUID menuGroupId;
     private UUID productId1;
     private UUID productId2;
-    private Product product1;
-    private Product product2;
 
     @BeforeEach
     void setUp() {
@@ -47,7 +47,9 @@ class MenuServiceTest {
         menuGroupRepository = new InMemoryMenuGroupRepository();
         productRepository = new InMemoryProductRepository();
         profanities = new FakePurogmalumClient("바보", "멍청이");
-        menuValidator = new MenuPriceValidator(productRepository, menuGroupRepository);
+        menuValidator = new MenuPriceValidator(menuGroupRepository);
+        productClient = new ProductClientImpl(productRepository);
+
 
         // 메뉴 그룹 생성
         menuGroupId = UUID.randomUUID();
@@ -58,15 +60,15 @@ class MenuServiceTest {
         // 상품 생성
         productId1 = UUID.randomUUID();
         productId2 = UUID.randomUUID();
-        product1 = new Product("상품1", 5000L, profanities);
-        product2 = new Product("상품2", 8000L, profanities);
+        Product product1 = new Product("상품1", 5000L, profanities);
+        Product product2 = new Product("상품2", 8000L, profanities);
         ReflectionTestUtils.setField(product1, "id", productId1);
         ReflectionTestUtils.setField(product2, "id", productId2);
         productRepository.save(product1);
         productRepository.save(product2);
 
         // 서비스 생성
-        menuService = new MenuService(menuRepository, profanities, menuValidator);
+        menuService = new MenuService(menuRepository, profanities, menuValidator, productClient);
     }
 
     @Test
@@ -128,7 +130,7 @@ class MenuServiceTest {
         List<MenuProduct> menuProducts = Arrays.asList(menuProduct1, menuProduct2);
 
 
-        Menu menu = MenuFixture.create(menuGroupId, menuProducts, profanities, menuValidator);
+        Menu menu = MenuFixture.create(menuGroupId, menuProducts, profanities, menuValidator, productClient);
         Menu saved = menuRepository.save(menu);
 
         MenuPriceChangeRequest request = new MenuPriceChangeRequest(12000L);
@@ -149,7 +151,7 @@ class MenuServiceTest {
         List<MenuProduct> menuProducts = Arrays.asList(menuProduct1, menuProduct2);
 
 
-        Menu menu = MenuFixture.create(menuGroupId, menuProducts, profanities, menuValidator);
+        Menu menu = MenuFixture.create(menuGroupId, menuProducts, profanities, menuValidator, productClient);
         Menu saved = menuRepository.save(menu);
 
         // when
@@ -168,7 +170,7 @@ class MenuServiceTest {
         List<MenuProduct> menuProducts = Arrays.asList(menuProduct1, menuProduct2);
 
 
-        Menu menu = MenuFixture.create(menuGroupId, menuProducts, profanities, menuValidator);
+        Menu menu = MenuFixture.create(menuGroupId, menuProducts, profanities, menuValidator, productClient);
         Menu saved = menuRepository.save(menu);
 
         // when
@@ -187,8 +189,8 @@ class MenuServiceTest {
         List<MenuProduct> menuProducts = Arrays.asList(menuProduct1, menuProduct2);
 
 
-        Menu menu1 = MenuFixture.create(menuGroupId, menuProducts, profanities, menuValidator);
-        Menu menu2 = MenuFixture.create(menuGroupId, menuProducts, profanities, menuValidator);
+        Menu menu1 = MenuFixture.create(menuGroupId, menuProducts, profanities, menuValidator, productClient);
+        Menu menu2 = MenuFixture.create(menuGroupId, menuProducts, profanities, menuValidator, productClient);
 
         menuRepository.save(menu1);
         menuRepository.save(menu2);

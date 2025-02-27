@@ -31,7 +31,7 @@ class ProductTest {
             assertAll(
                     () -> assertThat(product.getId()).isNotNull(),
                     () -> assertThat(product.getName()).isEqualTo(new ProductName("후라이드", profanities)),
-                    () -> assertThat(product.getPrice()).isEqualTo(new ProductPrice(16000L))
+                    () -> assertThat(product.getProductPrice()).isEqualTo(new ProductPrice(16000L))
             );
         }
 
@@ -101,7 +101,7 @@ class ProductTest {
             ReflectionTestUtils.setField(product, "price", newPrice);
 
             // then
-            assertThat(product.getPrice()).isEqualTo(newPrice);
+            assertThat(product.getProductPrice()).isEqualTo(newPrice);
         }
     }
 }

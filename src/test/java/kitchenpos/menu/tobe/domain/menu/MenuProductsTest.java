@@ -29,7 +29,7 @@ class MenuProductsTest {
         MenuProducts menuProducts = MenuProducts.from(menuProduct1, menuProduct2);
 
         // then
-        assertThat(menuProducts.getProducts()).hasSize(2);
+        assertThat(menuProducts.getMenuProducts()).hasSize(2);
         assertThat(menuProducts.getProductCount()).isEqualTo(2);
     }
 
@@ -44,7 +44,7 @@ class MenuProductsTest {
         MenuProducts menuProducts = MenuProducts.from(Arrays.asList(menuProduct1, menuProduct2));
 
         // then
-        assertThat(menuProducts.getProducts()).hasSize(2);
+        assertThat(menuProducts.getMenuProducts()).hasSize(2);
         assertThat(menuProducts.getProductCount()).isEqualTo(2);
     }
 
