@@ -76,7 +76,10 @@ public class EatInOrderService {
     }
 
     @Transactional(readOnly = true)
-    public List<Order> findAll() {
-        return orderRepository.findAll();
+    public List<EatInOrder> findAll() {
+        return orderRepository.findAll()
+                .stream()
+                .map(Order::toDomain)
+                .toList();
     }
 }

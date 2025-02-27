@@ -1,7 +1,6 @@
 package kitchenpos.eatinorder.application.service;
 
 import kitchenpos.eatinorder.adapter.out.persistance.JpaOrderTableRepository;
-import kitchenpos.eatinorder.adapter.out.persistance.entity.Order;
 import kitchenpos.eatinorder.adapter.out.persistance.entity.OrderTableEntity;
 import kitchenpos.eatinorder.application.service.model.CreateEatInOrderRequest;
 import kitchenpos.eatinorder.application.service.model.OrderLineItemRequest;
@@ -285,7 +284,7 @@ public class EatInOrderServiceTest {
         @Test
         void find_all_orders() {
             // when
-            List<Order> orders = orderService.findAll();
+            List<EatInOrder> orders = orderService.findAll();
 
             // then
             assertThat(orders).hasSize(TOTAL_ORDER_COUNT);

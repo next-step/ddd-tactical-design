@@ -1,7 +1,6 @@
 package kitchenpos.eatinorder.adapter.in.rest;
 
 import kitchenpos.eatinorder.application.service.EatInOrderService;
-import kitchenpos.eatinorder.adapter.out.persistance.entity.Order;
 import kitchenpos.eatinorder.application.service.model.CreateEatInOrderRequest;
 import kitchenpos.eatinorder.domain.model.todo.EatInOrder;
 import org.springframework.http.ResponseEntity;
@@ -43,7 +42,7 @@ public class EatInOrderRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Order>> findAll() {
+    public ResponseEntity<List<EatInOrder>> findAll() {
         return ResponseEntity.ok(eatInOrderService.findAll());
     }
 }
