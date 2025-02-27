@@ -1,8 +1,8 @@
 package kitchenpos.eatinorder.application.service;
 
+import kitchenpos.eatinorder.application.port.out.LoadEatInOrderPort;
 import kitchenpos.eatinorder.application.port.out.MenuEatInOrderLineItemMapper;
-import kitchenpos.eatinorder.application.port.out.OrderRepository;
-import kitchenpos.eatinorder.adapter.out.persistance.entity.Order;
+import kitchenpos.eatinorder.application.port.out.SaveEatInOrderPort;
 import kitchenpos.eatinorder.application.service.model.CreateEatInOrderRequest;
 import kitchenpos.eatinorder.domain.model.todo.EatInOrder;
 import kitchenpos.eatinorder.domain.model.todo.EatInOrderLineItem;
@@ -17,16 +17,19 @@ import java.util.UUID;
 
 @Service
 public class EatInOrderService {
-    private final OrderRepository orderRepository;
+    private final LoadEatInOrderPort loadEatInOrderPort;
+    private final SaveEatInOrderPort saveEatInOrderPort;
     private final MenuEatInOrderLineItemMapper menuEatInOrderLineItemMapper;
     private final OrderTableService orderTableService;
 
     public EatInOrderService(
-            final OrderRepository orderRepository,
+            final LoadEatInOrderPort loadEatInOrderPort,
+            final SaveEatInOrderPort saveEatInOrderPort,
             final MenuEatInOrderLineItemMapper menuEatInOrderLineItemMapper,
             final OrderTableService orderTableService
     ) {
-        this.orderRepository = orderRepository;
+        this.loadEatInOrderPort = loadEatInOrderPort;
+        this.saveEatInOrderPort = saveEatInOrderPort;
         this.menuEatInOrderLineItemMapper = menuEatInOrderLineItemMapper;
         this.orderTableService = orderTableService;
     }
@@ -40,46 +43,40 @@ public class EatInOrderService {
 
         List<EatInOrderLineItem> eatInOrderLineItems = menuEatInOrderLineItemMapper.toEatInOrderLines(request.orderLineItems());
         EatInOrder eatInOrder = EatInOrder.create(UUID.randomUUID(), LocalDateTime.now(), eatInOrderLineItems, orderTable.getId());
-        Order save = orderRepository.save(Order.of(eatInOrder));
-        return save.toDomain();
+        return saveEatInOrderPort.save(eatInOrder);
     }
 
     @Transactional
     public EatInOrder accept(final UUID orderId) {
-        final EatInOrder eatInOrder = orderRepository.findById(orderId)
-                .map(Order::toDomain)
-                .orElseThrow(NoSuchElementException::new);
+        final EatInOrder eatInOrder = findById(orderId);
         eatInOrder.accept();
-        Order save = orderRepository.save(Order.of(eatInOrder));
-        return save.toDomain();
+        return saveEatInOrderPort.save(eatInOrder);
     }
 
     @Transactional
     public EatInOrder serve(final UUID orderId) {
-        final EatInOrder eatInOrder = orderRepository.findById(orderId)
-                .map(Order::toDomain)
-                .orElseThrow(NoSuchElementException::new);
+        final EatInOrder eatInOrder = findById(orderId);
         eatInOrder.serve();
-        Order save = orderRepository.save(Order.of(eatInOrder));
-        return save.toDomain();
+        return saveEatInOrderPort.save(eatInOrder);
     }
 
     @Transactional
     public EatInOrder complete(final UUID orderId) {
-        final EatInOrder eatInOrder = orderRepository.findById(orderId)
-                .map(Order::toDomain)
-                .orElseThrow(NoSuchElementException::new);
+        final EatInOrder eatInOrder = findById(orderId);
         eatInOrder.complete();
-        Order save = orderRepository.save(Order.of(eatInOrder));
-        orderTableService.clear(eatInOrder.getOrderTableId());
-        return save.toDomain();
+        EatInOrder savedEatInOrder = saveEatInOrderPort.save(eatInOrder);
+        orderTableService.clear(savedEatInOrder.getOrderTableId());
+        return savedEatInOrder;
     }
 
     @Transactional(readOnly = true)
     public List<EatInOrder> findAll() {
-        return orderRepository.findAll()
-                .stream()
-                .map(Order::toDomain)
-                .toList();
+        return loadEatInOrderPort.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public EatInOrder findById(UUID orderId) {
+        return loadEatInOrderPort.findById(orderId)
+                .orElseThrow(NoSuchElementException::new);
     }
 }

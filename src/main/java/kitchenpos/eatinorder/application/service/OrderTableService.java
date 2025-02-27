@@ -1,7 +1,7 @@
 package kitchenpos.eatinorder.application.service;
 
+import kitchenpos.eatinorder.application.port.out.LoadEatInOrderPort;
 import kitchenpos.eatinorder.application.port.out.LoadOrderTablePort;
-import kitchenpos.eatinorder.application.port.out.OrderRepository;
 import kitchenpos.eatinorder.application.port.out.SaveOrderTablePort;
 import kitchenpos.eatinorder.application.service.model.ChangeNumberOfGuestsRequest;
 import kitchenpos.eatinorder.application.service.model.CreateOrderTableRequest;
@@ -19,18 +19,18 @@ import java.util.UUID;
 public class OrderTableService {
     private final LoadOrderTablePort orderTableRepository;
     private final SaveOrderTablePort saveOrderTablePort;
-    private final OrderRepository orderRepository;
+    private final LoadEatInOrderPort loadEatInOrderPort;
     private final Profanities profanities;
 
     public OrderTableService(
             final LoadOrderTablePort orderTableRepository,
             final SaveOrderTablePort saveOrderTablePort,
-            final OrderRepository orderRepository,
+            final LoadEatInOrderPort loadEatInOrderPort,
             final Profanities profanities
     ) {
         this.orderTableRepository = orderTableRepository;
         this.saveOrderTablePort = saveOrderTablePort;
-        this.orderRepository = orderRepository;
+        this.loadEatInOrderPort = loadEatInOrderPort;
         this.profanities = profanities;
     }
 
@@ -50,7 +50,7 @@ public class OrderTableService {
     @Transactional
     public OrderTable clear(final UUID orderTableId) {
         final OrderTable orderTable = findById(orderTableId);
-        if (orderRepository.existsByOrderTableAndStatusNot(orderTable.getId(), EatInOrderStatus.COMPLETED)) {
+        if (loadEatInOrderPort.existsByOrderTableAndStatusNot(orderTable.getId(), EatInOrderStatus.COMPLETED)) {
             throw new IllegalStateException();
         }
         orderTable.clear();
