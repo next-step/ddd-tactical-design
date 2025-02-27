@@ -10,8 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class EatInOrderTest {
@@ -26,7 +25,7 @@ class EatInOrderTest {
         final List<EatInOrderLineItem> eatInOrderLineItems = List.of(eatInOrderLineItem);
 
         // when
-        final EatInOrder eatInOrder = EatInOrder.create(id, orderDateTime, eatInOrderLineItems, orderTableId);
+        final EatInOrder eatInOrder = EatInOrder.create(id, orderDateTime, eatInOrderLineItems, orderTableId, orderTableId1 -> {});
 
         // then
         assertAll(
@@ -36,6 +35,25 @@ class EatInOrderTest {
                 () -> assertThat(eatInOrder.getStatus()).isEqualTo(EatInOrderStatus.WAITING),
                 () -> assertThat(eatInOrder.getLineItems()).containsExactly(eatInOrderLineItem)
         );
+    }
+
+    @DisplayName("EeaInOrder를 생성할 때 주문 테이블이 사용 중이면 예외를 던진다.")
+    @Test
+    void createWithOccupiedOrderTable() {
+        // given
+        final UUID id = UUID.randomUUID();
+        final LocalDateTime orderDateTime = LocalDateTime.now();
+        final UUID orderTableId = UUID.randomUUID();
+        final EatInOrderLineItem eatInOrderLineItem = EatInOrderLineItem.of(1L, UUID.randomUUID(), 1L, 1L, true);
+        final List<EatInOrderLineItem> eatInOrderLineItems = List.of(eatInOrderLineItem);
+
+        // when
+        final Throwable thrown = catchThrowable(() -> EatInOrder.create(id, orderDateTime, eatInOrderLineItems, orderTableId, orderTableId1 -> {
+            throw new IllegalStateException();
+        }));
+
+        // then
+        assertThat(thrown).isInstanceOf(IllegalStateException.class);
     }
 
     @DisplayName("EeaInOrder를 수락한다.")

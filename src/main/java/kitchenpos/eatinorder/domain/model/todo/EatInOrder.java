@@ -1,5 +1,7 @@
 package kitchenpos.eatinorder.domain.model.todo;
 
+import kitchenpos.eatinorder.domain.policy.CreateEatInOrderPolicy;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -30,8 +32,10 @@ public class EatInOrder {
             final UUID id,
             final LocalDateTime orderDateTime,
             final List<EatInOrderLineItem> eatInOrderLineItems,
-            final UUID orderTableId
+            final UUID orderTableId,
+            final CreateEatInOrderPolicy createEatInOrderPolicy
     ) {
+        createEatInOrderPolicy.validateOrderTableAvailability(orderTableId);
         return new EatInOrder(id, EatInOrderStatus.WAITING, orderDateTime, EatInOrderLineItems.of(eatInOrderLineItems), OrderTableId.of(orderTableId));
     }
 

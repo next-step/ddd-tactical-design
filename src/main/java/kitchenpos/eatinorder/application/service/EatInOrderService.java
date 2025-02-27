@@ -4,9 +4,9 @@ import kitchenpos.eatinorder.application.port.out.LoadEatInOrderPort;
 import kitchenpos.eatinorder.application.port.out.MenuEatInOrderLineItemMapper;
 import kitchenpos.eatinorder.application.port.out.SaveEatInOrderPort;
 import kitchenpos.eatinorder.application.service.model.CreateEatInOrderRequest;
+import kitchenpos.eatinorder.domain.policy.CreateEatInOrderPolicy;
 import kitchenpos.eatinorder.domain.model.todo.EatInOrder;
 import kitchenpos.eatinorder.domain.model.todo.EatInOrderLineItem;
-import kitchenpos.eatinorder.domain.model.todo.OrderTable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,28 +21,26 @@ public class EatInOrderService {
     private final SaveEatInOrderPort saveEatInOrderPort;
     private final MenuEatInOrderLineItemMapper menuEatInOrderLineItemMapper;
     private final OrderTableService orderTableService;
+    private final CreateEatInOrderPolicy createEatInOrderPolicy;
 
     public EatInOrderService(
             final LoadEatInOrderPort loadEatInOrderPort,
             final SaveEatInOrderPort saveEatInOrderPort,
             final MenuEatInOrderLineItemMapper menuEatInOrderLineItemMapper,
-            final OrderTableService orderTableService
+            final OrderTableService orderTableService,
+            final CreateEatInOrderPolicy createEatInOrderPolicy
     ) {
         this.loadEatInOrderPort = loadEatInOrderPort;
         this.saveEatInOrderPort = saveEatInOrderPort;
         this.menuEatInOrderLineItemMapper = menuEatInOrderLineItemMapper;
         this.orderTableService = orderTableService;
+        this.createEatInOrderPolicy = createEatInOrderPolicy;
     }
 
     @Transactional
     public EatInOrder create(final CreateEatInOrderRequest request) {
-        OrderTable orderTable = orderTableService.findById(request.orderTableId());
-        if (!orderTable.isOccupied()) {
-            throw new IllegalStateException();
-        }
-
         List<EatInOrderLineItem> eatInOrderLineItems = menuEatInOrderLineItemMapper.toEatInOrderLines(request.orderLineItems());
-        EatInOrder eatInOrder = EatInOrder.create(UUID.randomUUID(), LocalDateTime.now(), eatInOrderLineItems, orderTable.getId());
+        EatInOrder eatInOrder = EatInOrder.create(UUID.randomUUID(), LocalDateTime.now(), eatInOrderLineItems, request.orderTableId(), createEatInOrderPolicy);
         return saveEatInOrderPort.save(eatInOrder);
     }
 

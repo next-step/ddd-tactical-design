@@ -72,7 +72,7 @@ public class OrderTableService {
     @Transactional(readOnly = true)
     public OrderTable findById(UUID orderTableId) {
         if (orderTableId == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("주문 테이블 ID를 입력하세요");
         }
         return orderTableRepository.findById(orderTableId)
                 .orElseThrow(NoSuchElementException::new);

@@ -303,6 +303,7 @@ graph LR
   * `Order Line Item`에 포함된 `Menu`는 반드시 `Display Menu`여야 한다.
   * `Order Line Item`의 가격은 `Menu`에 설정된 가격과 동일해야 한다.
   * `Order Table`을 반드시 지정해야 한다.
+  * `Order Table`은 비어 있는 상태여야 한다.
 
 행위
 * `Order Table` 등록은 `주문 테이블 등록 정책`을 만족시켜야 한다
