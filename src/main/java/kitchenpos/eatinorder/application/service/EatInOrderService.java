@@ -5,10 +5,8 @@ import kitchenpos.eatinorder.application.port.out.OrderRepository;
 import kitchenpos.eatinorder.application.port.out.OrderTableRepository;
 import kitchenpos.eatinorder.domain.model.Order;
 import kitchenpos.eatinorder.domain.model.OrderTableEntity;
-import kitchenpos.eatinorder.domain.model.OrderType;
 import kitchenpos.eatinorder.domain.model.todo.EatInOrder;
 import kitchenpos.eatinorder.domain.model.todo.EatInOrderLineItem;
-import kitchenpos.eatinorder.domain.model.todo.EatInOrderStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,15 +20,17 @@ public class EatInOrderService {
     private final OrderRepository orderRepository;
     private final OrderTableRepository orderTableRepository;
     private final MenuEatInOrderLineItemMapper menuEatInOrderLineItemMapper;
+    private final OrderTableService orderTableService;
 
     public EatInOrderService(
             final OrderRepository orderRepository,
             final OrderTableRepository orderTableRepository,
-            final MenuEatInOrderLineItemMapper menuEatInOrderLineItemMapper
+            final MenuEatInOrderLineItemMapper menuEatInOrderLineItemMapper, OrderTableService orderTableService
     ) {
         this.orderRepository = orderRepository;
         this.orderTableRepository = orderTableRepository;
         this.menuEatInOrderLineItemMapper = menuEatInOrderLineItemMapper;
+        this.orderTableService = orderTableService;
     }
 
     @Transactional
@@ -64,26 +64,15 @@ public class EatInOrderService {
         return orderRepository.save(Order.of(eatInOrder));
     }
 
-
     @Transactional
     public Order complete(final UUID orderId) {
-        final Order order = orderRepository.findById(orderId)
-            .orElseThrow(NoSuchElementException::new);
-        final OrderType type = order.getType();
-        final EatInOrderStatus status = order.getStatus();
-
-        if (status != EatInOrderStatus.SERVED) {
-            throw new IllegalStateException();
-        }
-        order.setStatus(EatInOrderStatus.COMPLETED);
-        if (type == OrderType.EAT_IN) {
-            final OrderTableEntity orderTableEntity = orderTableRepository.findById(order.getOrderTableId()).orElseThrow();
-            if (!orderRepository.existsByOrderTableAndStatusNot(orderTableEntity.getId(), EatInOrderStatus.COMPLETED)) {
-                orderTableEntity.setNumberOfGuests(0);
-                orderTableEntity.setOccupied(false);
-            }
-        }
-        return order;
+        final EatInOrder eatInOrder = orderRepository.findById(orderId)
+                .map(Order::toDomain)
+                .orElseThrow(NoSuchElementException::new);
+        eatInOrder.complete();
+        Order savedOrder = orderRepository.save(Order.of(eatInOrder));
+        orderTableService.clear(eatInOrder.getOrderTableId());
+        return savedOrder;
     }
 
     @Transactional(readOnly = true)

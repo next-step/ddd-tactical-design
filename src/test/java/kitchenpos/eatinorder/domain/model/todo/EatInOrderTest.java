@@ -94,6 +94,34 @@ class EatInOrderTest {
                 .isInstanceOf(IllegalStateException.class);
     }
 
+    @DisplayName("EeaInOrder를 완료한다.")
+    @Test
+    void complete() {
+        // given
+        final EatInOrder eatInOrder = createEatInOrder(EatInOrderStatus.SERVED);
+
+        // when
+        eatInOrder.complete();
+
+        // then
+        assertThat(eatInOrder.getStatus()).isEqualTo(EatInOrderStatus.COMPLETED);
+    }
+
+    @DisplayName("주문 상태가 '제공' 상태인 경우에만 완료할 수 있다.")
+    @ValueSource(strings = {"WAITING", "ACCEPTED", "COMPLETED"})
+    @ParameterizedTest
+    void completeWhenServed(EatInOrderStatus status) {
+        // given
+        final EatInOrder eatInOrder = createEatInOrder(status);
+
+        // when
+        ThrowableAssert.ThrowingCallable complete = eatInOrder::complete;
+
+        // then
+        assertThatThrownBy(complete)
+                .isInstanceOf(IllegalStateException.class);
+    }
+
     private static EatInOrder createEatInOrder() {
         return createEatInOrder(EatInOrderStatus.WAITING);
     }

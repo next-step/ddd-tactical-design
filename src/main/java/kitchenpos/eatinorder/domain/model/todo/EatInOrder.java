@@ -59,6 +59,13 @@ public class EatInOrder {
         this.status = EatInOrderStatus.SERVED;
     }
 
+    public void complete() {
+        if (this.status != EatInOrderStatus.SERVED) {
+            throw new IllegalStateException();
+        }
+        this.status = EatInOrderStatus.COMPLETED;
+    }
+
     public UUID getId() {
         return id;
     }
