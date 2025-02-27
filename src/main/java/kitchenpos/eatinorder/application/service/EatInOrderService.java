@@ -6,6 +6,7 @@ import kitchenpos.eatinorder.domain.model.Order;
 import kitchenpos.eatinorder.domain.model.OrderTableEntity;
 import kitchenpos.eatinorder.domain.model.todo.EatInOrder;
 import kitchenpos.eatinorder.domain.model.todo.EatInOrderLineItem;
+import kitchenpos.eatinorder.domain.model.todo.OrderTable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,7 +33,7 @@ public class EatInOrderService {
 
     @Transactional
     public Order create(final Order request) {
-        OrderTableEntity orderTable = orderTableService.findById(request.getOrderTableId());
+        OrderTable orderTable = orderTableService.findById(request.getOrderTableId());
         if (!orderTable.isOccupied()) {
             throw new IllegalStateException();
         }
