@@ -2,6 +2,7 @@ package kitchenpos.eatinorder.application.service;
 
 import kitchenpos.eatinorder.application.port.out.OrderRepository;
 import kitchenpos.eatinorder.application.port.out.OrderTableRepository;
+import kitchenpos.eatinorder.application.service.model.ChangeNumberOfGuestsRequest;
 import kitchenpos.eatinorder.application.service.model.CreateOrderTableRequest;
 import kitchenpos.eatinorder.domain.model.OrderStatus;
 import kitchenpos.eatinorder.domain.model.OrderTableEntity;
@@ -62,11 +63,11 @@ public class OrderTableService {
     }
 
     @Transactional
-    public OrderTable changeNumberOfGuests(final UUID orderTableId, final OrderTableEntity request) {
+    public OrderTable changeNumberOfGuests(final UUID orderTableId, final ChangeNumberOfGuestsRequest request) {
         final OrderTable orderTable = orderTableRepository.findById(orderTableId)
                 .map(orderTableEntity -> orderTableEntity.toDomain(profanities))
                 .orElseThrow(NoSuchElementException::new);
-        orderTable.changeNumberOfGuests(request.getNumberOfGuests());
+        orderTable.changeNumberOfGuests(request.numberOfGuests());
         OrderTableEntity savedOrderTableEntity = orderTableRepository.save(OrderTableEntity.of(orderTable));
         return savedOrderTableEntity.toDomain(profanities);
     }

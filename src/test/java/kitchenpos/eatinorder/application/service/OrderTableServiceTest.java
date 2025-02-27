@@ -1,9 +1,9 @@
 package kitchenpos.eatinorder.application.service;
 
+import kitchenpos.eatinorder.application.service.model.ChangeNumberOfGuestsRequest;
 import kitchenpos.eatinorder.application.service.model.CreateOrderTableRequest;
 import kitchenpos.eatinorder.domain.model.Order;
 import kitchenpos.eatinorder.domain.model.OrderLineItem;
-import kitchenpos.eatinorder.domain.model.OrderTableEntity;
 import kitchenpos.eatinorder.domain.model.OrderType;
 import kitchenpos.eatinorder.domain.model.todo.OrderTable;
 import kitchenpos.menu.adapter.out.persistance.JpaMenuEntityEntityRepository;
@@ -134,14 +134,13 @@ public class OrderTableServiceTest {
             OrderTable orderTable = createInitializedOrderTable();
             orderTableService.sit(orderTable.getId());
 
-            OrderTableEntity request = new OrderTableEntity();
-            request.setNumberOfGuests(4);
+            ChangeNumberOfGuestsRequest request = new ChangeNumberOfGuestsRequest(4);
 
             // when
             OrderTable resultOrderTable = orderTableService.changeNumberOfGuests(orderTable.getId(), request);
 
             // then
-            assertThat(resultOrderTable.getNumberOfGuests()).isEqualTo(request.getNumberOfGuests());
+            assertThat(resultOrderTable.getNumberOfGuests()).isEqualTo(request.numberOfGuests());
         }
 
         @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
@@ -151,8 +150,7 @@ public class OrderTableServiceTest {
             // given
             OrderTable orderTable = createInitializedOrderTable();
             orderTableService.sit(orderTable.getId());
-            OrderTableEntity request = new OrderTableEntity();
-            request.setNumberOfGuests(-1);
+            ChangeNumberOfGuestsRequest request = new ChangeNumberOfGuestsRequest(-1);
 
             // when
             ThrowableAssert.ThrowingCallable throwingCallable = () -> orderTableService.changeNumberOfGuests(orderTable.getId(), request);
@@ -168,8 +166,7 @@ public class OrderTableServiceTest {
         void change_number_of_guests_on_empty_table() {
             // given
             OrderTable orderTable = createInitializedOrderTable();
-            OrderTableEntity request = new OrderTableEntity();
-            request.setNumberOfGuests(4);
+            ChangeNumberOfGuestsRequest request = new ChangeNumberOfGuestsRequest(4);
 
             // when
             ThrowableAssert.ThrowingCallable throwingCallable = () -> orderTableService.changeNumberOfGuests(orderTable.getId(), request);
@@ -338,19 +335,6 @@ public class OrderTableServiceTest {
         order.setDeliveryAddress(deliveryAddress);
         order.setOrderTableId(orderTableUuid);
         return order;
-    }
-
-    private static OrderTableEntity createOrderTable(String name, int numberOfGuests, boolean occupied) {
-        return createOrderTable(null, name, numberOfGuests, occupied);
-    }
-
-    private static OrderTableEntity createOrderTable(UUID id, String name, int numberOfGuests, boolean occupied) {
-        OrderTableEntity request = new OrderTableEntity();
-        request.setId(id);
-        request.setName(name);
-        request.setNumberOfGuests(numberOfGuests);
-        request.setOccupied(occupied);
-        return request;
     }
 
     private static final UUID 후라이드치킨_PRODUCT_UUID = UUID.randomUUID();

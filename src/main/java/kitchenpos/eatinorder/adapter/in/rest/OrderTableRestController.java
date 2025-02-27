@@ -1,6 +1,7 @@
 package kitchenpos.eatinorder.adapter.in.rest;
 
 import kitchenpos.eatinorder.application.service.OrderTableService;
+import kitchenpos.eatinorder.application.service.model.ChangeNumberOfGuestsRequest;
 import kitchenpos.eatinorder.application.service.model.CreateOrderTableRequest;
 import kitchenpos.eatinorder.domain.model.OrderTableEntity;
 import kitchenpos.eatinorder.domain.model.todo.OrderTable;
@@ -46,7 +47,7 @@ public class OrderTableRestController {
     @PutMapping("/{orderTableId}/number-of-guests")
     public ResponseEntity<OrderTable> changeNumberOfGuests(
         @PathVariable final UUID orderTableId,
-        @RequestBody final OrderTableEntity request
+        @RequestBody final ChangeNumberOfGuestsRequest request
     ) {
         return ResponseEntity.ok(orderTableService.changeNumberOfGuests(orderTableId, request));
     }
