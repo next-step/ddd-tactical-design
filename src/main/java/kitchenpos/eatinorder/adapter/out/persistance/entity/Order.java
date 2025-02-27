@@ -1,4 +1,4 @@
-package kitchenpos.eatinorder.domain.model;
+package kitchenpos.eatinorder.adapter.out.persistance.entity;
 
 import jakarta.persistence.*;
 import kitchenpos.eatinorder.domain.model.todo.EatInOrder;

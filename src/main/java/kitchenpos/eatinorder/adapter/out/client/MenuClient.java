@@ -1,7 +1,7 @@
 package kitchenpos.eatinorder.adapter.out.client;
 
 import kitchenpos.eatinorder.application.port.out.MenuEatInOrderLineItemMapper;
-import kitchenpos.eatinorder.domain.model.OrderLineItem;
+import kitchenpos.eatinorder.adapter.out.persistance.entity.OrderLineItem;
 import kitchenpos.eatinorder.domain.model.todo.EatInOrderLineItem;
 import kitchenpos.menu.adapter.out.persistance.JpaMenuEntityEntityRepository;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuEntity;

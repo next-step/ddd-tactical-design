@@ -1,8 +1,6 @@
 package kitchenpos.eatinorder.application.port.out;
 
-import kitchenpos.eatinorder.domain.model.Order;
-import kitchenpos.eatinorder.domain.model.OrderStatus;
-import kitchenpos.eatinorder.domain.model.OrderTableEntity;
+import kitchenpos.eatinorder.adapter.out.persistance.entity.Order;
 import kitchenpos.eatinorder.domain.model.todo.EatInOrderStatus;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

@@ -1,7 +1,7 @@
 package kitchenpos.eatinorder.adapter.in.rest;
 
 import kitchenpos.eatinorder.application.service.EatInOrderService;
-import kitchenpos.eatinorder.domain.model.Order;
+import kitchenpos.eatinorder.adapter.out.persistance.entity.Order;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,11 +1,10 @@
 package kitchenpos.eatinorder.application.service;
 
+import kitchenpos.eatinorder.application.port.out.LoadOrderTablePort;
 import kitchenpos.eatinorder.application.port.out.OrderRepository;
-import kitchenpos.eatinorder.application.port.out.OrderTableRepository;
+import kitchenpos.eatinorder.application.port.out.SaveOrderTablePort;
 import kitchenpos.eatinorder.application.service.model.ChangeNumberOfGuestsRequest;
 import kitchenpos.eatinorder.application.service.model.CreateOrderTableRequest;
-import kitchenpos.eatinorder.domain.model.OrderStatus;
-import kitchenpos.eatinorder.domain.model.OrderTableEntity;
 import kitchenpos.eatinorder.domain.model.todo.EatInOrderStatus;
 import kitchenpos.eatinorder.domain.model.todo.OrderTable;
 import kitchenpos.shared.domain.Profanities;
@@ -18,16 +17,19 @@ import java.util.UUID;
 
 @Service
 public class OrderTableService {
-    private final OrderTableRepository orderTableRepository;
+    private final LoadOrderTablePort orderTableRepository;
+    private final SaveOrderTablePort saveOrderTablePort;
     private final OrderRepository orderRepository;
     private final Profanities profanities;
 
     public OrderTableService(
-            final OrderTableRepository orderTableRepository,
+            final LoadOrderTablePort orderTableRepository,
+            final SaveOrderTablePort saveOrderTablePort,
             final OrderRepository orderRepository,
             final Profanities profanities
     ) {
         this.orderTableRepository = orderTableRepository;
+        this.saveOrderTablePort = saveOrderTablePort;
         this.orderRepository = orderRepository;
         this.profanities = profanities;
     }
@@ -35,55 +37,41 @@ public class OrderTableService {
     @Transactional
     public OrderTable create(final CreateOrderTableRequest request) {
         OrderTable orderTable = OrderTable.createEmptyTable(UUID.randomUUID(), request.name(), profanities);
-        OrderTableEntity orderTableEntity = orderTableRepository.save(OrderTableEntity.of(orderTable));
-        return orderTableEntity.toDomain(profanities);
+        return saveOrderTablePort.save(orderTable);
     }
 
     @Transactional
     public OrderTable sit(final UUID orderTableId) {
-        final OrderTable orderTable = orderTableRepository.findById(orderTableId)
-                .map(orderTableEntity -> orderTableEntity.toDomain(profanities))
-                .orElseThrow(NoSuchElementException::new);
+        final OrderTable orderTable = findById(orderTableId);
         orderTable.sit();
-        OrderTableEntity orderTableEntity = orderTableRepository.save(OrderTableEntity.of(orderTable));
-        return orderTableEntity.toDomain(profanities);
+        return saveOrderTablePort.save(orderTable);
     }
 
     @Transactional
     public OrderTable clear(final UUID orderTableId) {
-        final OrderTableEntity orderTableEntity = orderTableRepository.findById(orderTableId)
-                .orElseThrow(NoSuchElementException::new);
-        if (orderRepository.existsByOrderTableAndStatusNot(orderTableEntity.getId(), EatInOrderStatus.COMPLETED)) {
+        final OrderTable orderTable = findById(orderTableId);
+        if (orderRepository.existsByOrderTableAndStatusNot(orderTable.getId(), EatInOrderStatus.COMPLETED)) {
             throw new IllegalStateException();
         }
-        final OrderTable orderTable = orderTableEntity.toDomain(profanities);
         orderTable.clear();
-        OrderTableEntity savedOrderTableEntity = orderTableRepository.save(OrderTableEntity.of(orderTable));
-        return savedOrderTableEntity.toDomain(profanities);
+        return saveOrderTablePort.save(orderTable);
     }
 
     @Transactional
     public OrderTable changeNumberOfGuests(final UUID orderTableId, final ChangeNumberOfGuestsRequest request) {
-        final OrderTable orderTable = orderTableRepository.findById(orderTableId)
-                .map(orderTableEntity -> orderTableEntity.toDomain(profanities))
-                .orElseThrow(NoSuchElementException::new);
+        final OrderTable orderTable = findById(orderTableId);
         orderTable.changeNumberOfGuests(request.numberOfGuests());
-        OrderTableEntity savedOrderTableEntity = orderTableRepository.save(OrderTableEntity.of(orderTable));
-        return savedOrderTableEntity.toDomain(profanities);
+        return saveOrderTablePort.save(orderTable);
     }
 
     @Transactional(readOnly = true)
     public List<OrderTable> findAll() {
-        return orderTableRepository.findAll()
-                .stream()
-                .map(orderTableEntity -> orderTableEntity.toDomain(profanities))
-                .toList();
+        return orderTableRepository.findAll();
     }
 
     @Transactional(readOnly = true)
     public OrderTable findById(UUID orderTableId) {
         return orderTableRepository.findById(orderTableId)
-                .map(orderTableEntity -> orderTableEntity.toDomain(profanities))
                 .orElseThrow(NoSuchElementException::new);
     }
 }

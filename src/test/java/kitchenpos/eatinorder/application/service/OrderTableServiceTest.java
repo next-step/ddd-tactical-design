@@ -2,9 +2,9 @@ package kitchenpos.eatinorder.application.service;
 
 import kitchenpos.eatinorder.application.service.model.ChangeNumberOfGuestsRequest;
 import kitchenpos.eatinorder.application.service.model.CreateOrderTableRequest;
-import kitchenpos.eatinorder.domain.model.Order;
-import kitchenpos.eatinorder.domain.model.OrderLineItem;
-import kitchenpos.eatinorder.domain.model.OrderType;
+import kitchenpos.eatinorder.adapter.out.persistance.entity.Order;
+import kitchenpos.eatinorder.adapter.out.persistance.entity.OrderLineItem;
+import kitchenpos.eatinorder.adapter.out.persistance.entity.OrderType;
 import kitchenpos.eatinorder.domain.model.todo.OrderTable;
 import kitchenpos.menu.adapter.out.persistance.JpaMenuEntityEntityRepository;
 import kitchenpos.menu.adapter.out.persistance.JpaMenuGroupEntityRepository;

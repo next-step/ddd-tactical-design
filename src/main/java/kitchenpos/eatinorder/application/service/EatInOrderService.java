@@ -2,8 +2,7 @@ package kitchenpos.eatinorder.application.service;
 
 import kitchenpos.eatinorder.application.port.out.MenuEatInOrderLineItemMapper;
 import kitchenpos.eatinorder.application.port.out.OrderRepository;
-import kitchenpos.eatinorder.domain.model.Order;
-import kitchenpos.eatinorder.domain.model.OrderTableEntity;
+import kitchenpos.eatinorder.adapter.out.persistance.entity.Order;
 import kitchenpos.eatinorder.domain.model.todo.EatInOrder;
 import kitchenpos.eatinorder.domain.model.todo.EatInOrderLineItem;
 import kitchenpos.eatinorder.domain.model.todo.OrderTable;

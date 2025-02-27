@@ -1,8 +1,10 @@
 package kitchenpos.eatinorder.application.service;
 
-import kitchenpos.eatinorder.application.port.out.OrderTableRepository;
-import kitchenpos.eatinorder.domain.model.*;
-import kitchenpos.eatinorder.domain.model.Order;
+import kitchenpos.eatinorder.adapter.out.persistance.JpaOrderTableRepository;
+import kitchenpos.eatinorder.adapter.out.persistance.entity.Order;
+import kitchenpos.eatinorder.adapter.out.persistance.entity.OrderLineItem;
+import kitchenpos.eatinorder.adapter.out.persistance.entity.OrderTableEntity;
+import kitchenpos.eatinorder.adapter.out.persistance.entity.OrderType;
 import kitchenpos.eatinorder.domain.model.todo.EatInOrderStatus;
 import kitchenpos.menu.adapter.out.persistance.JpaMenuEntityEntityRepository;
 import kitchenpos.menu.adapter.out.persistance.JpaMenuGroupEntityRepository;
@@ -14,7 +16,10 @@ import kitchenpos.product.domain.model.Product;
 import kitchenpos.product.domain.model.ProductName;
 import kitchenpos.product.domain.model.ProductPrice;
 import org.assertj.core.api.ThrowableAssert;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.jdbc.Sql;
@@ -34,11 +39,11 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 public class EatInOrderServiceTest {
     private final EatInOrderService orderService;
     private final JpaMenuEntityEntityRepository menuEntityRepository;
-    private final OrderTableRepository orderTableRepository;
+    private final JpaOrderTableRepository orderTableRepository;
     private final SaveProductPort saveProductPort;
     private final JpaMenuGroupEntityRepository menuGroupEntityRepository;
 
-    public EatInOrderServiceTest(SaveProductPort saveProductPort, EatInOrderService orderService, JpaMenuEntityEntityRepository menuEntityRepository, OrderTableRepository orderTableRepository, JpaMenuGroupEntityRepository menuGroupEntityRepository) {
+    public EatInOrderServiceTest(SaveProductPort saveProductPort, EatInOrderService orderService, JpaMenuEntityEntityRepository menuEntityRepository, JpaOrderTableRepository orderTableRepository, JpaMenuGroupEntityRepository menuGroupEntityRepository) {
         this.saveProductPort = saveProductPort;
         this.orderService = orderService;
         this.menuEntityRepository = menuEntityRepository;

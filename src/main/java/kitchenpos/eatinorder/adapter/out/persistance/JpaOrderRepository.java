@@ -1,6 +1,6 @@
 package kitchenpos.eatinorder.adapter.out.persistance;
 
-import kitchenpos.eatinorder.domain.model.Order;
+import kitchenpos.eatinorder.adapter.out.persistance.entity.Order;
 import kitchenpos.eatinorder.application.port.out.OrderRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 
