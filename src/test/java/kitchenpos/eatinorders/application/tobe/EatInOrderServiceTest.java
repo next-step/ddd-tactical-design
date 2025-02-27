@@ -10,6 +10,7 @@ import kitchenpos.eatinorders.tobe.domain.exception.InvalidOrderStatusException;
 import kitchenpos.eatinorders.ui.dto.EatInOrderAcceptResponse;
 import kitchenpos.eatinorders.ui.dto.EatInOrderCreateRequest;
 import kitchenpos.eatinorders.ui.dto.EatInOrderCreateResponse;
+import kitchenpos.eatinorders.ui.dto.EatInOrderServedResponse;
 import kitchenpos.menus.infra.InMemoryMenuRepository;
 import kitchenpos.menus.tobe.domain.*;
 import kitchenpos.products.tobe.domain.ProductId;
@@ -66,7 +67,7 @@ class EatInOrderServiceTest {
         );
     }
 
-    @DisplayName("주문 상태가 대기 중이 아니면 주문 수락 시 예외 발생한다")
+    @DisplayName("대기 중인 주문이 아니면 주문 수락 시 예외 발생한다")
     @EnumSource(value = OrderStatus.class, names = "WAITING", mode = EnumSource.Mode.EXCLUDE)
     @ParameterizedTest
     void validateAccept(OrderStatus status) {
@@ -105,6 +106,47 @@ class EatInOrderServiceTest {
         EatInOrderAcceptResponse result = eatInOrderService.accept(order.id());
 
         assertThat(result.getStatus()).isEqualTo(OrderStatus.ACCEPTED);
+    }
+
+    @DisplayName("접수된 주문이 아니면 주문 서빙 시 예외 발생한다")
+    @EnumSource(value = OrderStatus.class, names = "ACCEPTED", mode = EnumSource.Mode.EXCLUDE)
+    @ParameterizedTest
+    void validateServe(OrderStatus status) {
+        OrderTable table = orderTableRepository.save(createOrderTable("1번테이블", 4, true));
+        OrderLineItems orderLineItems = new OrderLineItems(
+                new OrderLineItem(1L, CHICKEN, 1, new Price(25_000))
+        );
+        OrderEntity order = orderRepository.save(new OrderEntity(
+                OrderType.EAT_IN,
+                status,
+                orderLineItems,
+                null,
+                table.getId()
+        ));
+
+        assertThatThrownBy(() -> eatInOrderService.serve(order.id()))
+                .isInstanceOf(InvalidOrderStatusException.class);
+    }
+
+    @DisplayName("접수한 주문을 서빙한다")
+    @EnumSource(value = OrderStatus.class, names = "ACCEPTED", mode = EnumSource.Mode.INCLUDE)
+    @ParameterizedTest
+    void serve(OrderStatus status) {
+        OrderTable table = orderTableRepository.save(createOrderTable("1번테이블", 4, true));
+        OrderLineItems orderLineItems = new OrderLineItems(
+                new OrderLineItem(1L, CHICKEN, 1, new Price(25_000))
+        );
+        OrderEntity order = orderRepository.save(new OrderEntity(
+                OrderType.EAT_IN,
+                status,
+                orderLineItems,
+                null,
+                table.getId()
+        ));
+
+        EatInOrderServedResponse result = eatInOrderService.serve(order.id());
+
+        assertThat(result.getStatus()).isEqualTo(OrderStatus.SERVED);
     }
 
     private Menu createMenu(MenuId menuId, String name, int price, boolean displayed) {

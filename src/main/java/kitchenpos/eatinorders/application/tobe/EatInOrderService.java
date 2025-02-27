@@ -8,6 +8,7 @@ import kitchenpos.eatinorders.tobe.domain.exception.InvalidOrderStatusException;
 import kitchenpos.eatinorders.ui.dto.EatInOrderAcceptResponse;
 import kitchenpos.eatinorders.ui.dto.EatInOrderCreateRequest;
 import kitchenpos.eatinorders.ui.dto.EatInOrderCreateResponse;
+import kitchenpos.eatinorders.ui.dto.EatInOrderServedResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,5 +53,18 @@ public class EatInOrderService {
         eatInOrder.changeStatus();
 
         return EatInOrderAcceptResponse.from(eatInOrder.toEntity());
+    }
+
+    @Transactional
+    public EatInOrderServedResponse serve(final OrderId orderId) {
+        final OrderEntity order = orderRepository.findById(orderId)
+                .orElseThrow(NoSuchElementException::new);
+
+        if (order.status() != OrderStatus.ACCEPTED) {
+            throw new InvalidOrderStatusException("접수한 주문만 서빙 가능합니다");
+        }
+        EatInOrder eatInOrder = new EatInOrder(order);
+        eatInOrder.changeStatus();
+        return EatInOrderServedResponse.from(eatInOrder.toEntity());
     }
 }
