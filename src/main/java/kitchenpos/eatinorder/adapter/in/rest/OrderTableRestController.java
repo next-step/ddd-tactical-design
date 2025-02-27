@@ -1,6 +1,7 @@
 package kitchenpos.eatinorder.adapter.in.rest;
 
 import kitchenpos.eatinorder.application.service.OrderTableService;
+import kitchenpos.eatinorder.application.service.model.CreateOrderTableRequest;
 import kitchenpos.eatinorder.domain.model.OrderTableEntity;
 import kitchenpos.eatinorder.domain.model.todo.OrderTable;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class OrderTableRestController {
     }
 
     @PostMapping
-    public ResponseEntity<OrderTable> create(@RequestBody final OrderTableEntity request) {
+    public ResponseEntity<OrderTable> create(@RequestBody final CreateOrderTableRequest request) {
         final OrderTable response = orderTableService.create(request);
         return ResponseEntity.created(URI.create("/api/order-tables/" + response.getId()))
             .body(response);

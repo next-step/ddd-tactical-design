@@ -2,6 +2,7 @@ package kitchenpos.eatinorder.application.service;
 
 import kitchenpos.eatinorder.application.port.out.OrderRepository;
 import kitchenpos.eatinorder.application.port.out.OrderTableRepository;
+import kitchenpos.eatinorder.application.service.model.CreateOrderTableRequest;
 import kitchenpos.eatinorder.domain.model.OrderStatus;
 import kitchenpos.eatinorder.domain.model.OrderTableEntity;
 import kitchenpos.eatinorder.domain.model.todo.EatInOrderStatus;
@@ -31,8 +32,8 @@ public class OrderTableService {
     }
 
     @Transactional
-    public OrderTable create(final OrderTableEntity request) {
-        OrderTable orderTable = OrderTable.createEmptyTable(UUID.randomUUID(), request.getName(), profanities);
+    public OrderTable create(final CreateOrderTableRequest request) {
+        OrderTable orderTable = OrderTable.createEmptyTable(UUID.randomUUID(), request.name(), profanities);
         OrderTableEntity orderTableEntity = orderTableRepository.save(OrderTableEntity.of(orderTable));
         return orderTableEntity.toDomain(profanities);
     }

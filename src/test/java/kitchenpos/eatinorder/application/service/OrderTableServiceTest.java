@@ -1,5 +1,6 @@
 package kitchenpos.eatinorder.application.service;
 
+import kitchenpos.eatinorder.application.service.model.CreateOrderTableRequest;
 import kitchenpos.eatinorder.domain.model.Order;
 import kitchenpos.eatinorder.domain.model.OrderLineItem;
 import kitchenpos.eatinorder.domain.model.OrderTableEntity;
@@ -57,8 +58,7 @@ public class OrderTableServiceTest {
         @Test
         void create_order_table_successfully() {
             // given
-            OrderTableEntity request = new OrderTableEntity();
-            request.setName("테이블 1");
+            CreateOrderTableRequest request = new CreateOrderTableRequest("테이블 1");
 
             // when
             OrderTable orderTable = orderTableService.create(request);
@@ -66,7 +66,7 @@ public class OrderTableServiceTest {
             // then
             assertAll(
                     () -> assertThat(orderTable.getId()).isNotNull(),
-                    () -> assertThat(orderTable.getName()).isEqualTo(request.getName()),
+                    () -> assertThat(orderTable.getName()).isEqualTo(request.name()),
                     () -> assertThat(orderTable.getNumberOfGuests()).isEqualTo(0),
                     () -> assertThat(orderTable.isOccupied()).isFalse()
             );
@@ -77,7 +77,7 @@ public class OrderTableServiceTest {
         @Test
         void name_must_be_input() {
             // given
-            OrderTableEntity request = createOrderTable(null, 0, false);
+            CreateOrderTableRequest request = new CreateOrderTableRequest(null);
 
             // when
             ThrowableAssert.ThrowingCallable throwingCallable = () -> orderTableService.create(request);
@@ -261,7 +261,7 @@ public class OrderTableServiceTest {
     }
 
     private OrderTable createInitializedOrderTable() {
-        OrderTableEntity request = createOrderTable("테이블 1", 0, false);
+        CreateOrderTableRequest request = new CreateOrderTableRequest("테이블 1");
         return orderTableService.create(request);
     }
 
