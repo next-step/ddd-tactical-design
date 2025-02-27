@@ -58,6 +58,10 @@ public class OrderEntity {
         this.orderDateTime = orderDateTime;
     }
 
+    public void initializeType(OrderType orderType) {
+        this.orderType = orderType;
+    }
+
     public void changeStatus(OrderStatus status) {
         this.status = status;
     }
