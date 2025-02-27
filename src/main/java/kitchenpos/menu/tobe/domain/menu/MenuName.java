@@ -13,7 +13,7 @@ public class MenuName {
 
     protected MenuName() {}
 
-    public static MenuName of(String name, Profanities profanities) {
+    public static MenuName from(String name, Profanities profanities) {
         return new MenuName(name, profanities);
     }
 

@@ -31,23 +31,26 @@ public class Menu {
     protected Menu() {
     }
 
-    // 주 생성 메서드로 of 사용
-    public static Menu of(String name, Long price, UUID menuGroupId, List<MenuProduct> products, boolean displayed, Profanities profanities, MenuValidator menuValidator) {
+    public static Menu of(MenuName name, MenuPrice price, UUID menuGroupId, MenuDisplayStatus displayed, MenuProducts menuProducts, MenuValidator menuValidator) {
+        validate(price, menuGroupId, menuProducts, menuValidator);
+
         return new Menu(
-                UUID.randomUUID(),
-                MenuName.of(name, profanities),
-                MenuPrice.of(price),
+                name,
+                price,
                 menuGroupId,
-                MenuDisplayStatus.of(displayed),
-                MenuProducts.of(products),
-                menuValidator
+                displayed,
+                menuProducts
         );
     }
 
-    private Menu(UUID id, MenuName name, MenuPrice price, UUID menuGroupId, MenuDisplayStatus displayed, MenuProducts menuProducts, MenuValidator menuValidator) {
+    private static void validate(MenuPrice price, UUID menuGroupId, MenuProducts menuProducts, MenuValidator menuValidator) {
         menuValidator.validateMenuProductSize(menuProducts);
         menuValidator.validateMenuPrice(menuProducts, price);
-        this.id = id;
+        menuValidator.validateMenuGroup(menuGroupId);
+    }
+
+    private Menu(MenuName name, MenuPrice price, UUID menuGroupId, MenuDisplayStatus displayed, MenuProducts menuProducts) {
+        this.id = UUID.randomUUID();
         this.name = name;
         this.price = price;
         this.menuGroupId = menuGroupId;
@@ -65,7 +68,7 @@ public class Menu {
 
     public void changeMenuPrice(final Long price, final MenuValidator menuValidator) {
 
-        MenuPrice newPrice = MenuPrice.of(price);
+        MenuPrice newPrice = MenuPrice.from(price);
 
         menuValidator.validateMenuPrice(menuProducts, newPrice);
 

@@ -2,6 +2,8 @@ package kitchenpos.menu.tobe.application;
 
 import kitchenpos.common.exception.MenuException;
 import kitchenpos.common.tobe.Profanities;
+import kitchenpos.menu.tobe.application.dto.request.MenuCreateRequest;
+import kitchenpos.menu.tobe.application.dto.request.MenuPriceChangeRequest;
 import kitchenpos.menu.tobe.domain.menu.*;
 import kitchenpos.menu.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.menu.tobe.domain.menugroup.MenuGroupRepository;
@@ -9,6 +11,7 @@ import kitchenpos.menu.tobe.fake.FakePurogmalumClient;
 import kitchenpos.menu.tobe.fake.InMemoryMenuGroupRepository;
 import kitchenpos.menu.tobe.fake.InMemoryMenuRepository;
 import kitchenpos.menu.tobe.fake.InMemoryProductRepository;
+import kitchenpos.menu.tobe.fixture.MenuFixture;
 import kitchenpos.product.tobe.domain.Product;
 import kitchenpos.product.tobe.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,7 +47,7 @@ class MenuServiceTest {
         menuGroupRepository = new InMemoryMenuGroupRepository();
         productRepository = new InMemoryProductRepository();
         profanities = new FakePurogmalumClient("바보", "멍청이");
-        menuValidator = new MenuPriceValidator(productRepository);
+        menuValidator = new MenuPriceValidator(productRepository, menuGroupRepository);
 
         // 메뉴 그룹 생성
         menuGroupId = UUID.randomUUID();
@@ -63,7 +66,7 @@ class MenuServiceTest {
         productRepository.save(product2);
 
         // 서비스 생성
-        menuService = new MenuService(menuRepository, menuGroupRepository, profanities, menuValidator);
+        menuService = new MenuService(menuRepository, profanities, menuValidator);
     }
 
     @Test
@@ -74,7 +77,7 @@ class MenuServiceTest {
         MenuProduct menuProduct2 = new MenuProduct(null, 1, 8000L, productId2);
         List<MenuProduct> menuProducts = Arrays.asList(menuProduct1, menuProduct2);
 
-        MenuRequest request = new MenuRequest(
+        MenuCreateRequest request = new MenuCreateRequest(
                 "아메리카노",
                 13000L,
                 menuGroupId,
@@ -103,7 +106,7 @@ class MenuServiceTest {
         MenuProduct menuProduct2 = new MenuProduct(null, 1, 8000L, productId2);
         List<MenuProduct> menuProducts = Arrays.asList(menuProduct1, menuProduct2);
 
-        MenuRequest request = new MenuRequest(
+        MenuCreateRequest request = new MenuCreateRequest(
                 "아메리카노",
                 13000L,
                 nonExistingMenuGroupId,
@@ -124,17 +127,17 @@ class MenuServiceTest {
         MenuProduct menuProduct2 = new MenuProduct(null, 1, 8000L, productId2);
         List<MenuProduct> menuProducts = Arrays.asList(menuProduct1, menuProduct2);
 
-        Menu menu = Menu.of("아메리카노", 13000L, menuGroupId, menuProducts, true, profanities, menuValidator);
+
+        Menu menu = MenuFixture.create(menuGroupId, menuProducts, profanities, menuValidator);
         Menu saved = menuRepository.save(menu);
 
-        MenuRequest request = new MenuRequest();
-        request.setPrice(13000L);
+        MenuPriceChangeRequest request = new MenuPriceChangeRequest(12000L);
 
         // when
         Menu updated = menuService.changePrice(saved.getId(), request);
 
         // then
-        assertThat(updated.getMenuPrice()).isEqualTo(13000L);
+        assertThat(updated.getMenuPrice()).isEqualTo(12000L);
     }
 
     @Test
@@ -145,7 +148,8 @@ class MenuServiceTest {
         MenuProduct menuProduct2 = new MenuProduct(null, 1, 8000L, productId2);
         List<MenuProduct> menuProducts = Arrays.asList(menuProduct1, menuProduct2);
 
-        Menu menu = Menu.of("아메리카노", 13000L, menuGroupId, menuProducts, false, profanities, menuValidator);
+
+        Menu menu = MenuFixture.create(menuGroupId, menuProducts, profanities, menuValidator);
         Menu saved = menuRepository.save(menu);
 
         // when
@@ -163,7 +167,8 @@ class MenuServiceTest {
         MenuProduct menuProduct2 = new MenuProduct(null, 1, 8000L, productId2);
         List<MenuProduct> menuProducts = Arrays.asList(menuProduct1, menuProduct2);
 
-        Menu menu = Menu.of("아메리카노", 13000L, menuGroupId, menuProducts, true, profanities, menuValidator);
+
+        Menu menu = MenuFixture.create(menuGroupId, menuProducts, profanities, menuValidator);
         Menu saved = menuRepository.save(menu);
 
         // when
@@ -181,8 +186,9 @@ class MenuServiceTest {
         MenuProduct menuProduct2 = new MenuProduct(null, 1, 8000L, productId2);
         List<MenuProduct> menuProducts = Arrays.asList(menuProduct1, menuProduct2);
 
-        Menu menu1 = Menu.of("아메리카노", 13000L, menuGroupId, menuProducts, true, profanities, menuValidator);
-        Menu menu2 = Menu.of("카페라떼", 13000L, menuGroupId, menuProducts, true, profanities, menuValidator);
+
+        Menu menu1 = MenuFixture.create(menuGroupId, menuProducts, profanities, menuValidator);
+        Menu menu2 = MenuFixture.create(menuGroupId, menuProducts, profanities, menuValidator);
 
         menuRepository.save(menu1);
         menuRepository.save(menu2);

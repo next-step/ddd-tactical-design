@@ -2,6 +2,9 @@ package kitchenpos.menu.tobe.domain.menu;
 
 import kitchenpos.common.exception.MenuException;
 import kitchenpos.common.tobe.Profanities;
+import kitchenpos.menu.tobe.domain.menugroup.MenuGroup;
+import kitchenpos.menu.tobe.domain.menugroup.MenuGroupRepository;
+import kitchenpos.menu.tobe.fake.InMemoryMenuGroupRepository;
 import kitchenpos.product.tobe.domain.Product;
 import kitchenpos.product.tobe.domain.ProductRepository;
 import kitchenpos.product.tobe.fake.InMemoryProductRepository;
@@ -20,18 +23,26 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class MenuTest {
 
     private ProductRepository productRepository;
+    private MenuGroupRepository menuGroupRepository;
     private MenuValidator menuValidator;
     private final Profanities profanities = text -> text.equals("바보"); // 테스트용 비속어 설정
 
     private final UUID productId = UUID.randomUUID();
     private final UUID productId2 = UUID.randomUUID();
+    private UUID menuGroupId;
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
-        menuValidator = new MenuPriceValidator(productRepository);
+        menuGroupRepository = new InMemoryMenuGroupRepository();
+        menuValidator = new MenuPriceValidator(productRepository, menuGroupRepository);
+
+        menuGroupId = UUID.randomUUID();
+        MenuGroup menuGroup = MenuGroup.of("음료");
+        ReflectionTestUtils.setField(menuGroup, "id", menuGroupId);
+        menuGroupRepository.save(menuGroup);
         // 상품 생성 및 저장
-        Product product1 = new Product( "상품1", 5000L, profanities);
+        Product product1 = new Product("상품1", 5000L, profanities);
         ReflectionTestUtils.setField(product1, "id", productId);
         Product product2 = new Product("상품2", 8000L, profanities);
         ReflectionTestUtils.setField(product2, "id", productId2);
@@ -53,7 +64,7 @@ class MenuTest {
         boolean displayed = true;
 
         // when
-        Menu menu = Menu.of(menuName, menuPrice, UUID.randomUUID(), menuProducts, displayed, profanities, menuValidator);
+        Menu menu = Menu.of(MenuName.from(menuName, profanities), MenuPrice.from(menuPrice), menuGroupId, MenuDisplayStatus.from(displayed), MenuProducts.from(menuProducts), menuValidator);
 
         // then
         assertThat(menu).isNotNull();
@@ -62,6 +73,7 @@ class MenuTest {
         assertThat(menu.isDisplayed()).isEqualTo(displayed);
         assertThat(menu.getMenuProducts()).hasSize(2);
     }
+
     @Test
     @DisplayName("메뉴 가격이 상품 가격의 합보다 작으면 예외가 발생한다")
     void createMenuWithInvalidPrice() {
@@ -76,9 +88,10 @@ class MenuTest {
         boolean displayed = true;
 
         // when & then
-        assertThatThrownBy(() -> Menu.of(menuName, menuPrice, UUID.randomUUID(), menuProducts, displayed, profanities, menuValidator))
+        assertThatThrownBy(() -> Menu.of(MenuName.from(menuName, profanities), MenuPrice.from(menuPrice), menuGroupId, MenuDisplayStatus.from(displayed), MenuProducts.from(menuProducts), menuValidator))
                 .isInstanceOf(MenuException.class);
     }
+
     @Test
     @DisplayName("비속어가 포함된 메뉴 이름으로는 메뉴를 생성할 수 없다")
     void createMenuWithProfanity() {
@@ -92,7 +105,7 @@ class MenuTest {
         boolean displayed = true;
 
         // when & then
-        assertThatThrownBy(() -> Menu.of(menuName, menuPrice, UUID.randomUUID(), menuProducts, displayed, profanities, menuValidator))
+        assertThatThrownBy(() ->  Menu.of(MenuName.from(menuName, profanities), MenuPrice.from(menuPrice), menuGroupId, MenuDisplayStatus.from(displayed), MenuProducts.from(menuProducts), menuValidator))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("비속어가 포함되어 있습니다.");
     }
@@ -108,7 +121,7 @@ class MenuTest {
                 new MenuProduct(1L, 1, 5000L, productId2));
         boolean displayed = true;
 
-        Menu menu = Menu.of(menuName, initialPrice, UUID.randomUUID(), menuProducts, displayed, profanities, menuValidator);
+        Menu menu = Menu.of(MenuName.from(menuName, profanities), MenuPrice.from(initialPrice), menuGroupId, MenuDisplayStatus.from(displayed), MenuProducts.from(menuProducts), menuValidator);
 
         // when
         Long newPrice = 8000L;
@@ -130,7 +143,7 @@ class MenuTest {
 
         boolean displayed = true;
 
-        Menu menu = Menu.of(menuName, initialPrice, UUID.randomUUID(), menuProducts, displayed, profanities, menuValidator);
+        Menu menu = Menu.of(MenuName.from(menuName, profanities), MenuPrice.from(initialPrice), menuGroupId, MenuDisplayStatus.from(displayed), MenuProducts.from(menuProducts), menuValidator);
 
         // when & then
         Long invalidPrice = 16000L;
@@ -138,6 +151,7 @@ class MenuTest {
         assertThatThrownBy(() -> menu.changeMenuPrice(invalidPrice, menuValidator))
                 .isInstanceOf(MenuException.class);
     }
+
     @Test
     @DisplayName("메뉴를 display 상태로 변경할 수 있다")
     void showMenu() {
@@ -148,7 +162,7 @@ class MenuTest {
                 new MenuProduct(1L, 1, 5000L, productId),
                 new MenuProduct(2L, 1, 8000L, productId2));
         boolean displayed = false;
-        Menu menu = Menu.of(menuName, menuPrice, UUID.randomUUID(), menuProducts, displayed, profanities, menuValidator);
+        Menu menu = Menu.of(MenuName.from(menuName, profanities), MenuPrice.from(menuPrice), menuGroupId, MenuDisplayStatus.from(displayed), MenuProducts.from(menuProducts), menuValidator);
 
         // when
         menu.show(menuValidator);
@@ -156,6 +170,7 @@ class MenuTest {
         // then
         assertThat(menu.isDisplayed()).isTrue();
     }
+
     @Test
     @DisplayName("메뉴를 hide 상태로 변경할 수 있다")
     void hideMenu() {
@@ -166,7 +181,7 @@ class MenuTest {
                 new MenuProduct(1L, 1, 5000L, productId),
                 new MenuProduct(2L, 1, 8000L, productId2));
         boolean displayed = true;
-        Menu menu = Menu.of(menuName, menuPrice, UUID.randomUUID(), menuProducts, displayed, profanities, menuValidator);
+        Menu menu = Menu.of(MenuName.from(menuName, profanities), MenuPrice.from(menuPrice), menuGroupId, MenuDisplayStatus.from(displayed), MenuProducts.from(menuProducts), menuValidator);
 
         // when
         menu.hide();

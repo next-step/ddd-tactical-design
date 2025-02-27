@@ -5,7 +5,6 @@ import jakarta.persistence.Embeddable;
 import kitchenpos.common.exception.ErrorCode;
 import kitchenpos.common.exception.MenuException;
 
-import java.math.BigDecimal;
 import java.util.Objects;
 
 @Embeddable
@@ -13,7 +12,7 @@ public class MenuPrice {
     @Column(name = "price", nullable = false)
     private Long value;
 
-    public static MenuPrice of(Long value) {
+    public static MenuPrice from(Long value) {
         return new MenuPrice(value);
     }
 
@@ -21,9 +20,11 @@ public class MenuPrice {
         validate(value);
         this.value = value;
     }
+
     protected MenuPrice() {}
+
     private void validate(Long value) {
-        if (Objects.isNull(value) || value.compareTo(0L) <= 0 ) { // 맘에안드네 곧 변경예정
+        if (Objects.isNull(value) || value.compareTo(0L) <= 0) {
             throw new MenuException(ErrorCode.MENU_PRICE_INVALID);
         }
     }

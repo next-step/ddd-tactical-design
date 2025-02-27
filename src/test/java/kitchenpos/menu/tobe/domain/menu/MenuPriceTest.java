@@ -15,7 +15,7 @@ class MenuPriceTest {
     @DisplayName("MenuPrice 객체를 생성할 수 있다")
     void create() {
         // when
-        MenuPrice price = MenuPrice.of(10000L);
+        MenuPrice price = MenuPrice.from(10000L);
 
         // then
         assertThat(price.getValue()).isEqualTo(10000L);
@@ -25,7 +25,7 @@ class MenuPriceTest {
     @DisplayName("가격이 null이면 예외가 발생한다")
     void createWithNullPrice() {
         // when & then
-        assertThatThrownBy(() -> MenuPrice.of(null))
+        assertThatThrownBy(() -> MenuPrice.from(null))
                 .isInstanceOf(MenuException.class);
     }
 
@@ -34,7 +34,7 @@ class MenuPriceTest {
     @DisplayName("가격이 0 이하이면 예외가 발생한다")
     void createWithNonPositivePrice(Long price) {
         // when & then
-        assertThatThrownBy(() -> MenuPrice.of(price))
+        assertThatThrownBy(() -> MenuPrice.from(price))
                 .isInstanceOf(MenuException.class);
     }
 
@@ -42,9 +42,9 @@ class MenuPriceTest {
     @DisplayName("MenuPrice 객체끼리 동등성 비교가 가능하다")
     void equals() {
         // given
-        MenuPrice price1 = MenuPrice.of(10000L);
-        MenuPrice price2 = MenuPrice.of(10000L);
-        MenuPrice price3 = MenuPrice.of(20000L);
+        MenuPrice price1 = MenuPrice.from(10000L);
+        MenuPrice price2 = MenuPrice.from(10000L);
+        MenuPrice price3 = MenuPrice.from(20000L);
 
         // then
         assertThat(price1).isEqualTo(price2);

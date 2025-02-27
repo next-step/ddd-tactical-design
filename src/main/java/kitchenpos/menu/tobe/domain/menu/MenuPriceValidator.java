@@ -1,6 +1,7 @@
 package kitchenpos.menu.tobe.domain.menu;
 
 import kitchenpos.common.exception.MenuException;
+import kitchenpos.menu.tobe.domain.menugroup.MenuGroupRepository;
 import kitchenpos.product.tobe.domain.Product;
 import kitchenpos.product.tobe.domain.ProductRepository;
 import org.springframework.stereotype.Component;
@@ -15,9 +16,11 @@ import static kitchenpos.common.exception.ErrorCode.*;
 @Component
 public class MenuPriceValidator implements MenuValidator {
     private final ProductRepository productRepository;
+    private final MenuGroupRepository menuGroupRepository;
 
-    public MenuPriceValidator(ProductRepository productRepository) {
+    public MenuPriceValidator(ProductRepository productRepository, MenuGroupRepository menuGroupRepository) {
         this.productRepository = productRepository;
+        this.menuGroupRepository = menuGroupRepository;
     }
 
 
@@ -29,12 +32,16 @@ public class MenuPriceValidator implements MenuValidator {
             throw new MenuException(MENU_PRODUCTS_SIZE_NOT_MATCHED);
         }
     }
+
+    @Override
+    public void validateMenuGroup(UUID menuGroupId) {
+        menuGroupRepository.findById(menuGroupId)
+                .orElseThrow(() -> new MenuException(MENU_GROUP_NOT_FOUND));
+    }
+
     @Override
     public void validateMenuPrice(MenuProducts menuProducts, MenuPrice menuPrice) {
-        // 메뉴 상품들의 총 가격 계산
         Long totalProductPrice = calculateTotalProductPrice(menuProducts);
-        System.out.println("totalProductPrice = " + totalProductPrice);
-        System.out.println("menuPrice.getValue() = " + menuPrice.getValue());
         if (menuPrice.getValue() > totalProductPrice) {
             throw new MenuException(MENU_PRICE_INVALID);
         }

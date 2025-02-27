@@ -19,11 +19,11 @@ public class MenuProducts {
     )
     private List<MenuProduct> products;
 
-    public static MenuProducts of(MenuProduct... products) {
+    public static MenuProducts from(MenuProduct... products) {
         return new MenuProducts(Arrays.asList(products));
     }
 
-    public static MenuProducts of(List<MenuProduct> products) {
+    public static MenuProducts from(List<MenuProduct> products) {
         return new MenuProducts(products);
     }
 

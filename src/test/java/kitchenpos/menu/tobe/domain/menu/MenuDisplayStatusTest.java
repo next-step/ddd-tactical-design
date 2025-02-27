@@ -11,8 +11,8 @@ class MenuDisplayStatusTest {
     @DisplayName("MenuDisplayStatus 객체를 생성할 수 있다")
     void create() {
         // when
-        MenuDisplayStatus displayed = MenuDisplayStatus.of(true);
-        MenuDisplayStatus hidden = MenuDisplayStatus.of(false);
+        MenuDisplayStatus displayed = MenuDisplayStatus.from(true);
+        MenuDisplayStatus hidden = MenuDisplayStatus.from(false);
 
         // then
         assertThat(displayed.isDisplayed()).isTrue();
@@ -23,7 +23,7 @@ class MenuDisplayStatusTest {
     @DisplayName("MenuDisplayStatus를 표시 상태로 변경할 수 있다")
     void show() {
         // given
-        MenuDisplayStatus status = MenuDisplayStatus.of(false);
+        MenuDisplayStatus status = MenuDisplayStatus.from(false);
 
         // when
         status.show();
@@ -36,7 +36,7 @@ class MenuDisplayStatusTest {
     @DisplayName("MenuDisplayStatus를 숨김 상태로 변경할 수 있다")
     void hide() {
         // given
-        MenuDisplayStatus status = MenuDisplayStatus.of(true);
+        MenuDisplayStatus status = MenuDisplayStatus.from(true);
 
         // when
         status.hide();
@@ -49,9 +49,9 @@ class MenuDisplayStatusTest {
     @DisplayName("MenuDisplayStatus 객체끼리 동등성 비교가 가능하다")
     void equals() {
         // given
-        MenuDisplayStatus status1 = MenuDisplayStatus.of(true);
-        MenuDisplayStatus status2 = MenuDisplayStatus.of(true);
-        MenuDisplayStatus status3 = MenuDisplayStatus.of(false);
+        MenuDisplayStatus status1 = MenuDisplayStatus.from(true);
+        MenuDisplayStatus status2 = MenuDisplayStatus.from(true);
+        MenuDisplayStatus status3 = MenuDisplayStatus.from(false);
 
         // then
         assertThat(status1).isEqualTo(status2);

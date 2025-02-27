@@ -26,7 +26,7 @@ class MenuProductsTest {
         MenuProduct menuProduct2 = new MenuProduct(2L, 1, 8000L, productId2);
 
         // when
-        MenuProducts menuProducts = MenuProducts.of(menuProduct1, menuProduct2);
+        MenuProducts menuProducts = MenuProducts.from(menuProduct1, menuProduct2);
 
         // then
         assertThat(menuProducts.getProducts()).hasSize(2);
@@ -41,7 +41,7 @@ class MenuProductsTest {
         MenuProduct menuProduct2 = new MenuProduct(2L, 1, 8000L, productId2);
 
         // when
-        MenuProducts menuProducts = MenuProducts.of(Arrays.asList(menuProduct1, menuProduct2));
+        MenuProducts menuProducts = MenuProducts.from(Arrays.asList(menuProduct1, menuProduct2));
 
         // then
         assertThat(menuProducts.getProducts()).hasSize(2);
@@ -52,7 +52,7 @@ class MenuProductsTest {
     @DisplayName("비어있는 상품 목록으로 생성하면 예외가 발생한다")
     void createWithEmptyList() {
         // when & then
-        assertThatThrownBy(() -> MenuProducts.of(Collections.emptyList()))
+        assertThatThrownBy(() -> MenuProducts.from(Collections.emptyList()))
                 .isInstanceOf(MenuException.class);
     }
 
@@ -60,7 +60,7 @@ class MenuProductsTest {
     @DisplayName("null 상품 목록으로 생성하면 예외가 발생한다")
     void createWithNullList() {
         // when & then
-        assertThatThrownBy(() -> MenuProducts.of((ArrayList<MenuProduct>) null))
+        assertThatThrownBy(() -> MenuProducts.from((ArrayList<MenuProduct>) null))
                 .isInstanceOf(MenuException.class);
     }
 
@@ -70,14 +70,14 @@ class MenuProductsTest {
         // given
         MenuProduct menuProduct1 = new MenuProduct(1L, 2, 5000L, productId1);  // 10000원
         MenuProduct menuProduct2 = new MenuProduct(2L, 1, 8000L, productId2);  // 8000원
-        MenuProducts menuProducts = MenuProducts.of(menuProduct1, menuProduct2);
+        MenuProducts menuProducts = MenuProducts.from(menuProduct1, menuProduct2);
 
         // 총 가격: 18000원
 
         // when & then
-        assertThat(menuProducts.isTotalPriceLessThanOrEqualTo(MenuPrice.of(20000L))).isTrue();
-        assertThat(menuProducts.isTotalPriceLessThanOrEqualTo(MenuPrice.of(18000L))).isTrue();
-        assertThat(menuProducts.isTotalPriceLessThanOrEqualTo(MenuPrice.of(17000L))).isFalse();
+        assertThat(menuProducts.isTotalPriceLessThanOrEqualTo(MenuPrice.from(20000L))).isTrue();
+        assertThat(menuProducts.isTotalPriceLessThanOrEqualTo(MenuPrice.from(18000L))).isTrue();
+        assertThat(menuProducts.isTotalPriceLessThanOrEqualTo(MenuPrice.from(17000L))).isFalse();
     }
 
     @Test
@@ -86,7 +86,7 @@ class MenuProductsTest {
         // given
         MenuProduct menuProduct1 = new MenuProduct(1L, 2, 5000L, productId1);  // 10000원
         MenuProduct menuProduct2 = new MenuProduct(2L, 1, 8000L, productId2);  // 8000원
-        MenuProducts menuProducts = MenuProducts.of(menuProduct1, menuProduct2);
+        MenuProducts menuProducts = MenuProducts.from(menuProduct1, menuProduct2);
 
         // when
         Long totalPrice = menuProducts.calculateTotalPrice();
@@ -101,7 +101,7 @@ class MenuProductsTest {
         // given
         MenuProduct menuProduct1 = new MenuProduct(1L, 2, 5000L, productId1);
         MenuProduct menuProduct2 = new MenuProduct(2L, 1, 8000L, productId2);
-        MenuProducts menuProducts = MenuProducts.of(menuProduct1, menuProduct2);
+        MenuProducts menuProducts = MenuProducts.from(menuProduct1, menuProduct2);
 
         // when & then
         assertThat(menuProducts.containsProduct(productId1)).isTrue();
@@ -115,7 +115,7 @@ class MenuProductsTest {
         // given
         MenuProduct menuProduct1 = new MenuProduct(1L, 2, 5000L, productId1);
         MenuProduct menuProduct2 = new MenuProduct(2L, 1, 8000L, productId2);
-        MenuProducts menuProducts = MenuProducts.of(menuProduct1, menuProduct2);
+        MenuProducts menuProducts = MenuProducts.from(menuProduct1, menuProduct2);
 
         // when
         MenuProduct foundProduct = menuProducts.findProduct(productId1);
@@ -130,7 +130,7 @@ class MenuProductsTest {
         // given
         MenuProduct menuProduct1 = new MenuProduct(1L, 2, 5000L, productId1);
         MenuProduct menuProduct2 = new MenuProduct(2L, 1, 8000L, productId2);
-        MenuProducts menuProducts = MenuProducts.of(menuProduct1, menuProduct2);
+        MenuProducts menuProducts = MenuProducts.from(menuProduct1, menuProduct2);
 
         // when & then
         assertThatThrownBy(() -> menuProducts.findProduct(nonExistingProductId))
@@ -143,7 +143,7 @@ class MenuProductsTest {
         // given
         MenuProduct menuProduct1 = new MenuProduct(1L, 2, 5000L, productId1);
         MenuProduct menuProduct2 = new MenuProduct(2L, 1, 8000L, productId2);
-        MenuProducts menuProducts = MenuProducts.of(menuProduct1, menuProduct2);
+        MenuProducts menuProducts = MenuProducts.from(menuProduct1, menuProduct2);
 
         // when & then
         assertThat(menuProducts.hasEnoughQuantityOf(productId1, 1)).isTrue();
@@ -159,7 +159,7 @@ class MenuProductsTest {
         // given
         MenuProduct menuProduct1 = new MenuProduct(1L, 2, 5000L, productId1);
         MenuProduct menuProduct2 = new MenuProduct(2L, 1, 8000L, productId2);
-        MenuProducts menuProducts = MenuProducts.of(menuProduct1, menuProduct2);
+        MenuProducts menuProducts = MenuProducts.from(menuProduct1, menuProduct2);
 
         // when
         MenuProduct product = menuProducts.getProduct(productId1);

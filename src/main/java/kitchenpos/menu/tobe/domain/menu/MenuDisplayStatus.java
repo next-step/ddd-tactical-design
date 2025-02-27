@@ -11,7 +11,7 @@ public class MenuDisplayStatus {
     @Column(name = "displayed", nullable = false)
     private boolean value;
 
-    public static MenuDisplayStatus of(boolean value) {
+    public static MenuDisplayStatus from(boolean value) {
         return new MenuDisplayStatus(value);
     }
 
