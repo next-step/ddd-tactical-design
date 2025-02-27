@@ -8,6 +8,7 @@ import jakarta.persistence.OneToMany;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import kitchenpos.product.domain.model.ProductSummary;
 
@@ -67,6 +68,25 @@ public class MenuSummary {
 
     public List<ProductSummary> getProductSummaries() {
         return productSummaries;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        MenuSummary that = (MenuSummary) o;
+        return isDisplayed == that.isDisplayed && Objects.equals(id, that.id) && Objects.equals(
+                menuName, that.menuName) && Objects.equals(price, that.price) && Objects.equals(
+                menuGroupId, that.menuGroupId) && Objects.equals(menuGroupName, that.menuGroupName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, menuName, price, isDisplayed, menuGroupId, menuGroupName);
     }
 }
 
