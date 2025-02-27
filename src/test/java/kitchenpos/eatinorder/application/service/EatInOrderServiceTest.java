@@ -178,7 +178,7 @@ public class EatInOrderServiceTest {
             EatInOrder order = createEeaInOrder();
 
             // when
-            Order acceptedOrder = orderService.accept(order.getId());
+            EatInOrder acceptedOrder = orderService.accept(order.getId());
 
             // then
             assertThat(acceptedOrder.getStatus()).isEqualTo(EatInOrderStatus.ACCEPTED);

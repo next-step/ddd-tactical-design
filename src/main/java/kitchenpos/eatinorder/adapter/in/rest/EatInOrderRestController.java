@@ -28,7 +28,7 @@ public class EatInOrderRestController {
     }
 
     @PutMapping("/{orderId}/accept")
-    public ResponseEntity<Order> accept(@PathVariable final UUID orderId) {
+    public ResponseEntity<EatInOrder> accept(@PathVariable final UUID orderId) {
         return ResponseEntity.ok(eatInOrderService.accept(orderId));
     }
 

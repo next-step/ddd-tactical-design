@@ -45,12 +45,13 @@ public class EatInOrderService {
     }
 
     @Transactional
-    public Order accept(final UUID orderId) {
+    public EatInOrder accept(final UUID orderId) {
         final EatInOrder eatInOrder = orderRepository.findById(orderId)
                 .map(Order::toDomain)
                 .orElseThrow(NoSuchElementException::new);
         eatInOrder.accept();
-        return orderRepository.save(Order.of(eatInOrder));
+        Order save = orderRepository.save(Order.of(eatInOrder));
+        return save.toDomain();
     }
 
     @Transactional
