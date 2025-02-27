@@ -70,4 +70,10 @@ public class OrderTableService {
     public List<OrderTableEntity> findAll() {
         return orderTableRepository.findAll();
     }
+
+    @Transactional(readOnly = true)
+    public OrderTableEntity findById(UUID orderTableId) {
+        return orderTableRepository.findById(orderTableId)
+                .orElseThrow(NoSuchElementException::new);
+    }
 }

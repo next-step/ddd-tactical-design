@@ -2,7 +2,6 @@ package kitchenpos.eatinorder.application.service;
 
 import kitchenpos.eatinorder.application.port.out.MenuEatInOrderLineItemMapper;
 import kitchenpos.eatinorder.application.port.out.OrderRepository;
-import kitchenpos.eatinorder.application.port.out.OrderTableRepository;
 import kitchenpos.eatinorder.domain.model.Order;
 import kitchenpos.eatinorder.domain.model.OrderTableEntity;
 import kitchenpos.eatinorder.domain.model.todo.EatInOrder;
@@ -18,25 +17,22 @@ import java.util.UUID;
 @Service
 public class EatInOrderService {
     private final OrderRepository orderRepository;
-    private final OrderTableRepository orderTableRepository;
     private final MenuEatInOrderLineItemMapper menuEatInOrderLineItemMapper;
     private final OrderTableService orderTableService;
 
     public EatInOrderService(
             final OrderRepository orderRepository,
-            final OrderTableRepository orderTableRepository,
-            final MenuEatInOrderLineItemMapper menuEatInOrderLineItemMapper, OrderTableService orderTableService
+            final MenuEatInOrderLineItemMapper menuEatInOrderLineItemMapper,
+            final OrderTableService orderTableService
     ) {
         this.orderRepository = orderRepository;
-        this.orderTableRepository = orderTableRepository;
         this.menuEatInOrderLineItemMapper = menuEatInOrderLineItemMapper;
         this.orderTableService = orderTableService;
     }
 
     @Transactional
     public Order create(final Order request) {
-        final OrderTableEntity orderTable = orderTableRepository.findById(request.getOrderTableId())
-            .orElseThrow(NoSuchElementException::new);
+        OrderTableEntity orderTable = orderTableService.findById(request.getOrderTableId());
         if (!orderTable.isOccupied()) {
             throw new IllegalStateException();
         }
