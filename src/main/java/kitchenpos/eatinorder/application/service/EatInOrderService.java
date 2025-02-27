@@ -57,13 +57,11 @@ public class EatInOrderService {
 
     @Transactional
     public Order serve(final UUID orderId) {
-        final Order order = orderRepository.findById(orderId)
-            .orElseThrow(NoSuchElementException::new);
-        if (order.getStatus() != EatInOrderStatus.ACCEPTED) {
-            throw new IllegalStateException();
-        }
-        order.setStatus(EatInOrderStatus.SERVED);
-        return order;
+        final EatInOrder eatInOrder = orderRepository.findById(orderId)
+                .map(Order::toDomain)
+                .orElseThrow(NoSuchElementException::new);
+        eatInOrder.serve();
+        return orderRepository.save(Order.of(eatInOrder));
     }
 
 
