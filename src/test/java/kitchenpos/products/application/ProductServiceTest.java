@@ -1,11 +1,12 @@
 package kitchenpos.products.application;
 
+import kitchenpos.core.products.application.CommandProductService;
 import kitchenpos.menus.application.InMemoryMenuRepository;
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.domain.Product;
-import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.shared.domain.ProfanityChecker;
+import kitchenpos.core.menus.domain.Menu;
+import kitchenpos.core.menus.domain.MenuRepository;
+import kitchenpos.core.products.domain.Product;
+import kitchenpos.core.products.domain.ProductRepository;
+import kitchenpos.core.shared.domain.ProfanityChecker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,14 +29,14 @@ class ProductServiceTest {
     private ProductRepository productRepository;
     private MenuRepository menuRepository;
     private ProfanityChecker profanityChecker;
-    private ProductService productService;
+    private CommandProductService productService;
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
         profanityChecker = new FakeProfanityChecker();
-        productService = new ProductService(productRepository, menuRepository, profanityChecker);
+        productService = new CommandProductService(productRepository, menuRepository, profanityChecker);
     }
 
     @DisplayName("상품을 등록할 수 있다.")

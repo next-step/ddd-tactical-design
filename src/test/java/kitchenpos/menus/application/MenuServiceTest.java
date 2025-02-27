@@ -1,14 +1,15 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuGroupRepository;
-import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.core.menus.application.MenuService;
+import kitchenpos.core.menus.domain.Menu;
+import kitchenpos.core.menus.domain.MenuGroupRepository;
+import kitchenpos.core.menus.domain.MenuProduct;
+import kitchenpos.core.menus.domain.MenuRepository;
 import kitchenpos.products.application.FakeProfanityChecker;
 import kitchenpos.products.application.InMemoryProductRepository;
-import kitchenpos.products.domain.Product;
-import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.shared.domain.ProfanityChecker;
+import kitchenpos.core.products.domain.Product;
+import kitchenpos.core.products.domain.ProductRepository;
+import kitchenpos.core.shared.domain.ProfanityChecker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

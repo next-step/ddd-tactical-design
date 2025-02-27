@@ -1,6 +1,6 @@
 package kitchenpos.products.application;
 
-import kitchenpos.shared.domain.ProfanityChecker;
+import kitchenpos.core.shared.domain.ProfanityChecker;
 
 import java.util.Arrays;
 import java.util.List;
