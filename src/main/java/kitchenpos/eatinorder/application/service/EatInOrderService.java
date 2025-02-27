@@ -32,7 +32,7 @@ public class EatInOrderService {
     }
 
     @Transactional
-    public Order create(final CreateEatInOrderRequest request) {
+    public EatInOrder create(final CreateEatInOrderRequest request) {
         OrderTable orderTable = orderTableService.findById(request.orderTableId());
         if (!orderTable.isOccupied()) {
             throw new IllegalStateException();
@@ -40,7 +40,8 @@ public class EatInOrderService {
 
         List<EatInOrderLineItem> eatInOrderLineItems = menuEatInOrderLineItemMapper.toEatInOrderLines(request.orderLineItems());
         EatInOrder eatInOrder = EatInOrder.create(UUID.randomUUID(), LocalDateTime.now(), eatInOrderLineItems, orderTable.getId());
-        return orderRepository.save(Order.of(eatInOrder));
+        Order save = orderRepository.save(Order.of(eatInOrder));
+        return save.toDomain();
     }
 
     @Transactional

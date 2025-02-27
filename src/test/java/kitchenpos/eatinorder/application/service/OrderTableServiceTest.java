@@ -1,10 +1,10 @@
 package kitchenpos.eatinorder.application.service;
 
-import kitchenpos.eatinorder.adapter.out.persistance.entity.Order;
 import kitchenpos.eatinorder.application.service.model.ChangeNumberOfGuestsRequest;
 import kitchenpos.eatinorder.application.service.model.CreateEatInOrderRequest;
 import kitchenpos.eatinorder.application.service.model.CreateOrderTableRequest;
 import kitchenpos.eatinorder.application.service.model.OrderLineItemRequest;
+import kitchenpos.eatinorder.domain.model.todo.EatInOrder;
 import kitchenpos.eatinorder.domain.model.todo.OrderTable;
 import kitchenpos.menu.adapter.out.persistance.JpaMenuEntityEntityRepository;
 import kitchenpos.menu.adapter.out.persistance.JpaMenuGroupEntityRepository;
@@ -226,7 +226,7 @@ public class OrderTableServiceTest {
             OrderTable orderTable = createInitializedOrderTable();
             orderTableService.sit(orderTable.getId());
 
-            Order order = createEeaInOrder(orderTable);
+            EatInOrder order = createEeaInOrder(orderTable);
             orderService.accept(order.getId());
 
             // when
@@ -262,7 +262,7 @@ public class OrderTableServiceTest {
         return orderTableService.create(request);
     }
 
-    private Order createEeaInOrder(OrderTable orderTableEntity) {
+    private EatInOrder createEeaInOrder(OrderTable orderTableEntity) {
         Product product = createProduct(후라이드치킨_PRODUCT_UUID, 후라이드치킨_PRODUCT_NAME, 후라이드치킨_DEFAULT_PRICE);
         saveProductPort.save(product);
 
@@ -278,8 +278,8 @@ public class OrderTableServiceTest {
         return orderService.create(request);
     }
 
-    private Order createEatInOrderWithCompleteState(OrderTable orderTableEntity) {
-        Order order = createEeaInOrder(orderTableEntity);
+    private EatInOrder createEatInOrderWithCompleteState(OrderTable orderTableEntity) {
+        EatInOrder order = createEeaInOrder(orderTableEntity);
         orderService.accept(order.getId());
         orderService.serve(order.getId());
         orderService.complete(order.getId());

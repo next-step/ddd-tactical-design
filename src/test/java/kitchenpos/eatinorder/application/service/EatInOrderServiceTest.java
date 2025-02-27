@@ -2,11 +2,10 @@ package kitchenpos.eatinorder.application.service;
 
 import kitchenpos.eatinorder.adapter.out.persistance.JpaOrderTableRepository;
 import kitchenpos.eatinorder.adapter.out.persistance.entity.Order;
-import kitchenpos.eatinorder.adapter.out.persistance.entity.OrderLineItem;
 import kitchenpos.eatinorder.adapter.out.persistance.entity.OrderTableEntity;
-import kitchenpos.eatinorder.adapter.out.persistance.entity.OrderType;
 import kitchenpos.eatinorder.application.service.model.CreateEatInOrderRequest;
 import kitchenpos.eatinorder.application.service.model.OrderLineItemRequest;
+import kitchenpos.eatinorder.domain.model.todo.EatInOrder;
 import kitchenpos.eatinorder.domain.model.todo.EatInOrderStatus;
 import kitchenpos.menu.adapter.out.persistance.JpaMenuEntityEntityRepository;
 import kitchenpos.menu.adapter.out.persistance.JpaMenuGroupEntityRepository;
@@ -29,7 +28,6 @@ import org.springframework.test.context.jdbc.SqlGroup;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.*;
@@ -85,13 +83,13 @@ public class EatInOrderServiceTest {
             CreateEatInOrderRequest request = new CreateEatInOrderRequest(테이블_1_ORDER_TABLE_UUID, orderLineItems);
 
             // when
-            Order order = orderService.create(request);
+            EatInOrder order = orderService.create(request);
 
             // then
             assertAll(
                     () -> assertThat(order.getId()).isNotNull(),
                     () -> assertThat(order.getStatus()).isEqualTo(EatInOrderStatus.WAITING),
-                    () -> assertThat(order.getOrderLineItems()).hasSize(orderLineItems.size())
+                    () -> assertThat(order.getLineItems()).hasSize(orderLineItems.size())
             );
         }
 
@@ -177,7 +175,7 @@ public class EatInOrderServiceTest {
         @Test
         void accept_eat_in_order_successfully() {
             // given
-            Order order = createEeaInOrder();
+            EatInOrder order = createEeaInOrder();
 
             // when
             Order acceptedOrder = orderService.accept(order.getId());
@@ -191,7 +189,7 @@ public class EatInOrderServiceTest {
         @Test
         void only_waiting_order_can_be_accepted() {
             // given
-            Order order = createEeaInOrder();
+            EatInOrder order = createEeaInOrder();
             orderService.accept(order.getId());
 
             // when
@@ -212,7 +210,7 @@ public class EatInOrderServiceTest {
         @Test
         void serve_eat_in_order_successfully() {
             // given
-            Order order = createEeaInOrder();
+            EatInOrder order = createEeaInOrder();
             orderService.accept(order.getId());
 
             // when
@@ -227,7 +225,7 @@ public class EatInOrderServiceTest {
         @Test
         void only_accepted_order_can_be_served() {
             // given
-            Order order = createEeaInOrder();
+            EatInOrder order = createEeaInOrder();
 
             // when
             ThrowableAssert.ThrowingCallable throwingCallable = () -> orderService.serve(order.getId());
@@ -247,7 +245,7 @@ public class EatInOrderServiceTest {
         @Test
         void complete_eat_in_order_successfully() {
             // given
-            Order order = createEeaInOrder();
+            EatInOrder order = createEeaInOrder();
             orderService.accept(order.getId());
             orderService.serve(order.getId());
 
@@ -263,7 +261,7 @@ public class EatInOrderServiceTest {
         @Test
         void only_served_order_can_be_completed_for_eat_in() {
             // given
-            Order order = createEeaInOrder();
+            EatInOrder order = createEeaInOrder();
 
             // when
             ThrowableAssert.ThrowingCallable throwingCallable = () -> orderService.complete(order.getId());
@@ -294,7 +292,7 @@ public class EatInOrderServiceTest {
         }
     }
 
-    private Order createEeaInOrder() {
+    private EatInOrder createEeaInOrder() {
         OrderTableEntity orderTableEntity = createOrderTable(테이블_1_ORDER_TABLE_UUID, "테이블 1", 0, true);
         orderTableRepository.save(orderTableEntity);
 
@@ -324,23 +322,6 @@ public class EatInOrderServiceTest {
         menuGroup.setId(id);
         menuGroup.setName(name);
         return menuGroup;
-    }
-
-    private static Order createOrder(OrderType type, List<OrderLineItem> orderLineItems, String deliveryAddress, UUID orderTableUuid, OrderTableEntity orderTableEntity) {
-        Order order = new Order();
-        order.setType(type);
-        order.setOrderLineItems(orderLineItems);
-        order.setDeliveryAddress(deliveryAddress);
-        order.setOrderTableId(orderTableUuid);
-        return order;
-    }
-
-    private static OrderLineItem createOrderLineItem(UUID menuId, int quantity, BigDecimal price) {
-        OrderLineItem orderLineItem = new OrderLineItem();
-        orderLineItem.setMenuId(menuId);
-        orderLineItem.setQuantity(quantity);
-        orderLineItem.setPrice(price);
-        return orderLineItem;
     }
 
     private static MenuEntity createMenu(UUID id, String name, BigDecimal price, UUID menuGroupId, MenuGroupEntity menuGroup, List<MenuProductEntity> menuProducts) {
