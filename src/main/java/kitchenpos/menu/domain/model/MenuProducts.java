@@ -1,6 +1,5 @@
 package kitchenpos.menu.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embeddable;
@@ -29,7 +28,8 @@ public class MenuProducts {
         return new MenuProducts(menuProducts);
     }
 
-    protected MenuProducts() {}
+    protected MenuProducts() {
+    }
 
     public MenuProducts(List<MenuProduct> menuProducts) {
         this.menuProducts = new ArrayList<>(menuProducts);

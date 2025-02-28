@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 import kitchenpos.menu.domain.entity.Menu;
 import kitchenpos.menu.domain.model.MenuId;
 import kitchenpos.menu.domain.repository.MenuRepository;

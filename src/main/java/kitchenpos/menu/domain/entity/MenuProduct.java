@@ -1,7 +1,6 @@
 package kitchenpos.menu.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -36,7 +35,8 @@ public class MenuProduct {
     @Embedded
     private MenuProductQty quantity;
 
-    protected MenuProduct() {}
+    protected MenuProduct() {
+    }
 
     public MenuProduct(ProductId productId, MenuId menuId, MenuProductQty quantity) {
         this.productId = productId;
@@ -57,6 +57,7 @@ public class MenuProduct {
     }
 
     public static MenuProduct fromDto(MenuProductCreate dto, MenuId menuId) {
-        return new MenuProduct(ProductId.of(dto.productId()), menuId, MenuProductQty.of(dto.quantity()));
+        return new MenuProduct(ProductId.of(dto.productId()), menuId,
+            MenuProductQty.of(dto.quantity()));
     }
 }

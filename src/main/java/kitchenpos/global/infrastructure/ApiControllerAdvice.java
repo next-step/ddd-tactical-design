@@ -5,8 +5,6 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-import kitchenpos.global.exception.ErrorCode;
-import kitchenpos.global.exception.ErrorResponse;
 import kitchenpos.global.exception.validation.ValidationError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,14 +68,14 @@ public class ApiControllerAdvice extends ResponseEntityExceptionHandler {
         if (cause instanceof JsonMappingException jsonMappingException) {
             for (JsonMappingException.Reference reference : jsonMappingException.getPath()) {
                 ValidationError errorDetail = new ValidationError(
-                        reference.getFieldName(),
-                        "Invalid value or missing field"
+                    reference.getFieldName(),
+                    "Invalid value or missing field"
                 );
                 errors.add(errorDetail);
             }
         } else if (cause instanceof JsonParseException jsonParseException) {
             ValidationError errorDetail = new ValidationError(
-                    null, jsonParseException.getOriginalMessage()
+                null, jsonParseException.getOriginalMessage()
             );
             errors.add(errorDetail);
         }
