@@ -187,9 +187,10 @@ public class EatInOrderTest {
         );
         final EatInOrderTable eatInOrderTable = new DefaultEatInOrderTable(UUID.randomUUID(), true);
 
-        final EatInOrder eatInOrder = new EatInOrder(eatInOrderLineItems, eatInOrderMenus, eatInOrderTable);
-        eatInOrder.accepted();
-        eatInOrder.served();
+        final EatInOrder eatInOrder = new EatInOrder(
+                new EatInOrderId(), EatInOrderStatus.ACCEPTED, new EatInOrderDateTime(),
+                eatInOrderLineItems, eatInOrderMenus, eatInOrderTable
+        );
 
         assertThat(eatInOrder.status()).isEqualTo(EatInOrderStatus.SERVED);
     }
@@ -215,5 +216,27 @@ public class EatInOrderTest {
         );
         assertThatThrownBy(eatInOrder::completed)
                 .isExactlyInstanceOf(IllegalArgumentException.class);
+    }
+
+    @DisplayName("서빙중인 매장 주문을 주문 완료로 변경한다.")
+    @Test
+    void complete() {
+        final UUID firstMenuId = UUID.randomUUID();
+        final UUID secondMenuId = UUID.randomUUID();
+        final EatInOrderLineItem firstEatInOrderLineItem = new EatInOrderLineItem(1L, new EatInOrderLineItemMenu(firstMenuId, "후라이드 치킨", 16_000), 1);
+        final EatInOrderLineItem secondEatInOrderLineItem = new EatInOrderLineItem(1L, new EatInOrderLineItemMenu(secondMenuId, "양념 치킨", 16_000), 1);
+        final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(firstEatInOrderLineItem, secondEatInOrderLineItem);
+        final EatInOrderMenus eatInOrderMenus = new DefaultEatInOrderMenus(
+                new DefaultEatInOrderMenu(firstMenuId, 16_000, true),
+                new DefaultEatInOrderMenu(secondMenuId, 16_000, true)
+        );
+        final EatInOrderTable eatInOrderTable = new DefaultEatInOrderTable(UUID.randomUUID(), true);
+
+        final EatInOrder eatInOrder = new EatInOrder(
+                new EatInOrderId(), EatInOrderStatus.SERVED, new EatInOrderDateTime(),
+                eatInOrderLineItems, eatInOrderMenus, eatInOrderTable
+        );
+
+        assertThat(eatInOrder.status()).isEqualTo(EatInOrderStatus.COMPLETED);
     }
 }
