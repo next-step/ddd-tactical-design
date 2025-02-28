@@ -126,7 +126,27 @@ public class EatInOrderTest {
                 new EatInOrderId(), eatInOrderStatus, new EatInOrderDateTime(),
                 eatInOrderLineItems, eatInOrderMenus, eatInOrderTable
         );
-        assertThatThrownBy(eatInOrder::served)
+        assertThatThrownBy(eatInOrder::accepted)
                 .isExactlyInstanceOf(IllegalArgumentException.class);
+    }
+
+    @DisplayName("대기중인 매장 주문을 주문 수락으로 변경한다.")
+    @Test
+    void accept() {
+        final UUID firstMenuId = UUID.randomUUID();
+        final UUID secondMenuId = UUID.randomUUID();
+        final EatInOrderLineItem firstEatInOrderLineItem = new EatInOrderLineItem(1L, new EatInOrderLineItemMenu(firstMenuId, "후라이드 치킨", 16_000), 1);
+        final EatInOrderLineItem secondEatInOrderLineItem = new EatInOrderLineItem(1L, new EatInOrderLineItemMenu(secondMenuId, "양념 치킨", 16_000), 1);
+        final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(firstEatInOrderLineItem, secondEatInOrderLineItem);
+        final EatInOrderMenus eatInOrderMenus = new DefaultEatInOrderMenus(
+                new DefaultEatInOrderMenu(firstMenuId, 16_000, true),
+                new DefaultEatInOrderMenu(secondMenuId, 16_000, true)
+        );
+        final EatInOrderTable eatInOrderTable = new DefaultEatInOrderTable(UUID.randomUUID(), true);
+
+        final EatInOrder eatInOrder = new EatInOrder(eatInOrderLineItems, eatInOrderMenus, eatInOrderTable);
+        eatInOrder.accepted();
+
+        assertThat(eatInOrder.status()).isEqualTo(EatInOrderStatus.ACCEPTED);
     }
 }

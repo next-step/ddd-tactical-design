@@ -52,10 +52,10 @@ public class EatInOrder {
         return eatInOrderStatus;
     }
 
-    public void served() {
+    public void accepted() {
         if(EatInOrderStatus.WAITING != this.eatInOrderStatus) {
             throw new IllegalArgumentException();
         }
-        this.eatInOrderStatus = EatInOrderStatus.SERVED;
+        this.eatInOrderStatus = EatInOrderStatus.ACCEPTED;
     }
 }
