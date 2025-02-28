@@ -26,4 +26,8 @@ public class EatInOrderLineItemMenu {
     public boolean isSamePrice(final int price) {
         return this.price.isSamePrice(price);
     }
+
+    public UUID menuId() {
+        return menuId;
+    }
 }
