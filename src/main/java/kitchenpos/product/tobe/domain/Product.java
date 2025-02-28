@@ -1,9 +1,8 @@
 package kitchenpos.product.tobe.domain;
 
 import jakarta.persistence.*;
-import kitchenpos.product.tobe.Profanities;
+import kitchenpos.common.tobe.Profanities;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 @Table(name = "product")
@@ -19,7 +18,7 @@ public class Product {
     @Embedded
     private ProductPrice price;
 
-    public Product() {}
+    protected Product() {}
 
     public Product(String name, long price, Profanities profanities) {
         this.id = UUID.randomUUID();
@@ -31,23 +30,19 @@ public class Product {
         return id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
     public ProductName getName() {
         return name;
     }
 
-    public void setName(final ProductName productName) {
-        this.name = productName;
-    }
 
-    public ProductPrice getPrice() {
+    public ProductPrice getProductPrice() {
         return price;
     }
+    public Long getPrice() {
+        return price.getPrice();
+    }
 
-    public void setPrice(final ProductPrice productPrice) {
+    public void updatePrice(final ProductPrice productPrice) {
         this.price = productPrice;
     }
 }

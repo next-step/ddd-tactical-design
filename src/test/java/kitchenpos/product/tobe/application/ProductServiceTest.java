@@ -1,23 +1,21 @@
 package kitchenpos.product.tobe.application;
 
-import kitchenpos.fake.repository.InMemoryMenuRepository;
-import kitchenpos.product.tobe.Profanities;
-import kitchenpos.product.tobe.domain.ProductName;
-import kitchenpos.product.tobe.domain.ProductPrice;
+
+import kitchenpos.common.tobe.Profanities;
+import kitchenpos.menu.tobe.fake.InMemoryMenuRepository;
+import kitchenpos.product.tobe.domain.*;
 import kitchenpos.product.tobe.fake.FakePurogmalumClient;
 import kitchenpos.product.tobe.fake.InMemoryProductRepository;
 import kitchenpos.product.tobe.fixture.ProductFixture;
-import kitchenpos.menu.domain.MenuRepository;
+import kitchenpos.menu.tobe.domain.menu.MenuRepository;
 
-import kitchenpos.product.tobe.domain.Product;
-import kitchenpos.product.tobe.domain.ProductRepository;
+import kitchenpos.product.tobe.infra.ProductPriceValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.context.ApplicationEventPublisher;
 
-import java.math.BigDecimal;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
@@ -28,14 +26,17 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class ProductServiceTest {
     private ProductRepository productRepository;
     private ProductService productService;
+    private ProductValidator productValidator;
     private Profanities profanities;
+    private ApplicationEventPublisher applicationEventPublisher;
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
         MenuRepository menuRepository = new InMemoryMenuRepository();
         profanities = new FakePurogmalumClient("바보");
-        productService = new ProductService(productRepository, menuRepository, profanities);
+        productValidator = new ProductPriceValidator(menuRepository);
+        productService = new ProductService(productRepository, profanities, applicationEventPublisher);
     }
 
     @Nested
@@ -50,7 +51,7 @@ class ProductServiceTest {
             assertAll(
                     () -> assertThat(created.getId()).isNotNull(),
                     () -> assertThat(created.getName()).isEqualTo(new ProductName("후라이드", profanities)),
-                    () -> assertThat(created.getPrice()).isEqualTo(new ProductPrice(16000L))
+                    () -> assertThat(created.getProductPrice()).isEqualTo(new ProductPrice(16000L))
             );
         }
 
@@ -83,7 +84,7 @@ class ProductServiceTest {
 
             Product updated = productService.changePrice(product.getId(), request);
 
-            assertThat(updated.getPrice().equals(new ProductPrice(18000L)));
+            assertThat(updated.getProductPrice().equals(new ProductPrice(18000L)));
         }
 
         @Test

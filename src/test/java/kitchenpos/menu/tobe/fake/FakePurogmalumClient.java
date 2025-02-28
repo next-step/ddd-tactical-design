@@ -1,4 +1,4 @@
-package kitchenpos.product.tobe.fake;
+package kitchenpos.menu.tobe.fake;
 
 import kitchenpos.common.tobe.Profanities;
 

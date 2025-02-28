@@ -1,4 +1,4 @@
-package kitchenpos.product.tobe.fake;
+package kitchenpos.menu.tobe.fake;
 
 
 import kitchenpos.product.tobe.domain.Product;
@@ -12,6 +12,7 @@ public class InMemoryProductRepository implements ProductRepository {
 
     @Override
     public Product save(Product product) {
+
         store.put(product.getId(), product);
         return product;
     }

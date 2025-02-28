@@ -1,4 +1,4 @@
-package kitchenpos.product.tobe;
+package kitchenpos.common.tobe;
 
 import org.springframework.stereotype.Component;
 

@@ -15,11 +15,12 @@ public class ProductPrice {
         this.price = price;
     }
 
-    public ProductPrice() {}
+    protected ProductPrice() {}
 
     public long getPrice() {
         return price;
     }
+
     private void validate(Long price) {
         if (Objects.isNull(price)) {
             throw new IllegalArgumentException("상품 가격은 필수값입니다.");
@@ -28,6 +29,7 @@ public class ProductPrice {
             throw new IllegalArgumentException("상품 가격은 0보다 작을 수 없습니다.");
         }
     }
+
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;

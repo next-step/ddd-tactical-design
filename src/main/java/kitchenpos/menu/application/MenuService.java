@@ -56,6 +56,7 @@ public class MenuService {
             throw new MenuException(MENU_PRODUCTS_SIZE_NOT_MATCHED);
         }
         final List<MenuProduct> menuProducts = new ArrayList<>();
+
         BigDecimal sum = BigDecimal.ZERO;
         for (final MenuProduct menuProductRequest : menuProductRequests) {
             final long quantity = menuProductRequest.getQuantity();

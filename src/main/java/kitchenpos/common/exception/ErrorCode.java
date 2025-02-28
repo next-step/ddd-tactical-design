@@ -23,6 +23,8 @@ public enum ErrorCode {
     MENU_PRODUCTS_SIZE_NOT_MATCHED(2005, "메뉴 상품 목록의 크기가 일치하지 않습니다"),
     MENU_QUANTITY_NEGATIVE(2006, "메뉴 수량은 음수일 수 없습니다"),
     MENU_NOT_FOUND(2007, "메뉴를 찾을 수 없습니다"),
+    MENU_PRODUCT_PRICE_INVALID(2008, "메뉴 상품 가격이 유효하지 않습니다"),
+    MENU_PRODUCT_NOT_FOUND(2009,"메뉴에 등록하려던 상품이 존재하지 않습니다." ),
 
     // 배달 관련 에러 (3000번대)
     DELIVERY_ADDRESS_NOT_FOUND(3000, "배달 주소를 찾을 수 없습니다"),
