@@ -1,6 +1,7 @@
 package kitchenpos.eatinorders.tobe.domain;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -48,5 +49,22 @@ class EatInOrderLineItemsTest {
 
         assertThatThrownBy(() -> eatInOrderLineItems.isSamePrice(UUID.randomUUID(), menuPrice))
                 .isExactlyInstanceOf(IllegalArgumentException.class);
+    }
+
+    @DisplayName("메뉴의 식별자 목록을 반환한다.")
+    @Test
+    void menuIds() {
+        final UUID firstMenuId = UUID.randomUUID();
+        final EatInOrderLineItemMenu firstEatInOrderLineItemMenu = new EatInOrderLineItemMenu(firstMenuId, "후라이드치킨", 16_000);
+        final EatInOrderLineItem firstEatInOrderLineItem = new EatInOrderLineItem(1L, firstEatInOrderLineItemMenu, 1);
+
+        final UUID secondMenuId = UUID.randomUUID();
+        final EatInOrderLineItemMenu secondEatInOrderLineItemMenu = new EatInOrderLineItemMenu(secondMenuId, "후라이드치킨", 16_000);
+        final EatInOrderLineItem secondEatInOrderLineItem = new EatInOrderLineItem(1L, secondEatInOrderLineItemMenu, 1);
+
+        final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(List.of(firstEatInOrderLineItem, secondEatInOrderLineItem));
+        final List<UUID> actual = eatInOrderLineItems.menuIds();
+
+        assertThat(actual).containsExactlyInAnyOrder(firstMenuId, secondMenuId);
     }
 }
