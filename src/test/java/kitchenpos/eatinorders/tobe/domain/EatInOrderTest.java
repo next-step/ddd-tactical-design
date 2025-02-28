@@ -1,9 +1,11 @@
 package kitchenpos.eatinorders.tobe.domain;
 
 import kitchenpos.eatinorders.tobe.domain.order.*;
+import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.NullSource;
 
 import java.util.UUID;
@@ -103,5 +105,28 @@ public class EatInOrderTest {
                 () -> assertThat(eatInOrder.getId()).isNotNull(),
                 () -> assertThat(eatInOrder.status()).isEqualTo(EatInOrderStatus.WAITING)
         );
+    }
+
+    @DisplayName("대기중인 매장 주문이 아니면 주문 수락을 변경할 수 없다.")
+    @EnumSource(value = EatInOrderStatus.class, names = {"ACCEPTED", "SERVED", "COMPLETED"})
+    @ParameterizedTest(name = "{index}. 주문 상태: {0}")
+    void acceptWithNotWaitingStatus(final EatInOrderStatus eatInOrderStatus) {
+        final UUID firstMenuId = UUID.randomUUID();
+        final UUID secondMenuId = UUID.randomUUID();
+        final EatInOrderLineItem firstEatInOrderLineItem = new EatInOrderLineItem(1L, new EatInOrderLineItemMenu(firstMenuId, "후라이드 치킨", 16_000), 1);
+        final EatInOrderLineItem secondEatInOrderLineItem = new EatInOrderLineItem(1L, new EatInOrderLineItemMenu(secondMenuId, "양념 치킨", 16_000), 1);
+        final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(firstEatInOrderLineItem, secondEatInOrderLineItem);
+        final EatInOrderMenus eatInOrderMenus = new DefaultEatInOrderMenus(
+                new DefaultEatInOrderMenu(firstMenuId, 16_000, true),
+                new DefaultEatInOrderMenu(secondMenuId, 16_000, true)
+        );
+        final EatInOrderTable eatInOrderTable = new DefaultEatInOrderTable(UUID.randomUUID(), true);
+
+        final EatInOrder eatInOrder = new EatInOrder(
+                new EatInOrderId(), eatInOrderStatus, new EatInOrderDateTime(),
+                eatInOrderLineItems, eatInOrderMenus, eatInOrderTable
+        );
+        assertThatThrownBy(() -> eatInOrder.served())
+                .isExactlyInstanceOf(IllegalArgumentException.class);
     }
 }
