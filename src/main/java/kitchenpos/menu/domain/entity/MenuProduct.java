@@ -1,5 +1,6 @@
 package kitchenpos.menu.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
@@ -29,7 +30,7 @@ public class MenuProduct {
 
     @Embedded
     @AttributeOverride(name = "id", column = @Column(name = "menu_id"))
-    @JsonIgnore
+    @JsonBackReference
     private MenuId menuId;
 
     @Embedded

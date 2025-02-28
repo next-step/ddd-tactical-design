@@ -1,13 +1,16 @@
 package kitchenpos.menu.domain.model;
 
 import jakarta.persistence.Embeddable;
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 import kitchenpos.global.exception.ErrorCode;
 import kitchenpos.global.exception.NotFoundException;
 
 @Embeddable
-public class MenuGroupId{
+public class MenuGroupId implements Serializable {
+
+    private static final long serialVersionUID = 5221255306203664019L;
 
     private UUID id;
 

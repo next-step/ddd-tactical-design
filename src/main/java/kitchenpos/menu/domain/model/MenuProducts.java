@@ -1,6 +1,7 @@
 package kitchenpos.menu.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.JoinColumn;
@@ -18,7 +19,7 @@ public class MenuProducts {
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "menu_id", insertable = false, updatable = false)
-    @JsonIgnore
+    @JsonManagedReference
     private List<MenuProduct> menuProducts = new ArrayList<>();
 
     public static MenuProducts of(final List<MenuProduct> menuProducts) {
