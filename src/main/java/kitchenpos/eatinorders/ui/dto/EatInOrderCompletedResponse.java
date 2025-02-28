@@ -1,15 +1,16 @@
 package kitchenpos.eatinorders.ui.dto;
 
+import kitchenpos.eatinorders.tobe.domain.EatInOrder;
 import kitchenpos.eatinorders.tobe.domain.OrderTableId;
-import kitchenpos.eatinorders.tobe.domain.common.*;
+import kitchenpos.eatinorders.tobe.domain.common.OrderId;
+import kitchenpos.eatinorders.tobe.domain.common.OrderLineItems;
+import kitchenpos.eatinorders.tobe.domain.common.OrderStatus;
 
 import java.time.LocalDateTime;
 
 public class EatInOrderCompletedResponse {
 
     private OrderId id;
-
-    private OrderType orderType;
 
     private OrderStatus status;
 
@@ -19,20 +20,18 @@ public class EatInOrderCompletedResponse {
 
     private LocalDateTime orderDateTime;
 
-    public static EatInOrderCompletedResponse from(OrderEntity entity) {
+    public static EatInOrderCompletedResponse from(EatInOrder order) {
         return new EatInOrderCompletedResponse(
-                entity.id(),
-                entity.type(),
-                entity.status(),
-                entity.orderLineItems(),
-                entity.orderTableId(),
-                entity.orderDateTime()
+                order.getId(),
+                order.getStatus(),
+                order.getOrderLineItems(),
+                order.getOrderTableId(),
+                order.getOrderDateTime()
         );
     }
 
-    public EatInOrderCompletedResponse(OrderId id, OrderType orderType, OrderStatus status, OrderLineItems orderLineItems, OrderTableId orderTableId, LocalDateTime orderDateTime) {
+    public EatInOrderCompletedResponse(OrderId id, OrderStatus status, OrderLineItems orderLineItems, OrderTableId orderTableId, LocalDateTime orderDateTime) {
         this.id = id;
-        this.orderType = orderType;
         this.status = status;
         this.orderLineItems = orderLineItems;
         this.orderTableId = orderTableId;
@@ -41,10 +40,6 @@ public class EatInOrderCompletedResponse {
 
     public OrderId getId() {
         return id;
-    }
-
-    public OrderType getOrderType() {
-        return orderType;
     }
 
     public OrderStatus getStatus() {

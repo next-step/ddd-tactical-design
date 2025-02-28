@@ -36,8 +36,8 @@ public class EatInOrderService {
         EatInOrder eatInOrder = new EatInOrder(orderEntity);
         eatInOrder.createOrder(orderTable);
 
-        OrderEntity savedOrder = orderRepository.save(eatInOrder.toEntity());
-        return EatInOrderCreateResponse.from(savedOrder);
+        orderRepository.save(eatInOrder.toEntity());
+        return EatInOrderCreateResponse.from(eatInOrder);
     }
 
     @Transactional
@@ -48,7 +48,7 @@ public class EatInOrderService {
         EatInOrder eatInOrder = new EatInOrder(order);
         eatInOrder.accept();
 
-        return EatInOrderAcceptResponse.from(eatInOrder.toEntity());
+        return EatInOrderAcceptResponse.from(eatInOrder);
     }
 
     @Transactional
@@ -59,7 +59,7 @@ public class EatInOrderService {
         EatInOrder eatInOrder = new EatInOrder(order);
         eatInOrder.serve();
 
-        return EatInOrderServedResponse.from(eatInOrder.toEntity());
+        return EatInOrderServedResponse.from(eatInOrder);
     }
 
     @Transactional
@@ -71,6 +71,6 @@ public class EatInOrderService {
         eatInOrder.complete();
 
         clearOrderTableService.clearOrderTable(order.id());
-        return EatInOrderCompletedResponse.from(eatInOrder.toEntity());
+        return EatInOrderCompletedResponse.from(eatInOrder);
     }
 }

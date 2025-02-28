@@ -2,7 +2,10 @@ package kitchenpos.eatinorders.ui.dto;
 
 import kitchenpos.eatinorders.tobe.domain.EatInOrder;
 import kitchenpos.eatinorders.tobe.domain.OrderTableId;
-import kitchenpos.eatinorders.tobe.domain.common.*;
+import kitchenpos.eatinorders.tobe.domain.common.OrderId;
+import kitchenpos.eatinorders.tobe.domain.common.OrderLineItems;
+import kitchenpos.eatinorders.tobe.domain.common.OrderStatus;
+import kitchenpos.eatinorders.tobe.domain.common.OrderType;
 
 import java.time.LocalDateTime;
 
@@ -19,14 +22,14 @@ public class EatInOrderCreateResponse {
 
     private LocalDateTime orderDateTime;
 
-    public static EatInOrderCreateResponse from(OrderEntity entity) {
+    public static EatInOrderCreateResponse from(EatInOrder order) {
         return new EatInOrderCreateResponse(
-                entity.id(),
-                entity.type(),
-                entity.status(),
-                entity.orderLineItems(),
-                entity.orderTableId(),
-                entity.orderDateTime()
+                order.getId(),
+                order.getType(),
+                order.getStatus(),
+                order.getOrderLineItems(),
+                order.getOrderTableId(),
+                order.getOrderDateTime()
         );
     }
 

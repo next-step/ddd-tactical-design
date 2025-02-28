@@ -67,6 +67,10 @@ public class EatInOrder {
         return toEntity().id();
     }
 
+    public OrderType getType(){
+        return toEntity().type();
+    }
+
     public OrderStatus getStatus() {
         return toEntity().status();
     }
