@@ -36,4 +36,15 @@ public class DefaultProductContextService implements ProductContextProvider {
 
         return product.getTotalPrice(qty.get());
     }
+
+    @Override
+    public List<ProductId> validateProduct(List<ProductId> productIds, int menuProductsSize) {
+        var products = productRepository.findAllByProductIdIn(productIds);
+
+        if (products.size() != menuProductsSize) {
+            throw new NotFoundException(ErrorCode.NOT_FOUND_ANY_PRODUCT.toString());
+        }
+
+        return productIds;
+    }
 }

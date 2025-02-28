@@ -1,15 +1,21 @@
 package kitchenpos.menu.domain.model;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import java.util.Objects;
 import java.util.UUID;
 import kitchenpos.global.exception.ErrorCode;
 import kitchenpos.global.exception.NotFoundException;
 
 @Embeddable
-public record MenuId(
-    UUID id
-) {
+public class MenuId {
+
+    private UUID id;
+
+    protected MenuId() {}
+
+    public MenuId(UUID id) {
+        this.id = id;
+    }
 
     public static MenuId of(UUID id) {
         if (id == null) {
@@ -21,5 +27,22 @@ public record MenuId(
 
     public UUID get() {
         return id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        MenuId menuId = (MenuId) o;
+        return Objects.equals(id, menuId.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

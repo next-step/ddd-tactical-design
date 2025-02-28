@@ -22,7 +22,6 @@ import kitchenpos.menu.application.dto.MenuRequest.UpdatePrice;
 import kitchenpos.menu.application.dto.MenuResponse;
 import kitchenpos.menu.application.facade.MenuFacade;
 import kitchenpos.menu.domain.entity.Menu;
-import kitchenpos.menu.domain.entity.MenuProduct;
 import kitchenpos.menu.domain.exception.MenuPriceException;
 import kitchenpos.menu.domain.exception.MenuPriceInvalidException;
 import kitchenpos.menu.domain.exception.MenuProductQtyException;
@@ -30,7 +29,6 @@ import kitchenpos.menu.domain.exception.MenuStateInvalidException;
 import kitchenpos.menu.domain.fixture.MenuFixture;
 import kitchenpos.menu.domain.fixture.MenuGroupFixture;
 import kitchenpos.menu.domain.fixture.MenuProductFixture;
-import kitchenpos.menu.domain.model.MenuProductQty;
 import kitchenpos.menu.domain.repository.InMemoryMenuRepository;
 import kitchenpos.menu.domain.repository.MenuGroupRepository;
 import kitchenpos.menu.domain.repository.MenuRepository;
@@ -80,6 +78,7 @@ class MenuFacadeTest {
     @Mock
     private ProductContextProvider productContextProvider;
 
+    private MenuFixture menuFixture;
     private MenuRequest.Create createMenu;
     private MenuRequest.UpdatePrice updatePriceMenu;
     private Menu defaultMenu;
@@ -95,7 +94,8 @@ class MenuFacadeTest {
         menuCommandService = new DefaultMenuService(menuRepository, menuGroupRepository, purgomalumClient, menuPolicy, productContextProvider);
         menuFacade = new MenuFacade(menuQueryService, menuCommandService);
 
-        createMenu = MenuFixture.init().create();
+        menuFixture = MenuFixture.init();
+        createMenu = menuFixture.create();
 
         chicken = ProductFixture.init().toEntity();
         defaultMenu = MenuFixture.test(
@@ -103,7 +103,7 @@ class MenuFacadeTest {
             null,
             null,
             true,
-            List.of(new MenuProductFixture(chicken.getProductId().get(), MenuProductQty.of(10)).toEntity())
+            List.of(new MenuProductFixture(chicken.getProductId().get(), menuFixture.id(),10).create())
         ).toEntity();
 
         productRepository.save(chicken);
@@ -208,7 +208,7 @@ class MenuFacadeTest {
                 BigDecimal.valueOf(price1),
                 null,
                 true,
-                List.of(new MenuProductFixture(chicken.getProductId().get(), MenuProductQty.of(100)).toEntity())
+                List.of(new MenuProductFixture(chicken.getProductId().get(), menuFixture.id(), 100).create())
             ).create();
 
             chicken = new Product(chicken.getProductId(), chicken.getName(), ProductPrice.of(BigDecimal.valueOf(price2)));
@@ -231,7 +231,7 @@ class MenuFacadeTest {
                 null,
                 null,
                 true,
-                List.of(new MenuProduct(null, MenuProductQty.of(1)))
+                List.of(new MenuProductFixture(chicken.getProductId().get(), menuFixture.id(), 1).create())
             ).create();
             mockFindByMenuGroup();
 
@@ -252,7 +252,7 @@ class MenuFacadeTest {
                         null,
                         null,
                         true,
-                        List.of(new MenuProductFixture(chicken.getProductId().get(), MenuProductQty.of(qty)).toEntity())
+                        List.of(new MenuProductFixture(chicken.getProductId().get(), menuFixture.id(), qty).create())
                     ).create();
 
                     mockCreateMenu();
@@ -296,7 +296,7 @@ class MenuFacadeTest {
                 BigDecimal.valueOf(price1),
                 null,
                 true,
-                List.of(new MenuProductFixture(chicken.getProductId().get(), MenuProductQty.of(100)).toEntity())
+                List.of(new MenuProductFixture(chicken.getProductId().get(), menuFixture.id(), 100).create())
             ).toEntity();
 
             menuRepository.save(defaultMenu);
@@ -396,7 +396,7 @@ class MenuFacadeTest {
     }
 
     private boolean isOver(BigDecimal price) {
-        return defaultMenu.getMenuProducts().menuProducts().stream()
+        return defaultMenu.getMenuProducts().get().stream()
             .map(mp -> {
                 return chicken.getPrice().price().multiply(BigDecimal.valueOf(mp.getQuantity().quantity()));
             })

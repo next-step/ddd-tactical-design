@@ -16,7 +16,6 @@ import kitchenpos.global.infrastructure.external.FakeProfanityClient;
 import kitchenpos.menu.domain.entity.Menu;
 import kitchenpos.menu.domain.fixture.MenuFixture;
 import kitchenpos.menu.domain.fixture.MenuProductFixture;
-import kitchenpos.menu.domain.model.MenuProductQty;
 import kitchenpos.menu.domain.repository.MenuRepository;
 import kitchenpos.menu.domain.service.FakeMenuPolicy;
 import kitchenpos.product.application.dto.ProductRequest;
@@ -30,10 +29,10 @@ import kitchenpos.product.domain.model.ProductId;
 import kitchenpos.product.domain.repository.InMemoryMenuRepository;
 import kitchenpos.product.domain.repository.InMemoryProductRepository;
 import kitchenpos.product.domain.repository.ProductRepository;
+import kitchenpos.product.domain.service.DefaultProductService;
 import kitchenpos.product.domain.service.ProductCommandService;
 import kitchenpos.product.domain.service.ProductPurgomalumClient;
 import kitchenpos.product.domain.service.ProductQueryService;
-import kitchenpos.product.domain.service.DefaultProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -177,8 +176,9 @@ class ProductFacadeTest {
                 true,
                 List.of(new MenuProductFixture(
                     productId,
-                    MenuProductQty.of(100)
-                ).toEntity())
+                    null,
+                    100
+                ).create())
             ).toEntity();
             var menu = menuRepository.save(chickenMenu);
 

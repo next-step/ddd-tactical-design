@@ -9,4 +9,5 @@ import kitchenpos.product.domain.model.ProductId;
 public interface ProductContextProvider {
     List<Product> findAllByProductIds(List<ProductId> productIds);
     BigDecimal getTotalPrice(ProductId productId, MenuProductQty qty);
+    List<ProductId> validateProduct(List<ProductId> productIds, int menuProductsSize);
 }

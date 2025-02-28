@@ -1,7 +1,6 @@
 package kitchenpos.menu.domain.service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import kitchenpos.global.exception.ErrorCode;
 import kitchenpos.global.exception.NotFoundException;
@@ -18,7 +17,6 @@ import kitchenpos.menu.domain.model.MenuProducts;
 import kitchenpos.menu.domain.model.MenuVo;
 import kitchenpos.menu.domain.repository.MenuGroupRepository;
 import kitchenpos.menu.domain.repository.MenuRepository;
-import kitchenpos.product.domain.entity.Product;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,13 +51,15 @@ public class DefaultMenuService implements MenuQueryService, MenuCommandService 
         final MenuPrice price = request.price();
         final MenuName name = MenuName.of(request.name(), purgomalumClient);
         final MenuGroup menuGroup = validateMenuGroup(request.menuGroupId());
-        final MenuProducts menuProducts = createMenuProducts(request.menuProducts().get());
+        final MenuId menuId = MenuId.of(UUID.randomUUID());
+
+        MenuProducts menuProducts = createMenuProducts(request.menuProducts().get(), menuId);
 
         menuPolicy.validateMenuPrice(price, menuProducts);
 
         return MenuVo.MenuInfo.fromEntity(
             menuRepository.save(new Menu(
-                MenuId.of(UUID.randomUUID()),
+                menuId,
                 name,
                 price,
                 menuGroup.getMenuGroupId(),
@@ -102,35 +102,24 @@ public class DefaultMenuService implements MenuQueryService, MenuCommandService 
             .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_MENU_GROUP.toString()));
     }
 
-    private MenuProducts createMenuProducts(List<MenuProduct> menuProductRequests) {
-        if (Objects.isNull(menuProductRequests) || menuProductRequests.isEmpty()) {
-            throw new NotFoundException(ErrorCode.NOT_FOUND_MENU_PRODUCT.toString());
-        }
+    private MenuProducts createMenuProducts(List<MenuProduct> menuProductRequests, MenuId menuId) {
 
-        final List<Product> products = productContextProvider.findAllByProductIds(
-            menuProductRequests.stream().map(MenuProduct::getProductId).toList()
+        productContextProvider.validateProduct(
+            menuProductRequests.stream().map(MenuProduct::getProductId).toList(),
+            menuProductRequests.size()
         );
 
-        if (products.size() != menuProductRequests.size()) {
-            throw new NotFoundException(ErrorCode.NOT_FOUND_ANY_PRODUCT.toString());
-        }
-
-        return new MenuProducts(menuProductRequests.stream()
-                                    .map(request -> createMenuProduct(request, products))
-                                    .toList());
+        return MenuProducts.of(menuProductRequests.stream()
+                            .map(request -> createMenuProduct(request, menuId))
+                            .toList());
     }
 
-    private MenuProduct createMenuProduct(MenuProduct request, List<Product> products) {
+    private MenuProduct createMenuProduct(MenuProduct request, MenuId menuId) {
         if (request.getQuantity().isNegative()) {
             throw new MenuProductQtyException();
         }
 
-        final Product product = products.stream()
-            .filter(p -> p.getProductId().equals(request.getProductId()))
-            .findFirst()
-            .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_PRODUCT.toString()));
-
-        return new MenuProduct(product.getProductId(), request.getQuantity());
+        return new MenuProduct(request.getProductId(), menuId, request.getQuantity());
     }
 
 }

@@ -36,7 +36,8 @@ public class MenuFacade {
     }
 
     public MenuResponse.GetMenu hide(UUID menuId) {
-        return MenuResponse.GetMenu.fromVo(menuCommandService.hide(MenuId.of(menuId)));
+        var result = menuCommandService.hide(MenuId.of(menuId));
+        return MenuResponse.GetMenu.fromVo(result);
     }
 
     public List<MenuResponse.GetMenu> findAll() {

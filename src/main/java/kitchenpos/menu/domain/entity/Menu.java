@@ -7,6 +7,7 @@ import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
+import java.util.Objects;
 import kitchenpos.menu.domain.model.MenuGroupId;
 import kitchenpos.menu.domain.model.MenuId;
 import kitchenpos.menu.domain.model.MenuName;
@@ -88,4 +89,33 @@ public class Menu {
     public boolean isPriceEqual(BigDecimal diff) {
         return price.isEqual(diff);
     }
+
+    @Override
+    public String toString() {
+        return "Menu{" +
+                "menuId=" + menuId +
+                ", name=" + name +
+                ", price=" + price +
+                ", menuGroupId=" + menuGroupId +
+                ", displayed=" + displayed +
+                "}";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Menu menu = (Menu) o;
+        return displayed == menu.displayed &&
+                Objects.equals(menuId, menu.menuId) &&
+                Objects.equals(name, menu.name) &&
+                Objects.equals(price, menu.price) &&
+                Objects.equals(menuGroupId, menu.menuGroupId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(menuId, name, price, menuGroupId, displayed);
+    }
+
 }

@@ -8,7 +8,6 @@ import kitchenpos.menu.application.dto.MenuRequest;
 import kitchenpos.menu.application.dto.MenuRequest.UpdatePrice;
 import kitchenpos.menu.application.dto.MenuResponse;
 import kitchenpos.menu.application.facade.MenuFacade;
-import kitchenpos.menu.domain.model.MenuId;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

@@ -23,6 +23,7 @@ public enum ErrorCode implements ErrorType {
     MENU_PRICE_NOT_ALLOWED("400", "메뉴가격은 0원 이상이어야 합니다."),
     MENU_PRICE_OVER_TOTAL_PRODUCTS_NOT_ALLOWED("400", "메뉴가격은 구성 상품의 총 금액보다 클 수 없습니다."),
 
+    MENU_PRODUCT_NOT_ALLOWED("400", "메뉴 상품은 1개 이상 입력해야 합니다."),
     MENU_PRODUCT_QTY_NOT_ALLOWED("400", "메뉴가격은 구성 상품의 총 금액보다 클 수 없습니다.");
 
     private final String code;

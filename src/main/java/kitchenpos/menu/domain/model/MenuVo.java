@@ -10,10 +10,14 @@ public record MenuVo() {
         MenuId id,
         MenuName name,
         MenuPrice price,
-        boolean displayed
+        boolean displayed,
+        MenuProducts menuProducts,
+        MenuGroupId menuGroupId
     ) {
         public static MenuInfo fromEntity(Menu entity) {
-            return new MenuInfo(entity.getMenuId(), entity.getName(), entity.getPrice(), entity.isDisplayed());
+            return new MenuInfo(entity.getMenuId(), entity.getName(), entity.getPrice(), entity.isDisplayed(),
+                    MenuProducts.of(entity.getMenuProducts().get()), entity.getMenuGroupId()
+            );
         }
 
         public UUID getMenuId() {
@@ -26,6 +30,10 @@ public record MenuVo() {
 
         public BigDecimal getMenuPrice() {
             return price.get();
+        }
+
+        public UUID getMenuGroupId() {
+            return menuGroupId.get();
         }
     }
 
