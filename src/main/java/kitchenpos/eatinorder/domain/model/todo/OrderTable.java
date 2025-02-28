@@ -32,7 +32,7 @@ public class OrderTable {
                 id,
                 OrderTableName.of(name, profanities),
                 NumberOfGuests.ZERO,
-                OrderTableOccupiedState.VACANT
+                OrderTableOccupiedState.EMPTY
         );
     }
 

@@ -3,8 +3,8 @@ package kitchenpos.eatinorder.domain.model.todo;
 import java.util.Objects;
 
 public class OrderTableOccupiedState {
-    public static final OrderTableOccupiedState OCCUPIED = new OrderTableOccupiedState(true);
-    public static final OrderTableOccupiedState VACANT = new OrderTableOccupiedState(false);
+    public static final OrderTableOccupiedState USED = new OrderTableOccupiedState(true);
+    public static final OrderTableOccupiedState EMPTY = new OrderTableOccupiedState(false);
     private final boolean occupied;
 
     private OrderTableOccupiedState(final boolean occupied) {
@@ -13,9 +13,9 @@ public class OrderTableOccupiedState {
 
     public static OrderTableOccupiedState of(final boolean occupied) {
         if (occupied) {
-            return OCCUPIED;
+            return USED;
         }
-        return VACANT;
+        return EMPTY;
     }
 
     public boolean isOccupied() {
@@ -27,11 +27,11 @@ public class OrderTableOccupiedState {
     }
 
     public OrderTableOccupiedState occupy() {
-        return OCCUPIED;
+        return USED;
     }
 
     public OrderTableOccupiedState vacate() {
-        return VACANT;
+        return EMPTY;
     }
 
     @Override
