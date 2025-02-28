@@ -65,4 +65,11 @@ public class EatInOrder {
         }
         this.eatInOrderStatus = EatInOrderStatus.SERVED;
     }
+
+    public void completed() {
+        if(EatInOrderStatus.SERVED != this.eatInOrderStatus) {
+            throw new IllegalArgumentException();
+        }
+        this.eatInOrderStatus = EatInOrderStatus.COMPLETED;
+    }
 }
