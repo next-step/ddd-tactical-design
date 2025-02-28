@@ -1,10 +1,12 @@
 package kitchenpos.eatinorders.application.tobe;
 
 import kitchenpos.eatinorders.application.tobe.exception.InvalidOrderTableStateException;
+import kitchenpos.eatinorders.tobe.domain.ClearOrderTableService;
 import kitchenpos.eatinorders.tobe.domain.OrderTable;
 import kitchenpos.eatinorders.tobe.domain.OrderTableId;
 import kitchenpos.eatinorders.tobe.domain.OrderTableRepository;
 import kitchenpos.eatinorders.ui.dto.OrderTableChangeNumberOfGuestsResponse;
+import kitchenpos.eatinorders.ui.dto.OrderTableClearResponse;
 import kitchenpos.eatinorders.ui.dto.OrderTableCreateResponse;
 import kitchenpos.eatinorders.ui.dto.OrderTableSitResponse;
 import org.springframework.stereotype.Service;
@@ -17,9 +19,11 @@ import java.util.NoSuchElementException;
 public class OrderTableService {
 
     private final OrderTableRepository orderTableRepository;
+    private final ClearOrderTableService clearOrderTableService;
 
-    public OrderTableService(OrderTableRepository orderTableRepository) {
+    public OrderTableService(OrderTableRepository orderTableRepository, ClearOrderTableService clearOrderTableService) {
         this.orderTableRepository = orderTableRepository;
+        this.clearOrderTableService = clearOrderTableService;
     }
 
     @Transactional
@@ -37,18 +41,13 @@ public class OrderTableService {
         return OrderTableSitResponse.from(orderTable);
     }
 
-    //TODO orderRepository 개발 후 진행
-    /*@Transactional
-    public OrderTable clear(final OrderTableId orderTableId) {
+    @Transactional
+    public OrderTableClearResponse clear(final OrderTableId orderTableId) {
         final OrderTable orderTable = orderTableRepository.findById(orderTableId)
                 .orElseThrow(NoSuchElementException::new);
-        if (orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
-            throw new IllegalStateException();
-        }
-        orderTable.setNumberOfGuests(0);
-        orderTable.setOccupied(false);
-        return orderTable;
-    }*/
+        clearOrderTableService.clearOrderTable(orderTable.getId());
+        return OrderTableClearResponse.from(orderTable);
+    }
 
     @Transactional
     public OrderTableChangeNumberOfGuestsResponse changeNumberOfGuests(final OrderTableId id, final int numberOfGuests) {

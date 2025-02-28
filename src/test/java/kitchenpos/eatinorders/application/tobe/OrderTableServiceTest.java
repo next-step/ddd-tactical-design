@@ -1,18 +1,22 @@
 package kitchenpos.eatinorders.application.tobe;
 
 import kitchenpos.common.vo.PositiveNumber;
+import kitchenpos.common.vo.Price;
 import kitchenpos.eatinorders.application.tobe.exception.InvalidOrderTableStateException;
+import kitchenpos.eatinorders.infra.InMemoryOrderRepository;
 import kitchenpos.eatinorders.infra.InMemoryOrderTableRepository;
-import kitchenpos.eatinorders.tobe.domain.OrderTable;
-import kitchenpos.eatinorders.tobe.domain.OrderTableId;
-import kitchenpos.eatinorders.tobe.domain.OrderTableName;
-import kitchenpos.eatinorders.tobe.domain.OrderTableRepository;
+import kitchenpos.eatinorders.tobe.domain.*;
+import kitchenpos.eatinorders.tobe.domain.common.*;
 import kitchenpos.eatinorders.ui.dto.OrderTableChangeNumberOfGuestsResponse;
+import kitchenpos.eatinorders.ui.dto.OrderTableClearResponse;
 import kitchenpos.eatinorders.ui.dto.OrderTableCreateResponse;
 import kitchenpos.eatinorders.ui.dto.OrderTableSitResponse;
+import kitchenpos.menus.tobe.domain.MenuId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -21,12 +25,16 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class OrderTableServiceTest {
 
     private OrderTableRepository orderTableRepository;
+    private OrderRepository orderRepository;
+    private ClearOrderTableService clearOrderTableService;
     private OrderTableService orderTableService;
 
     @BeforeEach
     void setup() {
         orderTableRepository = new InMemoryOrderTableRepository();
-        orderTableService = new OrderTableService(orderTableRepository);
+        orderRepository = new InMemoryOrderRepository();
+        clearOrderTableService = new ClearOrderTableService(orderRepository, orderTableRepository);
+        orderTableService = new OrderTableService(orderTableRepository, clearOrderTableService);
     }
 
     @DisplayName("주문 테이블을 생성한다")
@@ -51,14 +59,48 @@ class OrderTableServiceTest {
         assertThat(result.isOccupied()).isTrue();
     }
 
-    //TODO clear orderRepository 구현 후 구현
-//    @DisplayName("")
-//    @Test
-//    void clear(){
-//        
-//    }
 
+    @DisplayName("주문 완료 상태가 아닌 주문 테이블을 정리하면 예외가 발생한다")
+    @EnumSource(value = OrderStatus.class, names = "COMPLETED", mode = EnumSource.Mode.EXCLUDE)
+    @ParameterizedTest
+    void throwsIfTableClear(OrderStatus status) {
+        OrderTable table = orderTableRepository.save(createOrderTable("1번테이블", 4, true));
+        OrderLineItems orderLineItems = new OrderLineItems(
+                new OrderLineItem(1L, MenuId.generate(), 1, new Price(25_000))
+        );
+        orderRepository.save(new OrderEntity(
+                OrderType.EAT_IN,
+                status,
+                orderLineItems,
+                null,
+                table.getId()
+        ));
 
+        assertThatThrownBy(() -> orderTableService.clear(table.getId()))
+                .isInstanceOf(InvalidOrderTableStateException.class);
+    }
+
+    @DisplayName("주문 테이블을 정리한다")
+    @Test
+    void clear() {
+        OrderTable table = orderTableRepository.save(createOrderTable("1번테이블", 4, true));
+        OrderLineItems orderLineItems = new OrderLineItems(
+                new OrderLineItem(1L, MenuId.generate(), 1, new Price(25_000))
+        );
+        orderRepository.save(new OrderEntity(
+                OrderType.EAT_IN,
+                OrderStatus.COMPLETED,
+                orderLineItems,
+                null,
+                table.getId()
+        ));
+
+        OrderTableClearResponse result = orderTableService.clear(table.getId());
+
+        assertThat(result.isOccupied()).isFalse();
+        assertThat(result.getNumberOfGuests()).isEqualTo(PositiveNumber.ZERO);
+    }
+    
     @DisplayName("빈 주문 테이블의 손님의 수를 변경하면 예외가 발생한다")
     @Test
     void changeNumberOfGuestsByEmptyTable() {

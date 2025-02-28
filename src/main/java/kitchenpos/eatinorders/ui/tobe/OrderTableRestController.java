@@ -4,6 +4,7 @@ import kitchenpos.eatinorders.application.tobe.OrderTableService;
 import kitchenpos.eatinorders.tobe.domain.OrderTable;
 import kitchenpos.eatinorders.tobe.domain.OrderTableId;
 import kitchenpos.eatinorders.ui.dto.OrderTableChangeNumberOfGuestsResponse;
+import kitchenpos.eatinorders.ui.dto.OrderTableClearResponse;
 import kitchenpos.eatinorders.ui.dto.OrderTableCreateResponse;
 import kitchenpos.eatinorders.ui.dto.OrderTableSitResponse;
 import org.springframework.http.ResponseEntity;
@@ -33,11 +34,10 @@ public class OrderTableRestController {
         return ResponseEntity.ok(orderTableService.sit(orderTableId));
     }
 
-    //TODO
-    /*@PutMapping("/{orderTableId}/clear")
-    public ResponseEntity<OrderTable> clear(@PathVariable final UUID orderTableId) {
+    @PutMapping("/{orderTableId}/clear")
+    public ResponseEntity<OrderTableClearResponse> clear(@PathVariable final OrderTableId orderTableId) {
         return ResponseEntity.ok(orderTableService.clear(orderTableId));
-    }*/
+    }
 
     @PutMapping("/{orderTableId}/number-of-guests")
     public ResponseEntity<OrderTableChangeNumberOfGuestsResponse> changeNumberOfGuests(
