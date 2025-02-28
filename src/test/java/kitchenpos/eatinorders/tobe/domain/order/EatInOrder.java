@@ -9,18 +9,19 @@ import static java.util.Objects.isNull;
 
 public class EatInOrder {
     private final EatInOrderId id;
-    private final EatInOrderStatus eatInOrderStatus;
+    private EatInOrderStatus eatInOrderStatus;
     private final EatInOrderDateTime eatInOrderDateTime;
     private final EatInOrderLineItems eatInOrderLineItems;
     private final UUID orderTableId;
 
     public EatInOrder(final EatInOrderLineItems eatInOrderLineItems, final EatInOrderMenus eatInOrderMenus, final EatInOrderTable orderTable) {
-        this(new EatInOrderId(), eatInOrderLineItems, EatInOrderStatus.WAITING, new EatInOrderDateTime(), eatInOrderMenus, orderTable);
+        this(new EatInOrderId(), EatInOrderStatus.WAITING, new EatInOrderDateTime(), eatInOrderLineItems, eatInOrderMenus, orderTable);
     }
 
-    public EatInOrder(final EatInOrderId id, final EatInOrderLineItems eatInOrderLineItems, final EatInOrderStatus eatInOrderStatus,
-                      final EatInOrderDateTime eatInOrderDateTime, final EatInOrderMenus eatInOrderMenus, final EatInOrderTable orderTable) {
-        verify(id, eatInOrderLineItems, eatInOrderStatus, eatInOrderDateTime, eatInOrderMenus, orderTable);
+    public EatInOrder(final EatInOrderId id, final EatInOrderStatus eatInOrderStatus,
+                      final EatInOrderDateTime eatInOrderDateTime, final EatInOrderLineItems eatInOrderLineItems,
+                      final EatInOrderMenus eatInOrderMenus, final EatInOrderTable orderTable) {
+        verify(id, eatInOrderStatus, eatInOrderDateTime, eatInOrderLineItems, eatInOrderMenus, orderTable);
         this.id = id;
         this.eatInOrderStatus = eatInOrderStatus;
         this.eatInOrderDateTime = eatInOrderDateTime;
@@ -30,11 +31,11 @@ public class EatInOrder {
                 .orElseThrow(IllegalArgumentException::new);
     }
 
-    private void verify(final EatInOrderId id, final EatInOrderLineItems eatInOrderLineItems,
-                        final EatInOrderStatus eatInOrderStatus, final EatInOrderDateTime eatInOrderDateTime,
+    private void verify(final EatInOrderId id, final EatInOrderStatus eatInOrderStatus,
+                        final EatInOrderDateTime eatInOrderDateTime, final EatInOrderLineItems eatInOrderLineItems,
                         final EatInOrderMenus eatInOrderMenus, final EatInOrderTable orderTable) {
-        if (isNull(id) || isNull(orderTable) || isNull(eatInOrderStatus) ||
-                isNull(eatInOrderDateTime) || isNull(eatInOrderLineItems) || isNull(eatInOrderMenus)) {
+        if (isNull(id) || isNull(eatInOrderStatus) || isNull(eatInOrderDateTime) ||
+                isNull(eatInOrderLineItems) || isNull(eatInOrderMenus) || isNull(orderTable)) {
             throw new IllegalArgumentException();
         }
         eatInOrderLineItems.verify(eatInOrderMenus);
@@ -49,5 +50,12 @@ public class EatInOrder {
 
     public EatInOrderStatus status() {
         return eatInOrderStatus;
+    }
+
+    public void served() {
+        if(EatInOrderStatus.WAITING != this.eatInOrderStatus) {
+            throw new IllegalArgumentException();
+        }
+        this.eatInOrderStatus = EatInOrderStatus.SERVED;
     }
 }

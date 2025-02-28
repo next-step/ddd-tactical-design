@@ -126,7 +126,7 @@ public class EatInOrderTest {
                 new EatInOrderId(), eatInOrderStatus, new EatInOrderDateTime(),
                 eatInOrderLineItems, eatInOrderMenus, eatInOrderTable
         );
-        assertThatThrownBy(() -> eatInOrder.served())
+        assertThatThrownBy(eatInOrder::served)
                 .isExactlyInstanceOf(IllegalArgumentException.class);
     }
 }
