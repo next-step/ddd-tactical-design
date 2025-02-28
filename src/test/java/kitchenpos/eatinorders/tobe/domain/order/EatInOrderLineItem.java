@@ -1,7 +1,7 @@
-package kitchenpos.eatinorders.tobe.domain;
+package kitchenpos.eatinorders.tobe.domain.order;
 
-import kitchenpos.eatinorders.tobe.domain.vo.EatInOrderLineItemSeq;
-import kitchenpos.eatinorders.tobe.domain.vo.Quantity;
+import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderLineItemSeq;
+import kitchenpos.eatinorders.tobe.domain.order.vo.Quantity;
 
 import java.util.UUID;
 

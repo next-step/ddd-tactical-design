@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.tobe.domain;
+package kitchenpos.eatinorders.tobe.domain.order;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,6 +10,4 @@ public interface EatInOrderRepository {
     Optional<EatInOrder> findById(UUID id);
 
     List<EatInOrder> findAll();
-
-    boolean existsByOrderTableAndStatusNot(OrderTable orderTable, OrderStatus status);
 }

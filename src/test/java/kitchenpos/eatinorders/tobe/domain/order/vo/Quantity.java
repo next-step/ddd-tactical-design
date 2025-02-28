@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.tobe.domain.vo;
+package kitchenpos.eatinorders.tobe.domain.order.vo;
 
 import java.util.Objects;
 

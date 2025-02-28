@@ -1,10 +1,9 @@
 package kitchenpos.eatinorders.tobe.domain;
 
-import kitchenpos.eatinorders.tobe.domain.vo.OrderTableId;
+import kitchenpos.eatinorders.tobe.domain.order.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.NullSource;
 
 import java.util.List;
@@ -59,7 +58,7 @@ public class EatInOrderTest {
                 new DefaultEatInOrderMenu(firstMenuId, "후라이드 치킨", 16_000, true),
                 new DefaultEatInOrderMenu(secondMenuId, "양념 치킨", 16_000, true)
         );
-        final EatInOrderTable eatInOrderTable = new FakeEatInOrderTable(UUID.randomUUID(), true);
+        final EatInOrderTable eatInOrderTable = new DefaultEatInOrderTable(UUID.randomUUID(), true);
 
         final EatInOrder eatInOrder = new EatInOrder(eatInOrderLineItems, eatInOrderMenus, eatInOrderTable);
         assertThat(eatInOrder.size()).isEqualTo(2);

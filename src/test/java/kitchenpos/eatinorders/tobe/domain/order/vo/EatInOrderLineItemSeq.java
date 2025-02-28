@@ -1,15 +1,15 @@
-package kitchenpos.eatinorders.tobe.domain.vo;
+package kitchenpos.eatinorders.tobe.domain.order.vo;
 
 import java.util.Objects;
 
-public class Occupied {
-    private final boolean value;
+public class EatInOrderLineItemSeq {
+    private final long value;
 
-    public Occupied(final boolean value) {
+    public EatInOrderLineItemSeq(final long value) {
         this.value = value;
     }
 
-    public boolean getValue() {
+    public long getValue() {
         return value;
     }
 
@@ -17,8 +17,8 @@ public class Occupied {
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        final Occupied occupied = (Occupied) o;
-        return value == occupied.value;
+        final EatInOrderLineItemSeq that = (EatInOrderLineItemSeq) o;
+        return value == that.value;
     }
 
     @Override

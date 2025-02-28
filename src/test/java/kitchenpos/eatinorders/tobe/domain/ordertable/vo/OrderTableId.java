@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.tobe.domain.vo;
+package kitchenpos.eatinorders.tobe.domain.ordertable.vo;
 
 import java.util.Objects;
 import java.util.UUID;

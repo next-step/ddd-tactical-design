@@ -3,7 +3,8 @@ package kitchenpos.eatinorders.tobe.application;
 import kitchenpos.eatinorders.tobe.application.dto.CreateEatInOrderCommand;
 import kitchenpos.eatinorders.tobe.application.dto.CreateEatInOrderLineItemCommand;
 import kitchenpos.eatinorders.tobe.domain.*;
-import kitchenpos.eatinorders.tobe.domain.vo.Quantity;
+import kitchenpos.eatinorders.tobe.domain.order.*;
+import kitchenpos.eatinorders.tobe.domain.order.vo.Quantity;
 
 import java.util.List;
 

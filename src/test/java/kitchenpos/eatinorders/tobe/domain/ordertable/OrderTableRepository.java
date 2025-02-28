@@ -1,6 +1,6 @@
-package kitchenpos.eatinorders.tobe.domain;
+package kitchenpos.eatinorders.tobe.domain.ordertable;
 
-import kitchenpos.eatinorders.tobe.domain.vo.OrderTableId;
+import kitchenpos.eatinorders.tobe.domain.ordertable.vo.OrderTableId;
 
 import java.util.List;
 import java.util.Optional;

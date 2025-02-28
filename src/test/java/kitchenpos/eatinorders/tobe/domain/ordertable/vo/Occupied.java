@@ -1,15 +1,15 @@
-package kitchenpos.eatinorders.tobe.domain.vo;
+package kitchenpos.eatinorders.tobe.domain.ordertable.vo;
 
 import java.util.Objects;
 
-public class EatInOrderLineItemSeq {
-    private final long value;
+public class Occupied {
+    private final boolean value;
 
-    public EatInOrderLineItemSeq(final long value) {
+    public Occupied(final boolean value) {
         this.value = value;
     }
 
-    public long getValue() {
+    public boolean getValue() {
         return value;
     }
 
@@ -17,8 +17,8 @@ public class EatInOrderLineItemSeq {
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        final EatInOrderLineItemSeq that = (EatInOrderLineItemSeq) o;
-        return value == that.value;
+        final Occupied occupied = (Occupied) o;
+        return value == occupied.value;
     }
 
     @Override

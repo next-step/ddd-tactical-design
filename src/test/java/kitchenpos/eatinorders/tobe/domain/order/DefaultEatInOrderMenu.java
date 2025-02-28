@@ -1,9 +1,8 @@
-package kitchenpos.eatinorders.tobe.domain;
+package kitchenpos.eatinorders.tobe.domain.order;
 
 import java.util.UUID;
 
 public class DefaultEatInOrderMenu implements EatInOrderMenu {
-
     private final UUID menuId;
     private final String name;
     private final int price;
