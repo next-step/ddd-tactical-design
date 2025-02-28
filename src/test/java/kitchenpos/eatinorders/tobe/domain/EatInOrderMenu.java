@@ -2,29 +2,10 @@ package kitchenpos.eatinorders.tobe.domain;
 
 import java.util.UUID;
 
-public class EatInOrderMenu {
+public interface EatInOrderMenu {
+    boolean isSameMenu(UUID uuid);
 
-    private final UUID menuId;
-    private final int price;
-    private final String name;
-    private final boolean displayed;
+    boolean isSamePrice(int price);
 
-    public EatInOrderMenu(final UUID menuId, final int price, final String name, final boolean displayed) {
-        this.menuId = menuId;
-        this.price = price;
-        this.name = name;
-        this.displayed = displayed;
-    }
-
-    public boolean isSameMenu(final UUID uuid) {
-        return menuId.equals(uuid);
-    }
-
-    public boolean isSamePrice(final int price) {
-        return this.price == price;
-    }
-
-    public boolean isDisplayed() {
-        return displayed;
-    }
+    boolean isDisplayed();
 }

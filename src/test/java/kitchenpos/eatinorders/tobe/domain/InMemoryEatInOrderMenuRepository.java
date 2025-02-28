@@ -19,8 +19,8 @@ public class InMemoryEatInOrderMenuRepository implements EatInOrderMenuRepositor
 
     @Override
     public EatInOrderMenus findAllByIdIn(final List<UUID> eatInOrderMenuIds) {
-        return new EatInOrderMenus(eatInOrderMenuIds.stream()
-            .map(eatInOrderMenus::get)
-            .toList());
+        return new DefaultEatInOrderMenus(eatInOrderMenuIds.stream()
+                .map(eatInOrderMenus::get)
+                .toList());
     }
 }

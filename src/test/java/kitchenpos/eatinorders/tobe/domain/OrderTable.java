@@ -39,8 +39,11 @@ public class OrderTable {
         this.numberOfGuests = new NumberOfGuests(numberOfGuests);
     }
 
+    public OrderTableId id() {
+        return id;
+    }
 
-    public UUID id() {
+    public UUID idValue() {
         return id.getValue();
     }
 

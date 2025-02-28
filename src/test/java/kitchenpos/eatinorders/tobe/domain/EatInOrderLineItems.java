@@ -6,6 +6,10 @@ import java.util.UUID;
 public class EatInOrderLineItems {
     private final List<EatInOrderLineItem> eatInOrderLineItems;
 
+    public EatInOrderLineItems(final EatInOrderLineItem... eatInOrderLineItem) {
+        this(List.of(eatInOrderLineItem));
+    }
+
     public EatInOrderLineItems(final List<EatInOrderLineItem> eatInOrderLineItems) {
         if (eatInOrderLineItems == null || eatInOrderLineItems.isEmpty()) {
             throw new IllegalArgumentException();
@@ -32,7 +36,7 @@ public class EatInOrderLineItems {
     }
 
     public void verify(final EatInOrderMenus eatInOrderMenus) {
-        if(eatInOrderLineItems.size() != eatInOrderMenus.size()) {
+        if(!eatInOrderMenus.isSameSize(eatInOrderLineItems.size())) {
             throw new IllegalArgumentException();
         }
         eatInOrderLineItems.forEach(eatInOrderLineItem -> verify(eatInOrderMenus, eatInOrderLineItem));
