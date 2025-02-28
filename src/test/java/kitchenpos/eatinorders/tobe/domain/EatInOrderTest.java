@@ -64,6 +64,24 @@ public class EatInOrderTest {
                 .isExactlyInstanceOf(IllegalArgumentException.class);
     }
 
+    @DisplayName("주문 테이블이 비어있으면 매장 주문을 생성할 수 없다.")
+    @Test
+    void createWithEmptyOrderTable() {
+        final UUID firstMenuId = UUID.randomUUID();
+        final UUID secondMenuId = UUID.randomUUID();
+        final EatInOrderLineItem firstEatInOrderLineItem = new EatInOrderLineItem(1L, new EatInOrderLineItemMenu(firstMenuId, "후라이드 치킨", 16_000), 1);
+        final EatInOrderLineItem secondEatInOrderLineItem = new EatInOrderLineItem(1L, new EatInOrderLineItemMenu(secondMenuId, "양념 치킨", 16_000), 1);
+        final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(firstEatInOrderLineItem, secondEatInOrderLineItem);
+        final EatInOrderMenus eatInOrderMenus = new DefaultEatInOrderMenus(
+                new DefaultEatInOrderMenu(firstMenuId, 16_000, true),
+                new DefaultEatInOrderMenu(secondMenuId, 16_000, true)
+        );
+        final EatInOrderTable eatInOrderTable = new DefaultEatInOrderTable(UUID.randomUUID(), false);
+
+        assertThatThrownBy(() -> new EatInOrder(eatInOrderLineItems, eatInOrderMenus, eatInOrderTable))
+                .isExactlyInstanceOf(IllegalArgumentException.class);
+    }
+
     @DisplayName("주문 항목 개수를 반환한다.")
     @Test
     void size() {
