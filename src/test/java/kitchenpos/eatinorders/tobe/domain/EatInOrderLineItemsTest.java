@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("주문 항목 목록 테스트")
 class EatInOrderLineItemsTest {
@@ -34,5 +35,18 @@ class EatInOrderLineItemsTest {
         final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(List.of(eatInOrderLineItem));
 
         assertThat(eatInOrderLineItems.isSamePrice(menuId, expectedPrice)).isFalse();
+    }
+
+    @DisplayName("메뉴의 가격을 비교할 주문 항목의 메뉴가 없으면 예외를 발생한다.")
+    @CsvSource(value = {"1000", "10_000", "16_000"}, delimiter = ':')
+    @ParameterizedTest(name = "메뉴 가격: {0}")
+    void isSamePriceWithEmptyMenu(final int menuPrice) {
+        final UUID menuId = UUID.randomUUID();
+        final EatInOrderLineItemMenu eatInOrderLineItemMenu = new EatInOrderLineItemMenu(menuId, "후라이드치킨", menuPrice);
+        final EatInOrderLineItem eatInOrderLineItem = new EatInOrderLineItem(1L, eatInOrderLineItemMenu, 1);
+        final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(List.of(eatInOrderLineItem));
+
+        assertThatThrownBy(() -> eatInOrderLineItems.isSamePrice(UUID.randomUUID(), menuPrice))
+                .isExactlyInstanceOf(IllegalArgumentException.class);
     }
 }
