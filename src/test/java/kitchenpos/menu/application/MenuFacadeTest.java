@@ -82,7 +82,6 @@ class MenuFacadeTest {
     private MenuRequest.Create createMenu;
     private MenuRequest.UpdatePrice updatePriceMenu;
     private Menu defaultMenu;
-
     private Product chicken;
 
     @BeforeEach
@@ -134,7 +133,7 @@ class MenuFacadeTest {
         @DisplayName("성공")
         void 메뉴등록_성공() {
 
-            mockCreateMenu();
+            mockFindByMenuGroup();
             var result = menuFacade.create(createMenu);
 
             assertAll(
@@ -143,7 +142,6 @@ class MenuFacadeTest {
                 () -> assertEquals(result.price(), createMenu.price()),
                 () -> assertEquals(result.displayed(), createMenu.displayed())
             );
-
         }
 
         @DisplayName("메뉴가격은 0원 이상이어야 한다.")
@@ -215,7 +213,8 @@ class MenuFacadeTest {
 
             productRepository.save(chicken);
 
-            mockCreateMenu();
+            mockFindByMenuGroup();
+
             menuPolicy.setExceptionStatus(isOver(BigDecimal.valueOf(price1)));
 
             assertThatExceptionOfType(MenuPriceInvalidException.class)
@@ -231,13 +230,12 @@ class MenuFacadeTest {
                 null,
                 null,
                 true,
-                List.of(new MenuProductFixture(chicken.getProductId().get(), menuFixture.id(), 1).create())
+                List.of()
             ).create();
-            mockFindByMenuGroup();
 
             assertThatExceptionOfType(NotFoundException.class)
                 .isThrownBy(() -> menuFacade.create(createMenu))
-                .withMessage(ErrorCode.NOT_FOUND_ANY_PRODUCT.toString());
+                .withMessage(ErrorCode.NOT_FOUND_MENU_PRODUCT.toString());
         }
 
         @DisplayName("메뉴 상품 정보에 속한 상품의 수량은 0개 이상이어야 한다.")
@@ -255,14 +253,10 @@ class MenuFacadeTest {
                         List.of(new MenuProductFixture(chicken.getProductId().get(), menuFixture.id(), qty).create())
                     ).create();
 
-                    mockCreateMenu();
-
                     menuFacade.create(createMenu);
                 })
                 .withMessage(ErrorCode.MENU_PRODUCT_QTY_NOT_ALLOWED.toString());
         }
-
-
     }
 
     @Nested
@@ -319,7 +313,10 @@ class MenuFacadeTest {
 
             menuFacade.hide(defaultMenu.getMenuId().get());
 
-            assertThat(defaultMenu.isDisplayed()).isFalse();
+            var result = menuRepository.findByMenuId(defaultMenu.getMenuId())
+                .orElseThrow();
+
+            assertThat(result.isDisplayed()).isFalse();
         }
     }
 
@@ -374,25 +371,9 @@ class MenuFacadeTest {
         }
     }
 
-    private void mockCreateMenu() {
-        mockFindByMenuGroup();
-        mockFindAllByProductContext();
-    }
-
     private void mockFindByMenuGroup() {
         when(menuGroupRepository.findByMenuGroupId(Mockito.any()))
             .thenReturn(Optional.of(MenuGroupFixture.init().toEntity()));
-    }
-
-    private void mockFindAllByProductContext() {
-        when(productContextProvider.findAllByProductIds(anyList()))
-            .thenAnswer(invocation -> {
-                List<ProductId> requestedProductIds = invocation.getArgument(0);
-                return requestedProductIds.stream()
-                    .map(id -> new Product(
-                        id, ProductName.of("치킨", menuPurgomalumClient), ProductPrice.of(BigDecimal.TEN))) // UUID 일치하는 Product 생성
-                    .toList();
-            });
     }
 
     private boolean isOver(BigDecimal price) {

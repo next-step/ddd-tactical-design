@@ -44,7 +44,6 @@ class MenuGroupFacadeTest {
     private MenuGroupRepository menuGroupRepository;
 
     private MenuGroupRequest.Create menuGroup;
-
     private MenuGroup menuGroupEntity;
 
     @BeforeEach

@@ -14,6 +14,7 @@ import kitchenpos.menu.domain.model.MenuId;
 import kitchenpos.menu.domain.model.MenuName;
 import kitchenpos.menu.domain.model.MenuPrice;
 import kitchenpos.menu.domain.model.MenuProducts;
+import kitchenpos.product.domain.fixture.ProductFixture;
 
 public record MenuFixture(UUID id, String 메뉴명, BigDecimal 메뉴가격,
                           UUID 메뉴그룹아이디, boolean 노출여부, List<MenuProductCreate> 메뉴구성품) {
@@ -28,7 +29,7 @@ public record MenuFixture(UUID id, String 메뉴명, BigDecimal 메뉴가격,
             DEFAULT_MENU_PRICE,
             MenuGroupFixture.init().toEntity().getMenuGroupId().get(),
             true,
-            List.of(MenuProductFixture.init().create()));
+            java.util.List.of(MenuProductFixture.init(null).create()));
     }
 
     public static MenuFixture test(String 메뉴명, BigDecimal 메뉴가격,
@@ -39,7 +40,7 @@ public record MenuFixture(UUID id, String 메뉴명, BigDecimal 메뉴가격,
             Objects.requireNonNullElse(메뉴가격, DEFAULT_MENU_PRICE),
             Objects.requireNonNullElse(메뉴그룹아이디, MenuGroupFixture.init().toEntity().getMenuGroupId().get()),
             노출여부,
-            Objects.requireNonNullElse(메뉴구성품, List.of(MenuProductFixture.init().create()))
+            Objects.requireNonNullElse(메뉴구성품, List.of(MenuProductFixture.init(null).create()))
         );
     }
 

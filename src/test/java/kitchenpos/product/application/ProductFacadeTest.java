@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 import kitchenpos.global.exception.ErrorCode;
+import kitchenpos.global.exception.NotFoundException;
 import kitchenpos.global.exception.ProfanityException;
 import kitchenpos.global.infrastructure.external.FakeProfanityClient;
 import kitchenpos.menu.domain.entity.Menu;
@@ -186,7 +187,8 @@ class ProductFacadeTest {
 
             menuPolicy.hideMenu(ProductId.of(productId));
 
-            var result = menuRepository.findByMenuId(menu.getMenuId()).orElseThrow();
+            var result = menuRepository.findByMenuId(menu.getMenuId())
+                .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_MENU.toString()));
 
             assertThat(result.isDisplayed()).isFalse();
         }

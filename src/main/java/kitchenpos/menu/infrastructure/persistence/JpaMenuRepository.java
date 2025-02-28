@@ -10,7 +10,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-@Repository
 public interface JpaMenuRepository extends MenuRepository, JpaRepository<Menu, MenuId> {
 
     @Query("select m from Menu m " +

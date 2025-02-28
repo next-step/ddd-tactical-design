@@ -12,10 +12,10 @@ public record MenuProductFixture(UUID 상품아이디, UUID 메뉴아이디, lon
 
     private static final long DEFAULT_MENU_PRODUCT_QTY = 10;
 
-    public static MenuProductFixture init() {
+    public static MenuProductFixture init(UUID menuId) {
         return new MenuProductFixture(
             ProductFixture.init().toEntity().getProductId().get(),
-            MenuFixture.init().toEntity().getMenuId().get(),
+            menuId,
             DEFAULT_MENU_PRODUCT_QTY
         );
     }
