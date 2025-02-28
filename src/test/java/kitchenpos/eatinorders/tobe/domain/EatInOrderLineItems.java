@@ -30,4 +30,20 @@ public class EatInOrderLineItems {
     public int size() {
         return eatInOrderLineItems.size();
     }
+
+    public void verify(final EatInOrderMenus eatInOrderMenus) {
+        if(eatInOrderLineItems.size() != eatInOrderMenus.size()) {
+            throw new IllegalArgumentException();
+        }
+        eatInOrderLineItems.forEach(eatInOrderLineItem -> verify(eatInOrderMenus, eatInOrderLineItem));
+    }
+
+    private void verify(final EatInOrderMenus eatInOrderMenus, final EatInOrderLineItem eatInOrderLineItem) {
+        if(!eatInOrderMenus.isDisplayed(eatInOrderLineItem.menuId())) {
+            throw new IllegalArgumentException();
+        }
+        if(!eatInOrderMenus.isSamePrice(eatInOrderLineItem.menuId(), eatInOrderLineItem.menuPrice())) {
+            throw new IllegalArgumentException();
+        }
+    }
 }

@@ -15,4 +15,16 @@ public class EatInOrderMenu {
         this.name = name;
         this.displayed = displayed;
     }
+
+    public boolean isSameMenu(final UUID uuid) {
+        return menuId.equals(uuid);
+    }
+
+    public boolean isSamePrice(final int price) {
+        return this.price == price;
+    }
+
+    public boolean isDisplayed() {
+        return displayed;
+    }
 }

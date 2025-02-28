@@ -5,6 +5,8 @@ import kitchenpos.eatinorders.tobe.domain.vo.Occupied;
 import kitchenpos.eatinorders.tobe.domain.vo.OrderTableId;
 import kitchenpos.eatinorders.tobe.domain.vo.OrderTableName;
 
+import java.util.UUID;
+
 public class OrderTable {
     private final OrderTableId id;
     private final OrderTableName name;
@@ -35,6 +37,11 @@ public class OrderTable {
             throw new IllegalArgumentException();
         }
         this.numberOfGuests = new NumberOfGuests(numberOfGuests);
+    }
+
+
+    public UUID id() {
+        return id.getValue();
     }
 
     public int numberOfGuests() {

@@ -36,4 +36,8 @@ public class EatInOrderLineItem {
     public UUID menuId() {
         return eatInOrderLineItemMenu.menuId();
     }
+
+    public int menuPrice() {
+        return eatInOrderLineItemMenu.price();
+    }
 }

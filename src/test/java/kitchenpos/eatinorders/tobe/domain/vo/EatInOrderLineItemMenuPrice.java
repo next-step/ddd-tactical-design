@@ -10,4 +10,8 @@ public class EatInOrderLineItemMenuPrice {
     public boolean isSamePrice(final int value) {
         return this.value == value;
     }
+
+    public int price() {
+        return value;
+    }
 }
