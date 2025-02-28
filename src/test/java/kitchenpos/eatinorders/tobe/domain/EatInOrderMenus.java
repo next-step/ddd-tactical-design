@@ -8,4 +8,10 @@ public class EatInOrderMenus {
     public EatInOrderMenus(final List<EatInOrderMenu> eatInOrderMenus) {
         this.eatInOrderMenus = eatInOrderMenus;
     }
+
+    public void verifySameSize(final EatInOrder eatInOrder) {
+        if (eatInOrderMenus.size() != eatInOrder.size()) {
+            throw new IllegalArgumentException();
+        }
+    }
 }
