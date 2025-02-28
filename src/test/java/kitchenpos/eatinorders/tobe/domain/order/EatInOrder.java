@@ -58,4 +58,11 @@ public class EatInOrder {
         }
         this.eatInOrderStatus = EatInOrderStatus.ACCEPTED;
     }
+
+    public void served() {
+        if(EatInOrderStatus.ACCEPTED != this.eatInOrderStatus) {
+            throw new IllegalArgumentException();
+        }
+        this.eatInOrderStatus = EatInOrderStatus.SERVED;
+    }
 }
