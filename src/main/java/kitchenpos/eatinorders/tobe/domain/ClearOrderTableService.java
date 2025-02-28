@@ -1,5 +1,6 @@
 package kitchenpos.eatinorders.tobe.domain;
 
+import kitchenpos.eatinorders.application.tobe.exception.InvalidOrderTableStateException;
 import kitchenpos.eatinorders.tobe.domain.common.OrderEntity;
 import kitchenpos.eatinorders.tobe.domain.common.OrderId;
 import kitchenpos.eatinorders.tobe.domain.common.OrderStatus;
@@ -31,6 +32,7 @@ public class ClearOrderTableService {
 
     @Transactional
     public void clearOrderTable(OrderId orderId) {
+        //EatInOrderService.complete 메소드에서 사용
         //1. 주문에 연결된 주문 테이블 id를 이용한 주문 테이블 정리
         OrderEntity order = orderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
@@ -45,12 +47,14 @@ public class ClearOrderTableService {
 
     @Transactional
     public void clearOrderTable(OrderTableId orderTableId) {
+        //OrderTableService.clear 메소드에서 사용
         //2. 주문 테이블 id를 이용한 주문 테이블 정리
         OrderTable orderTable = orderTableRepository.findById(orderTableId)
                 .orElseThrow(NoSuchElementException::new);
 
-        if (!orderRepository.existsByOrderTableAndStatusNot(orderTableId, OrderStatus.COMPLETED)) {
-            orderTable.clear();
+        if (orderRepository.existsByOrderTableAndStatusNot(orderTableId, OrderStatus.COMPLETED)) {
+            throw new InvalidOrderTableStateException("");
         }
+        orderTable.clear();
     }
 }
