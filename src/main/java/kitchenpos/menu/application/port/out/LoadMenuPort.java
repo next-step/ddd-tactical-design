@@ -10,4 +10,5 @@ public interface LoadMenuPort {
     List<Menu> findAll();
     Optional<Menu> findById(UUID id);
     List<Menu> findByProductId(UUID productId);
+    List<Menu> findAllByIdIn(List<UUID> ids);
 }

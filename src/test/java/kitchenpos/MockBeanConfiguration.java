@@ -1,5 +1,6 @@
 package kitchenpos;
 
+import kitchenpos.eatinorder.adapter.out.client.MenuClient;
 import kitchenpos.menu.adapter.out.client.ProductClient;
 import kitchenpos.shared.domain.Profanities;
 import org.mockito.Mockito;
@@ -19,5 +20,11 @@ public class MockBeanConfiguration {
     @Primary
     ProductClient productClient() {
         return Mockito.mock(ProductClient.class);
+    }
+
+    @Bean
+    @Primary
+    MenuClient menuClient() {
+        return Mockito.mock(MenuClient.class);
     }
 }

@@ -1,10 +1,13 @@
 package kitchenpos.eatinorder.application.service;
 
+import kitchenpos.MockBeanConfiguration;
+import kitchenpos.eatinorder.application.port.out.MenuEatInOrderLineItemMapper;
 import kitchenpos.eatinorder.application.service.model.ChangeNumberOfGuestsRequest;
 import kitchenpos.eatinorder.application.service.model.CreateEatInOrderRequest;
 import kitchenpos.eatinorder.application.service.model.CreateOrderTableRequest;
 import kitchenpos.eatinorder.application.service.model.OrderLineItemRequest;
 import kitchenpos.eatinorder.domain.model.todo.EatInOrder;
+import kitchenpos.eatinorder.domain.model.todo.EatInOrderLineItem;
 import kitchenpos.eatinorder.domain.model.todo.OrderTable;
 import kitchenpos.menu.adapter.out.persistance.JpaMenuEntityEntityRepository;
 import kitchenpos.menu.adapter.out.persistance.JpaMenuGroupEntityRepository;
@@ -20,6 +23,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
@@ -31,22 +35,27 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
+@Import(MockBeanConfiguration.class)
 public class OrderTableServiceTest {
     private final OrderTableService orderTableService;
     private final EatInOrderService orderService;
     private final SaveProductPort saveProductPort;
     private final JpaMenuGroupEntityRepository menuGroupEntityRepository;
     private final JpaMenuEntityEntityRepository menuEntityRepository;
+    private final MenuEatInOrderLineItemMapper menuEatInOrderLineItemMapper;
 
-    public OrderTableServiceTest(OrderTableService orderTableService, EatInOrderService orderService, SaveProductPort saveProductPort, JpaMenuGroupEntityRepository menuGroupEntityRepository, JpaMenuEntityEntityRepository menuEntityRepository) {
+    public OrderTableServiceTest(OrderTableService orderTableService, EatInOrderService orderService, SaveProductPort saveProductPort, JpaMenuGroupEntityRepository menuGroupEntityRepository, JpaMenuEntityEntityRepository menuEntityRepository, MenuEatInOrderLineItemMapper menuEatInOrderLineItemMapper) {
         this.orderTableService = orderTableService;
         this.orderService = orderService;
         this.saveProductPort = saveProductPort;
         this.menuGroupEntityRepository = menuGroupEntityRepository;
         this.menuEntityRepository = menuEntityRepository;
+        this.menuEatInOrderLineItemMapper = menuEatInOrderLineItemMapper;
     }
 
     @DisplayName("주문 테이블 등록하기")
@@ -272,6 +281,10 @@ public class OrderTableServiceTest {
         List<MenuProductEntity> menuProducts = List.of(createMenuProduct(후라이드치킨_PRODUCT_UUID, product, 1));
         MenuEntity menu = createMenu(후라이드치킨_MENU_UUID, 후라이드치킨_MENU_NAME, 후라이드치킨_MENU_DEFAULT_PRICE, 치킨류_MENU_GROUP_UUID, menuGroup, menuProducts);
         menuEntityRepository.save(menu);
+
+        when(menuEatInOrderLineItemMapper.toEatInOrderLines(any())).thenReturn(List.of(
+                EatInOrderLineItem.of(null, 후라이드치킨_MENU_UUID, 2, 후라이드치킨_MENU_DEFAULT_PRICE.longValue())
+        ));
 
         List<OrderLineItemRequest> orderLineItems = List.of(createOrderLineItemRequest(후라이드치킨_MENU_UUID, 2, 후라이드치킨_MENU_DEFAULT_PRICE));
         CreateEatInOrderRequest request = createEatInOrderRequest(orderTableEntity.getId(), orderLineItems);

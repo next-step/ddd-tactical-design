@@ -51,6 +51,14 @@ public class ManageMenuAdapter implements LoadMenuPort, SaveMenuPort {
     }
 
     @Override
+    public List<Menu> findAllByIdIn(List<UUID> ids) {
+        return menuRepository.findAllByIdIn(ids)
+                .stream()
+                .map(menuEntity -> menuEntity.toDomain(profanities))
+                .toList();
+    }
+
+    @Override
     public Menu save(Menu menu) {
         MenuGroupEntity menuGroupEntity = menuGroupRepository.findById(menu.getMenuGroupId())
                 .orElseThrow(() -> new MenuGroupNotFoundException(menu.getMenuGroupId()));

@@ -5,13 +5,7 @@ import kitchenpos.menu.application.service.model.ChangeMenuPriceRequest;
 import kitchenpos.menu.application.service.model.CreateMenuRequest;
 import kitchenpos.menu.domain.model.Menu;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
@@ -49,7 +43,7 @@ public class MenuRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Menu>> findAll() {
-        return ResponseEntity.ok(menuService.findAll());
+    public ResponseEntity<List<Menu>> findAll(@RequestParam(value = "ids", required = false) List<UUID> ids) {
+        return ResponseEntity.ok(menuService.findAll(ids));
     }
 }

@@ -1,9 +1,6 @@
 package kitchenpos.eatinorder.application.service.model;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class OrderLineItemRequests {
     private final Map<UUID, OrderLineItemRequest> orderLineItemRequestsMap = new HashMap<>();
@@ -31,5 +28,17 @@ public class OrderLineItemRequests {
 
     public int size() {
         return orderLineItemRequestsMap.size();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        OrderLineItemRequests that = (OrderLineItemRequests) o;
+        return Objects.equals(orderLineItemRequestsMap, that.orderLineItemRequestsMap);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(orderLineItemRequestsMap);
     }
 }

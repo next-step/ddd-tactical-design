@@ -1,10 +1,14 @@
 package kitchenpos.eatinorder.application.service;
 
+import kitchenpos.MockBeanConfiguration;
 import kitchenpos.eatinorder.adapter.out.persistance.JpaOrderTableRepository;
+import kitchenpos.eatinorder.adapter.out.persistance.entity.OrderLineItem;
 import kitchenpos.eatinorder.adapter.out.persistance.entity.OrderTableEntity;
+import kitchenpos.eatinorder.application.port.out.MenuEatInOrderLineItemMapper;
 import kitchenpos.eatinorder.application.service.model.CreateEatInOrderRequest;
 import kitchenpos.eatinorder.application.service.model.OrderLineItemRequest;
 import kitchenpos.eatinorder.domain.model.todo.EatInOrder;
+import kitchenpos.eatinorder.domain.model.todo.EatInOrderLineItem;
 import kitchenpos.eatinorder.domain.model.todo.EatInOrderStatus;
 import kitchenpos.menu.adapter.out.persistance.JpaMenuEntityEntityRepository;
 import kitchenpos.menu.adapter.out.persistance.JpaMenuGroupEntityRepository;
@@ -21,6 +25,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
@@ -31,22 +36,27 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
+@Import(MockBeanConfiguration.class)
 public class EatInOrderServiceTest {
     private final EatInOrderService orderService;
     private final JpaMenuEntityEntityRepository menuEntityRepository;
     private final JpaOrderTableRepository orderTableRepository;
     private final SaveProductPort saveProductPort;
     private final JpaMenuGroupEntityRepository menuGroupEntityRepository;
+    private final MenuEatInOrderLineItemMapper menuEatInOrderLineItemMapper;
 
-    public EatInOrderServiceTest(SaveProductPort saveProductPort, EatInOrderService orderService, JpaMenuEntityEntityRepository menuEntityRepository, JpaOrderTableRepository orderTableRepository, JpaMenuGroupEntityRepository menuGroupEntityRepository) {
+    public EatInOrderServiceTest(SaveProductPort saveProductPort, EatInOrderService orderService, JpaMenuEntityEntityRepository menuEntityRepository, JpaOrderTableRepository orderTableRepository, JpaMenuGroupEntityRepository menuGroupEntityRepository, MenuEatInOrderLineItemMapper menuEatInOrderLineItemMapper) {
         this.saveProductPort = saveProductPort;
         this.orderService = orderService;
         this.menuEntityRepository = menuEntityRepository;
         this.orderTableRepository = orderTableRepository;
         this.menuGroupEntityRepository = menuGroupEntityRepository;
+        this.menuEatInOrderLineItemMapper = menuEatInOrderLineItemMapper;
     }
 
     @BeforeEach
@@ -81,6 +91,10 @@ public class EatInOrderServiceTest {
             List<OrderLineItemRequest> orderLineItems = List.of(new OrderLineItemRequest(2, 후라이드치킨_MENU_UUID, 후라이드치킨_MENU_DEFAULT_PRICE));
             CreateEatInOrderRequest request = new CreateEatInOrderRequest(테이블_1_ORDER_TABLE_UUID, orderLineItems);
 
+            when(menuEatInOrderLineItemMapper.toEatInOrderLines(request.orderLineItemRequests())).thenReturn(List.of(
+                    EatInOrderLineItem.of(null, 후라이드치킨_MENU_UUID, 2, 후라이드치킨_MENU_DEFAULT_PRICE.longValue())
+            ));
+
             // when
             EatInOrder order = orderService.create(request);
 
@@ -102,6 +116,10 @@ public class EatInOrderServiceTest {
 
             List<OrderLineItemRequest> orderLineItems = List.of(new OrderLineItemRequest(2, 후라이드치킨_NO_DISPLAY_MENU_UUID, 후라이드치킨_MENU_DEFAULT_PRICE));
             CreateEatInOrderRequest request = new CreateEatInOrderRequest(테이블_1_ORDER_TABLE_UUID, orderLineItems);
+
+            when(menuEatInOrderLineItemMapper.toEatInOrderLines(request.orderLineItemRequests())).thenAnswer(invocation -> List.of(
+                    EatInOrderLineItem.of(null, 후라이드치킨_MENU_UUID, 2, 후라이드치킨_MENU_DEFAULT_PRICE.longValue(), false)
+            ));
 
             // when
             ThrowableAssert.ThrowingCallable throwingCallable = () -> orderService.create(request);
@@ -297,6 +315,10 @@ public class EatInOrderServiceTest {
 
         List<OrderLineItemRequest> orderLineItems = List.of(new OrderLineItemRequest(2, 후라이드치킨_MENU_UUID, 후라이드치킨_MENU_DEFAULT_PRICE));
         CreateEatInOrderRequest request = new CreateEatInOrderRequest(테이블_1_ORDER_TABLE_UUID, orderLineItems);
+
+        when(menuEatInOrderLineItemMapper.toEatInOrderLines(request.orderLineItemRequests())).thenReturn(List.of(
+                EatInOrderLineItem.of(null, 후라이드치킨_MENU_UUID, 2, 후라이드치킨_MENU_DEFAULT_PRICE.longValue())
+        ));
 
         return orderService.create(request);
     }
