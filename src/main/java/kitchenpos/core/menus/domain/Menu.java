@@ -10,6 +10,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import kitchenpos.core.shared.value.Money;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -26,7 +27,7 @@ public class Menu {
     private String name;
 
     @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    private Money price;
 
     @ManyToOne(optional = false)
     @JoinColumn(
@@ -52,6 +53,16 @@ public class Menu {
     private UUID menuGroupId;
 
     public Menu() {
+    }
+
+    public void recalculateDisplayStatus() {
+        Money sum = menuProducts.stream()
+                .map(MenuProduct::calculatePrice)
+                .reduce(Money.ZERO, Money::add);
+        // 메뉴 가격이 구성 상품의 총합보다 높으면 표시 안 함
+        if (this.price.isBiggerThan(sum)) {
+            this.displayed = false;
+        }
     }
 
     public UUID getId() {

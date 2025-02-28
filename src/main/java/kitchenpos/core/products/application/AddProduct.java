@@ -1,7 +1,8 @@
 package kitchenpos.core.products.application;
 
-import kitchenpos.core.shared.identifier.ProductId;
+import kitchenpos.core.products.application.dto.CreateProductRequest;
+import kitchenpos.core.products.tobe.domain.Product;
 
 public interface AddProduct {
-    ProductId add(CreateProductRequest request);
+    Product addProduct(CreateProductRequest request);
 }

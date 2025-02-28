@@ -46,4 +46,11 @@ public class Money extends ValueObject<Money> {
         return amount.toString() + "원";
     }
 
+    public Money multiply(long value) {
+        return new Money(amount.multiply(BigDecimal.valueOf(value)));
+    }
+
+    public boolean isBiggerThan(Money other) {
+        return this.amount.compareTo(other.amount) > 0;
+    }
 }

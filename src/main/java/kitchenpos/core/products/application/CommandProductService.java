@@ -1,81 +1,49 @@
 package kitchenpos.core.products.application;
 
 import kitchenpos.core.menus.domain.Menu;
-import kitchenpos.core.menus.domain.MenuProduct;
 import kitchenpos.core.menus.domain.MenuRepository;
-import kitchenpos.core.products.domain.Product;
-import kitchenpos.core.products.domain.ProductRepository;
-import kitchenpos.core.shared.domain.ProfanityChecker;
+import kitchenpos.core.products.application.dto.CreateProductRequest;
+import kitchenpos.core.products.tobe.domain.Product;
+import kitchenpos.core.products.tobe.domain.ProductPrice;
+import kitchenpos.core.products.tobe.domain.TobeProductRepository;
+import kitchenpos.core.products.tobe.domain.exception.ProductNotFoundException;
+import kitchenpos.core.shared.identifier.ProductId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.UUID;
-
 @Service
-public class CommandProductService {
-    private final ProductRepository productRepository;
+public class CommandProductService implements AddProduct, ChangeProductPrice {
+    private final TobeProductRepository tobeProductRepository;
     private final MenuRepository menuRepository;
-    private final ProfanityChecker profanityChecker;
 
     public CommandProductService(
-        final ProductRepository productRepository,
-        final MenuRepository menuRepository,
-        final ProfanityChecker profanityChecker
+            final TobeProductRepository tobeProductRepository,
+            final MenuRepository menuRepository
     ) {
-        this.productRepository = productRepository;
+        this.tobeProductRepository = tobeProductRepository;
         this.menuRepository = menuRepository;
-        this.profanityChecker = profanityChecker;
     }
 
     @Transactional
-    public Product create(final Product request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
-        final String name = request.getName();
-        if (Objects.isNull(name) || profanityChecker.containsProfanity(name)) {
-            throw new IllegalArgumentException();
-        }
-        final Product product = new Product();
-        product.setId(UUID.randomUUID());
-        product.setName(name);
-        product.setPrice(price);
-        return productRepository.save(product);
+    public kitchenpos.core.products.tobe.domain.Product addProduct(final CreateProductRequest request) {
+        return tobeProductRepository.save(kitchenpos.core.products.tobe.domain.Product.create(
+                request.id(),
+                request.name(),
+                request.price()
+        ));
     }
 
     @Transactional
-    public Product changePrice(final UUID productId, final Product request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
-        final Product product = productRepository.findById(productId)
-            .orElseThrow(NoSuchElementException::new);
-        product.setPrice(price);
-        final List<Menu> menus = menuRepository.findAllByProductId(productId);
-        for (final Menu menu : menus) {
-            BigDecimal sum = BigDecimal.ZERO;
-            for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-                sum = sum.add(
-                    menuProduct.getProduct()
-                        .getPrice()
-                        .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-                );
-            }
-            if (menu.getPrice().compareTo(sum) > 0) {
-                menu.setDisplayed(false);
-            }
-        }
+    public Product changePrice(final ProductId productId, final ProductPrice request) {
+
+        Product product = tobeProductRepository.findById(productId)
+                .map(p -> p.changePrice(request))
+                .orElseThrow(() -> new ProductNotFoundException(productId));
+
+        menuRepository.findAllByProductId(productId)
+                .forEach(Menu::recalculateDisplayStatus);
         return product;
     }
 
-    @Transactional(readOnly = true)
-    public List<Product> findAll() {
-        return productRepository.findAll();
-    }
+
 }

@@ -10,8 +10,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
-import kitchenpos.core.products.domain.Product;
+import kitchenpos.core.products.tobe.domain.Product;
+import kitchenpos.core.products.tobe.domain.ProductPrice;
+import kitchenpos.core.shared.value.Money;
+import kitchenpos.core.shared.value.Quantity;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Table(name = "menu_product")
@@ -28,10 +32,10 @@ public class MenuProduct {
         columnDefinition = "binary(16)",
         foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
     )
-    private Product product;
+    private kitchenpos.core.products.tobe.domain.Product product;
 
     @Column(name = "quantity", nullable = false)
-    private long quantity;
+    private Quantity quantity;
 
     @Transient
     private UUID productId;
@@ -55,11 +59,11 @@ public class MenuProduct {
         this.product = product;
     }
 
-    public long getQuantity() {
+    public Quantity getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(final long quantity) {
+    public void setQuantity(final Quantity quantity) {
         this.quantity = quantity;
     }
 
@@ -70,4 +74,9 @@ public class MenuProduct {
     public void setProductId(final UUID productId) {
         this.productId = productId;
     }
+
+    public Money calculatePrice() {
+        return product.getPrice().multiply(quantity);
+    }
+
 }

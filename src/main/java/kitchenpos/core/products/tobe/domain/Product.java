@@ -26,12 +26,12 @@ public class Product extends DomainEntity<Product, ProductId> {
     protected Product() {}
 
     private Product(ProductId id, ProductName name, ProductPrice price) {
-        this.id = Objects.requireNonNull(id, "id must not be null");
-        this.name = Objects.requireNonNull(name, "name must not be null");
-        this.price = Objects.requireNonNull(price, "price must not be null");
+        this.id = Objects.requireNonNull(id, "id는 null이 될 수 없습니다.");
+        this.name = Objects.requireNonNull(name, "name은 null이 될 수 없습니다.");
+        this.price = Objects.requireNonNull(price, "price은 null이 될 수 없습니다.");
     }
 
-    public static Product create(ProductId id, ProductName name, ProductPrice price) {
+    public static Product create(final ProductId id, final ProductName name, final ProductPrice price) {
         return new Product(id, name, price);
     }
 
@@ -47,4 +47,8 @@ public class Product extends DomainEntity<Product, ProductId> {
 
     public ProductPrice getPrice() { return price; }
 
+    public Product changePrice(final ProductPrice newPrice) {
+        this.price = newPrice;
+        return this;
+    }
 }

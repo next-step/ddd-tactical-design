@@ -1,4 +1,4 @@
-package kitchenpos.core.products.application;
+package kitchenpos.core.products.application.dto;
 
 import kitchenpos.core.products.tobe.domain.ProductName;
 import kitchenpos.core.products.tobe.domain.ProductPrice;

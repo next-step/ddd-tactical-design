@@ -3,6 +3,9 @@ package kitchenpos.core.products.tobe.domain;
 import kitchenpos.core.products.tobe.domain.exception.InvalidProductPriceException;
 import kitchenpos.core.shared.value.Money;
 import kitchenpos.core.shared.domain.ValueObject;
+import kitchenpos.core.shared.value.Quantity;
+
+import java.math.BigDecimal;
 
 public class ProductPrice extends ValueObject<ProductPrice> {
     private Money price;
@@ -23,8 +26,15 @@ public class ProductPrice extends ValueObject<ProductPrice> {
         return price;
     }
 
+    //quantity 곱하는 로직
+
+
     @Override
     protected Object[] getEqualityFields() {
         return new Object[] { price };
+    }
+
+    public Money multiply(Quantity quantity) {
+        return price.multiply(quantity.getValue());
     }
 }
