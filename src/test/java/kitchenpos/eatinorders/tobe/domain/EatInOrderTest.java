@@ -193,4 +193,27 @@ public class EatInOrderTest {
 
         assertThat(eatInOrder.status()).isEqualTo(EatInOrderStatus.SERVED);
     }
+
+    @DisplayName("서빙중인 매장 주문이 아니면 주문 완료를 변경할 수 없다.")
+    @EnumSource(value = EatInOrderStatus.class, names = {"WAITING", "ACCEPTED", "COMPLETED"})
+    @ParameterizedTest(name = "{index}. 주문 상태: {0}")
+    void completeWithNotServedStatus(final EatInOrderStatus eatInOrderStatus) {
+        final UUID firstMenuId = UUID.randomUUID();
+        final UUID secondMenuId = UUID.randomUUID();
+        final EatInOrderLineItem firstEatInOrderLineItem = new EatInOrderLineItem(1L, new EatInOrderLineItemMenu(firstMenuId, "후라이드 치킨", 16_000), 1);
+        final EatInOrderLineItem secondEatInOrderLineItem = new EatInOrderLineItem(1L, new EatInOrderLineItemMenu(secondMenuId, "양념 치킨", 16_000), 1);
+        final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(firstEatInOrderLineItem, secondEatInOrderLineItem);
+        final EatInOrderMenus eatInOrderMenus = new DefaultEatInOrderMenus(
+                new DefaultEatInOrderMenu(firstMenuId, 16_000, true),
+                new DefaultEatInOrderMenu(secondMenuId, 16_000, true)
+        );
+        final EatInOrderTable eatInOrderTable = new DefaultEatInOrderTable(UUID.randomUUID(), true);
+
+        final EatInOrder eatInOrder = new EatInOrder(
+                new EatInOrderId(), eatInOrderStatus, new EatInOrderDateTime(),
+                eatInOrderLineItems, eatInOrderMenus, eatInOrderTable
+        );
+        assertThatThrownBy(eatInOrder::completed)
+                .isExactlyInstanceOf(IllegalArgumentException.class);
+    }
 }
