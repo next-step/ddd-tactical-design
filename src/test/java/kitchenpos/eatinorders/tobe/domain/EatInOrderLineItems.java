@@ -26,4 +26,8 @@ public class EatInOrderLineItems {
                 .map(EatInOrderLineItem::menuId)
                 .toList();
     }
+
+    public int size() {
+        return eatInOrderLineItems.size();
+    }
 }
