@@ -1,13 +1,14 @@
 package kitchenpos.eatinorders.tobe.domain.order;
 
+import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderId;
+
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 public interface EatInOrderRepository {
     EatInOrder save(EatInOrder order);
 
-    Optional<EatInOrder> findById(UUID id);
+    Optional<EatInOrder> findById(EatInOrderId id);
 
     List<EatInOrder> findAll();
 }

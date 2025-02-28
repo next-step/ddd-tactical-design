@@ -1,4 +1,5 @@
 package kitchenpos.eatinorders.tobe.domain.order;
 
-public class EatInOrderStatus {
+public enum EatInOrderStatus {
+    WAITING, ACCEPTED, SERVED, COMPLETED
 }

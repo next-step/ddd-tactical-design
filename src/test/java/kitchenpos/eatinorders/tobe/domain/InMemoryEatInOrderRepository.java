@@ -2,18 +2,19 @@ package kitchenpos.eatinorders.tobe.domain;
 
 import kitchenpos.eatinorders.tobe.domain.order.EatInOrder;
 import kitchenpos.eatinorders.tobe.domain.order.EatInOrderRepository;
+import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderId;
 
 import java.util.*;
 
 public class InMemoryEatInOrderRepository implements EatInOrderRepository {
 
-    private final Map<UUID, EatInOrder> eatInOrders;
+    private final Map<EatInOrderId, EatInOrder> eatInOrders;
 
     public InMemoryEatInOrderRepository() {
         this(new HashMap<>());
     }
 
-    public InMemoryEatInOrderRepository(final Map<UUID, EatInOrder> eatInOrders) {
+    public InMemoryEatInOrderRepository(final Map<EatInOrderId, EatInOrder> eatInOrders) {
         this.eatInOrders = eatInOrders;
     }
 
@@ -24,7 +25,7 @@ public class InMemoryEatInOrderRepository implements EatInOrderRepository {
     }
 
     @Override
-    public Optional<EatInOrder> findById(final UUID id) {
+    public Optional<EatInOrder> findById(final EatInOrderId id) {
         return Optional.ofNullable(eatInOrders.get(id));
     }
 

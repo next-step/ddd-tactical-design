@@ -1,21 +1,40 @@
 package kitchenpos.eatinorders.tobe.domain.order;
 
-import java.util.Objects;
+import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderId;
+
+import java.util.Optional;
 import java.util.UUID;
 
+import static java.util.Objects.isNull;
+
 public class EatInOrder {
-    private final UUID id = UUID.randomUUID();
+    private final EatInOrderId id;
+    private final EatInOrderStatus eatInOrderStatus;
+    private final EatInOrderDateTime eatInOrderDateTime;
     private final EatInOrderLineItems eatInOrderLineItems;
     private final UUID orderTableId;
 
     public EatInOrder(final EatInOrderLineItems eatInOrderLineItems, final EatInOrderMenus eatInOrderMenus, final EatInOrderTable orderTable) {
-        verify(eatInOrderLineItems, eatInOrderMenus, orderTable);
-        this.eatInOrderLineItems = eatInOrderLineItems;
-        this.orderTableId = orderTable.id();
+        this(new EatInOrderId(), eatInOrderLineItems, EatInOrderStatus.WAITING, new EatInOrderDateTime(), eatInOrderMenus, orderTable);
     }
 
-    private static void verify(final EatInOrderLineItems eatInOrderLineItems, final EatInOrderMenus eatInOrderMenus, final EatInOrderTable orderTable) {
-        if(Objects.isNull(orderTable) || Objects.isNull(eatInOrderLineItems) || Objects.isNull(eatInOrderMenus)){
+    public EatInOrder(final EatInOrderId id, final EatInOrderLineItems eatInOrderLineItems, final EatInOrderStatus eatInOrderStatus,
+                      final EatInOrderDateTime eatInOrderDateTime, final EatInOrderMenus eatInOrderMenus, final EatInOrderTable orderTable) {
+        verify(id, eatInOrderLineItems, eatInOrderStatus, eatInOrderDateTime, eatInOrderMenus, orderTable);
+        this.id = id;
+        this.eatInOrderStatus = eatInOrderStatus;
+        this.eatInOrderDateTime = eatInOrderDateTime;
+        this.eatInOrderLineItems = eatInOrderLineItems;
+        this.orderTableId = Optional.ofNullable(orderTable)
+                .map(EatInOrderTable::id)
+                .orElseThrow(IllegalArgumentException::new);
+    }
+
+    private void verify(final EatInOrderId id, final EatInOrderLineItems eatInOrderLineItems,
+                        final EatInOrderStatus eatInOrderStatus, final EatInOrderDateTime eatInOrderDateTime,
+                        final EatInOrderMenus eatInOrderMenus, final EatInOrderTable orderTable) {
+        if (isNull(id) || isNull(orderTable) || isNull(eatInOrderStatus) ||
+                isNull(eatInOrderDateTime) || isNull(eatInOrderLineItems) || isNull(eatInOrderMenus)) {
             throw new IllegalArgumentException();
         }
         eatInOrderLineItems.verify(eatInOrderMenus);
@@ -28,7 +47,7 @@ public class EatInOrder {
         return eatInOrderLineItems.size();
     }
 
-    public UUID getId() {
+    public EatInOrderId getId() {
         return id;
     }
 }

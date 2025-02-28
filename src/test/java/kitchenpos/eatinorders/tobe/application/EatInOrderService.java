@@ -16,8 +16,7 @@ public class EatInOrderService {
 
     public EatInOrder create(final CreateEatInOrderCommand command) {
         final EatInOrderMenus eatInOrderMenus = eatInOrderMenuRepository.findAllByIdIn(command.menuIds());
-        final EatInOrderTable orderTable = orderTableRepository.findById(command.orderTableId())
-                .orElseThrow(IllegalArgumentException::new);
+        final EatInOrderTable orderTable = orderTableRepository.findById(command.orderTableId()).orElseThrow(IllegalArgumentException::new);
         final EatInOrder eatInOrder = eatInOrder(command, eatInOrderMenus, orderTable);
         return eatInOrderRepository.save(eatInOrder);
     }
