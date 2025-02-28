@@ -56,4 +56,15 @@ class EatInOrderLineItemMenuTest {
 
         assertThat(actual).isFalse();
     }
+
+    @DisplayName("주문 항목 메뉴의 식별자를 반환한다.")
+    @Test
+    void menuId() {
+        final UUID menuId = UUID.randomUUID();
+        final EatInOrderLineItemMenu eatInOrderLineItemMenu = new EatInOrderLineItemMenu(menuId, "후라이드치킨", 16_000);
+
+        final UUID actual = eatInOrderLineItemMenu.menuId();
+
+        assertThat(actual).isEqualTo(menuId);
+    }
 }
