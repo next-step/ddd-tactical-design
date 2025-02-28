@@ -20,4 +20,10 @@ public class EatInOrderLineItems {
                 .map(eatInOrderLineItem -> eatInOrderLineItem.isSamePrice(menuPrice))
                 .orElseThrow(IllegalArgumentException::new);
     }
+
+    public List<UUID> menuIds() {
+        return eatInOrderLineItems.stream()
+                .map(EatInOrderLineItem::menuId)
+                .toList();
+    }
 }
