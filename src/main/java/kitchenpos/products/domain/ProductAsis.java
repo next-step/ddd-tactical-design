@@ -8,7 +8,7 @@ import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@Table(name = "asis_product")
+@Table(name = "product")
 @Entity
 public class ProductAsis {
     @Column(name = "id", columnDefinition = "binary(16)")
