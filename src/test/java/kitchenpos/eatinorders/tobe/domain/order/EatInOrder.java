@@ -43,11 +43,11 @@ public class EatInOrder {
         }
     }
 
-    public int size() {
-        return eatInOrderLineItems.size();
-    }
-
     public EatInOrderId getId() {
         return id;
+    }
+
+    public EatInOrderStatus status() {
+        return eatInOrderStatus;
     }
 }

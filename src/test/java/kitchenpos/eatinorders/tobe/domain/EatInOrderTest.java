@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class EatInOrderTest {
 
@@ -82,9 +83,9 @@ public class EatInOrderTest {
                 .isExactlyInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("주문 항목 개수를 반환한다.")
+    @DisplayName("매장 주문을 생성한다.")
     @Test
-    void size() {
+    void create() {
         final UUID firstMenuId = UUID.randomUUID();
         final UUID secondMenuId = UUID.randomUUID();
         final EatInOrderLineItem firstEatInOrderLineItem = new EatInOrderLineItem(1L, new EatInOrderLineItemMenu(firstMenuId, "후라이드 치킨", 16_000), 1);
@@ -97,6 +98,10 @@ public class EatInOrderTest {
         final EatInOrderTable eatInOrderTable = new DefaultEatInOrderTable(UUID.randomUUID(), true);
 
         final EatInOrder eatInOrder = new EatInOrder(eatInOrderLineItems, eatInOrderMenus, eatInOrderTable);
-        assertThat(eatInOrder.size()).isEqualTo(2);
+
+        assertAll(
+                () -> assertThat(eatInOrder.getId()).isNotNull(),
+                () -> assertThat(eatInOrder.status()).isEqualTo(EatInOrderStatus.WAITING)
+        );
     }
 }
