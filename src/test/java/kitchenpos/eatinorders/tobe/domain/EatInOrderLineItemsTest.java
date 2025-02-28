@@ -67,4 +67,21 @@ class EatInOrderLineItemsTest {
 
         assertThat(actual).containsExactlyInAnyOrder(firstMenuId, secondMenuId);
     }
+
+    @DisplayName("주문 항목의 개수를 반환한다.")
+    @Test
+    void size() {
+        final UUID firstMenuId = UUID.randomUUID();
+        final EatInOrderLineItemMenu firstEatInOrderLineItemMenu = new EatInOrderLineItemMenu(firstMenuId, "후라이드치킨", 16_000);
+        final EatInOrderLineItem firstEatInOrderLineItem = new EatInOrderLineItem(1L, firstEatInOrderLineItemMenu, 1);
+
+        final UUID secondMenuId = UUID.randomUUID();
+        final EatInOrderLineItemMenu secondEatInOrderLineItemMenu = new EatInOrderLineItemMenu(secondMenuId, "후라이드치킨", 16_000);
+        final EatInOrderLineItem secondEatInOrderLineItem = new EatInOrderLineItem(1L, secondEatInOrderLineItemMenu, 1);
+
+        final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(List.of(firstEatInOrderLineItem, secondEatInOrderLineItem));
+        final int actual = eatInOrderLineItems.size();
+
+        assertThat(actual).isEqualTo(2);
+    }
 }
