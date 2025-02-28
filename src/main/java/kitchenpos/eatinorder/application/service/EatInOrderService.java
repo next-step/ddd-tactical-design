@@ -39,7 +39,7 @@ public class EatInOrderService {
 
     @Transactional
     public EatInOrder create(final CreateEatInOrderRequest request) {
-        List<EatInOrderLineItem> eatInOrderLineItems = menuEatInOrderLineItemMapper.toEatInOrderLines(request.orderLineItems());
+        List<EatInOrderLineItem> eatInOrderLineItems = menuEatInOrderLineItemMapper.toEatInOrderLines(request.orderLineItemRequests());
         EatInOrder eatInOrder = EatInOrder.create(UUID.randomUUID(), LocalDateTime.now(), eatInOrderLineItems, request.orderTableId(), createEatInOrderPolicy);
         return saveEatInOrderPort.save(eatInOrder);
     }

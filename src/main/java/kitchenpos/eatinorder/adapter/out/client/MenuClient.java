@@ -1,16 +1,13 @@
 package kitchenpos.eatinorder.adapter.out.client;
 
 import kitchenpos.eatinorder.application.port.out.MenuEatInOrderLineItemMapper;
-import kitchenpos.eatinorder.application.service.model.OrderLineItemRequest;
+import kitchenpos.eatinorder.application.service.model.OrderLineItemRequests;
 import kitchenpos.eatinorder.domain.model.todo.EatInOrderLineItem;
 import kitchenpos.menu.adapter.out.persistance.JpaMenuEntityEntityRepository;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuEntity;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Objects;
 
 @Component
 public class MenuClient implements MenuEatInOrderLineItemMapper {
@@ -21,39 +18,20 @@ public class MenuClient implements MenuEatInOrderLineItemMapper {
     }
 
     @Override
-    public List<EatInOrderLineItem> toEatInOrderLines(final List<OrderLineItemRequest> orderLineItemRequests) {
-        if (Objects.isNull(orderLineItemRequests) || orderLineItemRequests.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-
-        final List<MenuEntity> menus = menuEntityRepository.findAllByIdIn(
-                orderLineItemRequests.stream()
-                        .map(OrderLineItemRequest::getMenuId)
-                        .toList()
-        );
+    public List<EatInOrderLineItem> toEatInOrderLines(OrderLineItemRequests orderLineItemRequests) {
+        final List<MenuEntity> menus = menuEntityRepository.findAllByIdIn(orderLineItemRequests.getMenuIds());
         if (menus.size() != orderLineItemRequests.size()) {
             throw new IllegalArgumentException();
         }
-
-        final List<EatInOrderLineItem> eatInOrderLineItems = new ArrayList<>();
-        for (final OrderLineItemRequest orderLineItemRequest : orderLineItemRequests) {
-            final long quantity = orderLineItemRequest.getQuantity();
-            final MenuEntity menu = menuEntityRepository.findById(orderLineItemRequest.getMenuId())
-                    .orElseThrow(NoSuchElementException::new);
-            if (!menu.isDisplayed()) {
-                throw new IllegalStateException();
-            }
-            if (menu.getPrice().compareTo(orderLineItemRequest.getPrice()) != 0) {
-                throw new IllegalArgumentException();
-            }
-            eatInOrderLineItems.add(EatInOrderLineItem.of(
-                    null,
-                    menu.getId(),
-                    quantity,
-                    menu.getPrice().longValue(),
-                    menu.isDisplayed()
-            ));
-        }
-        return eatInOrderLineItems;
+        return menus.stream()
+                .map(menu -> EatInOrderLineItem.of(
+                        null,
+                        menu.getId(),
+                        orderLineItemRequests.getQuantity(menu.getId()),
+                        orderLineItemRequests.getPrice(menu.getId()),
+                        menu.getPrice().longValue(),
+                        menu.isDisplayed()
+                ))
+                .toList();
     }
 }

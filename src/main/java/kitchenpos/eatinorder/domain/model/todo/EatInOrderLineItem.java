@@ -28,8 +28,22 @@ public class EatInOrderLineItem {
             final long menuPrice,
             final boolean isDisplayedMenu
     ) {
+        return EatInOrderLineItem.of(seq, menuId, quantity, menuPrice, menuPrice, isDisplayedMenu);
+    }
+
+    public static EatInOrderLineItem of(
+            final Long seq,
+            final UUID menuId,
+            final long quantity,
+            final long itemPrice,
+            final long menuPrice,
+            final boolean isDisplayedMenu
+    ) {
         if (!isDisplayedMenu) {
             throw new IllegalStateException("주문할 수 없는 메뉴입니다. menuId=" + menuId);
+        }
+        if (itemPrice != menuPrice) {
+            throw new IllegalArgumentException("메뉴의 가격과 주문한 메뉴의 가격이 다릅니다.");
         }
         return new EatInOrderLineItem(seq, menuId, EatInOrderLineItemQuantity.of(quantity), EatInOrderLineItemPrice.of(menuPrice));
     }
