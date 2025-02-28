@@ -1,0 +1,13 @@
+package kitchenpos.eatinorders.tobe.domain.vo;
+
+public class EatInOrderLineItemMenuPrice {
+    private final int value;
+
+    public EatInOrderLineItemMenuPrice(final int value) {
+        this.value = value;
+    }
+
+    public boolean isSamePrice(final int value) {
+        return this.value == value;
+    }
+}
