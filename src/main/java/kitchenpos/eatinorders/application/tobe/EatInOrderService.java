@@ -45,11 +45,8 @@ public class EatInOrderService {
         final OrderEntity order = orderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
 
-        if (order.status() != OrderStatus.WAITING) {
-            throw new InvalidOrderStatusException("접수 대기 중인 주문만 접수 가능합니다");
-        }
         EatInOrder eatInOrder = new EatInOrder(order);
-        eatInOrder.changeStatus();
+        eatInOrder.accept();
 
         return EatInOrderAcceptResponse.from(eatInOrder.toEntity());
     }
@@ -59,11 +56,9 @@ public class EatInOrderService {
         final OrderEntity order = orderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
 
-        if (order.status() != OrderStatus.ACCEPTED) {
-            throw new InvalidOrderStatusException("접수한 주문만 서빙 가능합니다");
-        }
         EatInOrder eatInOrder = new EatInOrder(order);
-        eatInOrder.changeStatus();
+        eatInOrder.serve();
+
         return EatInOrderServedResponse.from(eatInOrder.toEntity());
     }
 
@@ -72,12 +67,8 @@ public class EatInOrderService {
         final OrderEntity order = orderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
 
-        if (order.status() != OrderStatus.SERVED) {
-            throw new InvalidOrderStatusException("서빙된 주문만 완료 가능합니다");
-        }
-
         EatInOrder eatInOrder = new EatInOrder(order);
-        eatInOrder.changeStatus();
+        eatInOrder.complete();
 
         clearOrderTableService.clearOrderTable(order.id());
         return EatInOrderCompletedResponse.from(eatInOrder.toEntity());

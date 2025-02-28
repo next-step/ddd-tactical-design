@@ -1,8 +1,6 @@
 package kitchenpos.eatinorders.tobe.domain;
 
-import kitchenpos.eatinorders.tobe.domain.common.OrderEntity;
-import kitchenpos.eatinorders.tobe.domain.common.OrderStatus;
-import kitchenpos.eatinorders.tobe.domain.common.OrderType;
+import kitchenpos.eatinorders.tobe.domain.common.*;
 import kitchenpos.eatinorders.tobe.domain.exception.InvalidOrderLineItemsException;
 import kitchenpos.eatinorders.tobe.domain.exception.InvalidOrderStatusException;
 import kitchenpos.eatinorders.tobe.domain.exception.InvalidOrderTableException;
@@ -40,16 +38,48 @@ public class EatInOrder {
         order.changeOrderTableId(orderTable.getId());
     }
 
-    public void changeStatus() {
-        switch (order.status()) {
-            case WAITING -> order.changeStatus(OrderStatus.ACCEPTED);
-            case ACCEPTED -> order.changeStatus(OrderStatus.SERVED);
-            case SERVED -> order.changeStatus(OrderStatus.COMPLETED);
-            default -> throw new InvalidOrderStatusException("잘못된 주문 상태입니다");
+    public void accept() {
+        if (order.status() != OrderStatus.WAITING) {
+            throw new InvalidOrderStatusException("접수 대기 중인 주문만 접수 가능합니다");
         }
+        order.changeStatus(OrderStatus.ACCEPTED);
+    }
+
+    public void serve() {
+        if (order.status() != OrderStatus.ACCEPTED) {
+            throw new InvalidOrderStatusException("접수한 주문만 서빙 가능합니다");
+        }
+        order.changeStatus(OrderStatus.SERVED);
+    }
+
+    public void complete() {
+        if (order.status() != OrderStatus.SERVED) {
+            throw new InvalidOrderStatusException("서빙된 주문만 완료 가능합니다");
+        }
+        order.changeStatus(OrderStatus.COMPLETED);
     }
 
     public OrderEntity toEntity() {
         return order;
+    }
+
+    public OrderId getId() {
+        return toEntity().id();
+    }
+
+    public OrderStatus getStatus() {
+        return toEntity().status();
+    }
+
+    public OrderLineItems getOrderLineItems() {
+        return toEntity().orderLineItems();
+    }
+
+    public OrderTableId getOrderTableId() {
+        return toEntity().orderTableId();
+    }
+
+    public LocalDateTime getOrderDateTime() {
+        return toEntity().orderDateTime();
     }
 }

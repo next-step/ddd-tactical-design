@@ -3,16 +3,18 @@ package kitchenpos.eatinorders.tobe.domain;
 import kitchenpos.common.vo.Price;
 import kitchenpos.eatinorders.tobe.domain.common.*;
 import kitchenpos.eatinorders.tobe.domain.exception.InvalidOrderLineItemsException;
+import kitchenpos.eatinorders.tobe.domain.exception.InvalidOrderStatusException;
 import kitchenpos.eatinorders.tobe.domain.exception.InvalidOrderTableException;
 import kitchenpos.menus.tobe.domain.MenuId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class EatInOrderTest {
 
@@ -75,34 +77,132 @@ class EatInOrderTest {
 
         eatInOrder.createOrder(orderTable);
 
-        OrderEntity orderEntity = eatInOrder.toEntity();
-        assertThat(orderEntity.status()).isEqualTo(OrderStatus.WAITING);
-        assertThat(orderEntity.orderTableId()).isEqualTo(orderTable.getId());
+        assertAll(
+                () -> assertThat(eatInOrder.getStatus()).isEqualTo(OrderStatus.WAITING),
+                () -> assertThat(eatInOrder.getOrderTableId()).isEqualTo(orderTable.getId())
+        );
     }
 
-    @DisplayName("매장 내 식사의 주문 상태를 변경한다")
-    @CsvSource({
-            "WAITING, ACCEPTED",
-            "ACCEPTED, SERVED",
-            "SERVED, COMPLETED"
-    })
+    @DisplayName("대기 중인 주문이 아니면 주문 수락 시 예외 발생한다")
+    @EnumSource(value = OrderStatus.class, names = "WAITING", mode = EnumSource.Mode.EXCLUDE)
     @ParameterizedTest
-    void changeStatus(OrderStatus current, OrderStatus next) {
+    void validateAcceptStatus(OrderStatus status) {
         OrderLineItems orderLineItems = new OrderLineItems(
                 new OrderLineItem(1L, MenuId.generate(), 1, new Price(10_000))
         );
         OrderEntity order = new OrderEntity(
                 OrderType.EAT_IN,
-                current,
+                status,
                 orderLineItems,
                 null,
                 OrderTableId.generate()
         );
         EatInOrder eatInOrder = new EatInOrder(order);
 
-        eatInOrder.changeStatus();
+        assertThatThrownBy(eatInOrder::accept)
+                .isInstanceOf(InvalidOrderStatusException.class);
+    }
 
-        OrderEntity orderEntity = eatInOrder.toEntity();
-        assertThat(orderEntity.status()).isEqualTo(next);
+    @DisplayName("대기 중인 주문을 수락한다")
+    @EnumSource(value = OrderStatus.class, names = "WAITING", mode = EnumSource.Mode.INCLUDE)
+    @ParameterizedTest
+    void accept(OrderStatus status) {
+        OrderLineItems orderLineItems = new OrderLineItems(
+                new OrderLineItem(1L, MenuId.generate(), 1, new Price(10_000))
+        );
+        OrderEntity order = new OrderEntity(
+                OrderType.EAT_IN,
+                status,
+                orderLineItems,
+                null,
+                OrderTableId.generate()
+        );
+        EatInOrder eatInOrder = new EatInOrder(order);
+
+        eatInOrder.accept();
+
+        assertThat(eatInOrder.getStatus()).isEqualTo(OrderStatus.ACCEPTED);
+    }
+
+    @DisplayName("접수된 주문이 아니면 주문 서빙 시 예외 발생한다")
+    @EnumSource(value = OrderStatus.class, names = "ACCEPTED", mode = EnumSource.Mode.EXCLUDE)
+    @ParameterizedTest
+    void validateServeStatus(OrderStatus status) {
+        OrderLineItems orderLineItems = new OrderLineItems(
+                new OrderLineItem(1L, MenuId.generate(), 1, new Price(10_000))
+        );
+        OrderEntity order = new OrderEntity(
+                OrderType.EAT_IN,
+                status,
+                orderLineItems,
+                null,
+                OrderTableId.generate()
+        );
+        EatInOrder eatInOrder = new EatInOrder(order);
+
+        assertThatThrownBy(eatInOrder::serve)
+                .isInstanceOf(InvalidOrderStatusException.class);
+    }
+
+    @DisplayName("접수한 주문을 서빙한다")
+    @EnumSource(value = OrderStatus.class, names = "ACCEPTED", mode = EnumSource.Mode.INCLUDE)
+    @ParameterizedTest
+    void serve(OrderStatus status) {
+        OrderLineItems orderLineItems = new OrderLineItems(
+                new OrderLineItem(1L, MenuId.generate(), 1, new Price(10_000))
+        );
+        OrderEntity order = new OrderEntity(
+                OrderType.EAT_IN,
+                status,
+                orderLineItems,
+                null,
+                OrderTableId.generate()
+        );
+        EatInOrder eatInOrder = new EatInOrder(order);
+
+        eatInOrder.serve();
+
+        assertThat(eatInOrder.getStatus()).isEqualTo(OrderStatus.SERVED);
+    }
+
+    @DisplayName("서빙된 주문이 아니면 주문 완료 시 예외 발생한다")
+    @EnumSource(value = OrderStatus.class, names = "SERVED", mode = EnumSource.Mode.EXCLUDE)
+    @ParameterizedTest
+    void validateCompleteStatus(OrderStatus status) {
+        OrderLineItems orderLineItems = new OrderLineItems(
+                new OrderLineItem(1L, MenuId.generate(), 1, new Price(10_000))
+        );
+        OrderEntity order = new OrderEntity(
+                OrderType.EAT_IN,
+                status,
+                orderLineItems,
+                null,
+                OrderTableId.generate()
+        );
+        EatInOrder eatInOrder = new EatInOrder(order);
+
+        assertThatThrownBy(eatInOrder::complete)
+                .isInstanceOf(InvalidOrderStatusException.class);
+    }
+
+    @DisplayName("주문을 완료 처리 한다")
+    @EnumSource(value = OrderStatus.class, names = "SERVED", mode = EnumSource.Mode.INCLUDE)
+    @ParameterizedTest
+    void complete(OrderStatus status) {
+        OrderLineItems orderLineItems = new OrderLineItems(
+                new OrderLineItem(1L, MenuId.generate(), 1, new Price(10_000))
+        );
+        OrderEntity order = new OrderEntity(
+                OrderType.EAT_IN,
+                status,
+                orderLineItems,
+                null,
+                OrderTableId.generate()
+        );
+        EatInOrder eatInOrder = new EatInOrder(order);
+
+        eatInOrder.complete();
+
+        assertThat(eatInOrder.getStatus()).isEqualTo(OrderStatus.COMPLETED);
     }
 }
