@@ -14,22 +14,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class EatInOrderTest {
 
-//    @DisplayName("주문 항목이 없거나 비어있으면 매장 주문을 생성할 수 없다.")
-//    @ParameterizedTest(name = "주문 항목: {0}")
-//    @NullAndEmptySource
-//    void createWithoutEatInOrderLineItems(final List<EatInOrderLineItem> eatInOrderLineItemList) {
-//        final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(eatInOrderLineItemList);
-//        final EatInOrderMenus eatInOrderMenus = new DefaultEatInOrderMenus(
-//                new DefaultEatInOrderMenu(UUID.randomUUID(), "후라이드 치킨", 16_000, true),
-//                new DefaultEatInOrderMenu(UUID.randomUUID(), "양념 치킨", 16_000, true)
-//        );
-//        final EatInOrderTable eatInOrderTable = new FakeEatInOrderTable(UUID.randomUUID(), true);
-//
-//
-//        assertThatThrownBy(() -> new EatInOrder(eatInOrderLineItems, eatInOrderMenus, eatInOrderTable))
-//                .isExactlyInstanceOf(IllegalArgumentException.class);
-//    }
-
     @DisplayName("주문 테이블이 없으면 매장 주문을 생성할 수 없다.")
     @NullSource
     @ParameterizedTest(name = "주문 테이블: {0}")
