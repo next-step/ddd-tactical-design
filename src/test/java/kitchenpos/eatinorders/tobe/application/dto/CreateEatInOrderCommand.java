@@ -9,7 +9,7 @@ public record CreateEatInOrderCommand(
 ) {
     public List<UUID> menuIds() {
         return lineItems.stream()
-                .map(CreateEatInOrderLineItemCommand::command)
+                .map(CreateEatInOrderLineItemCommand::eatInOrderLineItemMenuCommand)
                 .map(CreateEatInOrderLineItemMenuCommand::menuId)
                 .toList();
     }

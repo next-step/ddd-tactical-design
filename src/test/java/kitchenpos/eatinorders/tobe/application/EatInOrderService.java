@@ -2,6 +2,7 @@ package kitchenpos.eatinorders.tobe.application;
 
 import kitchenpos.eatinorders.tobe.application.dto.CreateEatInOrderCommand;
 import kitchenpos.eatinorders.tobe.application.dto.CreateEatInOrderLineItemCommand;
+import kitchenpos.eatinorders.tobe.application.dto.CreateEatInOrderLineItemMenuCommand;
 import kitchenpos.eatinorders.tobe.domain.InMemoryEatInOrderMenuRepository;
 import kitchenpos.eatinorders.tobe.domain.InMemoryEatInOrderRepository;
 import kitchenpos.eatinorders.tobe.domain.order.*;
@@ -30,46 +31,46 @@ public class EatInOrderService {
         return eatInOrderRepository.save(eatInOrder);
     }
 
-    public EatInOrder accept(final UUID orderId) {
-        final EatInOrder order = eatInOrderRepository.findById(new EatInOrderId(orderId))
+    public EatInOrder accept(final UUID eatInOrderId) {
+        final EatInOrder eatInOrder = eatInOrderRepository.findById(new EatInOrderId(eatInOrderId))
                 .orElseThrow(NoSuchElementException::new);
-        order.accepted();
-        return order;
+        eatInOrder.accepted();
+        return eatInOrderRepository.save(eatInOrder);
     }
 
-    public EatInOrder serve(final UUID orderId) {
-        final EatInOrder order = eatInOrderRepository.findById(new EatInOrderId(orderId))
+    public EatInOrder serve(final UUID eatInOrderId) {
+        final EatInOrder eatInOrder = eatInOrderRepository.findById(new EatInOrderId(eatInOrderId))
                 .orElseThrow(NoSuchElementException::new);
-        order.served();
-        return order;
+        eatInOrder.served();
+        return eatInOrderRepository.save(eatInOrder);
     }
 
-    public EatInOrder complete(final UUID orderId) {
-        final EatInOrder order = eatInOrderRepository.findById(new EatInOrderId(orderId))
+    public EatInOrder complete(final UUID eatInOrderId) {
+        final EatInOrder eatInOrder = eatInOrderRepository.findById(new EatInOrderId(eatInOrderId))
                 .orElseThrow(NoSuchElementException::new);
-        order.completed();
-//        order.setStatus(OrderStatus.COMPLETED);
-//        final OrderTable orderTable = order.getOrderTable();
-//        if (!eatInOrderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
-//            orderTable.setNumberOfGuests(0);
-//            orderTable.setOccupied(false);
-//        }
-        return order;
+        eatInOrder.completed();
+        return eatInOrderRepository.save(eatInOrder);
     }
 
     public List<EatInOrder> findAll() {
         return eatInOrderRepository.findAll();
     }
 
-
     private EatInOrder eatInOrder(final CreateEatInOrderCommand command, final EatInOrderMenus eatInOrderMenus, final OrderTable orderTable) {
         final List<CreateEatInOrderLineItemCommand> createEatInOrderLineItemCommands = command.lineItems();
         final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(createEatInOrderLineItemCommands.stream()
-                .map(it -> new EatInOrderLineItem(
+                .map(eatInOrderLineItemCommand -> new EatInOrderLineItem(
                         null,
-                        new EatInOrderLineItemMenu(it.command().menuId(), it.command().name(), it.command().price()),
-                        new Quantity(it.quantity()))
+                        eatInOrderLineItemMenu(eatInOrderLineItemCommand.eatInOrderLineItemMenuCommand()),
+                        new Quantity(eatInOrderLineItemCommand.quantity()))
                 ).toList());
         return new EatInOrder(eatInOrderLineItems, eatInOrderMenus, orderTable);
+    }
+
+    private EatInOrderLineItemMenu eatInOrderLineItemMenu(final CreateEatInOrderLineItemMenuCommand command) {
+        final UUID menuId = command.menuId();
+        final String name = command.name();
+        final int price = command.price();
+        return new EatInOrderLineItemMenu(menuId, name, price);
     }
 }

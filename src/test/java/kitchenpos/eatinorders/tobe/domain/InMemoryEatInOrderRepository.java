@@ -1,6 +1,5 @@
 package kitchenpos.eatinorders.tobe.domain;
 
-import kitchenpos.eatinorders.domain.OrderStatus;
 import kitchenpos.eatinorders.tobe.domain.order.EatInOrder;
 import kitchenpos.eatinorders.tobe.domain.order.EatInOrderRepository;
 import kitchenpos.eatinorders.tobe.domain.order.EatInOrderStatus;
