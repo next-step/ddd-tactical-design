@@ -4,10 +4,13 @@ import kitchenpos.eatinorders.tobe.application.dto.CreateEatInOrderCommand;
 import kitchenpos.eatinorders.tobe.application.dto.CreateEatInOrderLineItemCommand;
 import kitchenpos.eatinorders.tobe.domain.InMemoryEatInOrderMenuRepository;
 import kitchenpos.eatinorders.tobe.domain.InMemoryEatInOrderRepository;
-import kitchenpos.eatinorders.tobe.domain.InMemoryEatInOrderTableRepository;
 import kitchenpos.eatinorders.tobe.domain.order.*;
 import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderId;
 import kitchenpos.eatinorders.tobe.domain.order.vo.Quantity;
+import kitchenpos.eatinorders.tobe.domain.ordertable.InMemoryOrderTableRepository;
+import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTable;
+import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTableRepository;
+import kitchenpos.eatinorders.tobe.domain.ordertable.vo.OrderTableId;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -16,12 +19,13 @@ import java.util.UUID;
 public class EatInOrderService {
 
     private final EatInOrderMenuRepository eatInOrderMenuRepository = new InMemoryEatInOrderMenuRepository();
-    private final EatInOrderTableRepository orderTableRepository = new InMemoryEatInOrderTableRepository();
+    private final OrderTableRepository orderTableRepository = new InMemoryOrderTableRepository();
     private final EatInOrderRepository eatInOrderRepository = new InMemoryEatInOrderRepository();
 
     public EatInOrder create(final CreateEatInOrderCommand command) {
         final EatInOrderMenus eatInOrderMenus = eatInOrderMenuRepository.findAllByIdIn(command.menuIds());
-        final EatInOrderTable orderTable = orderTableRepository.findById(command.orderTableId()).orElseThrow(IllegalArgumentException::new);
+        final OrderTable orderTable = orderTableRepository.findById(new OrderTableId(command.orderTableId()))
+                .orElseThrow(IllegalArgumentException::new);
         final EatInOrder eatInOrder = eatInOrder(command, eatInOrderMenus, orderTable);
         return eatInOrderRepository.save(eatInOrder);
     }
@@ -58,7 +62,7 @@ public class EatInOrderService {
     }
 
 
-    private EatInOrder eatInOrder(final CreateEatInOrderCommand command, final EatInOrderMenus eatInOrderMenus, final EatInOrderTable orderTable) {
+    private EatInOrder eatInOrder(final CreateEatInOrderCommand command, final EatInOrderMenus eatInOrderMenus, final OrderTable orderTable) {
         final List<CreateEatInOrderLineItemCommand> createEatInOrderLineItemCommands = command.lineItems();
         final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(createEatInOrderLineItemCommands.stream()
                 .map(it -> new EatInOrderLineItem(

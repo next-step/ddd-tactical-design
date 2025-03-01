@@ -1,9 +1,10 @@
 package kitchenpos.eatinorders.tobe.domain.order;
 
 import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderId;
+import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTable;
+import kitchenpos.eatinorders.tobe.domain.ordertable.vo.OrderTableId;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import static java.util.Objects.isNull;
 
@@ -12,28 +13,28 @@ public class EatInOrder {
     private EatInOrderStatus eatInOrderStatus;
     private final EatInOrderDateTime eatInOrderDateTime;
     private final EatInOrderLineItems eatInOrderLineItems;
-    private final UUID orderTableId;
+    private final OrderTableId orderTableId;
 
-    public EatInOrder(final EatInOrderLineItems eatInOrderLineItems, final EatInOrderMenus eatInOrderMenus, final EatInOrderTable orderTable) {
+    public EatInOrder(final EatInOrderLineItems eatInOrderLineItems, final EatInOrderMenus eatInOrderMenus, final OrderTable orderTable) {
         this(new EatInOrderId(), EatInOrderStatus.WAITING, new EatInOrderDateTime(), eatInOrderLineItems, eatInOrderMenus, orderTable);
     }
 
     public EatInOrder(final EatInOrderId id, final EatInOrderStatus eatInOrderStatus,
                       final EatInOrderDateTime eatInOrderDateTime, final EatInOrderLineItems eatInOrderLineItems,
-                      final EatInOrderMenus eatInOrderMenus, final EatInOrderTable orderTable) {
+                      final EatInOrderMenus eatInOrderMenus, final OrderTable orderTable) {
         verify(id, eatInOrderStatus, eatInOrderDateTime, eatInOrderLineItems, eatInOrderMenus, orderTable);
         this.id = id;
         this.eatInOrderStatus = eatInOrderStatus;
         this.eatInOrderDateTime = eatInOrderDateTime;
         this.eatInOrderLineItems = eatInOrderLineItems;
         this.orderTableId = Optional.ofNullable(orderTable)
-                .map(EatInOrderTable::id)
+                .map(OrderTable::id)
                 .orElseThrow(IllegalArgumentException::new);
     }
 
     private void verify(final EatInOrderId id, final EatInOrderStatus eatInOrderStatus,
                         final EatInOrderDateTime eatInOrderDateTime, final EatInOrderLineItems eatInOrderLineItems,
-                        final EatInOrderMenus eatInOrderMenus, final EatInOrderTable orderTable) {
+                        final EatInOrderMenus eatInOrderMenus, final OrderTable orderTable) {
         if (isNull(id) || isNull(eatInOrderStatus) || isNull(eatInOrderDateTime) ||
                 isNull(eatInOrderLineItems) || isNull(eatInOrderMenus) || isNull(orderTable)) {
             throw new IllegalArgumentException();

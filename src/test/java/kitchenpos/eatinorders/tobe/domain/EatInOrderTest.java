@@ -2,6 +2,7 @@ package kitchenpos.eatinorders.tobe.domain;
 
 import kitchenpos.eatinorders.tobe.domain.order.*;
 import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderId;
+import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTable;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -19,7 +20,7 @@ public class EatInOrderTest {
     @DisplayName("주문 테이블이 없으면 매장 주문을 생성할 수 없다.")
     @NullSource
     @ParameterizedTest(name = "주문 테이블: {0}")
-    void createWithoutOrderTable(final EatInOrderTable eatInOrderTable) {
+    void createWithoutOrderTable(final OrderTable orderTable) {
         final UUID firstMenuId = UUID.randomUUID();
         final UUID secondMenuId = UUID.randomUUID();
         final EatInOrderLineItem firstEatInOrderLineItem = new EatInOrderLineItem(1L, new EatInOrderLineItemMenu(firstMenuId, "후라이드 치킨", 16_000), 1);
@@ -30,7 +31,7 @@ public class EatInOrderTest {
                 new DefaultEatInOrderMenu(secondMenuId, 16_000, true)
         );
 
-        assertThatThrownBy(() -> new EatInOrder(eatInOrderLineItems, eatInOrderMenus, eatInOrderTable))
+        assertThatThrownBy(() -> new EatInOrder(eatInOrderLineItems, eatInOrderMenus, orderTable))
                 .isExactlyInstanceOf(IllegalArgumentException.class);
     }
 
@@ -43,9 +44,9 @@ public class EatInOrderTest {
         final EatInOrderLineItem secondEatInOrderLineItem = new EatInOrderLineItem(1L, new EatInOrderLineItemMenu(secondMenuId, "양념 치킨", 16_000), 1);
         final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(firstEatInOrderLineItem, secondEatInOrderLineItem);
         final EatInOrderMenus eatInOrderMenus = new DefaultEatInOrderMenus(new DefaultEatInOrderMenu(firstMenuId, 16_000, true));
-        final EatInOrderTable eatInOrderTable = new DefaultEatInOrderTable(UUID.randomUUID(), true);
+        final OrderTable orderTable = new OrderTable("1번", 4, true);
 
-        assertThatThrownBy(() -> new EatInOrder(eatInOrderLineItems, eatInOrderMenus, eatInOrderTable))
+        assertThatThrownBy(() -> new EatInOrder(eatInOrderLineItems, eatInOrderMenus, orderTable))
                 .isExactlyInstanceOf(IllegalArgumentException.class);
     }
 
@@ -61,9 +62,9 @@ public class EatInOrderTest {
                 new DefaultEatInOrderMenu(firstMenuId, 16_001, true),
                 new DefaultEatInOrderMenu(secondMenuId, 16_001, true)
         );
-        final EatInOrderTable eatInOrderTable = new DefaultEatInOrderTable(UUID.randomUUID(), true);
+        final OrderTable orderTable = new OrderTable("1번", 4, true);
 
-        assertThatThrownBy(() -> new EatInOrder(eatInOrderLineItems, eatInOrderMenus, eatInOrderTable))
+        assertThatThrownBy(() -> new EatInOrder(eatInOrderLineItems, eatInOrderMenus, orderTable))
                 .isExactlyInstanceOf(IllegalArgumentException.class);
     }
 
@@ -79,9 +80,9 @@ public class EatInOrderTest {
                 new DefaultEatInOrderMenu(firstMenuId, 16_000, true),
                 new DefaultEatInOrderMenu(secondMenuId, 16_000, true)
         );
-        final EatInOrderTable eatInOrderTable = new DefaultEatInOrderTable(UUID.randomUUID(), false);
+        final OrderTable orderTable = new OrderTable("1번", 0, false);
 
-        assertThatThrownBy(() -> new EatInOrder(eatInOrderLineItems, eatInOrderMenus, eatInOrderTable))
+        assertThatThrownBy(() -> new EatInOrder(eatInOrderLineItems, eatInOrderMenus, orderTable))
                 .isExactlyInstanceOf(IllegalArgumentException.class);
     }
 
@@ -97,9 +98,9 @@ public class EatInOrderTest {
                 new DefaultEatInOrderMenu(firstMenuId, 16_000, true),
                 new DefaultEatInOrderMenu(secondMenuId, 16_000, true)
         );
-        final EatInOrderTable eatInOrderTable = new DefaultEatInOrderTable(UUID.randomUUID(), true);
+        final OrderTable orderTable = new OrderTable("1번", 4, true);
 
-        final EatInOrder eatInOrder = new EatInOrder(eatInOrderLineItems, eatInOrderMenus, eatInOrderTable);
+        final EatInOrder eatInOrder = new EatInOrder(eatInOrderLineItems, eatInOrderMenus, orderTable);
 
         assertAll(
                 () -> assertThat(eatInOrder.getId()).isNotNull(),
@@ -120,11 +121,11 @@ public class EatInOrderTest {
                 new DefaultEatInOrderMenu(firstMenuId, 16_000, true),
                 new DefaultEatInOrderMenu(secondMenuId, 16_000, true)
         );
-        final EatInOrderTable eatInOrderTable = new DefaultEatInOrderTable(UUID.randomUUID(), true);
+        final OrderTable orderTable = new OrderTable("1번", 4, true);
 
         final EatInOrder eatInOrder = new EatInOrder(
                 new EatInOrderId(), eatInOrderStatus, new EatInOrderDateTime(),
-                eatInOrderLineItems, eatInOrderMenus, eatInOrderTable
+                eatInOrderLineItems, eatInOrderMenus, orderTable
         );
         assertThatThrownBy(eatInOrder::accepted)
                 .isExactlyInstanceOf(IllegalArgumentException.class);
@@ -142,9 +143,9 @@ public class EatInOrderTest {
                 new DefaultEatInOrderMenu(firstMenuId, 16_000, true),
                 new DefaultEatInOrderMenu(secondMenuId, 16_000, true)
         );
-        final EatInOrderTable eatInOrderTable = new DefaultEatInOrderTable(UUID.randomUUID(), true);
+        final OrderTable orderTable = new OrderTable("1번", 4, true);
 
-        final EatInOrder eatInOrder = new EatInOrder(eatInOrderLineItems, eatInOrderMenus, eatInOrderTable);
+        final EatInOrder eatInOrder = new EatInOrder(eatInOrderLineItems, eatInOrderMenus, orderTable);
         eatInOrder.accepted();
         assertThat(eatInOrder.status()).isEqualTo(EatInOrderStatus.ACCEPTED);
     }
@@ -162,11 +163,11 @@ public class EatInOrderTest {
                 new DefaultEatInOrderMenu(firstMenuId, 16_000, true),
                 new DefaultEatInOrderMenu(secondMenuId, 16_000, true)
         );
-        final EatInOrderTable eatInOrderTable = new DefaultEatInOrderTable(UUID.randomUUID(), true);
+        final OrderTable orderTable = new OrderTable("1번", 4, true);
 
         final EatInOrder eatInOrder = new EatInOrder(
                 new EatInOrderId(), eatInOrderStatus, new EatInOrderDateTime(),
-                eatInOrderLineItems, eatInOrderMenus, eatInOrderTable
+                eatInOrderLineItems, eatInOrderMenus, orderTable
         );
         assertThatThrownBy(eatInOrder::served)
                 .isExactlyInstanceOf(IllegalArgumentException.class);
@@ -184,11 +185,11 @@ public class EatInOrderTest {
                 new DefaultEatInOrderMenu(firstMenuId, 16_000, true),
                 new DefaultEatInOrderMenu(secondMenuId, 16_000, true)
         );
-        final EatInOrderTable eatInOrderTable = new DefaultEatInOrderTable(UUID.randomUUID(), true);
+        final OrderTable orderTable = new OrderTable("1번", 4, true);
 
         final EatInOrder eatInOrder = new EatInOrder(
                 new EatInOrderId(), EatInOrderStatus.ACCEPTED, new EatInOrderDateTime(),
-                eatInOrderLineItems, eatInOrderMenus, eatInOrderTable
+                eatInOrderLineItems, eatInOrderMenus, orderTable
         );
         eatInOrder.served();
         assertThat(eatInOrder.status()).isEqualTo(EatInOrderStatus.SERVED);
@@ -207,11 +208,11 @@ public class EatInOrderTest {
                 new DefaultEatInOrderMenu(firstMenuId, 16_000, true),
                 new DefaultEatInOrderMenu(secondMenuId, 16_000, true)
         );
-        final EatInOrderTable eatInOrderTable = new DefaultEatInOrderTable(UUID.randomUUID(), true);
+        final OrderTable orderTable = new OrderTable("1번", 4, true);
 
         final EatInOrder eatInOrder = new EatInOrder(
                 new EatInOrderId(), eatInOrderStatus, new EatInOrderDateTime(),
-                eatInOrderLineItems, eatInOrderMenus, eatInOrderTable
+                eatInOrderLineItems, eatInOrderMenus, orderTable
         );
         assertThatThrownBy(eatInOrder::completed)
                 .isExactlyInstanceOf(IllegalArgumentException.class);
@@ -229,11 +230,11 @@ public class EatInOrderTest {
                 new DefaultEatInOrderMenu(firstMenuId, 16_000, true),
                 new DefaultEatInOrderMenu(secondMenuId, 16_000, true)
         );
-        final EatInOrderTable eatInOrderTable = new DefaultEatInOrderTable(UUID.randomUUID(), true);
+        final OrderTable orderTable = new OrderTable("1번", 4, true);
 
         final EatInOrder eatInOrder = new EatInOrder(
                 new EatInOrderId(), EatInOrderStatus.SERVED, new EatInOrderDateTime(),
-                eatInOrderLineItems, eatInOrderMenus, eatInOrderTable
+                eatInOrderLineItems, eatInOrderMenus, orderTable
         );
         eatInOrder.completed();
         assertThat(eatInOrder.status()).isEqualTo(EatInOrderStatus.COMPLETED);
