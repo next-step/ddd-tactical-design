@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static java.util.Objects.*;
+
 public class EatInOrderLineItems {
     private final List<EatInOrderLineItem> eatInOrderLineItems;
 
@@ -20,7 +22,7 @@ public class EatInOrderLineItems {
     }
 
     private void verify(final EatInOrderMenus eatInOrderMenus, final List<EatInOrderLineItem> eatInOrderLineItems) {
-        if (Objects.isNull(eatInOrderMenus) || Objects.isNull(eatInOrderLineItems) || eatInOrderLineItems.isEmpty()) {
+        if (isNull(eatInOrderMenus) || isNull(eatInOrderLineItems) || eatInOrderLineItems.isEmpty()) {
             throw new IllegalArgumentException();
         }
         if(!eatInOrderMenus.isSameSize(eatInOrderLineItems.size())) {

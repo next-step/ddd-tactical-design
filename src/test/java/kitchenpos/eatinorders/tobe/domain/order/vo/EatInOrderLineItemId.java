@@ -10,12 +10,15 @@ public class EatInOrderLineItemId {
         this(UUID.randomUUID());
     }
 
-    public EatInOrderLineItemId(final UUID value) {
-        this.value = value;
+    public EatInOrderLineItemId(final String value) {
+        this(UUID.fromString(value));
     }
 
-    public EatInOrderLineItemId(final String id) {
-        this(UUID.fromString(id));
+    public EatInOrderLineItemId(final UUID value) {
+        if(Objects.isNull(value)) {
+            throw new IllegalArgumentException();
+        }
+        this.value = value;
     }
 
     public UUID getValue() {

@@ -24,14 +24,6 @@ public class EatInOrderLineItemMenu {
         throw new UnsupportedOperationException("EatInOrderLineItemMenu is deprecated");
     }
 
-    public boolean isSameMenu(final UUID menuId) {
-        return this.menuId.equals(menuId);
-    }
-
-    public boolean isSamePrice(final int price) {
-        return this.price.isSamePrice(price);
-    }
-
     public UUID menuId() {
         return menuId;
     }

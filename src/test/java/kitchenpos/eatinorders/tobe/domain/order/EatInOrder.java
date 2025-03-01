@@ -6,6 +6,7 @@ import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderId;
 import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderStatus;
 import kitchenpos.eatinorders.tobe.domain.ordertable.vo.OrderTableId;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Objects.isNull;
@@ -36,8 +37,7 @@ public class EatInOrder {
     private void verify(final EatInOrderId id, final EatInOrderStatus eatInOrderStatus,
                         final EatInOrderDateTime eatInOrderDateTime, final EatInOrderLineItems eatInOrderLineItems,
                         final OrderTableId orderTable) {
-        if (isNull(id) || isNull(eatInOrderStatus) || isNull(eatInOrderDateTime) ||
-                isNull(eatInOrderLineItems) || isNull(orderTable)) {
+        if (isNull(id) || isNull(eatInOrderStatus) || isNull(eatInOrderDateTime) || isNull(eatInOrderLineItems) || isNull(orderTable)) {
             throw new IllegalArgumentException();
         }
     }
@@ -67,6 +67,6 @@ public class EatInOrder {
     }
 
     public List<EatInOrderLineItem> eatInOrderLineItems() {
-        return eatInOrderLineItems.eatInOrderLineItems();
+        return new ArrayList<>(eatInOrderLineItems.eatInOrderLineItems());
     }
 }

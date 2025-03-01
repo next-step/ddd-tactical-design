@@ -2,12 +2,10 @@ package kitchenpos.eatinorders.tobe.application;
 
 import kitchenpos.eatinorders.tobe.application.dto.CreateEatInOrderCommand;
 import kitchenpos.eatinorders.tobe.application.dto.CreateEatInOrderLineItemCommand;
-import kitchenpos.eatinorders.tobe.domain.order.InMemoryEatInOrderMenuRepository;
-import kitchenpos.eatinorders.tobe.domain.order.InMemoryEatInOrderRepository;
 import kitchenpos.eatinorders.tobe.domain.order.*;
-import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderId;
 import kitchenpos.eatinorders.tobe.domain.order.menu.EatInOrderMenuRepository;
 import kitchenpos.eatinorders.tobe.domain.order.menu.EatInOrderMenus;
+import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderId;
 import kitchenpos.eatinorders.tobe.domain.ordertable.InMemoryOrderTableRepository;
 import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTable;
 import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTableRepository;
@@ -30,8 +28,7 @@ public class EatInOrderService {
         if (!orderTable.isOccupiedValue()) {
             throw new IllegalArgumentException();
         }
-        final EatInOrder eatInOrder = toEatInOrder(command, eatInOrderMenus, orderTable);
-        return eatInOrderRepository.save(eatInOrder);
+        return eatInOrderRepository.save(eatInOrder(command, eatInOrderMenus, orderTable.id()));
     }
 
     public EatInOrder accept(final UUID eatInOrderId) {
@@ -59,20 +56,20 @@ public class EatInOrderService {
         return eatInOrderRepository.findAll();
     }
 
-    private EatInOrder toEatInOrder(final CreateEatInOrderCommand command, final EatInOrderMenus eatInOrderMenus, final OrderTable orderTable) {
+    private EatInOrder eatInOrder(final CreateEatInOrderCommand command, final EatInOrderMenus eatInOrderMenus, final OrderTableId orderTableId) {
         final List<CreateEatInOrderLineItemCommand> createEatInOrderLineItemCommands = command.lineItems();
         final List<EatInOrderLineItem> eatInOrderLineItems = createEatInOrderLineItemCommands.stream()
-                .map(this::toEatInOrderLineItem)
+                .map(this::eatInOrderLineItem)
                 .toList();
-        return new EatInOrder(eatInOrderLineItems, eatInOrderMenus, orderTable.id());
+        return new EatInOrder(eatInOrderLineItems, eatInOrderMenus, orderTableId);
     }
 
-    private EatInOrderLineItem toEatInOrderLineItem(final CreateEatInOrderLineItemCommand eatInOrderLineItemCommand) {
+    private EatInOrderLineItem eatInOrderLineItem(final CreateEatInOrderLineItemCommand command) {
         return new EatInOrderLineItem(
-                eatInOrderLineItemCommand.menuId(),
-                eatInOrderLineItemCommand.name(),
-                eatInOrderLineItemCommand.price(),
-                eatInOrderLineItemCommand.quantity()
+                command.menuId(),
+                command.name(),
+                command.price(),
+                command.quantity()
         );
     }
 }

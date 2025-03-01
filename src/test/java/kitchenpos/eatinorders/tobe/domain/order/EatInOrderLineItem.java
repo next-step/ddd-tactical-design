@@ -2,7 +2,10 @@ package kitchenpos.eatinorders.tobe.domain.order;
 
 import kitchenpos.eatinorders.tobe.domain.order.vo.*;
 
+import java.util.Objects;
 import java.util.UUID;
+
+import static java.util.Objects.*;
 
 public class EatInOrderLineItem {
     private final EatInOrderLineItemId eatInOrderLineItemId;
@@ -23,11 +26,19 @@ public class EatInOrderLineItem {
             final EatInOrderLineItemPrice price,
             final Quantity quantity
     ) {
+        verify(eatInOrderLineItemId, menuId, name, price, quantity);
         this.eatInOrderLineItemId = eatInOrderLineItemId;
         this.menuId = menuId;
         this.name = name;
         this.price = price;
         this.quantity = quantity;
+    }
+
+    private void verify(final EatInOrderLineItemId eatInOrderLineItemId, final UUID menuId,
+                        final EatInOrderLineItemName name, final EatInOrderLineItemPrice price, final Quantity quantity) {
+        if (isNull(eatInOrderLineItemId) || isNull(menuId) || isNull(name) || isNull(price) || isNull(quantity)) {
+            throw new IllegalArgumentException();
+        }
     }
 
     public UUID eatInOrderLineItemIdValue() {
