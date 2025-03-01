@@ -2,6 +2,7 @@ package kitchenpos.eatinorders.tobe.infrastructure;
 
 import kitchenpos.eatinorders.tobe.domain.order.*;
 import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderId;
+import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderStatus;
 import kitchenpos.eatinorders.tobe.domain.ordertable.vo.OrderTableId;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

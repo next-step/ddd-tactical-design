@@ -1,9 +1,10 @@
-package kitchenpos.eatinorders.tobe.domain.order;
+package kitchenpos.eatinorders.tobe.poc;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Deprecated
 public interface EatInOrderTableRepository {
     EatInOrderTable save(EatInOrderTable orderTable);
 

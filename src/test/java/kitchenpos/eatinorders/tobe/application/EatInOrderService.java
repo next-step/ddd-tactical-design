@@ -2,10 +2,12 @@ package kitchenpos.eatinorders.tobe.application;
 
 import kitchenpos.eatinorders.tobe.application.dto.CreateEatInOrderCommand;
 import kitchenpos.eatinorders.tobe.application.dto.CreateEatInOrderLineItemCommand;
-import kitchenpos.eatinorders.tobe.domain.InMemoryEatInOrderMenuRepository;
-import kitchenpos.eatinorders.tobe.domain.InMemoryEatInOrderRepository;
+import kitchenpos.eatinorders.tobe.domain.order.InMemoryEatInOrderMenuRepository;
+import kitchenpos.eatinorders.tobe.domain.order.InMemoryEatInOrderRepository;
 import kitchenpos.eatinorders.tobe.domain.order.*;
 import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderId;
+import kitchenpos.eatinorders.tobe.domain.order.menu.EatInOrderMenuRepository;
+import kitchenpos.eatinorders.tobe.domain.order.menu.EatInOrderMenus;
 import kitchenpos.eatinorders.tobe.domain.ordertable.InMemoryOrderTableRepository;
 import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTable;
 import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTableRepository;

@@ -2,7 +2,7 @@ package kitchenpos.eatinorders.tobe.infrastructure;
 
 import kitchenpos.eatinorders.tobe.domain.order.EatInOrder;
 import kitchenpos.eatinorders.tobe.domain.order.EatInOrderLineItem;
-import kitchenpos.eatinorders.tobe.domain.order.EatInOrderStatus;
+import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderStatus;
 import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderId;
 import kitchenpos.eatinorders.tobe.domain.ordertable.vo.OrderTableId;
 

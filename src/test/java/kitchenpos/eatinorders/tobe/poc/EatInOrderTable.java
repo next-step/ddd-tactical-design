@@ -1,7 +1,8 @@
-package kitchenpos.eatinorders.tobe.domain.order;
+package kitchenpos.eatinorders.tobe.poc;
 
 import java.util.UUID;
 
+@Deprecated
 public interface EatInOrderTable {
     UUID id();
 

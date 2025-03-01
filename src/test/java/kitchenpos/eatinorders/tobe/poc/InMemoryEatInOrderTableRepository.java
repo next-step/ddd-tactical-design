@@ -1,10 +1,8 @@
 package kitchenpos.eatinorders.tobe.poc;
 
-import kitchenpos.eatinorders.tobe.domain.order.EatInOrderTable;
-import kitchenpos.eatinorders.tobe.domain.order.EatInOrderTableRepository;
-
 import java.util.*;
 
+@Deprecated
 public class InMemoryEatInOrderTableRepository implements EatInOrderTableRepository {
     private final Map<UUID, EatInOrderTable> orderTables = new HashMap<>();
 

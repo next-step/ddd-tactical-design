@@ -1,15 +1,12 @@
-package kitchenpos.eatinorders.tobe.domain;
+package kitchenpos.eatinorders.tobe.domain.order;
 
-import kitchenpos.eatinorders.tobe.domain.order.EatInOrder;
-import kitchenpos.eatinorders.tobe.domain.order.EatInOrderRepository;
-import kitchenpos.eatinorders.tobe.domain.order.EatInOrderStatus;
+import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderStatus;
 import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderId;
 import kitchenpos.eatinorders.tobe.domain.ordertable.vo.OrderTableId;
 
 import java.util.*;
 
 public class InMemoryEatInOrderRepository implements EatInOrderRepository {
-
     private final Map<EatInOrderId, EatInOrder> eatInOrders;
 
     public InMemoryEatInOrderRepository() {
@@ -22,7 +19,7 @@ public class InMemoryEatInOrderRepository implements EatInOrderRepository {
 
     @Override
     public EatInOrder save(final EatInOrder eatInOrder) {
-        eatInOrders.put(eatInOrder.getId(), eatInOrder);
+        eatInOrders.put(eatInOrder.id(), eatInOrder);
         return eatInOrder;
     }
 

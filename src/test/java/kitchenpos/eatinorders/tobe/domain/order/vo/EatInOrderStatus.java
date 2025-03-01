@@ -1,6 +1,4 @@
-package kitchenpos.eatinorders.tobe.domain.order;
-
-import kitchenpos.eatinorders.domain.OrderStatus;
+package kitchenpos.eatinorders.tobe.domain.order.vo;
 
 import java.util.Arrays;
 

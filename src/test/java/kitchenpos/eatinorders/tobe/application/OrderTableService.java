@@ -1,9 +1,9 @@
 package kitchenpos.eatinorders.tobe.application;
 
 import kitchenpos.eatinorders.tobe.application.dto.CreateOrderTableCommand;
-import kitchenpos.eatinorders.tobe.domain.InMemoryEatInOrderRepository;
+import kitchenpos.eatinorders.tobe.domain.order.InMemoryEatInOrderRepository;
 import kitchenpos.eatinorders.tobe.domain.order.EatInOrderRepository;
-import kitchenpos.eatinorders.tobe.domain.order.EatInOrderStatus;
+import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderStatus;
 import kitchenpos.eatinorders.tobe.domain.ordertable.InMemoryOrderTableRepository;
 import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTable;
 import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTableRepository;

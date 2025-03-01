@@ -1,5 +1,6 @@
 package kitchenpos.eatinorders.tobe.domain.order;
 
+import kitchenpos.eatinorders.tobe.domain.order.menu.EatInOrderMenus;
 import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderId;
 
 import java.util.ArrayList;
@@ -20,6 +21,26 @@ public class EatInOrderLineItems {
         this.eatInOrderLineItems = eatInOrderLineItems;
     }
 
+    /**
+     * 무결성을 보장한다는 의미
+      * @param eatInOrderMenus
+     */
+    public void ensureIntegrity(final EatInOrderMenus eatInOrderMenus) {
+        if(!eatInOrderMenus.isSameSize(eatInOrderLineItems.size())) {
+            throw new IllegalArgumentException();
+        }
+        eatInOrderLineItems.forEach(eatInOrderLineItem -> ensureIntegrity(eatInOrderMenus, eatInOrderLineItem));
+    }
+
+    private void ensureIntegrity(final EatInOrderMenus eatInOrderMenus, final EatInOrderLineItem eatInOrderLineItem) {
+        if(!eatInOrderMenus.isDisplayed(eatInOrderLineItem.menuId())) {
+            throw new IllegalArgumentException();
+        }
+        if(!eatInOrderMenus.isSamePrice(eatInOrderLineItem.menuId(), eatInOrderLineItem.orderLineItemPrice())) {
+            throw new IllegalArgumentException();
+        }
+    }
+
     public boolean isSamePrice(final UUID menuId, final int menuPrice) {
         return eatInOrderLineItems.stream()
                 .filter(eatInOrderLineItem -> eatInOrderLineItem.isSameMenu(menuId))
@@ -36,22 +57,6 @@ public class EatInOrderLineItems {
 
     public int size() {
         return eatInOrderLineItems.size();
-    }
-
-    public void verify(final EatInOrderMenus eatInOrderMenus) {
-        if(!eatInOrderMenus.isSameSize(eatInOrderLineItems.size())) {
-            throw new IllegalArgumentException();
-        }
-        eatInOrderLineItems.forEach(eatInOrderLineItem -> verify(eatInOrderMenus, eatInOrderLineItem));
-    }
-
-    private void verify(final EatInOrderMenus eatInOrderMenus, final EatInOrderLineItem eatInOrderLineItem) {
-        if(!eatInOrderMenus.isDisplayed(eatInOrderLineItem.menuId())) {
-            throw new IllegalArgumentException();
-        }
-        if(!eatInOrderMenus.isSamePrice(eatInOrderLineItem.menuId(), eatInOrderLineItem.orderLineItemPrice())) {
-            throw new IllegalArgumentException();
-        }
     }
 
     public List<EatInOrderLineItem> eatInOrderLineItems() {

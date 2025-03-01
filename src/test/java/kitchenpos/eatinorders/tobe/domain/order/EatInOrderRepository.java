@@ -1,6 +1,7 @@
 package kitchenpos.eatinorders.tobe.domain.order;
 
 import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderId;
+import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderStatus;
 import kitchenpos.eatinorders.tobe.domain.ordertable.vo.OrderTableId;
 
 import java.util.List;

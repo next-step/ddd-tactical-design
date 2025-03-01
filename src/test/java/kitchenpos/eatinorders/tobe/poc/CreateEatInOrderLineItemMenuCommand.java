@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.tobe.application.dto;
+package kitchenpos.eatinorders.tobe.poc;
 
 import java.util.UUID;
 

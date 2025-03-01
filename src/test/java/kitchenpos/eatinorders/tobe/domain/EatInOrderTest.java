@@ -1,10 +1,13 @@
 package kitchenpos.eatinorders.tobe.domain;
 
 import kitchenpos.eatinorders.tobe.domain.order.*;
+import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderDateTime;
 import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderId;
-import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTable;
+import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderStatus;
+import kitchenpos.eatinorders.tobe.domain.order.menu.DefaultEatInOrderMenu;
+import kitchenpos.eatinorders.tobe.domain.order.menu.DefaultEatInOrderMenus;
+import kitchenpos.eatinorders.tobe.domain.order.menu.EatInOrderMenus;
 import kitchenpos.eatinorders.tobe.domain.ordertable.vo.OrderTableId;
-import org.aspectj.weaver.ast.Or;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -70,7 +73,11 @@ public class EatInOrderTest {
     }
 
     /**
-     * Service 레이어로 비즈니스 로직 이동
+     * Application 에서는 OrderTable 가 occupied 를 확인하는 로직을 통해 생성 가능한지 판단.
+     * DB 저장 및 조회시에는 OrderTableId 만 사용함.
+     * OrderTable 의 상태를 확인하는 로직은 Application 에서 처리함
+     * poc 패키지에 존재하는 EatInOrderTable 관련 클래스들을 활용하면,
+     * 생성자내에서 OrderTable 의 상태를 확인할 수 있으나, 트레이드 오프 영역이라 판단
      */
 //    @DisplayName("주문 테이블이 비어있으면 매장 주문을 생성할 수 없다.")
 //    @Test
@@ -105,10 +112,7 @@ public class EatInOrderTest {
 
         final EatInOrder eatInOrder = new EatInOrder(eatInOrderLineItems, eatInOrderMenus, new OrderTableId());
 
-        assertAll(
-                () -> assertThat(eatInOrder.getId()).isNotNull(),
-                () -> assertThat(eatInOrder.status()).isEqualTo(EatInOrderStatus.WAITING)
-        );
+        assertThat(eatInOrder.isSameStatus(EatInOrderStatus.WAITING)).isTrue();
     }
 
     @DisplayName("대기중인 매장 주문이 아니면 주문 수락을 변경할 수 없다.")
@@ -148,7 +152,7 @@ public class EatInOrderTest {
 
         final EatInOrder eatInOrder = new EatInOrder(eatInOrderLineItems, eatInOrderMenus, new OrderTableId());
         eatInOrder.accepted();
-        assertThat(eatInOrder.status()).isEqualTo(EatInOrderStatus.ACCEPTED);
+        assertThat(eatInOrder.isSameStatus(EatInOrderStatus.ACCEPTED)).isTrue();
     }
 
     @DisplayName("수락중인 매장 주문이 아니면 주문 서빙을 변경할 수 없다.")
@@ -191,7 +195,7 @@ public class EatInOrderTest {
                 eatInOrderLineItems, eatInOrderMenus, new OrderTableId()
         );
         eatInOrder.served();
-        assertThat(eatInOrder.status()).isEqualTo(EatInOrderStatus.SERVED);
+        assertThat(eatInOrder.isSameStatus(EatInOrderStatus.SERVED)).isTrue();
     }
 
     @DisplayName("서빙중인 매장 주문이 아니면 주문 완료를 변경할 수 없다.")
@@ -234,6 +238,6 @@ public class EatInOrderTest {
                 eatInOrderLineItems, eatInOrderMenus, new OrderTableId()
         );
         eatInOrder.completed();
-        assertThat(eatInOrder.status()).isEqualTo(EatInOrderStatus.COMPLETED);
+        assertThat(eatInOrder.isSameStatus(EatInOrderStatus.COMPLETED)).isTrue();
     }
 }

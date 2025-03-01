@@ -1,6 +1,5 @@
-package kitchenpos.eatinorders.tobe.infrastructure;
+package kitchenpos.eatinorders.tobe.poc;
 
-import kitchenpos.eatinorders.tobe.poc.EatInOrderLineItemMenu;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;

@@ -1,29 +1,25 @@
 package kitchenpos.eatinorders.tobe.domain.order;
 
-import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderId;
-import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderLineItemId;
-import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderLineItemPrice;
-import kitchenpos.eatinorders.tobe.domain.order.vo.Quantity;
+import kitchenpos.eatinorders.tobe.domain.order.vo.*;
 
 import java.util.UUID;
 
 public class EatInOrderLineItem {
-
     private final EatInOrderLineItemId id;
     private final UUID menuId;
-    private final String name;
+    private final EatInOrderLineItemName name;
     private final EatInOrderLineItemPrice price;
     private final Quantity quantity;
     private EatInOrderId eatInOrderId;
 
     public EatInOrderLineItem(final UUID menuId, final String name, final int price, final int quantity) {
-        this(new EatInOrderLineItemId(), menuId, name, new EatInOrderLineItemPrice(price), new Quantity(quantity));
+        this(new EatInOrderLineItemId(), menuId, new EatInOrderLineItemName(name), new EatInOrderLineItemPrice(price), new Quantity(quantity));
     }
 
     public EatInOrderLineItem(
             final EatInOrderLineItemId id,
             final UUID menuId,
-            final String name,
+            final EatInOrderLineItemName name,
             final EatInOrderLineItemPrice price,
             final Quantity quantity
     ) {
@@ -66,8 +62,8 @@ public class EatInOrderLineItem {
         return id.getValue();
     }
 
-    public String name() {
-        return name;
+    public String nameValue() {
+        return name.getValue();
     }
 
     public int priceValue() {

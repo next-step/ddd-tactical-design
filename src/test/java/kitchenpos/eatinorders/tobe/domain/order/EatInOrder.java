@@ -1,12 +1,12 @@
 package kitchenpos.eatinorders.tobe.domain.order;
 
-import kitchenpos.eatinorders.domain.OrderStatus;
+import kitchenpos.eatinorders.tobe.domain.order.menu.EatInOrderMenus;
+import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderDateTime;
 import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderId;
-import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTable;
+import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderStatus;
 import kitchenpos.eatinorders.tobe.domain.ordertable.vo.OrderTableId;
 
 import java.util.List;
-import java.util.Optional;
 
 import static java.util.Objects.isNull;
 
@@ -40,15 +40,7 @@ public class EatInOrder {
                 isNull(eatInOrderLineItems) || isNull(eatInOrderMenus) || isNull(orderTable)) {
             throw new IllegalArgumentException();
         }
-        eatInOrderLineItems.verify(eatInOrderMenus);
-    }
-
-    public EatInOrderId getId() {
-        return id;
-    }
-
-    public EatInOrderStatus status() {
-        return eatInOrderStatus;
+        eatInOrderLineItems.ensureIntegrity(eatInOrderMenus);
     }
 
     public void accepted() {
@@ -69,6 +61,10 @@ public class EatInOrder {
 
     public boolean isSameStatus(final EatInOrderStatus orderStatus) {
         return this.eatInOrderStatus.isSameStatus(orderStatus);
+    }
+
+    public EatInOrderId id() {
+        return id;
     }
 
     public List<EatInOrderLineItem> eatInOrderLineItems() {

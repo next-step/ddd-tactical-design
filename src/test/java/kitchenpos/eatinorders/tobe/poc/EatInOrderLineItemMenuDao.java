@@ -1,6 +1,4 @@
-package kitchenpos.eatinorders.tobe.infrastructure;
-
-import kitchenpos.eatinorders.tobe.poc.EatInOrderLineItemMenu;
+package kitchenpos.eatinorders.tobe.poc;
 
 import java.util.List;
 

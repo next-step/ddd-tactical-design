@@ -1,9 +1,8 @@
 package kitchenpos.eatinorders.tobe.poc;
 
-import kitchenpos.eatinorders.tobe.domain.order.EatInOrderTable;
-
 import java.util.UUID;
 
+@Deprecated
 public class DefaultEatInOrderTable implements EatInOrderTable {
     private final UUID id;
     private final boolean occupied;
