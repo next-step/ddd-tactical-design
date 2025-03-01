@@ -1,10 +1,12 @@
 package kitchenpos.eatinorders.tobe.domain;
 
+import kitchenpos.eatinorders.tobe.domain.order.EatInOrder;
 import kitchenpos.eatinorders.tobe.domain.order.EatInOrderLineItem;
 import kitchenpos.eatinorders.tobe.domain.order.EatInOrderLineItems;
 import kitchenpos.eatinorders.tobe.domain.order.menu.DefaultEatInOrderMenu;
 import kitchenpos.eatinorders.tobe.domain.order.menu.DefaultEatInOrderMenus;
 import kitchenpos.eatinorders.tobe.domain.order.menu.EatInOrderMenus;
+import kitchenpos.eatinorders.tobe.domain.ordertable.vo.OrderTableId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -71,6 +73,23 @@ class EatInOrderLineItemsTest {
         final EatInOrderMenus eatInOrderMenus = new DefaultEatInOrderMenus(
                 new DefaultEatInOrderMenu(firstMenuId, 16_000, true),
                 new DefaultEatInOrderMenu(secondMenuId, 16_001, true)
+        );
+
+        assertThatThrownBy(() -> eatInOrderLineItems.ensureIntegrity(eatInOrderMenus))
+                .isExactlyInstanceOf(IllegalArgumentException.class);
+    }
+
+    @DisplayName("주문 항목 메뉴가 미노출 상태이면 매장 주문을 생성할 수 없다.")
+    @Test
+    void createWithNotDisplayedMenu() {
+        final UUID firstMenuId = UUID.randomUUID();
+        final UUID secondMenuId = UUID.randomUUID();
+        final EatInOrderLineItem firstEatInOrderLineItem = new EatInOrderLineItem(firstMenuId, "후라이드 치킨", 16_000, 1);
+        final EatInOrderLineItem secondEatInOrderLineItem = new EatInOrderLineItem(secondMenuId, "양념 치킨", 16_000, 1);
+        final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(firstEatInOrderLineItem, secondEatInOrderLineItem);
+        final EatInOrderMenus eatInOrderMenus = new DefaultEatInOrderMenus(
+                new DefaultEatInOrderMenu(firstMenuId, 16_000, false),
+                new DefaultEatInOrderMenu(secondMenuId, 16_000, true)
         );
 
         assertThatThrownBy(() -> eatInOrderLineItems.ensureIntegrity(eatInOrderMenus))

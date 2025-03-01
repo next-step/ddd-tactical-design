@@ -71,6 +71,23 @@ public class EatInOrderTest {
                 .isExactlyInstanceOf(IllegalArgumentException.class);
     }
 
+    @DisplayName("주문 항목 메뉴가 미노출 상태이면 매장 주문을 생성할 수 없다.")
+    @Test
+    void createWithNotDisplayedMenu() {
+        final UUID firstMenuId = UUID.randomUUID();
+        final UUID secondMenuId = UUID.randomUUID();
+        final EatInOrderLineItem firstEatInOrderLineItem = new EatInOrderLineItem(firstMenuId, "후라이드 치킨", 16_000, 1);
+        final EatInOrderLineItem secondEatInOrderLineItem = new EatInOrderLineItem(secondMenuId, "양념 치킨", 16_000, 1);
+        final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(firstEatInOrderLineItem, secondEatInOrderLineItem);
+        final EatInOrderMenus eatInOrderMenus = new DefaultEatInOrderMenus(
+                new DefaultEatInOrderMenu(firstMenuId, 16_000, false),
+                new DefaultEatInOrderMenu(secondMenuId, 16_000, true)
+        );
+
+        assertThatThrownBy(() -> new EatInOrder(eatInOrderLineItems, eatInOrderMenus, new OrderTableId()))
+                .isExactlyInstanceOf(IllegalArgumentException.class);
+    }
+
     /**
      * Application 에서는 OrderTable 가 occupied 를 확인하는 로직을 통해 생성 가능한지 판단.
      * DB 저장 및 조회시에는 OrderTableId 만 사용함.
