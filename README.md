@@ -8,8 +8,80 @@
 cd docker
 docker compose -p kitchenpos up -d
 ```
+<details>
+<summary>패키지구조</summary>
 
-## 요구 사항
+```bash
+├── /global
+│    ├── /event
+│    ├── /exception
+│    │   └── /validation
+│    └── /infrastructure
+│        └── /external
+├── /menu
+│    ├── /application
+│    │    ├── /dto
+│    │    └── /facade
+│    ├── /domain
+│    │    ├── /entity
+│    │    ├── /event
+│    │    ├── /exception
+│    │    ├── /model
+│    │    ├── /repository
+│    │    └── /service
+│    ├── /infrastructure
+│    │    └── /persistence
+│    └── /presentation
+│         └── /controller
+├── /product
+│    ├── /application
+│    │    ├── /dto
+│    │    └── /facade
+│    ├── /domain
+│    │    ├── /entity
+│    │    ├── /event
+│    │    ├── /exception
+│    │    ├── /model
+│    │    ├── /repository
+│    │    └── /service
+│    ├── /infrastructure
+│    │    └── /persistence
+│    └── /presentation
+│         └── /controller
+├── /order
+│    ├── /common
+│    │    ├── /application
+│    │    │    ├── /dto
+│    │    │    └── /facade
+│    │    ├── /domain
+│    │    │    ├── /dto
+│    │    │    ├── /entity
+│    │    │    ├── /repository
+│    │    │    ├── /service
+│    │    ├── /infrastructure
+│    │    │    ├── /persistence
+│    │    │    └── /external
+│    │    └── /presentation
+│    │         └── /controller
+│    ├── /delivery
+│    │    ├── /domain
+│    │    │    ├── /model
+│    │    │    └── /service
+│    ├── /takeout
+│    │    ├── /domain
+│    │    │    ├── /model
+│    │    │    ├── /service
+│    └── /eatin
+│         └── /domain
+│              ├── /entity
+│              ├── /model
+│              └── /service
+```
+
+</details>
+
+<details>
+<summary>요구사항</summary>
 
 - 기존 레거시 키친포스를 리팩토링 한다.
 
@@ -111,9 +183,10 @@ docker compose -p kitchenpos up -d
     - [x] 테이블 사용중인 상태여야 한다.
     - [x] 테이블 인원 수는 0명 이상이어야 한다.
 
-****
+</details>
 
-## 용어 사전
+<details>
+<summary>용어사전</summary>
 
 **[1]**: 유효성 검사와 관련된 필수조건도 명시를 하는게 좋을까?
 <br>
@@ -208,9 +281,10 @@ docker compose -p kitchenpos up -d
 | 배달 완료 | DELIVERED  | 배달중 이후 배달완료 상태      |
 | 주문 완료 | COMPLETED  | 주문 완료 상태            |
 
----
+</details>
 
-## 모델링
+<details>
+<summary>모델링</summary>
 
 ### 상품 (product)
 * `상품 등록 정책`
@@ -280,7 +354,10 @@ docker compose -p kitchenpos up -d
   * `손님 수`는 `0명 이상`이어야 한다.
   * `빈 테이블`은 변경할 수 없다.
 
----
+</details>
+
+<details>
+<summary>모델링 다이어그램</summary>
 
 ### 메뉴 등록 프로세스
 ```mermaid
@@ -390,4 +467,4 @@ sequenceDiagram
     주문 테이블-->>+매장: 빈 테이블 설정
     매장-->>+손님: 주문 완료
 ```
-
+</details>

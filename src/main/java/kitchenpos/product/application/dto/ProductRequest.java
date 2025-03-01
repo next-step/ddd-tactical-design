@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 import java.util.UUID;
+import kitchenpos.product.domain.model.ProductId;
 import kitchenpos.product.domain.model.ProductPrice;
 import kitchenpos.product.domain.model.ProductVo;
 
@@ -29,7 +30,7 @@ public record ProductRequest() {
     {
 
         public ProductVo.Update toVo() {
-            return new ProductVo.Update(productId, ProductPrice.of(price));
+            return new ProductVo.Update(ProductId.of(productId), ProductPrice.of(price));
         }
     }
 

@@ -13,22 +13,21 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import kitchenpos.menu.domain.entity.Menu;
 import kitchenpos.menu.domain.fixture.MenuFixture;
 import kitchenpos.menu.domain.repository.MenuRepository;
 import kitchenpos.order.common.domain.entity.Order;
 import kitchenpos.order.common.domain.entity.OrderLineItem;
 import kitchenpos.order.common.domain.entity.OrderStatus;
-import kitchenpos.order.eatin.domain.entity.OrderTable;
 import kitchenpos.order.common.domain.entity.OrderType;
+import kitchenpos.order.common.domain.repository.OrderRepository;
+import kitchenpos.order.common.domain.repository.OrderTableRepository;
+import kitchenpos.order.common.domain.service.OrderService;
+import kitchenpos.order.delivery.domain.service.DeliveryKitchenridersClient;
 import kitchenpos.order.domain.fixture.OrderFixture;
 import kitchenpos.order.domain.fixture.OrderLineItemFixture;
 import kitchenpos.order.domain.fixture.OrderTableFixture;
-import kitchenpos.order.common.domain.repository.OrderRepository;
-import kitchenpos.order.common.domain.repository.OrderTableRepository;
-import kitchenpos.order.delivery.domain.service.DeliveryKitchenridersClient;
-import kitchenpos.order.common.domain.service.OrderService;
+import kitchenpos.order.eatin.domain.entity.OrderTable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -65,7 +64,7 @@ class OrderFacadeTest {
 
     @BeforeEach
     void setUp() {
-        chickenMenu = MenuFixture.init().create();
+        chickenMenu = MenuFixture.init().toEntity();
         order = OrderFixture.init().create();
     }
 
@@ -178,7 +177,7 @@ class OrderFacadeTest {
         @Test
         @DisplayName("메뉴가 노출된 상태여야 한다.")
         void 메뉴가_노출상태인지_검사() {
-            chickenMenu.setDisplayed(false);
+            chickenMenu.updateDisplayed(false);
 
             mockFindAllByMenu(order);
             mockFindByMenu(chickenMenu);
@@ -191,7 +190,7 @@ class OrderFacadeTest {
         @DisplayName("메뉴가격과 주문 아이템 가격이 다르면 안된다.")
         void 메뉴가격_주문아이템가격_비교() {
             chickenMenu = MenuFixture.test(null, BigDecimal.valueOf(500_000), null, true, null)
-                .create();
+                .toEntity();
 
             mockFindAllByMenu(order);
 
@@ -452,15 +451,12 @@ class OrderFacadeTest {
     }
 
     private void mockFindAllByMenu(Order order) {
-        when(menuRepository.findAllByIdIn(Mockito.any()))
-            .thenReturn(order.getOrderLineItems()
-                .stream()
-                .map(OrderLineItem::getMenu)
-                .collect(Collectors.toList()));
+        when(menuRepository.findAllByMenuIdIn(Mockito.any()))
+            .thenReturn(null);
     }
 
     private void mockFindByMenu(Menu menu) {
-        when(menuRepository.findById(Mockito.any()))
+        when(menuRepository.findByMenuId(Mockito.any()))
             .thenReturn(Optional.of(chickenMenu));
     }
 

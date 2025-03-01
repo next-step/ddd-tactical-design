@@ -5,39 +5,39 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 import kitchenpos.menu.domain.entity.Menu;
+import kitchenpos.menu.domain.model.MenuId;
 import kitchenpos.menu.domain.repository.MenuRepository;
+import kitchenpos.product.domain.model.ProductId;
 
 public class InMemoryMenuRepository implements MenuRepository {
 
-    private final Map<UUID, Menu> menus = new HashMap<>();
+    private final Map<MenuId, Menu> menus = new HashMap<>();
 
     @Override
-    public List<Menu> findAllByIdIn(List<UUID> ids) {
+    public List<Menu> findAllByMenuIdIn(List<MenuId> ids) {
         return menus.values().stream()
-            .filter(menu -> ids.contains(menu.getId()))
+            .filter(menu -> ids.contains(menu.getMenuId()))
             .toList();
     }
 
     @Override
-    public List<Menu> findAllByProductId(UUID productId) {
+    public List<Menu> findAllByProductId(ProductId productId) {
         return menus.values().stream()
-            .filter(menu -> menu.getMenuProducts().stream()
-                .anyMatch(menuProduct -> menuProduct.getProduct().getId().equals(productId)))
+            .filter(menu -> menu.getMenuProducts().get().stream()
+                .anyMatch(menuProduct -> menuProduct.getProductId().equals(productId)))
             .toList();
     }
 
     @Override
     public Menu save(Menu menu) {
-        final var id = UUID.randomUUID();
-        menu.setId(id);
-        menus.put(id, menu);
+        final var menuId = menu.getMenuId();
+        menus.put(menuId, new Menu(menuId, menu.getName(), menu.getPrice(), menu.getMenuGroupId(), menu.isDisplayed(), menu.getMenuProducts()));
         return menu;
     }
 
     @Override
-    public Optional<Menu> findById(UUID id) {
+    public Optional<Menu> findByMenuId(MenuId id) {
         return Optional.ofNullable(menus.get(id));
     }
 

@@ -1,24 +1,27 @@
 package kitchenpos.menu.domain.event;
 
 import kitchenpos.global.event.ProductEvent;
-import kitchenpos.menu.domain.service.MenuUpdatePolicy;
-import org.springframework.context.event.EventListener;
+import kitchenpos.menu.domain.service.MenuPolicy;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
 public class DefaultProductEventListener implements ProductEventListener {
 
-    private final MenuUpdatePolicy menuUpdatePolicy;
+    private final MenuPolicy menuPolicy;
 
-    public DefaultProductEventListener(MenuUpdatePolicy menuUpdatePolicy) {
-        this.menuUpdatePolicy = menuUpdatePolicy;
+    public DefaultProductEventListener(MenuPolicy menuPolicy) {
+        this.menuPolicy = menuPolicy;
     }
 
-    @EventListener
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @TransactionalEventListener
     @Override
     public void handle(ProductEvent event) {
         if (event instanceof ProductEvent.ProductPriceChangedEvent priceChangedEvent) {
-            menuUpdatePolicy.hideMenu(priceChangedEvent.productId());
+            menuPolicy.hideMenu(priceChangedEvent.productId());
         }
     }
 }

@@ -1,17 +1,18 @@
 package kitchenpos.menu.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
-import java.util.UUID;
-import kitchenpos.product.domain.entity.Product;
+import kitchenpos.menu.application.dto.MenuRequest.MenuProductCreate;
+import kitchenpos.menu.domain.model.MenuId;
+import kitchenpos.menu.domain.model.MenuProductQty;
+import kitchenpos.product.domain.model.ProductId;
 
 @Table(name = "menu_product")
 @Entity
@@ -22,52 +23,41 @@ public class MenuProduct {
     @Id
     private Long seq;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(
-        name = "product_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
-    )
-    private Product product;
+    @Embedded
+    @AttributeOverride(name = "id", column = @Column(name = "product_id"))
+    private ProductId productId;
 
-    @Column(name = "quantity", nullable = false)
-    private long quantity;
+    @Embedded
+    @AttributeOverride(name = "id", column = @Column(name = "menu_id"))
+    @JsonBackReference
+    private MenuId menuId;
 
-    @Transient
-    private UUID productId;
+    @Embedded
+    private MenuProductQty quantity;
 
-    public MenuProduct() {
+    protected MenuProduct() {
     }
 
-    public Long getSeq() {
-        return seq;
-    }
-
-    public void setSeq(final Long seq) {
-        this.seq = seq;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(final Product product) {
-        this.product = product;
-    }
-
-    public long getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(final long quantity) {
+    public MenuProduct(ProductId productId, MenuId menuId, MenuProductQty quantity) {
+        this.productId = productId;
+        this.menuId = menuId;
         this.quantity = quantity;
     }
 
-    public UUID getProductId() {
+    public MenuProductQty getQuantity() {
+        return quantity;
+    }
+
+    public ProductId getProductId() {
         return productId;
     }
 
-    public void setProductId(final UUID productId) {
-        this.productId = productId;
+    public MenuId getMenuId() {
+        return menuId;
+    }
+
+    public static MenuProduct fromDto(MenuProductCreate dto, MenuId menuId) {
+        return new MenuProduct(ProductId.of(dto.productId()), menuId,
+            MenuProductQty.of(dto.quantity()));
     }
 }

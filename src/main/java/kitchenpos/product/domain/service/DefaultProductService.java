@@ -1,11 +1,13 @@
 package kitchenpos.product.domain.service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.UUID;
 import kitchenpos.global.event.ProductEvent.ProductPriceChangedEvent;
+import kitchenpos.global.exception.ErrorCode;
+import kitchenpos.global.exception.NotFoundException;
 import kitchenpos.product.domain.entity.Product;
 import kitchenpos.product.domain.event.ProductEventPublisher;
+import kitchenpos.product.domain.model.ProductId;
 import kitchenpos.product.domain.model.ProductName;
 import kitchenpos.product.domain.model.ProductPrice;
 import kitchenpos.product.domain.model.ProductVo;
@@ -15,13 +17,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Service
-public class ProductServiceImpl implements ProductService {
+public class DefaultProductService implements ProductQueryService, ProductCommandService {
 
     private final ProductRepository productRepository;
     private final ProductPurgomalumClient purgomalumClient;
     private final ProductEventPublisher productEventPublisher;
 
-    public ProductServiceImpl(
+    public DefaultProductService(
         final ProductRepository productRepository,
         final ProductPurgomalumClient purgomalumClient,
         final ProductEventPublisher defaultProductEventPublisher
@@ -37,17 +39,18 @@ public class ProductServiceImpl implements ProductService {
         final ProductName name = ProductName.of(request.name(), purgomalumClient);
 
         return ProductVo.ProductInfo.fromEntity(
-            productRepository.save(new Product(UUID.randomUUID(), name, price))
+            productRepository.save(new Product(ProductId.of(UUID.randomUUID()), name, price))
         );
     }
 
     @Override
     public ProductVo.ProductInfo changePrice(final ProductVo.Update request) {
+        final ProductId productId = request.productId();
         final ProductPrice price = request.price();
-        final Product product = productRepository.findById(request.productId())
-            .orElseThrow(NoSuchElementException::new);
+        final Product product = productRepository.findByProductId(productId)
+                                        .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_PRODUCT.toString()));
 
-        product.update(price);
+        product.updatePrice(price);
 
         productEventPublisher.publish(new ProductPriceChangedEvent(request.productId()));
 

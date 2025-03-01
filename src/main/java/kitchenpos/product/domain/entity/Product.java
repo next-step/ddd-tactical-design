@@ -1,11 +1,11 @@
 package kitchenpos.product.domain.entity;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import java.util.UUID;
+import java.math.BigDecimal;
+import kitchenpos.product.domain.model.ProductId;
 import kitchenpos.product.domain.model.ProductName;
 import kitchenpos.product.domain.model.ProductPrice;
 import org.hibernate.annotations.DynamicUpdate;
@@ -15,9 +15,8 @@ import org.hibernate.annotations.DynamicUpdate;
 @DynamicUpdate
 public class Product {
 
-    @Column(name = "id", columnDefinition = "binary(16)")
-    @Id
-    private UUID id;
+    @EmbeddedId
+    private ProductId productId;
 
     @Embedded
     private ProductName name;
@@ -25,21 +24,20 @@ public class Product {
     @Embedded
     private ProductPrice price;
 
-    public Product() {
-    }
+    protected Product() {}
 
-    public Product(UUID uuid, ProductName name, ProductPrice price) {
-        this.id = uuid;
+    public Product(ProductId productId, ProductName name, ProductPrice price) {
+        this.productId = productId;
         this.name = name;
         this.price = price;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
+    public ProductId getProductId() {
+        return productId;
     }
 
-    public UUID getId() {
-        return id;
+    public void setProductId(ProductId productId) {
+        this.productId = productId;
     }
 
     public ProductName getName() {
@@ -50,7 +48,11 @@ public class Product {
         return price;
     }
 
-    public void update(ProductPrice price) {
+    public BigDecimal getTotalPrice(long qty) {
+        return price.multiply(qty).get();
+    }
+
+    public void updatePrice(ProductPrice price) {
         this.price = price;
     }
 
