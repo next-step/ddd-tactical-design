@@ -146,7 +146,6 @@ public class EatInOrderTest {
 
         final EatInOrder eatInOrder = new EatInOrder(eatInOrderLineItems, eatInOrderMenus, eatInOrderTable);
         eatInOrder.accepted();
-
         assertThat(eatInOrder.status()).isEqualTo(EatInOrderStatus.ACCEPTED);
     }
 
@@ -191,7 +190,7 @@ public class EatInOrderTest {
                 new EatInOrderId(), EatInOrderStatus.ACCEPTED, new EatInOrderDateTime(),
                 eatInOrderLineItems, eatInOrderMenus, eatInOrderTable
         );
-
+        eatInOrder.served();
         assertThat(eatInOrder.status()).isEqualTo(EatInOrderStatus.SERVED);
     }
 
@@ -236,7 +235,7 @@ public class EatInOrderTest {
                 new EatInOrderId(), EatInOrderStatus.SERVED, new EatInOrderDateTime(),
                 eatInOrderLineItems, eatInOrderMenus, eatInOrderTable
         );
-
+        eatInOrder.completed();
         assertThat(eatInOrder.status()).isEqualTo(EatInOrderStatus.COMPLETED);
     }
 }

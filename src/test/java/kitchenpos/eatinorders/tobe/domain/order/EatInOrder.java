@@ -53,23 +53,14 @@ public class EatInOrder {
     }
 
     public void accepted() {
-        if(EatInOrderStatus.WAITING != this.eatInOrderStatus) {
-            throw new IllegalArgumentException();
-        }
-        this.eatInOrderStatus = EatInOrderStatus.ACCEPTED;
+        this.eatInOrderStatus = eatInOrderStatus.accepted();
     }
 
     public void served() {
-        if(EatInOrderStatus.ACCEPTED != this.eatInOrderStatus) {
-            throw new IllegalArgumentException();
-        }
-        this.eatInOrderStatus = EatInOrderStatus.SERVED;
+        this.eatInOrderStatus = eatInOrderStatus.served();
     }
 
     public void completed() {
-        if(EatInOrderStatus.SERVED != this.eatInOrderStatus) {
-            throw new IllegalArgumentException();
-        }
-        this.eatInOrderStatus = EatInOrderStatus.COMPLETED;
+        this.eatInOrderStatus = eatInOrderStatus.completed();
     }
 }
