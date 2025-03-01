@@ -5,14 +5,9 @@ import kitchenpos.core.products.tobe.domain.Product;
 import kitchenpos.core.products.tobe.domain.TobeProductRepository;
 import kitchenpos.core.shared.identifier.ProductId;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
-public class InMemoryProductRepository implements TobeProductRepository {
+public class TobeInMemoryProductRepository implements TobeProductRepository {
     private final Map<ProductId, Product> products = new HashMap<>();
 
     @Override

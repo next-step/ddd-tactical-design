@@ -5,10 +5,13 @@ import kitchenpos.core.menus.domain.Menu;
 import kitchenpos.core.menus.domain.MenuGroupRepository;
 import kitchenpos.core.menus.domain.MenuProduct;
 import kitchenpos.core.menus.domain.MenuRepository;
+import kitchenpos.core.products.tobe.domain.Product;
+import kitchenpos.core.products.tobe.domain.TobeProductRepository;
+import kitchenpos.core.shared.identifier.ProductId;
+import kitchenpos.core.shared.value.Money;
+import kitchenpos.core.shared.value.Quantity;
 import kitchenpos.products.application.FakeProfanityChecker;
 import kitchenpos.products.application.InMemoryProductRepository;
-import kitchenpos.core.products.domain.Product;
-import kitchenpos.core.products.domain.ProductRepository;
 import kitchenpos.core.shared.domain.ProfanityChecker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -26,11 +29,11 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
-import static kitchenpos.Fixtures.INVALID_ID;
-import static kitchenpos.Fixtures.menu;
-import static kitchenpos.Fixtures.menuGroup;
-import static kitchenpos.Fixtures.menuProduct;
-import static kitchenpos.Fixtures.product;
+import static kitchenpos.fixture.Fixtures.INVALID_ID;
+import static kitchenpos.fixture.Fixtures.menu;
+import static kitchenpos.fixture.Fixtures.menuGroup;
+import static kitchenpos.fixture.Fixtures.menuProduct;
+import static kitchenpos.fixture.ProductFixtures.product;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -38,7 +41,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class MenuServiceTest {
     private MenuRepository menuRepository;
     private MenuGroupRepository menuGroupRepository;
-    private ProductRepository productRepository;
+    private TobeProductRepository productRepository;
     private ProfanityChecker profanityChecker;
     private MenuService menuService;
     private UUID menuGroupId;
@@ -86,17 +89,16 @@ class MenuServiceTest {
         return Arrays.asList(
             null,
             Arguments.of(Collections.emptyList()),
-            Arguments.of(Arrays.asList(createMenuProductRequest(INVALID_ID, 2L)))
+            Arguments.of(Arrays.asList(createMenuProductRequest(ProductId.of(INVALID_ID.toString()), 2L)))
         );
     }
 
     @DisplayName("메뉴에 속한 상품의 수량은 0개 이상이어야 한다.")
     @Test
     void createNegativeQuantity() {
-        final Menu expected = createMenuRequest(
-            "후라이드+후라이드", 19_000L, menuGroupId, true, createMenuProductRequest(product.getId(), -1L)
-        );
-        assertThatThrownBy(() -> menuService.create(expected))
+        assertThatThrownBy(() -> menuService.create(createMenuRequest(
+                "후라이드+후라이드", 19_000L, menuGroupId, true, createMenuProductRequest(product.getId(), -1L)
+        )))
             .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -105,10 +107,10 @@ class MenuServiceTest {
     @NullSource
     @ParameterizedTest
     void create(final BigDecimal price) {
-        final Menu expected = createMenuRequest(
-            "후라이드+후라이드", price, menuGroupId, true, createMenuProductRequest(product.getId(), 2L)
-        );
-        assertThatThrownBy(() -> menuService.create(expected))
+        assertThatThrownBy(() ->
+                menuService.create(createMenuRequest(
+                "후라이드+후라이드", price, menuGroupId, true, createMenuProductRequest(product.getId(), 2L)
+        )))
             .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -160,8 +162,7 @@ class MenuServiceTest {
     @ParameterizedTest
     void changePrice(final BigDecimal price) {
         final UUID menuId = menuRepository.save(menu(19_000L, menuProduct(product, 2L))).getId();
-        final Menu expected = changePriceRequest(price);
-        assertThatThrownBy(() -> menuService.changePrice(menuId, expected))
+        assertThatThrownBy(() -> menuService.changePrice(menuId, changePriceRequest(price)))
             .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -245,17 +246,17 @@ class MenuServiceTest {
     ) {
         final Menu menu = new Menu();
         menu.setName(name);
-        menu.setPrice(price);
+        menu.setPrice(Money.wons(price));
         menu.setMenuGroupId(menuGroupId);
         menu.setDisplayed(displayed);
         menu.setMenuProducts(menuProducts);
         return menu;
     }
 
-    private static MenuProduct createMenuProductRequest(final UUID productId, final long quantity) {
+    private static MenuProduct createMenuProductRequest(final ProductId productId, final long quantity) {
         final MenuProduct menuProduct = new MenuProduct();
         menuProduct.setProductId(productId);
-        menuProduct.setQuantity(quantity);
+        menuProduct.setQuantity(Quantity.of(quantity));
         return menuProduct;
     }
 
@@ -265,7 +266,7 @@ class MenuServiceTest {
 
     private Menu changePriceRequest(final BigDecimal price) {
         final Menu menu = new Menu();
-        menu.setPrice(price);
+        menu.setPrice(Money.wons(price));
         return menu;
     }
 }

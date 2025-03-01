@@ -1,6 +1,7 @@
 package kitchenpos.products.application;
 
 import kitchenpos.core.shared.domain.ProfanityChecker;
+import org.thymeleaf.util.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -14,6 +15,9 @@ public class FakeProfanityChecker implements ProfanityChecker {
 
     @Override
     public boolean containsProfanity(final String text) {
+        if(StringUtils.isEmpty(text)) {
+            return false;
+        }
         return profanities.stream()
             .anyMatch(profanity -> text.contains(profanity));
     }

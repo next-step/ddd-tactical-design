@@ -12,6 +12,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import kitchenpos.core.products.tobe.domain.Product;
 import kitchenpos.core.products.tobe.domain.ProductPrice;
+import kitchenpos.core.shared.identifier.ProductId;
 import kitchenpos.core.shared.value.Money;
 import kitchenpos.core.shared.value.Quantity;
 
@@ -38,7 +39,7 @@ public class MenuProduct {
     private Quantity quantity;
 
     @Transient
-    private UUID productId;
+    private ProductId productId;
 
     public MenuProduct() {
     }
@@ -67,11 +68,11 @@ public class MenuProduct {
         this.quantity = quantity;
     }
 
-    public UUID getProductId() {
+    public ProductId getProductId() {
         return productId;
     }
 
-    public void setProductId(final UUID productId) {
+    public void setProductId(final ProductId productId) {
         this.productId = productId;
     }
 

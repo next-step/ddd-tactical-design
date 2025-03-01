@@ -1,5 +1,6 @@
 package kitchenpos.core.eatinorders.application;
 
+import kitchenpos.core.shared.value.Money;
 import kitchenpos.data.KitchenridersClient;
 import kitchenpos.core.eatinorders.domain.Order;
 import kitchenpos.core.eatinorders.domain.OrderLineItem;
@@ -71,7 +72,7 @@ public class OrderService {
             if (!menu.isDisplayed()) {
                 throw new IllegalStateException();
             }
-            if (menu.getPrice().compareTo(orderLineItemRequest.getPrice()) != 0) {
+            if (!menu.getPrice().isEqual(Money.wons(orderLineItemRequest.getPrice()))) {
                 throw new IllegalArgumentException();
             }
             final OrderLineItem orderLineItem = new OrderLineItem();
@@ -111,13 +112,13 @@ public class OrderService {
             throw new IllegalStateException();
         }
         if (order.getType() == OrderType.DELIVERY) {
-            BigDecimal sum = BigDecimal.ZERO;
+            Money sum = Money.ZERO;
             for (final OrderLineItem orderLineItem : order.getOrderLineItems()) {
                 sum = orderLineItem.getMenu()
                     .getPrice()
-                    .multiply(BigDecimal.valueOf(orderLineItem.getQuantity()));
+                    .multiply(orderLineItem.getQuantity());
             }
-            kitchenridersClient.requestDelivery(orderId, sum, order.getDeliveryAddress());
+            kitchenridersClient.requestDelivery(orderId, sum.getAmount(), order.getDeliveryAddress());
         }
         order.setStatus(OrderStatus.ACCEPTED);
         return order;

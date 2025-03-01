@@ -7,8 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
-@Transactional
+@Transactional(readOnly = true)
 public interface TobeProductRepository {
     Product save(Product product);
 

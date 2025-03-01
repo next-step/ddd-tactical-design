@@ -5,12 +5,16 @@ import kitchenpos.core.shared.domain.ValueObject;
 import java.math.BigDecimal;
 
 public class Money extends ValueObject<Money> {
-    public static final Money ZERO = Money.wons(0);
+    public static final Money ZERO = Money.wons(0L);
 
     private final BigDecimal amount;
 
     public static Money wons(long amount) {
         return new Money(BigDecimal.valueOf(amount));
+    }
+
+    public static Money wons(BigDecimal amount) {
+        return new Money(amount);
     }
 
     private Money(BigDecimal amount) {
@@ -52,5 +56,9 @@ public class Money extends ValueObject<Money> {
 
     public boolean isBiggerThan(Money other) {
         return this.amount.compareTo(other.amount) > 0;
+    }
+
+    public boolean isEqual(Money other) {
+        return this.amount.compareTo(other.amount) == 0;
     }
 }
