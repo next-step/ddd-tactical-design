@@ -79,8 +79,7 @@ public class JdbcTemplateEatInOrderDao implements EatInOrderDao {
                 new EatInOrderId(eatInOrderId),
                 EatInOrderStatus.of(resultSet.getString("eat_in_order_status")),
                 new EatInOrderDateTime(resultSet.getTimestamp("order_datetime").toLocalDateTime()),
-                new EatInOrderLineItems(eatInOrderIdListMap.get(eatInOrderId)),
-                new NoneEatInOrderMenus(),
+                new EatInOrderLineItems(new NoneEatInOrderMenus(), eatInOrderIdListMap.get(eatInOrderId)),
                 new OrderTableId(resultSet.getString("order_table_id"))
         );
     }

@@ -3,13 +3,11 @@ package kitchenpos.eatinorders.tobe.poc;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
-import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.util.List;
 
 @Deprecated
-@Component
 public class JdbcEatInOrderLineItemMenuDao implements EatInOrderLineItemMenuDao {
 
     private static final String SEQ = "seq";

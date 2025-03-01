@@ -17,14 +17,14 @@ public class EatInOrder {
     private final EatInOrderLineItems eatInOrderLineItems;
     private final OrderTableId orderTableId;
 
-    public EatInOrder(final EatInOrderLineItems eatInOrderLineItems, final EatInOrderMenus eatInOrderMenus, final OrderTableId orderTableId) {
-        this(new EatInOrderId(), EatInOrderStatus.WAITING, new EatInOrderDateTime(), eatInOrderLineItems, eatInOrderMenus, orderTableId);
+
+    public EatInOrder(final List<EatInOrderLineItem> eatInOrderLineItems, final EatInOrderMenus eatInOrderMenus, final OrderTableId orderTableId) {
+        this(new EatInOrderId(), EatInOrderStatus.WAITING, new EatInOrderDateTime(), new EatInOrderLineItems(eatInOrderMenus, eatInOrderLineItems), orderTableId);
     }
 
     public EatInOrder(final EatInOrderId id, final EatInOrderStatus eatInOrderStatus,
-                      final EatInOrderDateTime eatInOrderDateTime, final EatInOrderLineItems eatInOrderLineItems,
-                      final EatInOrderMenus eatInOrderMenus, final OrderTableId orderTableId) {
-        verify(id, eatInOrderStatus, eatInOrderDateTime, eatInOrderLineItems, eatInOrderMenus, orderTableId);
+                      final EatInOrderDateTime eatInOrderDateTime, final EatInOrderLineItems eatInOrderLineItems, final OrderTableId orderTableId) {
+        verify(id, eatInOrderStatus, eatInOrderDateTime, eatInOrderLineItems, orderTableId);
         this.id = id;
         this.eatInOrderStatus = eatInOrderStatus;
         this.eatInOrderDateTime = eatInOrderDateTime;
@@ -35,12 +35,11 @@ public class EatInOrder {
 
     private void verify(final EatInOrderId id, final EatInOrderStatus eatInOrderStatus,
                         final EatInOrderDateTime eatInOrderDateTime, final EatInOrderLineItems eatInOrderLineItems,
-                        final EatInOrderMenus eatInOrderMenus, final OrderTableId orderTable) {
+                        final OrderTableId orderTable) {
         if (isNull(id) || isNull(eatInOrderStatus) || isNull(eatInOrderDateTime) ||
-                isNull(eatInOrderLineItems) || isNull(eatInOrderMenus) || isNull(orderTable)) {
+                isNull(eatInOrderLineItems) || isNull(orderTable)) {
             throw new IllegalArgumentException();
         }
-        eatInOrderLineItems.ensureIntegrity(eatInOrderMenus);
     }
 
     public void accepted() {

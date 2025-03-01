@@ -5,29 +5,31 @@ import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderId;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class EatInOrderLineItems {
     private final List<EatInOrderLineItem> eatInOrderLineItems;
 
-    public EatInOrderLineItems(final EatInOrderLineItem... eatInOrderLineItem) {
-        this(List.of(eatInOrderLineItem));
+    public EatInOrderLineItems(final EatInOrderMenus eatInOrderMenus, final EatInOrderLineItem... eatInOrderLineItem) {
+        this(eatInOrderMenus, List.of(eatInOrderLineItem));
     }
 
-    public EatInOrderLineItems(final List<EatInOrderLineItem> eatInOrderLineItems) {
-        if (eatInOrderLineItems == null || eatInOrderLineItems.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
+    public EatInOrderLineItems(final EatInOrderMenus eatInOrderMenus, final List<EatInOrderLineItem> eatInOrderLineItems) {
+        verify(eatInOrderMenus, eatInOrderLineItems);
         this.eatInOrderLineItems = eatInOrderLineItems;
     }
 
-    public void ensureIntegrity(final EatInOrderMenus eatInOrderMenus) {
+    private void verify(final EatInOrderMenus eatInOrderMenus, final List<EatInOrderLineItem> eatInOrderLineItems) {
+        if (Objects.isNull(eatInOrderMenus) || Objects.isNull(eatInOrderLineItems) || eatInOrderLineItems.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
         if(!eatInOrderMenus.isSameSize(eatInOrderLineItems.size())) {
             throw new IllegalArgumentException();
         }
-        eatInOrderLineItems.forEach(eatInOrderLineItem -> ensureIntegrity(eatInOrderMenus, eatInOrderLineItem));
+        eatInOrderLineItems.forEach(eatInOrderLineItem -> verify(eatInOrderMenus, eatInOrderLineItem));
     }
 
-    private void ensureIntegrity(final EatInOrderMenus eatInOrderMenus, final EatInOrderLineItem eatInOrderLineItem) {
+    private void verify(final EatInOrderMenus eatInOrderMenus, final EatInOrderLineItem eatInOrderLineItem) {
         if(!eatInOrderMenus.isDisplayed(eatInOrderLineItem.menuId())) {
             throw new IllegalArgumentException();
         }

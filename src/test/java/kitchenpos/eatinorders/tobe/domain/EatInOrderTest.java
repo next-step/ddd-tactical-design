@@ -14,6 +14,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.NullSource;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,13 +29,14 @@ public class EatInOrderTest {
     void createWithoutOrderTable(final OrderTableId orderTable) {
         final UUID firstMenuId = UUID.randomUUID();
         final UUID secondMenuId = UUID.randomUUID();
-        final EatInOrderLineItem firstEatInOrderLineItem = new EatInOrderLineItem(firstMenuId, "후라이드 치킨", 16_000, 1);
-        final EatInOrderLineItem secondEatInOrderLineItem = new EatInOrderLineItem(secondMenuId, "양념 치킨", 16_000, 1);
-        final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(firstEatInOrderLineItem, secondEatInOrderLineItem);
         final EatInOrderMenus eatInOrderMenus = new DefaultEatInOrderMenus(
                 new DefaultEatInOrderMenu(firstMenuId, 16_000, true),
                 new DefaultEatInOrderMenu(secondMenuId, 16_000, true)
         );
+
+        final EatInOrderLineItem firstEatInOrderLineItem = new EatInOrderLineItem(firstMenuId, "후라이드 치킨", 16_000, 1);
+        final EatInOrderLineItem secondEatInOrderLineItem = new EatInOrderLineItem(secondMenuId, "양념 치킨", 16_000, 1);
+        final List<EatInOrderLineItem> eatInOrderLineItems = List.of(firstEatInOrderLineItem, secondEatInOrderLineItem);
 
         assertThatThrownBy(() -> new EatInOrder(eatInOrderLineItems, eatInOrderMenus, orderTable))
                 .isExactlyInstanceOf(IllegalArgumentException.class);
@@ -45,10 +47,11 @@ public class EatInOrderTest {
     void createWithDifferentMenuSize() {
         final UUID firstMenuId = UUID.randomUUID();
         final UUID secondMenuId = UUID.randomUUID();
+        final EatInOrderMenus eatInOrderMenus = new DefaultEatInOrderMenus(new DefaultEatInOrderMenu(firstMenuId, 16_000, true));
+
         final EatInOrderLineItem firstEatInOrderLineItem = new EatInOrderLineItem(firstMenuId, "후라이드 치킨", 16_000, 1);
         final EatInOrderLineItem secondEatInOrderLineItem = new EatInOrderLineItem(secondMenuId, "양념 치킨", 16_000, 1);
-        final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(firstEatInOrderLineItem, secondEatInOrderLineItem);
-        final EatInOrderMenus eatInOrderMenus = new DefaultEatInOrderMenus(new DefaultEatInOrderMenu(firstMenuId, 16_000, true));
+        final List<EatInOrderLineItem> eatInOrderLineItems = List.of(firstEatInOrderLineItem, secondEatInOrderLineItem);
 
         assertThatThrownBy(() -> new EatInOrder(eatInOrderLineItems, eatInOrderMenus, new OrderTableId()))
                 .isExactlyInstanceOf(IllegalArgumentException.class);
@@ -59,13 +62,14 @@ public class EatInOrderTest {
     void createWithDifferentMenuPrice() {
         final UUID firstMenuId = UUID.randomUUID();
         final UUID secondMenuId = UUID.randomUUID();
-        final EatInOrderLineItem firstEatInOrderLineItem = new EatInOrderLineItem(firstMenuId, "후라이드 치킨", 16_000, 1);
-        final EatInOrderLineItem secondEatInOrderLineItem = new EatInOrderLineItem(secondMenuId, "양념 치킨", 16_000, 1);
-        final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(firstEatInOrderLineItem, secondEatInOrderLineItem);
         final EatInOrderMenus eatInOrderMenus = new DefaultEatInOrderMenus(
                 new DefaultEatInOrderMenu(firstMenuId, 16_001, true),
                 new DefaultEatInOrderMenu(secondMenuId, 16_001, true)
         );
+
+        final EatInOrderLineItem firstEatInOrderLineItem = new EatInOrderLineItem(firstMenuId, "후라이드 치킨", 16_000, 1);
+        final EatInOrderLineItem secondEatInOrderLineItem = new EatInOrderLineItem(secondMenuId, "양념 치킨", 16_000, 1);
+        final List<EatInOrderLineItem> eatInOrderLineItems = List.of(firstEatInOrderLineItem, secondEatInOrderLineItem);
 
         assertThatThrownBy(() -> new EatInOrder(eatInOrderLineItems, eatInOrderMenus, new OrderTableId()))
                 .isExactlyInstanceOf(IllegalArgumentException.class);
@@ -76,13 +80,14 @@ public class EatInOrderTest {
     void createWithNotDisplayedMenu() {
         final UUID firstMenuId = UUID.randomUUID();
         final UUID secondMenuId = UUID.randomUUID();
-        final EatInOrderLineItem firstEatInOrderLineItem = new EatInOrderLineItem(firstMenuId, "후라이드 치킨", 16_000, 1);
-        final EatInOrderLineItem secondEatInOrderLineItem = new EatInOrderLineItem(secondMenuId, "양념 치킨", 16_000, 1);
-        final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(firstEatInOrderLineItem, secondEatInOrderLineItem);
         final EatInOrderMenus eatInOrderMenus = new DefaultEatInOrderMenus(
                 new DefaultEatInOrderMenu(firstMenuId, 16_000, false),
                 new DefaultEatInOrderMenu(secondMenuId, 16_000, true)
         );
+
+        final EatInOrderLineItem firstEatInOrderLineItem = new EatInOrderLineItem(firstMenuId, "후라이드 치킨", 16_000, 1);
+        final EatInOrderLineItem secondEatInOrderLineItem = new EatInOrderLineItem(secondMenuId, "양념 치킨", 16_000, 1);
+        final List<EatInOrderLineItem> eatInOrderLineItems = List.of(firstEatInOrderLineItem, secondEatInOrderLineItem);
 
         assertThatThrownBy(() -> new EatInOrder(eatInOrderLineItems, eatInOrderMenus, new OrderTableId()))
                 .isExactlyInstanceOf(IllegalArgumentException.class);
@@ -118,16 +123,16 @@ public class EatInOrderTest {
     void create() {
         final UUID firstMenuId = UUID.randomUUID();
         final UUID secondMenuId = UUID.randomUUID();
-        final EatInOrderLineItem firstEatInOrderLineItem = new EatInOrderLineItem(firstMenuId, "후라이드 치킨", 16_000, 1);
-        final EatInOrderLineItem secondEatInOrderLineItem = new EatInOrderLineItem(secondMenuId, "양념 치킨", 16_000, 1);
-        final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(firstEatInOrderLineItem, secondEatInOrderLineItem);
         final EatInOrderMenus eatInOrderMenus = new DefaultEatInOrderMenus(
                 new DefaultEatInOrderMenu(firstMenuId, 16_000, true),
                 new DefaultEatInOrderMenu(secondMenuId, 16_000, true)
         );
 
-        final EatInOrder eatInOrder = new EatInOrder(eatInOrderLineItems, eatInOrderMenus, new OrderTableId());
+        final EatInOrderLineItem firstEatInOrderLineItem = new EatInOrderLineItem(firstMenuId, "후라이드 치킨", 16_000, 1);
+        final EatInOrderLineItem secondEatInOrderLineItem = new EatInOrderLineItem(secondMenuId, "양념 치킨", 16_000, 1);
+        final List<EatInOrderLineItem> eatInOrderLineItems = List.of(firstEatInOrderLineItem, secondEatInOrderLineItem);
 
+        final EatInOrder eatInOrder = new EatInOrder(eatInOrderLineItems, eatInOrderMenus, new OrderTableId());
         assertThat(eatInOrder.isSameStatus(EatInOrderStatus.WAITING)).isTrue();
     }
 
@@ -137,17 +142,17 @@ public class EatInOrderTest {
     void acceptWithNotWaitingStatus(final EatInOrderStatus eatInOrderStatus) {
         final UUID firstMenuId = UUID.randomUUID();
         final UUID secondMenuId = UUID.randomUUID();
-        final EatInOrderLineItem firstEatInOrderLineItem = new EatInOrderLineItem(firstMenuId, "후라이드 치킨", 16_000, 1);
-        final EatInOrderLineItem secondEatInOrderLineItem = new EatInOrderLineItem(secondMenuId, "양념 치킨", 16_000, 1);
-        final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(firstEatInOrderLineItem, secondEatInOrderLineItem);
         final EatInOrderMenus eatInOrderMenus = new DefaultEatInOrderMenus(
                 new DefaultEatInOrderMenu(firstMenuId, 16_000, true),
                 new DefaultEatInOrderMenu(secondMenuId, 16_000, true)
         );
 
+        final EatInOrderLineItem firstEatInOrderLineItem = new EatInOrderLineItem(firstMenuId, "후라이드 치킨", 16_000, 1);
+        final EatInOrderLineItem secondEatInOrderLineItem = new EatInOrderLineItem(secondMenuId, "양념 치킨", 16_000, 1);
+        final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(eatInOrderMenus, firstEatInOrderLineItem, secondEatInOrderLineItem);
+
         final EatInOrder eatInOrder = new EatInOrder(
-                new EatInOrderId(), eatInOrderStatus, new EatInOrderDateTime(),
-                eatInOrderLineItems, eatInOrderMenus, new OrderTableId()
+                new EatInOrderId(), eatInOrderStatus, new EatInOrderDateTime(), eatInOrderLineItems, new OrderTableId()
         );
         assertThatThrownBy(eatInOrder::accepted)
                 .isExactlyInstanceOf(IllegalArgumentException.class);
@@ -158,15 +163,16 @@ public class EatInOrderTest {
     void accept() {
         final UUID firstMenuId = UUID.randomUUID();
         final UUID secondMenuId = UUID.randomUUID();
-        final EatInOrderLineItem firstEatInOrderLineItem = new EatInOrderLineItem(firstMenuId, "후라이드 치킨", 16_000, 1);
-        final EatInOrderLineItem secondEatInOrderLineItem = new EatInOrderLineItem(secondMenuId, "양념 치킨", 16_000, 1);
-        final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(firstEatInOrderLineItem, secondEatInOrderLineItem);
         final EatInOrderMenus eatInOrderMenus = new DefaultEatInOrderMenus(
                 new DefaultEatInOrderMenu(firstMenuId, 16_000, true),
                 new DefaultEatInOrderMenu(secondMenuId, 16_000, true)
         );
 
-        final EatInOrder eatInOrder = new EatInOrder(eatInOrderLineItems, eatInOrderMenus, new OrderTableId());
+        final EatInOrderLineItem firstEatInOrderLineItem = new EatInOrderLineItem(firstMenuId, "후라이드 치킨", 16_000, 1);
+        final EatInOrderLineItem secondEatInOrderLineItem = new EatInOrderLineItem(secondMenuId, "양념 치킨", 16_000, 1);
+        final List<EatInOrderLineItem> eatInOrderLineItems = List.of(firstEatInOrderLineItem, secondEatInOrderLineItem);
+
+        final EatInOrder eatInOrder = new EatInOrder(eatInOrderLineItems, eatInOrderMenus,  new OrderTableId());
         eatInOrder.accepted();
         assertThat(eatInOrder.isSameStatus(EatInOrderStatus.ACCEPTED)).isTrue();
     }
@@ -177,17 +183,17 @@ public class EatInOrderTest {
     void serveWithNotAcceptedStatus(final EatInOrderStatus eatInOrderStatus) {
         final UUID firstMenuId = UUID.randomUUID();
         final UUID secondMenuId = UUID.randomUUID();
-        final EatInOrderLineItem firstEatInOrderLineItem = new EatInOrderLineItem(firstMenuId, "후라이드 치킨", 16_000, 1);
-        final EatInOrderLineItem secondEatInOrderLineItem = new EatInOrderLineItem(secondMenuId, "양념 치킨", 16_000, 1);
-        final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(firstEatInOrderLineItem, secondEatInOrderLineItem);
         final EatInOrderMenus eatInOrderMenus = new DefaultEatInOrderMenus(
                 new DefaultEatInOrderMenu(firstMenuId, 16_000, true),
                 new DefaultEatInOrderMenu(secondMenuId, 16_000, true)
         );
 
+        final EatInOrderLineItem firstEatInOrderLineItem = new EatInOrderLineItem(firstMenuId, "후라이드 치킨", 16_000, 1);
+        final EatInOrderLineItem secondEatInOrderLineItem = new EatInOrderLineItem(secondMenuId, "양념 치킨", 16_000, 1);
+        final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(eatInOrderMenus, firstEatInOrderLineItem, secondEatInOrderLineItem);
+
         final EatInOrder eatInOrder = new EatInOrder(
-                new EatInOrderId(), eatInOrderStatus, new EatInOrderDateTime(),
-                eatInOrderLineItems, eatInOrderMenus, new OrderTableId()
+                new EatInOrderId(), eatInOrderStatus, new EatInOrderDateTime(), eatInOrderLineItems, new OrderTableId()
         );
         assertThatThrownBy(eatInOrder::served)
                 .isExactlyInstanceOf(IllegalArgumentException.class);
@@ -198,17 +204,17 @@ public class EatInOrderTest {
     void serve() {
         final UUID firstMenuId = UUID.randomUUID();
         final UUID secondMenuId = UUID.randomUUID();
-        final EatInOrderLineItem firstEatInOrderLineItem = new EatInOrderLineItem(firstMenuId, "후라이드 치킨", 16_000, 1);
-        final EatInOrderLineItem secondEatInOrderLineItem = new EatInOrderLineItem(secondMenuId, "양념 치킨", 16_000, 1);
-        final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(firstEatInOrderLineItem, secondEatInOrderLineItem);
         final EatInOrderMenus eatInOrderMenus = new DefaultEatInOrderMenus(
                 new DefaultEatInOrderMenu(firstMenuId, 16_000, true),
                 new DefaultEatInOrderMenu(secondMenuId, 16_000, true)
         );
 
+        final EatInOrderLineItem firstEatInOrderLineItem = new EatInOrderLineItem(firstMenuId, "후라이드 치킨", 16_000, 1);
+        final EatInOrderLineItem secondEatInOrderLineItem = new EatInOrderLineItem(secondMenuId, "양념 치킨", 16_000, 1);
+        final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(eatInOrderMenus, firstEatInOrderLineItem, secondEatInOrderLineItem);
+
         final EatInOrder eatInOrder = new EatInOrder(
-                new EatInOrderId(), EatInOrderStatus.ACCEPTED, new EatInOrderDateTime(),
-                eatInOrderLineItems, eatInOrderMenus, new OrderTableId()
+                new EatInOrderId(), EatInOrderStatus.ACCEPTED, new EatInOrderDateTime(), eatInOrderLineItems, new OrderTableId()
         );
         eatInOrder.served();
         assertThat(eatInOrder.isSameStatus(EatInOrderStatus.SERVED)).isTrue();
@@ -220,17 +226,17 @@ public class EatInOrderTest {
     void completeWithNotServedStatus(final EatInOrderStatus eatInOrderStatus) {
         final UUID firstMenuId = UUID.randomUUID();
         final UUID secondMenuId = UUID.randomUUID();
-        final EatInOrderLineItem firstEatInOrderLineItem = new EatInOrderLineItem(firstMenuId, "후라이드 치킨", 16_000, 1);
-        final EatInOrderLineItem secondEatInOrderLineItem = new EatInOrderLineItem(secondMenuId, "양념 치킨", 16_000, 1);
-        final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(firstEatInOrderLineItem, secondEatInOrderLineItem);
         final EatInOrderMenus eatInOrderMenus = new DefaultEatInOrderMenus(
                 new DefaultEatInOrderMenu(firstMenuId, 16_000, true),
                 new DefaultEatInOrderMenu(secondMenuId, 16_000, true)
         );
 
+        final EatInOrderLineItem firstEatInOrderLineItem = new EatInOrderLineItem(firstMenuId, "후라이드 치킨", 16_000, 1);
+        final EatInOrderLineItem secondEatInOrderLineItem = new EatInOrderLineItem(secondMenuId, "양념 치킨", 16_000, 1);
+        final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(eatInOrderMenus, firstEatInOrderLineItem, secondEatInOrderLineItem);
+
         final EatInOrder eatInOrder = new EatInOrder(
-                new EatInOrderId(), eatInOrderStatus, new EatInOrderDateTime(),
-                eatInOrderLineItems, eatInOrderMenus, new OrderTableId()
+                new EatInOrderId(), eatInOrderStatus, new EatInOrderDateTime(), eatInOrderLineItems, new OrderTableId()
         );
         assertThatThrownBy(eatInOrder::completed)
                 .isExactlyInstanceOf(IllegalArgumentException.class);
@@ -241,17 +247,18 @@ public class EatInOrderTest {
     void complete() {
         final UUID firstMenuId = UUID.randomUUID();
         final UUID secondMenuId = UUID.randomUUID();
-        final EatInOrderLineItem firstEatInOrderLineItem = new EatInOrderLineItem(firstMenuId, "후라이드 치킨", 16_000, 1);
-        final EatInOrderLineItem secondEatInOrderLineItem = new EatInOrderLineItem(secondMenuId, "양념 치킨", 16_000, 1);
-        final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(firstEatInOrderLineItem, secondEatInOrderLineItem);
         final EatInOrderMenus eatInOrderMenus = new DefaultEatInOrderMenus(
                 new DefaultEatInOrderMenu(firstMenuId, 16_000, true),
                 new DefaultEatInOrderMenu(secondMenuId, 16_000, true)
         );
 
+        final EatInOrderLineItem firstEatInOrderLineItem = new EatInOrderLineItem(firstMenuId, "후라이드 치킨", 16_000, 1);
+        final EatInOrderLineItem secondEatInOrderLineItem = new EatInOrderLineItem(secondMenuId, "양념 치킨", 16_000, 1);
+        final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(eatInOrderMenus, firstEatInOrderLineItem, secondEatInOrderLineItem);
+
         final EatInOrder eatInOrder = new EatInOrder(
                 new EatInOrderId(), EatInOrderStatus.SERVED, new EatInOrderDateTime(),
-                eatInOrderLineItems, eatInOrderMenus, new OrderTableId()
+                eatInOrderLineItems, new OrderTableId()
         );
         eatInOrder.completed();
         assertThat(eatInOrder.isSameStatus(EatInOrderStatus.COMPLETED)).isTrue();

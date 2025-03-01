@@ -30,7 +30,7 @@ public class EatInOrderService {
         if (!orderTable.isOccupiedValue()) {
             throw new IllegalArgumentException();
         }
-        final EatInOrder eatInOrder = eatInOrder(command, eatInOrderMenus, orderTable);
+        final EatInOrder eatInOrder = toEatInOrder(command, eatInOrderMenus, orderTable);
         return eatInOrderRepository.save(eatInOrder);
     }
 
@@ -59,15 +59,20 @@ public class EatInOrderService {
         return eatInOrderRepository.findAll();
     }
 
-    private EatInOrder eatInOrder(final CreateEatInOrderCommand command, final EatInOrderMenus eatInOrderMenus, final OrderTable orderTable) {
+    private EatInOrder toEatInOrder(final CreateEatInOrderCommand command, final EatInOrderMenus eatInOrderMenus, final OrderTable orderTable) {
         final List<CreateEatInOrderLineItemCommand> createEatInOrderLineItemCommands = command.lineItems();
-        final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(createEatInOrderLineItemCommands.stream()
-                .map(eatInOrderLineItemCommand -> new EatInOrderLineItem(
-                        eatInOrderLineItemCommand.menuId(),
-                        eatInOrderLineItemCommand.name(),
-                        eatInOrderLineItemCommand.price(),
-                        eatInOrderLineItemCommand.quantity())
-                ).toList());
+        final List<EatInOrderLineItem> eatInOrderLineItems = createEatInOrderLineItemCommands.stream()
+                .map(this::toEatInOrderLineItem)
+                .toList();
         return new EatInOrder(eatInOrderLineItems, eatInOrderMenus, orderTable.id());
+    }
+
+    private EatInOrderLineItem toEatInOrderLineItem(final CreateEatInOrderLineItemCommand eatInOrderLineItemCommand) {
+        return new EatInOrderLineItem(
+                eatInOrderLineItemCommand.menuId(),
+                eatInOrderLineItemCommand.name(),
+                eatInOrderLineItemCommand.price(),
+                eatInOrderLineItemCommand.quantity()
+        );
     }
 }
