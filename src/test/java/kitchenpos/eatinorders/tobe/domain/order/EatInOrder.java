@@ -1,6 +1,5 @@
 package kitchenpos.eatinorders.tobe.domain.order;
 
-import kitchenpos.eatinorders.tobe.domain.order.menu.EatInOrderMenus;
 import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderDateTime;
 import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderId;
 import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderStatus;
@@ -8,6 +7,7 @@ import kitchenpos.eatinorders.tobe.domain.ordertable.vo.OrderTableId;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static java.util.Objects.isNull;
 
@@ -64,6 +64,14 @@ public class EatInOrder {
 
     public EatInOrderId id() {
         return id;
+    }
+
+    public UUID idValue() {
+        return id.getValue();
+    }
+
+    public OrderTableId orderTableId() {
+        return orderTableId;
     }
 
     public List<EatInOrderLineItem> eatInOrderLineItems() {

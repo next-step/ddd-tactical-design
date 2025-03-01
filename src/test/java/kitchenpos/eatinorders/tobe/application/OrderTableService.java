@@ -1,8 +1,8 @@
 package kitchenpos.eatinorders.tobe.application;
 
 import kitchenpos.eatinorders.tobe.application.dto.CreateOrderTableCommand;
-import kitchenpos.eatinorders.tobe.domain.order.InMemoryEatInOrderRepository;
 import kitchenpos.eatinorders.tobe.domain.order.EatInOrderRepository;
+import kitchenpos.eatinorders.tobe.domain.order.InMemoryEatInOrderRepository;
 import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderStatus;
 import kitchenpos.eatinorders.tobe.domain.ordertable.InMemoryOrderTableRepository;
 import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTable;
@@ -12,8 +12,18 @@ import kitchenpos.eatinorders.tobe.domain.ordertable.vo.OrderTableId;
 import java.util.UUID;
 
 public class OrderTableService {
-    private final OrderTableRepository orderTableRepository = new InMemoryOrderTableRepository();
-    private final EatInOrderRepository eatInOrderRepository = new InMemoryEatInOrderRepository();
+
+    private final OrderTableRepository orderTableRepository;
+    private final EatInOrderRepository eatInOrderRepository;
+
+    public OrderTableService() {
+        this(new InMemoryOrderTableRepository(), new InMemoryEatInOrderRepository());
+    }
+
+    public OrderTableService(final OrderTableRepository orderTableRepository, final EatInOrderRepository eatInOrderRepository) {
+        this.orderTableRepository = orderTableRepository;
+        this.eatInOrderRepository = eatInOrderRepository;
+    }
 
     public OrderTable create(final CreateOrderTableCommand command) {
         final OrderTable orderTable = new OrderTable(command.name(), command.numberOfGuests(), command.occupied());

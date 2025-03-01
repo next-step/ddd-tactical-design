@@ -3,13 +3,16 @@ package kitchenpos.eatinorders.tobe.application;
 import kitchenpos.eatinorders.tobe.application.dto.CreateEatInOrderCommand;
 import kitchenpos.eatinorders.tobe.application.dto.CreateEatInOrderLineItemCommand;
 import kitchenpos.eatinorders.tobe.domain.order.*;
-import kitchenpos.eatinorders.tobe.domain.order.menu.EatInOrderMenuRepository;
-import kitchenpos.eatinorders.tobe.domain.order.menu.EatInOrderMenus;
+import kitchenpos.eatinorders.tobe.domain.order.EatInOrderMenuRepository;
+import kitchenpos.eatinorders.tobe.domain.order.EatInOrderMenus;
+import kitchenpos.eatinorders.tobe.domain.order.event.EatInOrderCompletedEvent;
 import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderId;
 import kitchenpos.eatinorders.tobe.domain.ordertable.InMemoryOrderTableRepository;
 import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTable;
 import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTableRepository;
 import kitchenpos.eatinorders.tobe.domain.ordertable.vo.OrderTableId;
+import kitchenpos.shared.InMemoryApplicationEventPublisher;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -20,6 +23,7 @@ public class EatInOrderService {
     private final EatInOrderMenuRepository eatInOrderMenuRepository = new InMemoryEatInOrderMenuRepository();
     private final OrderTableRepository orderTableRepository = new InMemoryOrderTableRepository();
     private final EatInOrderRepository eatInOrderRepository = new InMemoryEatInOrderRepository();
+    private final ApplicationEventPublisher eventPublisher = new InMemoryApplicationEventPublisher();
 
     public EatInOrder create(final CreateEatInOrderCommand command) {
         final EatInOrderMenus eatInOrderMenus = eatInOrderMenuRepository.findAllByIdIn(command.menuIds());
@@ -49,6 +53,7 @@ public class EatInOrderService {
         final EatInOrder eatInOrder = eatInOrderRepository.findById(new EatInOrderId(eatInOrderId))
                 .orElseThrow(NoSuchElementException::new);
         eatInOrder.completed();
+        eventPublisher.publishEvent(new EatInOrderCompletedEvent(eatInOrder.idValue(), eatInOrder.orderTableId()));
         return eatInOrderRepository.save(eatInOrder);
     }
 
