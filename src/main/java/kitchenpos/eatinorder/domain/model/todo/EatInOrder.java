@@ -1,13 +1,15 @@
 package kitchenpos.eatinorder.domain.model.todo;
 
+import kitchenpos.eatinorder.domain.event.EatInOrderCompletedEvent;
 import kitchenpos.eatinorder.domain.policy.CreateEatInOrderPolicy;
+import kitchenpos.shared.domain.AggregateRoot;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-public class EatInOrder {
+public class EatInOrder extends AggregateRoot {
     private final UUID id;
     private EatInOrderStatus status;
     private final LocalDateTime orderDateTime;
@@ -68,6 +70,7 @@ public class EatInOrder {
             throw new IllegalStateException();
         }
         this.status = EatInOrderStatus.COMPLETED;
+        this.registerEvent(new EatInOrderCompletedEvent(this.id));
     }
 
     public UUID getId() {

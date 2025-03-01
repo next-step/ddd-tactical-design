@@ -4,9 +4,11 @@ import kitchenpos.eatinorder.application.port.out.LoadEatInOrderPort;
 import kitchenpos.eatinorder.application.port.out.MenuEatInOrderLineItemMapper;
 import kitchenpos.eatinorder.application.port.out.SaveEatInOrderPort;
 import kitchenpos.eatinorder.application.service.model.CreateEatInOrderRequest;
-import kitchenpos.eatinorder.domain.policy.CreateEatInOrderPolicy;
 import kitchenpos.eatinorder.domain.model.todo.EatInOrder;
 import kitchenpos.eatinorder.domain.model.todo.EatInOrderLineItem;
+import kitchenpos.eatinorder.domain.policy.CreateEatInOrderPolicy;
+import kitchenpos.shared.event.DomainEvent;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,21 +22,20 @@ public class EatInOrderService {
     private final LoadEatInOrderPort loadEatInOrderPort;
     private final SaveEatInOrderPort saveEatInOrderPort;
     private final MenuEatInOrderLineItemMapper menuEatInOrderLineItemMapper;
-    private final OrderTableService orderTableService;
     private final CreateEatInOrderPolicy createEatInOrderPolicy;
+    private final ApplicationEventPublisher eventPublisher;
 
     public EatInOrderService(
             final LoadEatInOrderPort loadEatInOrderPort,
             final SaveEatInOrderPort saveEatInOrderPort,
             final MenuEatInOrderLineItemMapper menuEatInOrderLineItemMapper,
-            final OrderTableService orderTableService,
-            final CreateEatInOrderPolicy createEatInOrderPolicy
+            final CreateEatInOrderPolicy createEatInOrderPolicy, ApplicationEventPublisher eventPublisher
     ) {
         this.loadEatInOrderPort = loadEatInOrderPort;
         this.saveEatInOrderPort = saveEatInOrderPort;
         this.menuEatInOrderLineItemMapper = menuEatInOrderLineItemMapper;
-        this.orderTableService = orderTableService;
         this.createEatInOrderPolicy = createEatInOrderPolicy;
+        this.eventPublisher = eventPublisher;
     }
 
     @Transactional
@@ -62,9 +63,8 @@ public class EatInOrderService {
     public EatInOrder complete(final UUID orderId) {
         final EatInOrder eatInOrder = findById(orderId);
         eatInOrder.complete();
-        EatInOrder savedEatInOrder = saveEatInOrderPort.save(eatInOrder);
-        orderTableService.clear(savedEatInOrder.getOrderTableId());
-        return savedEatInOrder;
+        publishEvent(eatInOrder);
+        return saveEatInOrderPort.save(eatInOrder);
     }
 
     @Transactional(readOnly = true)
@@ -76,5 +76,11 @@ public class EatInOrderService {
     public EatInOrder findById(UUID orderId) {
         return loadEatInOrderPort.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
+    }
+
+    private void publishEvent(EatInOrder eatInOrder) {
+        List<DomainEvent> domainEvents = eatInOrder.getDomainEvents();
+        domainEvents.forEach(eventPublisher::publishEvent);
+        eatInOrder.clearDomainEvents();
     }
 }

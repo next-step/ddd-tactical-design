@@ -1,5 +1,6 @@
 package kitchenpos.product.domain.model;
 
+import kitchenpos.shared.domain.AggregateRoot;
 import kitchenpos.shared.event.ProductPriceChangedEvent;
 
 import java.math.BigDecimal;

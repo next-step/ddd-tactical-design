@@ -1,5 +1,6 @@
 package kitchenpos.eatinorder.application.service;
 
+import kitchenpos.eatinorder.application.port.in.ClearOrderTableUseCase;
 import kitchenpos.eatinorder.application.port.out.LoadEatInOrderPort;
 import kitchenpos.eatinorder.application.port.out.LoadOrderTablePort;
 import kitchenpos.eatinorder.application.port.out.SaveOrderTablePort;
@@ -16,7 +17,7 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Service
-public class OrderTableService {
+public class OrderTableService implements ClearOrderTableUseCase {
     private final LoadOrderTablePort orderTableRepository;
     private final SaveOrderTablePort saveOrderTablePort;
     private final LoadEatInOrderPort loadEatInOrderPort;

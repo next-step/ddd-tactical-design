@@ -1,4 +1,4 @@
-package kitchenpos.product.domain.model;
+package kitchenpos.shared.domain;
 
 import kitchenpos.shared.event.DomainEvent;
 
