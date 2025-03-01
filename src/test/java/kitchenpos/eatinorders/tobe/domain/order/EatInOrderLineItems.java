@@ -1,5 +1,8 @@
 package kitchenpos.eatinorders.tobe.domain.order;
 
+import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderId;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -49,5 +52,13 @@ public class EatInOrderLineItems {
         if(!eatInOrderMenus.isSamePrice(eatInOrderLineItem.menuId(), eatInOrderLineItem.menuPrice())) {
             throw new IllegalArgumentException();
         }
+    }
+
+    public List<EatInOrderLineItem> eatInOrderLineItems() {
+        return new ArrayList<>(eatInOrderLineItems);
+    }
+
+    public void setEatInOrderMenuId(final EatInOrderId eatInOrderId) {
+        eatInOrderLineItems.forEach(eatInOrderLineItem -> eatInOrderLineItem.setEatInOrderId(eatInOrderId));
     }
 }

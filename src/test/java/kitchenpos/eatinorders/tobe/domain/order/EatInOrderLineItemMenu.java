@@ -1,6 +1,8 @@
 package kitchenpos.eatinorders.tobe.domain.order;
 
+import jakarta.annotation.Nullable;
 import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderLineItemMenuPrice;
+import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderLineItemId;
 
 import java.util.UUID;
 
@@ -8,6 +10,7 @@ public class EatInOrderLineItemMenu {
     private final UUID menuId;
     private final String name;
     private final EatInOrderLineItemMenuPrice price;
+    private EatInOrderLineItemId eatInOrderLineItemId;
 
     public EatInOrderLineItemMenu(final UUID menuId, final String name, final int price) {
         this(menuId, name, new EatInOrderLineItemMenuPrice(price));
@@ -31,7 +34,21 @@ public class EatInOrderLineItemMenu {
         return menuId;
     }
 
-    public int price() {
-        return price.price();
+    public String name() {
+        return name;
     }
+
+    public int priceValue() {
+        return price.value();
+    }
+
+    public UUID eatInOrderLineItemIdValue() {
+        return eatInOrderLineItemId.getValue();
+    }
+
+    public void setEatInOrderLineItemSeq(@Nullable final EatInOrderLineItemId seq) {
+        this.eatInOrderLineItemId = seq;
+    }
+
+
 }

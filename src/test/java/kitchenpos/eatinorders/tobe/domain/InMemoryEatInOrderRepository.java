@@ -21,9 +21,9 @@ public class InMemoryEatInOrderRepository implements EatInOrderRepository {
     }
 
     @Override
-    public EatInOrder save(final EatInOrder order) {
-        eatInOrders.put(order.getId(), order);
-        return order;
+    public EatInOrder save(final EatInOrder eatInOrder) {
+        eatInOrders.put(eatInOrder.getId(), eatInOrder);
+        return eatInOrder;
     }
 
     @Override
@@ -37,8 +37,8 @@ public class InMemoryEatInOrderRepository implements EatInOrderRepository {
     }
 
     @Override
-    public boolean existsByOrderTableAndStatusNot(final OrderTableId orderTableId, final EatInOrderStatus orderStatus) {
+    public boolean existsByOrderTableAndStatusNot(final OrderTableId orderTableId, final EatInOrderStatus eatInOrderStatus) {
         return eatInOrders.values().stream()
-                .allMatch(order -> order.isSameOrderTable(orderTableId) && order.isSameStatus(orderStatus));
+                .allMatch(order -> order.isSameOrderTable(orderTableId) && order.isSameStatus(eatInOrderStatus));
     }
 }

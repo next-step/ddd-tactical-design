@@ -1,28 +1,35 @@
 package kitchenpos.eatinorders.tobe.domain.order;
 
-import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderLineItemSeq;
+import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderId;
+import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderLineItemId;
 import kitchenpos.eatinorders.tobe.domain.order.vo.Quantity;
 
 import java.util.UUID;
 
 public class EatInOrderLineItem {
 
-    private final EatInOrderLineItemSeq seq;
+    private final EatInOrderLineItemId id;
     private final EatInOrderLineItemMenu eatInOrderLineItemMenu;
     private final Quantity quantity;
+    private EatInOrderId eatInOrderId;
 
-    public EatInOrderLineItem(final long seq, final EatInOrderLineItemMenu eatInOrderLineItemMenu, final int quantity) {
-        this(new EatInOrderLineItemSeq(seq), eatInOrderLineItemMenu, new Quantity(quantity));
+    public EatInOrderLineItem(final EatInOrderLineItemMenu eatInOrderLineItemMenu, final int quantity) {
+        this(new EatInOrderLineItemId(), eatInOrderLineItemMenu, new Quantity(quantity));
+    }
+
+    public EatInOrderLineItem(final EatInOrderLineItemId id, final EatInOrderLineItemMenu eatInOrderLineItemMenu, final int quantity) {
+        this(id, eatInOrderLineItemMenu, new Quantity(quantity));
     }
 
     public EatInOrderLineItem(
-            final EatInOrderLineItemSeq seq,
+            final EatInOrderLineItemId id,
             final EatInOrderLineItemMenu eatInOrderLineItemMenu,
             final Quantity quantity
     ) {
-        this.seq = seq;
+        this.id = id;
         this.eatInOrderLineItemMenu = eatInOrderLineItemMenu;
         this.quantity = quantity;
+        this.eatInOrderLineItemMenu.setEatInOrderLineItemSeq(id);
     }
 
     public boolean isSameMenu(final UUID menuId) {
@@ -38,6 +45,26 @@ public class EatInOrderLineItem {
     }
 
     public int menuPrice() {
-        return eatInOrderLineItemMenu.price();
+        return eatInOrderLineItemMenu.priceValue();
+    }
+
+    public EatInOrderLineItemMenu eatInOrderLineItemMenu() {
+        return eatInOrderLineItemMenu;
+    }
+
+    public UUID eatInOrderIdValue() {
+        return eatInOrderId.getValue();
+    }
+
+    public void setEatInOrderId(final EatInOrderId eatInOrderId) {
+        this.eatInOrderId = eatInOrderId;
+    }
+
+    public long quantityValue() {
+        return quantity.getValue();
+    }
+
+    public UUID idValue() {
+        return id.getValue();
     }
 }

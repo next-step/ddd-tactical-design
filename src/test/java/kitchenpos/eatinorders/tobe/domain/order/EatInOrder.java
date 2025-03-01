@@ -5,6 +5,7 @@ import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderId;
 import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTable;
 import kitchenpos.eatinorders.tobe.domain.ordertable.vo.OrderTableId;
 
+import java.util.List;
 import java.util.Optional;
 
 import static java.util.Objects.isNull;
@@ -31,6 +32,7 @@ public class EatInOrder {
         this.orderTableId = Optional.ofNullable(orderTable)
                 .map(OrderTable::id)
                 .orElseThrow(IllegalArgumentException::new);
+        eatInOrderLineItems.setEatInOrderMenuId(id);
     }
 
     private void verify(final EatInOrderId id, final EatInOrderStatus eatInOrderStatus,
@@ -72,5 +74,9 @@ public class EatInOrder {
 
     public boolean isSameStatus(final EatInOrderStatus orderStatus) {
         return this.eatInOrderStatus.isSameStatus(orderStatus);
+    }
+
+    public List<EatInOrderLineItem> eatInOrderLineItems() {
+        return eatInOrderLineItems.eatInOrderLineItems();
     }
 }

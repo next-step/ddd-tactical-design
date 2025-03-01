@@ -12,4 +12,8 @@ public class EatInOrderId {
     public EatInOrderId(final UUID value) {
         this.value = value;
     }
+
+    public UUID getValue() {
+        return value;
+    }
 }

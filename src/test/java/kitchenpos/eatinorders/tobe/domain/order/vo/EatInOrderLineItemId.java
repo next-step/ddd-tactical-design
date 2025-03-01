@@ -1,15 +1,20 @@
 package kitchenpos.eatinorders.tobe.domain.order.vo;
 
 import java.util.Objects;
+import java.util.UUID;
 
-public class EatInOrderLineItemSeq {
-    private final long value;
+public class EatInOrderLineItemId {
+    private final UUID value;
 
-    public EatInOrderLineItemSeq(final long value) {
+    public EatInOrderLineItemId() {
+        this(UUID.randomUUID());
+    }
+
+    public EatInOrderLineItemId(final UUID value) {
         this.value = value;
     }
 
-    public long getValue() {
+    public UUID getValue() {
         return value;
     }
 
@@ -17,7 +22,7 @@ public class EatInOrderLineItemSeq {
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        final EatInOrderLineItemSeq that = (EatInOrderLineItemSeq) o;
+        final EatInOrderLineItemId that = (EatInOrderLineItemId) o;
         return value == that.value;
     }
 

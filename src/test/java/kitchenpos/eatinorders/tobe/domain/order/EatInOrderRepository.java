@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface EatInOrderRepository {
-    EatInOrder save(EatInOrder order);
+    EatInOrder save(EatInOrder eatInOrder);
 
     Optional<EatInOrder> findById(EatInOrderId id);
 
     List<EatInOrder> findAll();
 
-    boolean existsByOrderTableAndStatusNot(OrderTableId orderTable, EatInOrderStatus orderStatus);
+    boolean existsByOrderTableAndStatusNot(OrderTableId orderTableId, EatInOrderStatus eatInOrderStatus);
 }

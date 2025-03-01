@@ -38,7 +38,7 @@ class EatInOrderLineItemMenuTest {
     @DisplayName("가격이 주문 항목 메뉴의 가격과 일치하면 true 를 반환한다.")
     @CsvSource(value = {"1000:1000", "10_000:10_000", "16_000:16_000"}, delimiter = ':')
     @ParameterizedTest(name = "가격: {0}, 주문 항목 메뉴 가격: {1}")
-    void isSamePrice(final int menuPrice, final int expectedPrice) {
+    void isSamePriceValue(final int menuPrice, final int expectedPrice) {
         final UUID menuId = UUID.randomUUID();
         final EatInOrderLineItemMenu eatInOrderLineItemMenu = new EatInOrderLineItemMenu(menuId, "후라이드치킨", menuPrice);
 
@@ -50,7 +50,7 @@ class EatInOrderLineItemMenuTest {
     @DisplayName("가격이 주문 항목 메뉴의 가격과 불일치하면 false 를 반환한다.")
     @CsvSource(value = {"1000:1001", "10_000:9_999", "0:1"}, delimiter = ':')
     @ParameterizedTest(name = "가격: {0}, 주문 항목 메뉴 가격: {1}")
-    void isNotSamePrice(final int menuPrice, final int expectedPrice) {
+    void isNotSamePriceValue(final int menuPrice, final int expectedPrice) {
         final UUID menuId = UUID.randomUUID();
         final EatInOrderLineItemMenu eatInOrderLineItemMenu = new EatInOrderLineItemMenu(menuId, "후라이드치킨", menuPrice);
 
@@ -61,7 +61,7 @@ class EatInOrderLineItemMenuTest {
 
     @DisplayName("주문 항목 메뉴의 식별자를 반환한다.")
     @Test
-    void menuId() {
+    void menuIdValue() {
         final UUID menuId = UUID.randomUUID();
         final EatInOrderLineItemMenu eatInOrderLineItemMenu = new EatInOrderLineItemMenu(menuId, "후라이드치킨", 16_000);
 
