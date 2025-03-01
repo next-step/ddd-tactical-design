@@ -78,6 +78,9 @@ public class MenuService {
 
     @Transactional(readOnly = true)
     public List<Menu>  findAll(List<UUID> ids) {
+        if (ids == null || ids.isEmpty()) {
+            return findAll();
+        }
         return loadMenuPort.findAllByIdIn(ids);
     }
 }
