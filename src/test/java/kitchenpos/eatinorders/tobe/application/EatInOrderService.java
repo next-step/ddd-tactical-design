@@ -2,6 +2,7 @@ package kitchenpos.eatinorders.tobe.application;
 
 import kitchenpos.eatinorders.tobe.application.dto.CreateEatInOrderCommand;
 import kitchenpos.eatinorders.tobe.application.dto.CreateEatInOrderLineItemCommand;
+import kitchenpos.eatinorders.tobe.domain.order.InMemoryEatInOrderMenuRepository;
 import kitchenpos.eatinorders.tobe.domain.order.*;
 import kitchenpos.eatinorders.tobe.domain.order.EatInOrderMenuRepository;
 import kitchenpos.eatinorders.tobe.domain.order.EatInOrderMenus;
@@ -24,6 +25,7 @@ public class EatInOrderService {
     private final OrderTableRepository orderTableRepository = new InMemoryOrderTableRepository();
     private final EatInOrderRepository eatInOrderRepository = new InMemoryEatInOrderRepository();
     private final ApplicationEventPublisher eventPublisher = new InMemoryApplicationEventPublisher();
+
 
     public EatInOrder create(final CreateEatInOrderCommand command) {
         final EatInOrderMenus eatInOrderMenus = eatInOrderMenuRepository.findAllByIdIn(command.menuIds());

@@ -18,7 +18,6 @@ public class EatInOrder {
     private final EatInOrderLineItems eatInOrderLineItems;
     private final OrderTableId orderTableId;
 
-
     public EatInOrder(final List<EatInOrderLineItem> eatInOrderLineItems, final EatInOrderMenus eatInOrderMenus, final OrderTableId orderTableId) {
         this(new EatInOrderId(), EatInOrderStatus.WAITING, new EatInOrderDateTime(), new EatInOrderLineItems(eatInOrderMenus, eatInOrderLineItems), orderTableId);
     }

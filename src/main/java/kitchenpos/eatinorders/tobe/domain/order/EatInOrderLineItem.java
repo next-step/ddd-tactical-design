@@ -2,7 +2,6 @@ package kitchenpos.eatinorders.tobe.domain.order;
 
 import kitchenpos.eatinorders.tobe.domain.order.vo.*;
 
-import java.util.Objects;
 import java.util.UUID;
 
 import static java.util.Objects.*;
