@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@DisplayName("주문 항목 메뉴 테스트")
 class EatInOrderLineItemMenuTest {
 
     @DisplayName("식별자가 주문 항목 메뉴의 메뉴 식별자와 일치하면 true 를 반환한다.")

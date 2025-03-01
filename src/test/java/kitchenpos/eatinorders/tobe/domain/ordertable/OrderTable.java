@@ -50,4 +50,9 @@ public class OrderTable {
     public int numberOfGuests() {
         return numberOfGuests.getValue();
     }
+
+    public void clear() {
+        this.numberOfGuests = new NumberOfGuests(0);
+        this.occupied = new Occupied(false);
+    }
 }

@@ -57,4 +57,14 @@ public class OrderTableTest {
 
         assertThat(orderTable.numberOfGuests()).isEqualTo(numberOfGuests);
     }
+
+    @DisplayName("사용중인 테이블을 비운다")
+    @Test
+    void clear() {
+        final OrderTable orderTable = new OrderTable("1번", 10, true);
+        orderTable.clear();
+
+        assertThat(orderTable.numberOfGuests()).isZero();
+        assertThat(orderTable.isOccupiedValue()).isFalse();
+    }
 }

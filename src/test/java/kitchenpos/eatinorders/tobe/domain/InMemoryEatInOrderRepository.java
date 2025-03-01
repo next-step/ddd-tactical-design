@@ -1,8 +1,11 @@
 package kitchenpos.eatinorders.tobe.domain;
 
+import kitchenpos.eatinorders.domain.OrderStatus;
 import kitchenpos.eatinorders.tobe.domain.order.EatInOrder;
 import kitchenpos.eatinorders.tobe.domain.order.EatInOrderRepository;
+import kitchenpos.eatinorders.tobe.domain.order.EatInOrderStatus;
 import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderId;
+import kitchenpos.eatinorders.tobe.domain.ordertable.vo.OrderTableId;
 
 import java.util.*;
 
@@ -32,5 +35,11 @@ public class InMemoryEatInOrderRepository implements EatInOrderRepository {
     @Override
     public List<EatInOrder> findAll() {
         return new ArrayList<>(eatInOrders.values());
+    }
+
+    @Override
+    public boolean existsByOrderTableAndStatusNot(final OrderTableId orderTableId, final EatInOrderStatus orderStatus) {
+        return eatInOrders.values().stream()
+                .allMatch(order -> order.isSameOrderTable(orderTableId) && order.isSameStatus(orderStatus));
     }
 }

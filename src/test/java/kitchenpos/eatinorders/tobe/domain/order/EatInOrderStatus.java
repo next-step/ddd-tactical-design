@@ -1,5 +1,7 @@
 package kitchenpos.eatinorders.tobe.domain.order;
 
+import kitchenpos.eatinorders.domain.OrderStatus;
+
 public enum EatInOrderStatus {
     WAITING, ACCEPTED, SERVED, COMPLETED;
 
@@ -22,5 +24,9 @@ public enum EatInOrderStatus {
             return COMPLETED;
         }
         throw new IllegalArgumentException();
+    }
+
+    public boolean isSameStatus(final EatInOrderStatus orderStatus) {
+        return this == orderStatus;
     }
 }

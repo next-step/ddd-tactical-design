@@ -1,5 +1,6 @@
 package kitchenpos.eatinorders.tobe.domain.order;
 
+import kitchenpos.eatinorders.domain.OrderStatus;
 import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderId;
 import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTable;
 import kitchenpos.eatinorders.tobe.domain.ordertable.vo.OrderTableId;
@@ -63,5 +64,13 @@ public class EatInOrder {
 
     public void completed() {
         this.eatInOrderStatus = eatInOrderStatus.completed();
+    }
+
+    public boolean isSameOrderTable(final OrderTableId orderTableId) {
+        return this.orderTableId.equals(orderTableId);
+    }
+
+    public boolean isSameStatus(final EatInOrderStatus orderStatus) {
+        return this.eatInOrderStatus.isSameStatus(orderStatus);
     }
 }

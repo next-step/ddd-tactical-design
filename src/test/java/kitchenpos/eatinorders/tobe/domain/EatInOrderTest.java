@@ -15,6 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+@DisplayName("매장 주문 테스트")
 public class EatInOrderTest {
 
     @DisplayName("주문 테이블이 없으면 매장 주문을 생성할 수 없다.")
