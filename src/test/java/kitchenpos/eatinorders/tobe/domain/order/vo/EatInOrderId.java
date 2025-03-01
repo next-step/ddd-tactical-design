@@ -5,8 +5,13 @@ import java.util.UUID;
 public class EatInOrderId {
     private final UUID value;
 
+
     public EatInOrderId() {
         this(UUID.randomUUID());
+    }
+
+    public EatInOrderId(final String value) {
+        this(UUID.fromString(value));
     }
 
     public EatInOrderId(final UUID value) {

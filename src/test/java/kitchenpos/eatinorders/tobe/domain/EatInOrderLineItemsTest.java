@@ -1,7 +1,6 @@
 package kitchenpos.eatinorders.tobe.domain;
 
 import kitchenpos.eatinorders.tobe.domain.order.EatInOrderLineItem;
-import kitchenpos.eatinorders.tobe.domain.order.EatInOrderLineItemMenu;
 import kitchenpos.eatinorders.tobe.domain.order.EatInOrderLineItems;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,8 +22,7 @@ class EatInOrderLineItemsTest {
     @ParameterizedTest(name = "{index}. 메뉴 가격: {0}, 주문 항목 메뉴 가격: {1}")
     void isSamePrice(final int menuPrice, final int expectedPrice) {
         final UUID menuId = UUID.randomUUID();
-        final EatInOrderLineItemMenu eatInOrderLineItemMenu = new EatInOrderLineItemMenu(menuId, "후라이드치킨", menuPrice);
-        final EatInOrderLineItem eatInOrderLineItem = new EatInOrderLineItem(eatInOrderLineItemMenu, 1);
+        final EatInOrderLineItem eatInOrderLineItem = new EatInOrderLineItem(menuId, "후라이드치킨", menuPrice, 1);
         final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(List.of(eatInOrderLineItem));
 
         assertThat(eatInOrderLineItems.isSamePrice(menuId, expectedPrice)).isTrue();
@@ -35,8 +33,7 @@ class EatInOrderLineItemsTest {
     @ParameterizedTest(name = "{index}. 메뉴 가격: {0}, 주문 항목 메뉴 가격: {1}")
     void isNotSamePrice(final int menuPrice, final int expectedPrice) {
         final UUID menuId = UUID.randomUUID();
-        final EatInOrderLineItemMenu eatInOrderLineItemMenu = new EatInOrderLineItemMenu(menuId, "후라이드치킨", menuPrice);
-        final EatInOrderLineItem eatInOrderLineItem = new EatInOrderLineItem(eatInOrderLineItemMenu, 1);
+        final EatInOrderLineItem eatInOrderLineItem = new EatInOrderLineItem(menuId, "후라이드치킨", menuPrice, 1);
         final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(List.of(eatInOrderLineItem));
 
         assertThat(eatInOrderLineItems.isSamePrice(menuId, expectedPrice)).isFalse();
@@ -47,8 +44,7 @@ class EatInOrderLineItemsTest {
     @ParameterizedTest(name = "메뉴 가격: {0}")
     void isSamePriceWithEmptyMenu(final int menuPrice) {
         final UUID menuId = UUID.randomUUID();
-        final EatInOrderLineItemMenu eatInOrderLineItemMenu = new EatInOrderLineItemMenu(menuId, "후라이드치킨", menuPrice);
-        final EatInOrderLineItem eatInOrderLineItem = new EatInOrderLineItem(eatInOrderLineItemMenu, 1);
+        final EatInOrderLineItem eatInOrderLineItem = new EatInOrderLineItem(menuId, "후라이드치킨", menuPrice, 1);
         final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(List.of(eatInOrderLineItem));
 
         assertThatThrownBy(() -> eatInOrderLineItems.isSamePrice(UUID.randomUUID(), menuPrice))
@@ -59,12 +55,9 @@ class EatInOrderLineItemsTest {
     @Test
     void menuIds() {
         final UUID firstMenuId = UUID.randomUUID();
-        final EatInOrderLineItemMenu firstEatInOrderLineItemMenu = new EatInOrderLineItemMenu(firstMenuId, "후라이드치킨", 16_000);
-        final EatInOrderLineItem firstEatInOrderLineItem = new EatInOrderLineItem(firstEatInOrderLineItemMenu, 1);
-
+        final EatInOrderLineItem firstEatInOrderLineItem = new EatInOrderLineItem(firstMenuId, "후라이드치킨", 16_000, 1);
         final UUID secondMenuId = UUID.randomUUID();
-        final EatInOrderLineItemMenu secondEatInOrderLineItemMenu = new EatInOrderLineItemMenu(secondMenuId, "후라이드치킨", 16_000);
-        final EatInOrderLineItem secondEatInOrderLineItem = new EatInOrderLineItem(secondEatInOrderLineItemMenu, 1);
+        final EatInOrderLineItem secondEatInOrderLineItem = new EatInOrderLineItem(secondMenuId, "후라이드치킨", 16_000, 1);
 
         final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(List.of(firstEatInOrderLineItem, secondEatInOrderLineItem));
         final List<UUID> actual = eatInOrderLineItems.menuIds();
@@ -76,12 +69,10 @@ class EatInOrderLineItemsTest {
     @Test
     void size() {
         final UUID firstMenuId = UUID.randomUUID();
-        final EatInOrderLineItemMenu firstEatInOrderLineItemMenu = new EatInOrderLineItemMenu(firstMenuId, "후라이드치킨", 16_000);
-        final EatInOrderLineItem firstEatInOrderLineItem = new EatInOrderLineItem(firstEatInOrderLineItemMenu, 1);
+        final EatInOrderLineItem firstEatInOrderLineItem = new EatInOrderLineItem(firstMenuId, "후라이드치킨", 16_000, 1);
 
         final UUID secondMenuId = UUID.randomUUID();
-        final EatInOrderLineItemMenu secondEatInOrderLineItemMenu = new EatInOrderLineItemMenu(secondMenuId, "후라이드치킨", 16_000);
-        final EatInOrderLineItem secondEatInOrderLineItem = new EatInOrderLineItem(secondEatInOrderLineItemMenu, 1);
+        final EatInOrderLineItem secondEatInOrderLineItem = new EatInOrderLineItem(secondMenuId, "후라이드치킨", 16_000, 1);
 
         final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(List.of(firstEatInOrderLineItem, secondEatInOrderLineItem));
         final int actual = eatInOrderLineItems.size();

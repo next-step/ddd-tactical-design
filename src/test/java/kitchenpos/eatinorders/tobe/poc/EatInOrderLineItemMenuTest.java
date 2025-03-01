@@ -1,6 +1,6 @@
-package kitchenpos.eatinorders.tobe.domain;
+package kitchenpos.eatinorders.tobe.poc;
 
-import kitchenpos.eatinorders.tobe.domain.order.EatInOrderLineItemMenu;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -10,6 +10,8 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Deprecated
+@Disabled
 @DisplayName("주문 항목 메뉴 테스트")
 class EatInOrderLineItemMenuTest {
 

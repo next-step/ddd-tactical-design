@@ -1,4 +1,6 @@
-package kitchenpos.eatinorders.tobe.domain.order;
+package kitchenpos.eatinorders.tobe.poc;
+
+import kitchenpos.eatinorders.tobe.domain.order.EatInOrderTable;
 
 import java.util.UUID;
 

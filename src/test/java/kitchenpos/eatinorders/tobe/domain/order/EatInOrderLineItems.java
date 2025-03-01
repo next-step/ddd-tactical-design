@@ -49,7 +49,7 @@ public class EatInOrderLineItems {
         if(!eatInOrderMenus.isDisplayed(eatInOrderLineItem.menuId())) {
             throw new IllegalArgumentException();
         }
-        if(!eatInOrderMenus.isSamePrice(eatInOrderLineItem.menuId(), eatInOrderLineItem.menuPrice())) {
+        if(!eatInOrderMenus.isSamePrice(eatInOrderLineItem.menuId(), eatInOrderLineItem.orderLineItemPrice())) {
             throw new IllegalArgumentException();
         }
     }

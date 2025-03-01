@@ -1,6 +1,6 @@
 package kitchenpos.eatinorders.tobe.infrastructure;
 
-import kitchenpos.eatinorders.tobe.domain.order.EatInOrderLineItemMenu;
+import kitchenpos.eatinorders.tobe.poc.EatInOrderLineItemMenu;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import javax.sql.DataSource;
 import java.util.List;
 
+@Deprecated
 @Component
 public class JdbcEatInOrderLineItemMenuDao implements EatInOrderLineItemMenuDao {
 
@@ -22,6 +23,7 @@ public class JdbcEatInOrderLineItemMenuDao implements EatInOrderLineItemMenuDao 
         this.orderLineItemMenuJdbcInsert = new SimpleJdbcInsert(dataSource)
                 .withTableName("eat_in_order_line_item_menus")
                 .usingGeneratedKeyColumns(SEQ);
+        throw new UnsupportedOperationException("Deprecated 클래스입니다.");
     }
 
     @Override

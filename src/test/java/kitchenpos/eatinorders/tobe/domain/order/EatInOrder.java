@@ -17,35 +17,30 @@ public class EatInOrder {
     private final EatInOrderLineItems eatInOrderLineItems;
     private final OrderTableId orderTableId;
 
-    public EatInOrder(final EatInOrderLineItems eatInOrderLineItems, final EatInOrderMenus eatInOrderMenus, final OrderTable orderTable) {
-        this(new EatInOrderId(), EatInOrderStatus.WAITING, new EatInOrderDateTime(), eatInOrderLineItems, eatInOrderMenus, orderTable);
+    public EatInOrder(final EatInOrderLineItems eatInOrderLineItems, final EatInOrderMenus eatInOrderMenus, final OrderTableId orderTableId) {
+        this(new EatInOrderId(), EatInOrderStatus.WAITING, new EatInOrderDateTime(), eatInOrderLineItems, eatInOrderMenus, orderTableId);
     }
 
     public EatInOrder(final EatInOrderId id, final EatInOrderStatus eatInOrderStatus,
                       final EatInOrderDateTime eatInOrderDateTime, final EatInOrderLineItems eatInOrderLineItems,
-                      final EatInOrderMenus eatInOrderMenus, final OrderTable orderTable) {
-        verify(id, eatInOrderStatus, eatInOrderDateTime, eatInOrderLineItems, eatInOrderMenus, orderTable);
+                      final EatInOrderMenus eatInOrderMenus, final OrderTableId orderTableId) {
+        verify(id, eatInOrderStatus, eatInOrderDateTime, eatInOrderLineItems, eatInOrderMenus, orderTableId);
         this.id = id;
         this.eatInOrderStatus = eatInOrderStatus;
         this.eatInOrderDateTime = eatInOrderDateTime;
         this.eatInOrderLineItems = eatInOrderLineItems;
-        this.orderTableId = Optional.ofNullable(orderTable)
-                .map(OrderTable::id)
-                .orElseThrow(IllegalArgumentException::new);
+        this.orderTableId = orderTableId;
         eatInOrderLineItems.setEatInOrderMenuId(id);
     }
 
     private void verify(final EatInOrderId id, final EatInOrderStatus eatInOrderStatus,
                         final EatInOrderDateTime eatInOrderDateTime, final EatInOrderLineItems eatInOrderLineItems,
-                        final EatInOrderMenus eatInOrderMenus, final OrderTable orderTable) {
+                        final EatInOrderMenus eatInOrderMenus, final OrderTableId orderTable) {
         if (isNull(id) || isNull(eatInOrderStatus) || isNull(eatInOrderDateTime) ||
                 isNull(eatInOrderLineItems) || isNull(eatInOrderMenus) || isNull(orderTable)) {
             throw new IllegalArgumentException();
         }
         eatInOrderLineItems.verify(eatInOrderMenus);
-        if (!orderTable.isOccupiedValue()) {
-            throw new IllegalArgumentException();
-        }
     }
 
     public EatInOrderId getId() {

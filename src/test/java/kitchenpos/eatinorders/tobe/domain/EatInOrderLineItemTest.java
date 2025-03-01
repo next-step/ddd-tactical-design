@@ -1,7 +1,6 @@
 package kitchenpos.eatinorders.tobe.domain;
 
 import kitchenpos.eatinorders.tobe.domain.order.EatInOrderLineItem;
-import kitchenpos.eatinorders.tobe.domain.order.EatInOrderLineItemMenu;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -17,8 +16,7 @@ class EatInOrderLineItemTest {
     void menuIdValue() {
         final UUID menuId = UUID.randomUUID();
         final EatInOrderLineItem eatInOrderLineItem = new EatInOrderLineItem(
-                new EatInOrderLineItemMenu(menuId, "후라이드치킨", 16_000),
-                1
+                menuId, "후라이드치킨", 16_000, 1
         );
 
         final UUID actual = eatInOrderLineItem.menuId();

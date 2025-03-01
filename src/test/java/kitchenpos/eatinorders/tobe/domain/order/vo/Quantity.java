@@ -3,9 +3,9 @@ package kitchenpos.eatinorders.tobe.domain.order.vo;
 import java.util.Objects;
 
 public class Quantity {
-    private final long value;
+    private final int value;
 
-    public Quantity(final long value) {
+    public Quantity(final int value) {
         this.value = value;
     }
 

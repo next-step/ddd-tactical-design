@@ -2,12 +2,10 @@ package kitchenpos.eatinorders.tobe.application;
 
 import kitchenpos.eatinorders.tobe.application.dto.CreateEatInOrderCommand;
 import kitchenpos.eatinorders.tobe.application.dto.CreateEatInOrderLineItemCommand;
-import kitchenpos.eatinorders.tobe.application.dto.CreateEatInOrderLineItemMenuCommand;
 import kitchenpos.eatinorders.tobe.domain.InMemoryEatInOrderMenuRepository;
 import kitchenpos.eatinorders.tobe.domain.InMemoryEatInOrderRepository;
 import kitchenpos.eatinorders.tobe.domain.order.*;
 import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderId;
-import kitchenpos.eatinorders.tobe.domain.order.vo.Quantity;
 import kitchenpos.eatinorders.tobe.domain.ordertable.InMemoryOrderTableRepository;
 import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTable;
 import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTableRepository;
@@ -27,6 +25,9 @@ public class EatInOrderService {
         final EatInOrderMenus eatInOrderMenus = eatInOrderMenuRepository.findAllByIdIn(command.menuIds());
         final OrderTable orderTable = orderTableRepository.findById(new OrderTableId(command.orderTableId()))
                 .orElseThrow(IllegalArgumentException::new);
+        if (!orderTable.isOccupiedValue()) {
+            throw new IllegalArgumentException();
+        }
         final EatInOrder eatInOrder = eatInOrder(command, eatInOrderMenus, orderTable);
         return eatInOrderRepository.save(eatInOrder);
     }
@@ -60,17 +61,11 @@ public class EatInOrderService {
         final List<CreateEatInOrderLineItemCommand> createEatInOrderLineItemCommands = command.lineItems();
         final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(createEatInOrderLineItemCommands.stream()
                 .map(eatInOrderLineItemCommand -> new EatInOrderLineItem(
-                        null,
-                        eatInOrderLineItemMenu(eatInOrderLineItemCommand.eatInOrderLineItemMenuCommand()),
-                        new Quantity(eatInOrderLineItemCommand.quantity()))
+                        eatInOrderLineItemCommand.menuId(),
+                        eatInOrderLineItemCommand.name(),
+                        eatInOrderLineItemCommand.price(),
+                        eatInOrderLineItemCommand.quantity())
                 ).toList());
-        return new EatInOrder(eatInOrderLineItems, eatInOrderMenus, orderTable);
-    }
-
-    private EatInOrderLineItemMenu eatInOrderLineItemMenu(final CreateEatInOrderLineItemMenuCommand command) {
-        final UUID menuId = command.menuId();
-        final String name = command.name();
-        final int price = command.price();
-        return new EatInOrderLineItemMenu(menuId, name, price);
+        return new EatInOrder(eatInOrderLineItems, eatInOrderMenus, orderTable.id());
     }
 }

@@ -2,6 +2,7 @@ package kitchenpos.eatinorders.tobe.domain.order;
 
 import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderId;
 import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderLineItemId;
+import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderLineItemPrice;
 import kitchenpos.eatinorders.tobe.domain.order.vo.Quantity;
 
 import java.util.UUID;
@@ -9,47 +10,44 @@ import java.util.UUID;
 public class EatInOrderLineItem {
 
     private final EatInOrderLineItemId id;
-    private final EatInOrderLineItemMenu eatInOrderLineItemMenu;
+    private final UUID menuId;
+    private final String name;
+    private final EatInOrderLineItemPrice price;
     private final Quantity quantity;
     private EatInOrderId eatInOrderId;
 
-    public EatInOrderLineItem(final EatInOrderLineItemMenu eatInOrderLineItemMenu, final int quantity) {
-        this(new EatInOrderLineItemId(), eatInOrderLineItemMenu, new Quantity(quantity));
-    }
-
-    public EatInOrderLineItem(final EatInOrderLineItemId id, final EatInOrderLineItemMenu eatInOrderLineItemMenu, final int quantity) {
-        this(id, eatInOrderLineItemMenu, new Quantity(quantity));
+    public EatInOrderLineItem(final UUID menuId, final String name, final int price, final int quantity) {
+        this(new EatInOrderLineItemId(), menuId, name, new EatInOrderLineItemPrice(price), new Quantity(quantity));
     }
 
     public EatInOrderLineItem(
             final EatInOrderLineItemId id,
-            final EatInOrderLineItemMenu eatInOrderLineItemMenu,
+            final UUID menuId,
+            final String name,
+            final EatInOrderLineItemPrice price,
             final Quantity quantity
     ) {
         this.id = id;
-        this.eatInOrderLineItemMenu = eatInOrderLineItemMenu;
+        this.menuId = menuId;
+        this.name = name;
+        this.price = price;
         this.quantity = quantity;
-        this.eatInOrderLineItemMenu.setEatInOrderLineItemSeq(id);
     }
 
     public boolean isSameMenu(final UUID menuId) {
-        return eatInOrderLineItemMenu.isSameMenu(menuId);
+        return this.menuId.equals(menuId);
     }
 
     public boolean isSamePrice(final int menuPrice) {
-        return eatInOrderLineItemMenu.isSamePrice(menuPrice);
+        return price.isSamePrice(menuPrice);
     }
 
     public UUID menuId() {
-        return eatInOrderLineItemMenu.menuId();
+        return menuId;
     }
 
-    public int menuPrice() {
-        return eatInOrderLineItemMenu.priceValue();
-    }
-
-    public EatInOrderLineItemMenu eatInOrderLineItemMenu() {
-        return eatInOrderLineItemMenu;
+    public int orderLineItemPrice() {
+        return price.value();
     }
 
     public UUID eatInOrderIdValue() {
@@ -66,5 +64,17 @@ public class EatInOrderLineItem {
 
     public UUID idValue() {
         return id.getValue();
+    }
+
+    public String name() {
+        return name;
+    }
+
+    public int priceValue() {
+        return price.value();
+    }
+
+    public EatInOrderId eatInOrderId() {
+        return eatInOrderId;
     }
 }

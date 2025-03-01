@@ -14,6 +14,10 @@ public class EatInOrderLineItemId {
         this.value = value;
     }
 
+    public EatInOrderLineItemId(final String id) {
+        this(UUID.fromString(id));
+    }
+
     public UUID getValue() {
         return value;
     }

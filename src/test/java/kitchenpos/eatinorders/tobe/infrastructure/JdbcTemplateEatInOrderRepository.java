@@ -13,14 +13,11 @@ import java.util.Optional;
 public class JdbcTemplateEatInOrderRepository implements EatInOrderRepository {
 
     private final EatInOrderLineItemDao eatInOrderLineItemDao;
-    private final EatInOrderLineItemMenuDao eatInOrderLineItemMenuDao;
     private final EatInOrderDao eatInOrderDao;
 
     public JdbcTemplateEatInOrderRepository(final EatInOrderLineItemDao eatInOrderLineItemDao,
-                                            final EatInOrderLineItemMenuDao eatInOrderLineItemMenuDao,
                                             final EatInOrderDao eatInOrderDao) {
         this.eatInOrderLineItemDao = eatInOrderLineItemDao;
-        this.eatInOrderLineItemMenuDao = eatInOrderLineItemMenuDao;
         this.eatInOrderDao = eatInOrderDao;
     }
 
@@ -28,27 +25,24 @@ public class JdbcTemplateEatInOrderRepository implements EatInOrderRepository {
     @Override
     public EatInOrder save(final EatInOrder eatInOrder) {
         eatInOrderDao.save(eatInOrder);
-        final List<EatInOrderLineItem> eatInOrderLineItems = eatInOrder.eatInOrderLineItems();
         eatInOrderLineItemDao.saveAll(eatInOrder.eatInOrderLineItems());
-        final List<EatInOrderLineItemMenu> eatInOrderLineItemMenus = eatInOrderLineItems.stream()
-                .map(EatInOrderLineItem::eatInOrderLineItemMenu)
-                .toList();
-        eatInOrderLineItemMenuDao.saveAll(eatInOrderLineItemMenus);
         return eatInOrder;
     }
 
     @Override
     public Optional<EatInOrder> findById(final EatInOrderId id) {
-        return Optional.empty();
+        final List<EatInOrderLineItem> eatInOrderLineItems = eatInOrderLineItemDao.findAllByEatInOrderId(id);
+        return Optional.ofNullable(eatInOrderDao.findById(id, eatInOrderLineItems));
     }
 
     @Override
     public List<EatInOrder> findAll() {
-        return List.of();
+        final List<EatInOrderLineItem> eatInOrderLineItems = eatInOrderLineItemDao.findAll();
+        return eatInOrderDao.findAll(eatInOrderLineItems);
     }
 
     @Override
     public boolean existsByOrderTableAndStatusNot(final OrderTableId orderTableId, final EatInOrderStatus eatInOrderStatus) {
-        return false;
+        return eatInOrderDao.existsByOrderTableAndStatusNot(orderTableId, eatInOrderStatus);
     }
 }

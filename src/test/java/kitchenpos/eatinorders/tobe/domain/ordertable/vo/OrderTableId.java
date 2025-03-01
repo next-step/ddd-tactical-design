@@ -10,6 +10,10 @@ public class OrderTableId {
         this(UUID.randomUUID());
     }
 
+    public OrderTableId(final String value) {
+        this(UUID.fromString(value));
+    }
+
     public OrderTableId(final UUID value) {
         this.value = value;
     }

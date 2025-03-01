@@ -1,9 +1,9 @@
 package kitchenpos.eatinorders.tobe.domain.order.vo;
 
-public class EatInOrderLineItemMenuPrice {
+public class EatInOrderLineItemPrice {
     private final int value;
 
-    public EatInOrderLineItemMenuPrice(final int value) {
+    public EatInOrderLineItemPrice(final int value) {
         this.value = value;
     }
 
