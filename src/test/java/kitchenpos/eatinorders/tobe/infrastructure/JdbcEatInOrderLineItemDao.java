@@ -31,10 +31,10 @@ public class JdbcEatInOrderLineItemDao implements EatInOrderLineItemDao {
     public void saveAll(final List<EatInOrderLineItem> eatInOrderLineItems) {
         final List<MapSqlParameterSource> mapSqlParameterSources = eatInOrderLineItems.stream()
                 .map(eatInOrderLineItem -> new MapSqlParameterSource()
-                        .addValue("id", eatInOrderLineItem.idValue())
+                        .addValue("id", eatInOrderLineItem.eatInOrderLineItemIdValue())
                         .addValue("menu_id", eatInOrderLineItem.menuId())
-                        .addValue("name", eatInOrderLineItem.nameValue())
-                        .addValue("price", eatInOrderLineItem.priceValue())
+                        .addValue("name", eatInOrderLineItem.orderLineItemNameValue())
+                        .addValue("price", eatInOrderLineItem.orderLineItemPriceValue())
                         .addValue("eat_in_order_id", eatInOrderLineItem.eatInOrderIdValue())
                         .addValue("quantity", eatInOrderLineItem.quantityValue())
                 ).toList();

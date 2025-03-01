@@ -18,7 +18,6 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("매장 주문 테스트")
 public class EatInOrderTest {
@@ -41,7 +40,7 @@ public class EatInOrderTest {
                 .isExactlyInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("주문 항목 메뉴와 메뉴의 사이즈가 일치하지 않으면 매장 주문을 생성할 수 없다.")
+    @DisplayName("주문 항목 메뉴와 메뉴의 개수가 일치하지 않으면 매장 주문을 생성할 수 없다.")
     @Test
     void createWithDifferentMenuSize() {
         final UUID firstMenuId = UUID.randomUUID();

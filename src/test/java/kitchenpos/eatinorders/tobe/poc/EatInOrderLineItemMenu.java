@@ -41,7 +41,7 @@ public class EatInOrderLineItemMenu {
     }
 
     public int priceValue() {
-        return price.value();
+        return price.getValue();
     }
 
     public UUID eatInOrderLineItemIdValue() {

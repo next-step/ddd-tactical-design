@@ -9,7 +9,7 @@ public class Quantity {
         this.value = value;
     }
 
-    public long getValue() {
+    public int getValue() {
         return value;
     }
 

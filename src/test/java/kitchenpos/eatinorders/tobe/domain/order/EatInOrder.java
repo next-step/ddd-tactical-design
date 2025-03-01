@@ -30,7 +30,7 @@ public class EatInOrder {
         this.eatInOrderDateTime = eatInOrderDateTime;
         this.eatInOrderLineItems = eatInOrderLineItems;
         this.orderTableId = orderTableId;
-        eatInOrderLineItems.setEatInOrderMenuId(id);
+        eatInOrderLineItems.setEatInOrderId(id);
     }
 
     private void verify(final EatInOrderId id, final EatInOrderStatus eatInOrderStatus,

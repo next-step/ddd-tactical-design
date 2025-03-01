@@ -18,6 +18,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import static java.util.stream.Collectors.groupingBy;
 
@@ -45,7 +46,7 @@ public class JdbcTemplateEatInOrderDao implements EatInOrderDao {
 
     @Override
     public EatInOrder findById(final EatInOrderId id, final List<EatInOrderLineItem> eatInOrderLineItems) {
-        final Map<EatInOrderId, List<EatInOrderLineItem>> eatInOrderIdListMap = eatInOrderLineItemMap(eatInOrderLineItems);
+        final Map<UUID, List<EatInOrderLineItem>> eatInOrderIdListMap = eatInOrderLineItemMap(eatInOrderLineItems);
         final String sql = "SELECT id, order_table_id, order_datetime, order_status FROM eat_in_orders WHERE id = :id";
         final SqlParameterSource parameterSource = new MapSqlParameterSource().addValue("id", id);
         return jdbcTemplate.queryForObject(sql, parameterSource, (resultSet, rowNumber) -> toEatInOrder(resultSet, eatInOrderIdListMap));
@@ -53,7 +54,7 @@ public class JdbcTemplateEatInOrderDao implements EatInOrderDao {
 
     @Override
     public List<EatInOrder> findAll(final List<EatInOrderLineItem> eatInOrderLineItems) {
-        final Map<EatInOrderId, List<EatInOrderLineItem>> eatInOrderIdListMap = eatInOrderLineItemMap(eatInOrderLineItems);
+        final Map<UUID, List<EatInOrderLineItem>> eatInOrderIdListMap = eatInOrderLineItemMap(eatInOrderLineItems);
         final String sql = "SELECT id, order_table_id, order_datetime, order_status FROM eat_in_orders";
         return jdbcTemplate.query(sql, (resultSet, rowNumber) -> toEatInOrder(resultSet, eatInOrderIdListMap));
     }
@@ -67,15 +68,15 @@ public class JdbcTemplateEatInOrderDao implements EatInOrderDao {
         return jdbcTemplate.queryForObject(sql, parameterSource, Integer.class) > 0;
     }
 
-    private Map<EatInOrderId, List<EatInOrderLineItem>> eatInOrderLineItemMap(final List<EatInOrderLineItem> eatInOrderLineItems) {
+    private Map<UUID, List<EatInOrderLineItem>> eatInOrderLineItemMap(final List<EatInOrderLineItem> eatInOrderLineItems) {
         return eatInOrderLineItems.stream()
-                .collect(groupingBy(EatInOrderLineItem::eatInOrderId));
+                .collect(groupingBy(EatInOrderLineItem::eatInOrderIdValue));
     }
 
-    private EatInOrder toEatInOrder(final ResultSet resultSet, final Map<EatInOrderId, List<EatInOrderLineItem>> eatInOrderIdListMap) throws SQLException {
-        final EatInOrderId eatInOrderId = new EatInOrderId(resultSet.getString("id"));
+    private EatInOrder toEatInOrder(final ResultSet resultSet, final Map<UUID, List<EatInOrderLineItem>> eatInOrderIdListMap) throws SQLException {
+        final UUID eatInOrderId = UUID.fromString(resultSet.getString("id"));
         return new EatInOrder(
-                eatInOrderId,
+                new EatInOrderId(eatInOrderId),
                 EatInOrderStatus.of(resultSet.getString("eat_in_order_status")),
                 new EatInOrderDateTime(resultSet.getTimestamp("order_datetime").toLocalDateTime()),
                 new EatInOrderLineItems(eatInOrderIdListMap.get(eatInOrderId)),

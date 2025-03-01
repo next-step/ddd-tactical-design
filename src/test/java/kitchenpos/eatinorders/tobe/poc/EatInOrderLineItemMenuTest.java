@@ -63,7 +63,7 @@ class EatInOrderLineItemMenuTest {
 
     @DisplayName("주문 항목 메뉴의 식별자를 반환한다.")
     @Test
-    void menuIdValue() {
+    void menuEatInOrderLineItemIdValue() {
         final UUID menuId = UUID.randomUUID();
         final EatInOrderLineItemMenu eatInOrderLineItemMenu = new EatInOrderLineItemMenu(menuId, "후라이드치킨", 16_000);
 

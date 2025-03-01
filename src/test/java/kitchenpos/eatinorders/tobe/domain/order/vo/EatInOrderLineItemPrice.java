@@ -11,7 +11,7 @@ public class EatInOrderLineItemPrice {
         return this.value == value;
     }
 
-    public int value() {
+    public int getValue() {
         return value;
     }
 }

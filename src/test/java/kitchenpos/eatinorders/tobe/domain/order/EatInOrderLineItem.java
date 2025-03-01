@@ -5,7 +5,7 @@ import kitchenpos.eatinorders.tobe.domain.order.vo.*;
 import java.util.UUID;
 
 public class EatInOrderLineItem {
-    private final EatInOrderLineItemId id;
+    private final EatInOrderLineItemId eatInOrderLineItemId;
     private final UUID menuId;
     private final EatInOrderLineItemName name;
     private final EatInOrderLineItemPrice price;
@@ -17,33 +17,37 @@ public class EatInOrderLineItem {
     }
 
     public EatInOrderLineItem(
-            final EatInOrderLineItemId id,
+            final EatInOrderLineItemId eatInOrderLineItemId,
             final UUID menuId,
             final EatInOrderLineItemName name,
             final EatInOrderLineItemPrice price,
             final Quantity quantity
     ) {
-        this.id = id;
+        this.eatInOrderLineItemId = eatInOrderLineItemId;
         this.menuId = menuId;
         this.name = name;
         this.price = price;
         this.quantity = quantity;
     }
 
-    public boolean isSameMenu(final UUID menuId) {
-        return this.menuId.equals(menuId);
-    }
-
-    public boolean isSamePrice(final int menuPrice) {
-        return price.isSamePrice(menuPrice);
+    public UUID eatInOrderLineItemIdValue() {
+        return eatInOrderLineItemId.getValue();
     }
 
     public UUID menuId() {
         return menuId;
     }
 
-    public int orderLineItemPrice() {
-        return price.value();
+    public String orderLineItemNameValue() {
+        return name.getValue();
+    }
+
+    public int orderLineItemPriceValue() {
+        return price.getValue();
+    }
+
+    public int quantityValue() {
+        return quantity.getValue();
     }
 
     public UUID eatInOrderIdValue() {
@@ -52,25 +56,5 @@ public class EatInOrderLineItem {
 
     public void setEatInOrderId(final EatInOrderId eatInOrderId) {
         this.eatInOrderId = eatInOrderId;
-    }
-
-    public long quantityValue() {
-        return quantity.getValue();
-    }
-
-    public UUID idValue() {
-        return id.getValue();
-    }
-
-    public String nameValue() {
-        return name.getValue();
-    }
-
-    public int priceValue() {
-        return price.value();
-    }
-
-    public EatInOrderId eatInOrderId() {
-        return eatInOrderId;
     }
 }
