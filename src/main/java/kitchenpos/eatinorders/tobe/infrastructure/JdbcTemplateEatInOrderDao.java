@@ -25,6 +25,12 @@ import static java.util.stream.Collectors.groupingBy;
 @Component
 public class JdbcTemplateEatInOrderDao implements EatInOrderDao {
 
+    private static final String EAT_IN_ORDERS_TABLE = "eat_in_orders";
+    private static final String ID = "id";
+    private static final String EAT_IN_ORDER_STATUS = "eat_in_order_status";
+    private static final String ORDER_DATETIME = "order_datetime";
+    private static final String ORDER_TABLE_ID = "order_table_id";
+
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert eatInOrderJdbcInsert;
     private static final int EXECUTE_FAILED = 0;
@@ -32,7 +38,7 @@ public class JdbcTemplateEatInOrderDao implements EatInOrderDao {
     public JdbcTemplateEatInOrderDao(final DataSource dataSource) {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
         this.eatInOrderJdbcInsert = new SimpleJdbcInsert(dataSource)
-                .withTableName("eat_in_orders");
+                .withTableName(EAT_IN_ORDERS_TABLE);
     }
 
     @Override
@@ -74,13 +80,13 @@ public class JdbcTemplateEatInOrderDao implements EatInOrderDao {
     }
 
     private EatInOrder toEatInOrder(final ResultSet resultSet, final Map<UUID, List<EatInOrderLineItem>> eatInOrderIdListMap) throws SQLException {
-        final UUID eatInOrderId = UUID.fromString(resultSet.getString("id"));
+        final UUID eatInOrderId = UUID.fromString(resultSet.getString(ID));
         return new EatInOrder(
                 new EatInOrderId(eatInOrderId),
-                EatInOrderStatus.of(resultSet.getString("eat_in_order_status")),
-                new EatInOrderDateTime(resultSet.getTimestamp("order_datetime").toLocalDateTime()),
+                EatInOrderStatus.of(resultSet.getString(EAT_IN_ORDER_STATUS)),
+                new EatInOrderDateTime(resultSet.getTimestamp(ORDER_DATETIME).toLocalDateTime()),
                 new EatInOrderLineItems(new NoneEatInOrderMenus(), eatInOrderIdListMap.get(eatInOrderId)),
-                new OrderTableId(resultSet.getString("order_table_id"))
+                new OrderTableId(resultSet.getString(ORDER_TABLE_ID))
         );
     }
 }

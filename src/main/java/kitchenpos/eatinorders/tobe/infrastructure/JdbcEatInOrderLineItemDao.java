@@ -16,27 +16,33 @@ import java.util.UUID;
 @Component
 public class JdbcEatInOrderLineItemDao implements EatInOrderLineItemDao {
 
-    private static final String SEQ = "seq";
+    private static final String EAT_IN_ORDER_LINE_ITEMS_TABLE = "eat_in_order_line_items";
+    private static final String ID = "id";
+    private static final String MENU_ID = "menu_id";
+    private static final String NAME = "name";
+    private static final String PRICE = "price";
+    private static final String EAT_IN_ORDER_ID = "eat_in_order_id";
+    private static final String QUANTITY = "quantity";
+
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert menuProductJdbcInsert;
 
     public JdbcEatInOrderLineItemDao(final DataSource dataSource) {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
         this.menuProductJdbcInsert = new SimpleJdbcInsert(dataSource)
-                .withTableName("eat_in_order_line_items")
-                .usingGeneratedKeyColumns(SEQ);
+                .withTableName(EAT_IN_ORDER_LINE_ITEMS_TABLE);
     }
 
     @Override
     public void saveAll(final List<EatInOrderLineItem> eatInOrderLineItems) {
         final List<MapSqlParameterSource> mapSqlParameterSources = eatInOrderLineItems.stream()
                 .map(eatInOrderLineItem -> new MapSqlParameterSource()
-                        .addValue("id", eatInOrderLineItem.eatInOrderLineItemIdValue())
-                        .addValue("menu_id", eatInOrderLineItem.menuId())
-                        .addValue("name", eatInOrderLineItem.orderLineItemNameValue())
-                        .addValue("price", eatInOrderLineItem.orderLineItemPriceValue())
-                        .addValue("eat_in_order_id", eatInOrderLineItem.eatInOrderIdValue())
-                        .addValue("quantity", eatInOrderLineItem.quantityValue())
+                        .addValue(ID, eatInOrderLineItem.eatInOrderLineItemIdValue())
+                        .addValue(MENU_ID, eatInOrderLineItem.menuId())
+                        .addValue(NAME, eatInOrderLineItem.orderLineItemNameValue())
+                        .addValue(PRICE, eatInOrderLineItem.orderLineItemPriceValue())
+                        .addValue(EAT_IN_ORDER_ID, eatInOrderLineItem.eatInOrderIdValue())
+                        .addValue(QUANTITY, eatInOrderLineItem.quantityValue())
                 ).toList();
         final int[] results = menuProductJdbcInsert.executeBatch(mapSqlParameterSources.toArray(new MapSqlParameterSource[0]));
         if (results.length != eatInOrderLineItems.size()) {
@@ -59,10 +65,10 @@ public class JdbcEatInOrderLineItemDao implements EatInOrderLineItemDao {
 
     private EatInOrderLineItem toEatInOrder(final ResultSet resultSet) throws SQLException {
         return new EatInOrderLineItem(
-                new EatInOrderLineItemId(resultSet.getString("id")),
-                UUID.fromString(resultSet.getString("menu_id")),
-                new EatInOrderLineItemName(resultSet.getString("name")),
-                new EatInOrderLineItemPrice(resultSet.getInt("price")),
-                new Quantity(resultSet.getInt("quantity")));
+                new EatInOrderLineItemId(resultSet.getString(ID)),
+                UUID.fromString(resultSet.getString(MENU_ID)),
+                new EatInOrderLineItemName(resultSet.getString(NAME)),
+                new EatInOrderLineItemPrice(resultSet.getInt(PRICE)),
+                new Quantity(resultSet.getInt(QUANTITY)));
     }
 }
