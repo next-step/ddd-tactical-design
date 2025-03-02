@@ -98,6 +98,12 @@ public class Menu {
         this.price = new MenuPrice(price);
     }
 
+    public void display(MenuProducts menuProducts) {
+        if (this.price.getPrice() > menuProducts.total()) {
+            throw new InvalidMenuPriceException("메뉴 가격은 포함된 상품들의 총 가격보다 클 수 없습니다.");
+        }
+        this.displayed = true;
+    }
     public boolean isDisplayed() {
         return displayed;
     }
