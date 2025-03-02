@@ -35,16 +35,8 @@ public class Price {
         }
     }
 
-    public BigDecimal multiply(BigDecimal bigDecimal) {
-        return price.multiply(bigDecimal);
-    }
-
     public BigDecimal getPrice() {
         return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
     }
 
     @Override
