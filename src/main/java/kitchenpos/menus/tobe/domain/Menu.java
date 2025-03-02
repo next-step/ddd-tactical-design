@@ -86,4 +86,8 @@ public class Menu {
         this.price = new MenuPrice(price);
         this.displayed = displayed;
     }
+
+    public void changeMenuPrice(int price) {
+        this.price = new MenuPrice(price);
+    }
 }
