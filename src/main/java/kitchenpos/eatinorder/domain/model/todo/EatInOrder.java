@@ -10,14 +10,14 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class EatInOrder extends AggregateRoot {
-    private final UUID id;
+    private final EatInOrderId id;
     private EatInOrderStatus status;
     private final LocalDateTime orderDateTime;
     private final EatInOrderLineItems lineItems;
     private final OrderTableId orderTableId;
 
     private EatInOrder(
-            final UUID id,
+            final EatInOrderId id,
             final EatInOrderStatus status,
             final LocalDateTime orderDateTime,
             final EatInOrderLineItems lineItems,
@@ -38,7 +38,7 @@ public class EatInOrder extends AggregateRoot {
             final CreateEatInOrderPolicy createEatInOrderPolicy
     ) {
         createEatInOrderPolicy.validateOrderTableAvailability(orderTableId);
-        return new EatInOrder(id, EatInOrderStatus.WAITING, orderDateTime, EatInOrderLineItems.of(eatInOrderLineItems), OrderTableId.of(orderTableId));
+        return new EatInOrder(EatInOrderId.of(id), EatInOrderStatus.WAITING, orderDateTime, EatInOrderLineItems.of(eatInOrderLineItems), OrderTableId.of(orderTableId));
     }
 
     public static EatInOrder create(
@@ -48,7 +48,7 @@ public class EatInOrder extends AggregateRoot {
             final UUID orderTableId,
             final EatInOrderStatus status
     ) {
-        return new EatInOrder(id, status, orderDateTime, EatInOrderLineItems.of(eatInOrderLineItems), OrderTableId.of(orderTableId));
+        return new EatInOrder(EatInOrderId.of(id), status, orderDateTime, EatInOrderLineItems.of(eatInOrderLineItems), OrderTableId.of(orderTableId));
     }
 
     public void accept() {
@@ -70,11 +70,11 @@ public class EatInOrder extends AggregateRoot {
             throw new IllegalStateException();
         }
         this.status = EatInOrderStatus.COMPLETED;
-        this.registerEvent(new EatInOrderCompletedEvent(this.id));
+        this.registerEvent(new EatInOrderCompletedEvent(getId()));
     }
 
     public UUID getId() {
-        return id;
+        return id.value();
     }
 
     public EatInOrderStatus getStatus() {
