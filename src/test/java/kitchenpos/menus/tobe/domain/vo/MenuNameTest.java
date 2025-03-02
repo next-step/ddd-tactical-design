@@ -27,9 +27,12 @@ class MenuNameTest {
         final var profanities = new FakeProfanitiesClient("욕설", "비속어");
 
         // when & then
-        assertThatIllegalArgumentException()
-                .isThrownBy(() -> new MenuName("욕설", profanities));
-        assertThatIllegalArgumentException()
-                .isThrownBy(() -> new MenuName("비속어", profanities));
+        assertThatThrownBy(() -> new MenuName("욕설", profanities))
+                .isInstanceOf(InvalidMenuNameException.class)
+                .hasMessage("메뉴 이름에는 비속어가 포함되면 안됩니다.");
+
+        assertThatThrownBy(() -> new MenuName("비속어", profanities))
+                .isInstanceOf(InvalidMenuNameException.class)
+                .hasMessage("메뉴 이름에는 비속어가 포함되면 안됩니다.");
     }
 }

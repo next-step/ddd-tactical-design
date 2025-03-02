@@ -23,7 +23,7 @@ public class MenuName {
     public MenuName(String name, ProfanityClient profanityChecker) {
         this(name);
         if (profanityChecker.containsProfanity(name)) {
-            throw new IllegalArgumentException("메뉴 이름에는 비속어가 포함되면 안됩니다.");
+            throw new InvalidMenuNameException("메뉴 이름에는 비속어가 포함되면 안됩니다.");
         }
     }
 }
