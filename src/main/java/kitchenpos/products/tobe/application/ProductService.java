@@ -37,10 +37,7 @@ public class ProductService {
         final String name = request.getName().getName();
         final Price price = new Price(request.getPrice().getPrice());
         final ProductName productName = new ProductName(name, purgomalumClient);
-        final Product product = new Product();
-        product.setId(UUID.randomUUID());
-        product.setName(productName);
-        product.setPrice(price);
+        final Product product = new Product(productName, price);
         return productRepository.save(product);
     }
 

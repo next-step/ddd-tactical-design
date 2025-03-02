@@ -20,6 +20,12 @@ public class Product {
     public Product() {
     }
 
+    public Product(ProductName name, Price price) {
+        this.id = UUID.randomUUID();
+        this.name = name;
+        this.price = price;
+    }
+
     public UUID getId() {
         return id;
     }
