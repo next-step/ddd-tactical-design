@@ -90,4 +90,15 @@ public class Menu {
     public void changeMenuPrice(int price) {
         this.price = new MenuPrice(price);
     }
+
+    public void changeMenuPrice(int price, MenuProducts menuProducts) {
+        if (price > menuProducts.total()) {
+            throw new InvalidMenuPriceException("메뉴 가격은 포함된 상품들의 총 가격보다 클 수 없습니다.");
+        }
+        this.price = new MenuPrice(price);
+    }
+
+    public boolean isDisplayed() {
+        return displayed;
+    }
 }
