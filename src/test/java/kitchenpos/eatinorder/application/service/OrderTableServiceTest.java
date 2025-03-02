@@ -1,9 +1,14 @@
 package kitchenpos.eatinorder.application.service;
 
-import kitchenpos.eatinorder.domain.model.Order;
-import kitchenpos.eatinorder.domain.model.OrderLineItem;
-import kitchenpos.eatinorder.domain.model.OrderTable;
-import kitchenpos.eatinorder.domain.model.OrderType;
+import kitchenpos.MockBeanConfiguration;
+import kitchenpos.eatinorder.application.port.out.MenuEatInOrderLineItemMapper;
+import kitchenpos.eatinorder.application.service.model.ChangeNumberOfGuestsRequest;
+import kitchenpos.eatinorder.application.service.model.CreateEatInOrderRequest;
+import kitchenpos.eatinorder.application.service.model.CreateOrderTableRequest;
+import kitchenpos.eatinorder.application.service.model.OrderLineItemRequest;
+import kitchenpos.eatinorder.domain.model.todo.EatInOrder;
+import kitchenpos.eatinorder.domain.model.todo.EatInOrderLineItem;
+import kitchenpos.eatinorder.domain.model.todo.OrderTable;
 import kitchenpos.menu.adapter.out.persistance.JpaMenuEntityEntityRepository;
 import kitchenpos.menu.adapter.out.persistance.JpaMenuGroupEntityRepository;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuEntity;
@@ -18,6 +23,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
@@ -29,35 +35,39 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
+@Import(MockBeanConfiguration.class)
 public class OrderTableServiceTest {
     private final OrderTableService orderTableService;
     private final EatInOrderService orderService;
     private final SaveProductPort saveProductPort;
     private final JpaMenuGroupEntityRepository menuGroupEntityRepository;
     private final JpaMenuEntityEntityRepository menuEntityRepository;
+    private final MenuEatInOrderLineItemMapper menuEatInOrderLineItemMapper;
 
-    public OrderTableServiceTest(OrderTableService orderTableService, EatInOrderService orderService, SaveProductPort saveProductPort, JpaMenuGroupEntityRepository menuGroupEntityRepository, JpaMenuEntityEntityRepository menuEntityRepository) {
+    public OrderTableServiceTest(OrderTableService orderTableService, EatInOrderService orderService, SaveProductPort saveProductPort, JpaMenuGroupEntityRepository menuGroupEntityRepository, JpaMenuEntityEntityRepository menuEntityRepository, MenuEatInOrderLineItemMapper menuEatInOrderLineItemMapper) {
         this.orderTableService = orderTableService;
         this.orderService = orderService;
         this.saveProductPort = saveProductPort;
         this.menuGroupEntityRepository = menuGroupEntityRepository;
         this.menuEntityRepository = menuEntityRepository;
+        this.menuEatInOrderLineItemMapper = menuEatInOrderLineItemMapper;
     }
 
     @DisplayName("주문 테이블 등록하기")
     @Nested
-    class OrderTableRegisterTest {
+    class OrderTableEntityRegisterTest {
 
         @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
         @DisplayName("주문 테이블을 정상적으로 등록한다")
         @Test
         void create_order_table_successfully() {
             // given
-            OrderTable request = new OrderTable();
-            request.setName("테이블 1");
+            CreateOrderTableRequest request = new CreateOrderTableRequest("테이블 1");
 
             // when
             OrderTable orderTable = orderTableService.create(request);
@@ -65,7 +75,7 @@ public class OrderTableServiceTest {
             // then
             assertAll(
                     () -> assertThat(orderTable.getId()).isNotNull(),
-                    () -> assertThat(orderTable.getName()).isEqualTo(request.getName()),
+                    () -> assertThat(orderTable.getName()).isEqualTo(request.name()),
                     () -> assertThat(orderTable.getNumberOfGuests()).isEqualTo(0),
                     () -> assertThat(orderTable.isOccupied()).isFalse()
             );
@@ -76,7 +86,7 @@ public class OrderTableServiceTest {
         @Test
         void name_must_be_input() {
             // given
-            OrderTable request = createOrderTable(null, 0, false);
+            CreateOrderTableRequest request = new CreateOrderTableRequest(null);
 
             // when
             ThrowableAssert.ThrowingCallable throwingCallable = () -> orderTableService.create(request);
@@ -89,7 +99,7 @@ public class OrderTableServiceTest {
 
     @DisplayName("테이블에 손님 배정하기")
     @Nested
-    class SitOrderTableTest {
+    class SitOrderTableEntityTest {
 
         @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
         @DisplayName("테이블에 손님을 배정한다")
@@ -99,10 +109,10 @@ public class OrderTableServiceTest {
             OrderTable orderTable = createInitializedOrderTable();
 
             // when
-            OrderTable resultOrderTable = orderTableService.sit(orderTable.getId());
+            OrderTable resultOrderTableEntity = orderTableService.sit(orderTable.getId());
 
             // then
-            assertThat(resultOrderTable.isOccupied()).isTrue();
+            assertThat(resultOrderTableEntity.isOccupied()).isTrue();
         }
 
         @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
@@ -133,14 +143,13 @@ public class OrderTableServiceTest {
             OrderTable orderTable = createInitializedOrderTable();
             orderTableService.sit(orderTable.getId());
 
-            OrderTable request = new OrderTable();
-            request.setNumberOfGuests(4);
+            ChangeNumberOfGuestsRequest request = new ChangeNumberOfGuestsRequest(4);
 
             // when
             OrderTable resultOrderTable = orderTableService.changeNumberOfGuests(orderTable.getId(), request);
 
             // then
-            assertThat(resultOrderTable.getNumberOfGuests()).isEqualTo(request.getNumberOfGuests());
+            assertThat(resultOrderTable.getNumberOfGuests()).isEqualTo(request.numberOfGuests());
         }
 
         @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
@@ -149,8 +158,8 @@ public class OrderTableServiceTest {
         void number_of_guests_must_be_positive() {
             // given
             OrderTable orderTable = createInitializedOrderTable();
-            OrderTable request = new OrderTable();
-            request.setNumberOfGuests(-1);
+            orderTableService.sit(orderTable.getId());
+            ChangeNumberOfGuestsRequest request = new ChangeNumberOfGuestsRequest(-1);
 
             // when
             ThrowableAssert.ThrowingCallable throwingCallable = () -> orderTableService.changeNumberOfGuests(orderTable.getId(), request);
@@ -166,8 +175,7 @@ public class OrderTableServiceTest {
         void change_number_of_guests_on_empty_table() {
             // given
             OrderTable orderTable = createInitializedOrderTable();
-            OrderTable request = new OrderTable();
-            request.setNumberOfGuests(4);
+            ChangeNumberOfGuestsRequest request = new ChangeNumberOfGuestsRequest(4);
 
             // when
             ThrowableAssert.ThrowingCallable throwingCallable = () -> orderTableService.changeNumberOfGuests(orderTable.getId(), request);
@@ -180,7 +188,7 @@ public class OrderTableServiceTest {
 
     @DisplayName("테이블 정리하기")
     @Nested
-    class ClearOrderTableTest {
+    class ClearOrderTableEntityTest {
 
         @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
         @DisplayName("테이블을 정리한다")
@@ -204,18 +212,18 @@ public class OrderTableServiceTest {
         @Test
         void clear_order_table_with_completed_order() {
             // given
-            OrderTable orderTable = createInitializedOrderTable();
-            orderTableService.sit(orderTable.getId());
+            OrderTable orderTableEntity = createInitializedOrderTable();
+            orderTableService.sit(orderTableEntity.getId());
 
-            createEatInOrderWithCompleteState(orderTable);
+            createEatInOrderWithCompleteState(orderTableEntity);
 
             // when
-            OrderTable resultOrderTable = orderTableService.clear(orderTable.getId());
+            OrderTable orderTable = orderTableService.clear(orderTableEntity.getId());
 
             // then
             assertAll(
-                    () -> assertThat(resultOrderTable.getNumberOfGuests()).isEqualTo(0),
-                    () -> assertThat(resultOrderTable.isOccupied()).isFalse()
+                    () -> assertThat(orderTable.getNumberOfGuests()).isEqualTo(0),
+                    () -> assertThat(orderTable.isOccupied()).isFalse()
             );
         }
 
@@ -227,7 +235,7 @@ public class OrderTableServiceTest {
             OrderTable orderTable = createInitializedOrderTable();
             orderTableService.sit(orderTable.getId());
 
-            Order order = createEeaInOrder(orderTable);
+            EatInOrder order = createEeaInOrder(orderTable);
             orderService.accept(order.getId());
 
             // when
@@ -237,11 +245,44 @@ public class OrderTableServiceTest {
             assertThatIllegalStateException()
                     .isThrownBy(throwingCallable);
         }
+
+        @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+        @DisplayName("모든 주문이 완료된 테이블을 정리한다")
+        @Test
+        void clearWhenAllOrdersCompleted() {
+            // given
+            OrderTable orderTable = createInitializedOrderTable();
+            orderTableService.sit(orderTable.getId());
+            createEatInOrderWithCompleteState(orderTable);
+
+            // when
+            boolean cleared = orderTableService.clearWhenAllOrdersCompleted(orderTable.getId());
+
+            // then
+            assertThat(cleared).isTrue();
+        }
+
+        @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+        @DisplayName("주문이 완료되지 않은 테이블은 정리할 수 없다")
+        @Test
+        void clearWhenAllOrdersCompletedWithUncompletedOrder() {
+            // given
+            OrderTable orderTable = createInitializedOrderTable();
+            orderTableService.sit(orderTable.getId());
+            createEeaInOrder(orderTable);
+
+            // when
+            boolean cleared = orderTableService.clearWhenAllOrdersCompleted(orderTable.getId());
+
+            // then
+            assertThat(cleared).isFalse();
+        }
     }
+
 
     @DisplayName("주문 테이블 조회하기")
     @Nested
-    class FindAllOrderTablesTest {
+    class FindAllOrderTablesTestEntity {
 
         @SqlGroup({
                 @Sql(value = "/setup.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
@@ -259,11 +300,11 @@ public class OrderTableServiceTest {
     }
 
     private OrderTable createInitializedOrderTable() {
-        OrderTable request = createOrderTable("테이블 1", 0, false);
+        CreateOrderTableRequest request = new CreateOrderTableRequest("테이블 1");
         return orderTableService.create(request);
     }
 
-    private Order createEeaInOrder(OrderTable orderTable) {
+    private EatInOrder createEeaInOrder(OrderTable orderTableEntity) {
         Product product = createProduct(후라이드치킨_PRODUCT_UUID, 후라이드치킨_PRODUCT_NAME, 후라이드치킨_DEFAULT_PRICE);
         saveProductPort.save(product);
 
@@ -274,13 +315,17 @@ public class OrderTableServiceTest {
         MenuEntity menu = createMenu(후라이드치킨_MENU_UUID, 후라이드치킨_MENU_NAME, 후라이드치킨_MENU_DEFAULT_PRICE, 치킨류_MENU_GROUP_UUID, menuGroup, menuProducts);
         menuEntityRepository.save(menu);
 
-        List<OrderLineItem> orderLineItems = List.of(createOrderLineItem(후라이드치킨_MENU_UUID, 2, 후라이드치킨_MENU_DEFAULT_PRICE));
-        Order request = createOrder(OrderType.EAT_IN, orderLineItems, "서울시 강남구", orderTable.getId(), orderTable);
+        when(menuEatInOrderLineItemMapper.toEatInOrderLines(any())).thenReturn(List.of(
+                EatInOrderLineItem.of(null, 후라이드치킨_MENU_UUID, 2, 후라이드치킨_MENU_DEFAULT_PRICE.longValue())
+        ));
+
+        List<OrderLineItemRequest> orderLineItems = List.of(createOrderLineItemRequest(후라이드치킨_MENU_UUID, 2, 후라이드치킨_MENU_DEFAULT_PRICE));
+        CreateEatInOrderRequest request = createEatInOrderRequest(orderTableEntity.getId(), orderLineItems);
         return orderService.create(request);
     }
 
-    private Order createEatInOrderWithCompleteState(OrderTable orderTable) {
-        Order order = createEeaInOrder(orderTable);
+    private EatInOrder createEatInOrderWithCompleteState(OrderTable orderTableEntity) {
+        EatInOrder order = createEeaInOrder(orderTableEntity);
         orderService.accept(order.getId());
         orderService.serve(order.getId());
         orderService.complete(order.getId());
@@ -321,35 +366,12 @@ public class OrderTableServiceTest {
         return menuProduct;
     }
 
-    private static OrderLineItem createOrderLineItem(UUID menuId, int quantity, BigDecimal price) {
-        OrderLineItem orderLineItem = new OrderLineItem();
-        orderLineItem.setMenuId(menuId);
-        orderLineItem.setQuantity(quantity);
-        orderLineItem.setPrice(price);
-        return orderLineItem;
+    private static OrderLineItemRequest createOrderLineItemRequest(UUID menuId, int quantity, BigDecimal price) {
+        return new OrderLineItemRequest(quantity, menuId, price);
     }
 
-    private static Order createOrder(OrderType type, List<OrderLineItem> orderLineItems, String deliveryAddress, UUID orderTableUuid, OrderTable orderTable) {
-        Order order = new Order();
-        order.setType(type);
-        order.setOrderLineItems(orderLineItems);
-        order.setDeliveryAddress(deliveryAddress);
-        order.setOrderTableId(orderTableUuid);
-        order.setOrderTable(orderTable);
-        return order;
-    }
-
-    private static OrderTable createOrderTable(String name, int numberOfGuests, boolean occupied) {
-        return createOrderTable(null, name, numberOfGuests, occupied);
-    }
-
-    private static OrderTable createOrderTable(UUID id, String name, int numberOfGuests, boolean occupied) {
-        OrderTable request = new OrderTable();
-        request.setId(id);
-        request.setName(name);
-        request.setNumberOfGuests(numberOfGuests);
-        request.setOccupied(occupied);
-        return request;
+    public static CreateEatInOrderRequest createEatInOrderRequest(UUID orderTableId, List<OrderLineItemRequest> orderLineItems) {
+        return new CreateEatInOrderRequest(orderTableId, orderLineItems);
     }
 
     private static final UUID 후라이드치킨_PRODUCT_UUID = UUID.randomUUID();

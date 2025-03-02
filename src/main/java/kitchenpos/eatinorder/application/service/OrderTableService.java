@@ -1,78 +1,99 @@
 package kitchenpos.eatinorder.application.service;
 
-import kitchenpos.eatinorder.application.port.out.OrderRepository;
-import kitchenpos.eatinorder.domain.model.OrderStatus;
-import kitchenpos.eatinorder.domain.model.OrderTable;
-import kitchenpos.eatinorder.application.port.out.OrderTableRepository;
+import kitchenpos.eatinorder.application.port.in.ClearOrderTableUseCase;
+import kitchenpos.eatinorder.application.port.out.LoadEatInOrderPort;
+import kitchenpos.eatinorder.application.port.out.LoadOrderTablePort;
+import kitchenpos.eatinorder.application.port.out.SaveOrderTablePort;
+import kitchenpos.eatinorder.application.service.model.ChangeNumberOfGuestsRequest;
+import kitchenpos.eatinorder.application.service.model.CreateOrderTableRequest;
+import kitchenpos.eatinorder.domain.model.todo.EatInOrderStatus;
+import kitchenpos.eatinorder.domain.model.todo.OrderTable;
+import kitchenpos.shared.domain.Profanities;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
-public class OrderTableService {
-    private final OrderTableRepository orderTableRepository;
-    private final OrderRepository orderRepository;
+public class OrderTableService implements ClearOrderTableUseCase {
+    private static final Logger log = LoggerFactory.getLogger(OrderTableService.class);
 
-    public OrderTableService(final OrderTableRepository orderTableRepository, final OrderRepository orderRepository) {
+    private final LoadOrderTablePort orderTableRepository;
+    private final SaveOrderTablePort saveOrderTablePort;
+    private final LoadEatInOrderPort loadEatInOrderPort;
+    private final Profanities profanities;
+
+    public OrderTableService(
+            final LoadOrderTablePort orderTableRepository,
+            final SaveOrderTablePort saveOrderTablePort,
+            final LoadEatInOrderPort loadEatInOrderPort,
+            final Profanities profanities
+    ) {
         this.orderTableRepository = orderTableRepository;
-        this.orderRepository = orderRepository;
+        this.saveOrderTablePort = saveOrderTablePort;
+        this.loadEatInOrderPort = loadEatInOrderPort;
+        this.profanities = profanities;
     }
 
     @Transactional
-    public OrderTable create(final OrderTable request) {
-        final String name = request.getName();
-        if (Objects.isNull(name) || name.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-        final OrderTable orderTable = new OrderTable();
-        orderTable.setId(UUID.randomUUID());
-        orderTable.setName(name);
-        orderTable.setNumberOfGuests(0);
-        orderTable.setOccupied(false);
-        return orderTableRepository.save(orderTable);
+    public OrderTable create(final CreateOrderTableRequest request) {
+        OrderTable orderTable = OrderTable.createEmptyTable(UUID.randomUUID(), request.name(), profanities);
+        return saveOrderTablePort.save(orderTable);
     }
 
     @Transactional
     public OrderTable sit(final UUID orderTableId) {
-        final OrderTable orderTable = orderTableRepository.findById(orderTableId)
-            .orElseThrow(NoSuchElementException::new);
-        orderTable.setOccupied(true);
-        return orderTable;
+        final OrderTable orderTable = findById(orderTableId);
+        orderTable.sit();
+        return saveOrderTablePort.save(orderTable);
     }
 
     @Transactional
     public OrderTable clear(final UUID orderTableId) {
-        final OrderTable orderTable = orderTableRepository.findById(orderTableId)
-            .orElseThrow(NoSuchElementException::new);
-        if (orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
-            throw new IllegalStateException();
+        if (loadEatInOrderPort.existsByOrderTableAndStatusNot(orderTableId, EatInOrderStatus.COMPLETED)) {
+            throw new IllegalStateException("완료되지 않은 주문이 있어 주문 테이블을 정리할 수 없습니다. orderTableId=" + orderTableId);
         }
-        orderTable.setNumberOfGuests(0);
-        orderTable.setOccupied(false);
-        return orderTable;
+        return clearOrderTable(orderTableId);
     }
 
     @Transactional
-    public OrderTable changeNumberOfGuests(final UUID orderTableId, final OrderTable request) {
-        final int numberOfGuests = request.getNumberOfGuests();
-        if (numberOfGuests < 0) {
-            throw new IllegalArgumentException();
+    public boolean clearWhenAllOrdersCompleted(final UUID orderTableId) {
+        if (loadEatInOrderPort.existsByOrderTableAndStatusNot(orderTableId, EatInOrderStatus.COMPLETED)) {
+            log.info("완료되지 않은 주문이 있어 주문 테이블을 정리할 수 없습니다. orderTableId={}", orderTableId);
+            return false;
         }
-        final OrderTable orderTable = orderTableRepository.findById(orderTableId)
-            .orElseThrow(NoSuchElementException::new);
-        if (!orderTable.isOccupied()) {
-            throw new IllegalStateException();
-        }
-        orderTable.setNumberOfGuests(numberOfGuests);
-        return orderTable;
+        clearOrderTable(orderTableId);
+        return true;
+    }
+
+    @Transactional
+    public OrderTable changeNumberOfGuests(final UUID orderTableId, final ChangeNumberOfGuestsRequest request) {
+        final OrderTable orderTable = findById(orderTableId);
+        orderTable.changeNumberOfGuests(request.numberOfGuests());
+        return saveOrderTablePort.save(orderTable);
     }
 
     @Transactional(readOnly = true)
     public List<OrderTable> findAll() {
         return orderTableRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public OrderTable findById(UUID orderTableId) {
+        if (orderTableId == null) {
+            throw new IllegalArgumentException("주문 테이블 ID를 입력하세요");
+        }
+        return orderTableRepository.findById(orderTableId)
+                .orElseThrow(NoSuchElementException::new);
+    }
+
+    private OrderTable clearOrderTable(UUID orderTableId) {
+        final OrderTable orderTable = findById(orderTableId);
+        orderTable.clear();
+        return saveOrderTablePort.save(orderTable);
     }
 }

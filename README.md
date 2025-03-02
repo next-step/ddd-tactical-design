@@ -264,30 +264,24 @@ graph LR
   * `Product Price`를 변경할 땐 0원 이상 입력하여야 한다.
 * `Product List`를 조회할 수 있다
 
-### MenuGroup : 메뉴 그룹 관리
-
-속성
-* `메뉴 그룹 등록 정책` : 
-  * `Menu Group Name`은 반드시 입력해야 한다
-  * `Menu Group Name`에는 `Profanity`를 사용할 수 없다.
-
-행위
-* `Menu Group` 등록은 `메뉴 그룹 등록 정책`을 만족시켜야 한다
-* `Menu Group List`를 조회할 수 있다
-
 ### Menu : 메뉴 관리
 
 속성
+* `메뉴 그룹 등록 정책` :
+  * `Menu Group Name`은 반드시 입력해야 한다
+  * `Menu Group Name`에는 `Profanity`를 사용할 수 없다.
 * `메뉴 등록 정책` : 
   * `Menu Name`은 반드시 입력해야 한다
   * `Menu Name`에는 `Profanity`를 사용할 수 없다.
   * `Menu Price`는 반드시 입력해야 한다.
   * `Menu Price`는 0원 이상어야한다.
+  * `Menu Price`는 `Menu Products`의 `Total Product Price` 보다  같거나 작아야 한다
   * `Menu`는 `Menu Products`를 포함해야 한다
-  * `Menu`는 `Menu Products`의 `Total Product Price` 보다 `Menu Price`가 같거나 작아야 한다
   * `Menu`는 하나 이상의 `Menu Group`에 속한다
 
 행위
+* `Menu Group` 등록은 `메뉴 그룹 등록 정책`을 만족시켜야 한다
+* `Menu Group List`를 조회할 수 있다
 * `Menu` 등록은 `메뉴 등록 정책`을 만족시켜야 한다
 * `Menu Price`를 변경할 수 있다.
   * `Menu Price`를 변경할 땐 0원 이상 입력하여야 한다.
@@ -305,10 +299,11 @@ graph LR
   * `Order Table Name`은 반드시 입력해야 한다
   * `Order Table Name`에는 `Profanity`를 사용할 수 없다.
 * `매장 식사 주문 생성 정책` : 
-  * `Order Item`이 1개 이상 포함되어야 한다.
-  * `Order Item`에 포함된 `Menu`는 반드시 `Display Menu`여야 한다.
-  * `Order Item`의 가격은 `Menu`에 설정된 가격과 동일해야 한다.
+  * `Order Line Item`이 1개 이상 포함되어야 한다.
+  * `Order Line Item`에 포함된 `Menu`는 반드시 `Display Menu`여야 한다.
+  * `Order Line Item`의 가격은 `Menu`에 설정된 가격과 동일해야 한다.
   * `Order Table`을 반드시 지정해야 한다.
+  * `Order Table`은 비어 있는 상태여야 한다.
 
 행위
 * `Order Table` 등록은 `주문 테이블 등록 정책`을 만족시켜야 한다

@@ -1,15 +1,17 @@
-package kitchenpos.eatinorder.domain.model;
+package kitchenpos.eatinorder.adapter.out.persistance.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import kitchenpos.eatinorder.domain.model.todo.OrderTable;
+import kitchenpos.shared.domain.Profanities;
 
 import java.util.UUID;
 
 @Table(name = "order_table")
 @Entity
-public class OrderTable {
+public class OrderTableEntity {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
     private UUID id;
@@ -23,7 +25,20 @@ public class OrderTable {
     @Column(name = "occupied", nullable = false)
     private boolean occupied;
 
-    public OrderTable() {
+    public OrderTableEntity() {
+    }
+
+    public static OrderTableEntity of(OrderTable orderTable) {
+        OrderTableEntity orderTableEntity = new OrderTableEntity();
+        orderTableEntity.setId(orderTable.getId());
+        orderTableEntity.setName(orderTable.getName());
+        orderTableEntity.setNumberOfGuests(orderTable.getNumberOfGuests());
+        orderTableEntity.setOccupied(orderTable.isOccupied());
+        return orderTableEntity;
+    }
+
+    public OrderTable toDomain(Profanities profanities) {
+        return OrderTable.create(this.id, this.name, this.numberOfGuests, this.occupied, profanities);
     }
 
     public UUID getId() {

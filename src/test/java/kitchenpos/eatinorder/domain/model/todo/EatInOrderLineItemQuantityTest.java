@@ -1,0 +1,39 @@
+package kitchenpos.eatinorder.domain.model.todo;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+class EatInOrderLineItemQuantityTest {
+    @DisplayName("EatInOrderLineItemQuantity를 생성한다.")
+    @Test
+    void create() {
+        // given
+        final long quantity = 1L;
+
+        // when
+        final EatInOrderLineItemQuantity eatInOrderLineItemQuantity = EatInOrderLineItemQuantity.of(quantity);
+
+        // then
+        assertAll(
+                () -> assertThat(eatInOrderLineItemQuantity).isNotNull(),
+                () -> assertThat(eatInOrderLineItemQuantity.value()).isEqualTo(quantity)
+        );
+    }
+
+    @DisplayName("EatInOrderLineItemQuantity를 생성할 때 수량이 0 미만인 경우 예외를 던진다.")
+    @Test
+    void createWithNegativeValue() {
+        // given
+        final long quantity = -1L;
+
+        // when
+        final Throwable thrown = catchThrowable(() -> EatInOrderLineItemQuantity.of(quantity));
+
+        // then
+        assertThat(thrown).isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("수량은 0개 이상이어야 합니다.");
+    }
+}

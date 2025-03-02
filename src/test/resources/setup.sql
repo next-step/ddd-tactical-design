@@ -63,8 +63,8 @@ values (x'7ce8b3a235454542ab9cb3d493bbd4fb', false, '7번', 0);
 insert into order_table (id, occupied, name, number_of_guests)
 values (x'7bdb1ffde36e4e2b94e3d2c14d391ef3', false, '8번', 0);
 
-insert into orders (id, delivery_address, order_date_time, status, type, order_table_id)
-values (x'69d78f383bff457cbb7226319c985fd8', '서울시 송파구 위례성대로 2', '2021-07-27', 'WAITING', 'DELIVERY', null);
+-- insert into orders (id, delivery_address, order_date_time, status, type, order_table_id)
+-- values (x'69d78f383bff457cbb7226319c985fd8', '서울시 송파구 위례성대로 2', '2021-07-27', 'WAITING', 'DELIVERY', null);
 insert into orders (id, delivery_address, order_date_time, status, type, order_table_id)
 values (x'98da3d3859e04dacbbaeebf6560a43bd', null, '2021-07-27', 'COMPLETED', 'EAT_IN',
         x'8d71004329b6420e8452233f5a035520');
@@ -72,9 +72,9 @@ insert into orders (id, delivery_address, order_date_time, status, type, order_t
 values (x'd7cc15b3e32c4bc8b440d3067b35522e', null, '2021-07-27', 'COMPLETED', 'EAT_IN',
         x'8d71004329b6420e8452233f5a035520');
 
-insert into order_line_item (quantity, menu_id, order_id)
-values (1, x'f59b1e1cb145440aaa6f6095a0e2d63b', x'69d78f383bff457cbb7226319c985fd8');
-insert into order_line_item (quantity, menu_id, order_id)
-values (1, x'f59b1e1cb145440aaa6f6095a0e2d63b', x'98da3d3859e04dacbbaeebf6560a43bd');
-insert into order_line_item (quantity, menu_id, order_id)
-values (1, x'f59b1e1cb145440aaa6f6095a0e2d63b', x'd7cc15b3e32c4bc8b440d3067b35522e');
+insert into order_line_item (quantity, menu_id, order_id, price)
+values (1, x'f59b1e1cb145440aaa6f6095a0e2d63b', x'69d78f383bff457cbb7226319c985fd8', 16000);
+insert into order_line_item (quantity, menu_id, order_id, price)
+values (1, x'f59b1e1cb145440aaa6f6095a0e2d63b', x'98da3d3859e04dacbbaeebf6560a43bd', 16000);
+insert into order_line_item (quantity, menu_id, order_id, price)
+values (1, x'f59b1e1cb145440aaa6f6095a0e2d63b', x'd7cc15b3e32c4bc8b440d3067b35522e', 16000);

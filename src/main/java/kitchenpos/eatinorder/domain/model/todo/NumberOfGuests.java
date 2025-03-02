@@ -1,0 +1,39 @@
+package kitchenpos.eatinorder.domain.model.todo;
+
+import java.util.Objects;
+
+public class NumberOfGuests {
+    public static final NumberOfGuests ZERO = new NumberOfGuests(0);
+    private final int value;
+
+    private NumberOfGuests(final int value) {
+        this.value = value;
+    }
+
+    public static NumberOfGuests of(final int value) {
+        if (value < 0) {
+            throw new IllegalArgumentException("손님 수는 0 미만일 수 없습니다.");
+        }
+        return new NumberOfGuests(value);
+    }
+
+    public int value() {
+        return value;
+    }
+
+    public boolean isZero() {
+        return this.equals(ZERO);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        NumberOfGuests that = (NumberOfGuests) o;
+        return value == that.value;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(value);
+    }
+}
