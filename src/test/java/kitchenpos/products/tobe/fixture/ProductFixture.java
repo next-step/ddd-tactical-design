@@ -6,7 +6,6 @@ import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductName;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 public class ProductFixture {
 
@@ -19,10 +18,9 @@ public class ProductFixture {
     }
 
     public static Product createProductRequest(final String name, final BigDecimal price, PurgomalumClient purgomalumClient) {
-        final Product product = new Product();
-        product.setId(UUID.randomUUID());
-        product.setName(new ProductName(name, purgomalumClient));
-        product.setPrice(new Price(price));
+        final ProductName productName = new ProductName(name, purgomalumClient);
+        final Price productPrice = new Price(price);
+        final Product product = new Product(productName, productPrice);
         return product;
     }
 }
