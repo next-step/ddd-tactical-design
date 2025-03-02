@@ -104,6 +104,11 @@ public class Menu {
         }
         this.displayed = true;
     }
+
+    public void hide() {
+        this.displayed = false;
+    }
+
     public boolean isDisplayed() {
         return displayed;
     }
