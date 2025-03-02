@@ -245,7 +245,40 @@ public class OrderTableServiceTest {
             assertThatIllegalStateException()
                     .isThrownBy(throwingCallable);
         }
+
+        @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+        @DisplayName("모든 주문이 완료된 테이블을 정리한다")
+        @Test
+        void clearWhenAllOrdersCompleted() {
+            // given
+            OrderTable orderTable = createInitializedOrderTable();
+            orderTableService.sit(orderTable.getId());
+            createEatInOrderWithCompleteState(orderTable);
+
+            // when
+            boolean cleared = orderTableService.clearWhenAllOrdersCompleted(orderTable.getId());
+
+            // then
+            assertThat(cleared).isTrue();
+        }
+
+        @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+        @DisplayName("주문이 완료되지 않은 테이블은 정리할 수 없다")
+        @Test
+        void clearWhenAllOrdersCompletedWithUncompletedOrder() {
+            // given
+            OrderTable orderTable = createInitializedOrderTable();
+            orderTableService.sit(orderTable.getId());
+            createEeaInOrder(orderTable);
+
+            // when
+            boolean cleared = orderTableService.clearWhenAllOrdersCompleted(orderTable.getId());
+
+            // then
+            assertThat(cleared).isFalse();
+        }
     }
+
 
     @DisplayName("주문 테이블 조회하기")
     @Nested

@@ -9,6 +9,8 @@ import kitchenpos.eatinorder.application.service.model.CreateOrderTableRequest;
 import kitchenpos.eatinorder.domain.model.todo.EatInOrderStatus;
 import kitchenpos.eatinorder.domain.model.todo.OrderTable;
 import kitchenpos.shared.domain.Profanities;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +20,8 @@ import java.util.UUID;
 
 @Service
 public class OrderTableService implements ClearOrderTableUseCase {
+    private static final Logger log = LoggerFactory.getLogger(OrderTableService.class);
+
     private final LoadOrderTablePort orderTableRepository;
     private final SaveOrderTablePort saveOrderTablePort;
     private final LoadEatInOrderPort loadEatInOrderPort;
@@ -50,12 +54,20 @@ public class OrderTableService implements ClearOrderTableUseCase {
 
     @Transactional
     public OrderTable clear(final UUID orderTableId) {
-        final OrderTable orderTable = findById(orderTableId);
-        if (loadEatInOrderPort.existsByOrderTableAndStatusNot(orderTable.getId(), EatInOrderStatus.COMPLETED)) {
-            throw new IllegalStateException();
+        if (loadEatInOrderPort.existsByOrderTableAndStatusNot(orderTableId, EatInOrderStatus.COMPLETED)) {
+            throw new IllegalStateException("완료되지 않은 주문이 있어 주문 테이블을 정리할 수 없습니다. orderTableId=" + orderTableId);
         }
-        orderTable.clear();
-        return saveOrderTablePort.save(orderTable);
+        return clearOrderTable(orderTableId);
+    }
+
+    @Transactional
+    public boolean clearWhenAllOrdersCompleted(final UUID orderTableId) {
+        if (loadEatInOrderPort.existsByOrderTableAndStatusNot(orderTableId, EatInOrderStatus.COMPLETED)) {
+            log.info("완료되지 않은 주문이 있어 주문 테이블을 정리할 수 없습니다. orderTableId={}", orderTableId);
+            return false;
+        }
+        clearOrderTable(orderTableId);
+        return true;
     }
 
     @Transactional
@@ -77,5 +89,11 @@ public class OrderTableService implements ClearOrderTableUseCase {
         }
         return orderTableRepository.findById(orderTableId)
                 .orElseThrow(NoSuchElementException::new);
+    }
+
+    private OrderTable clearOrderTable(UUID orderTableId) {
+        final OrderTable orderTable = findById(orderTableId);
+        orderTable.clear();
+        return saveOrderTablePort.save(orderTable);
     }
 }
