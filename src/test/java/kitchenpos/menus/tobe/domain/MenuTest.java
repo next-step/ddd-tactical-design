@@ -39,4 +39,18 @@ class MenuTest {
                 .hasMessage("메뉴 가격은 포함된 상품들의 총 가격보다 클 수 없습니다.");
     }
 
+    @ParameterizedTest
+    @ValueSource(ints = {-1, -1000, -10000})
+    void 메뉴_가격을_변경할_때_가격이_0원_이상이어야한다(int invalidMenuPrice) {
+        // given
+        MenuGroup menuGroup = new MenuGroup("메인 메뉴");
+        Menu menu = new Menu(menuGroup, "후라이드 치킨", 20_000, true);
+
+        // when & then
+        assertThatThrownBy(() -> menu.changeMenuPrice(invalidMenuPrice))
+                .isInstanceOf(InvalidMenuPriceException.class)
+                .hasMessage("메뉴 가격은 0보다 커야 합니다.")
+        ;
+    }
+
 }
