@@ -70,4 +70,20 @@ public class Menu {
         this.displayed = displayed;
     }
 
+    /**
+     * 메뉴 가격은 포함된 상품들의 총 가격보다 클 수 없다.
+     */
+    public Menu(MenuGroup menuGroup, String name, int price, boolean displayed, MenuProducts menuProducts) {
+        if (menuGroup == null) {
+            throw new InvalidMenuGroupEmptyException("메뉴는 반드시 특정 메뉴 그룹에 속해야 합니다.");
+        }
+        if (price > menuProducts.total()) {
+            throw new InvalidMenuPriceException("메뉴 가격은 포함된 상품들의 총 가격보다 클 수 없습니다.");
+        }
+        this.id = UUID.randomUUID();
+        this.menuGroup = menuGroup;
+        this.name = new MenuName(name);
+        this.price = new MenuPrice(price);
+        this.displayed = displayed;
+    }
 }
