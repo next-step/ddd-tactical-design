@@ -4,7 +4,7 @@ import kitchenpos.common.infra.ProfanityClient;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.tobe.application.exception.InvalidProductServiceException;
+import kitchenpos.products.tobe.domain.exception.InvalidProductException;
 import kitchenpos.products.tobe.ui.dto.ChangeProductRequest;
 import kitchenpos.products.tobe.ui.dto.ChangeProductResponse;
 import kitchenpos.products.tobe.ui.dto.CreateProductRequest;
@@ -38,16 +38,8 @@ public class ProductService {
 
     @Transactional
     public CreateProductResponse create(final CreateProductRequest request) {
-        validateProfanity(request.name());
-        final Product product = new Product(request.name(), request.price());
-
+        final Product product = new Product(request.name(), request.price(), profanityClient);
         return CreateProductResponse.from(productRepository.save(product));
-    }
-
-    private void validateProfanity(final String name) {
-        if (profanityClient.containsProfanity(name)) {
-            throw new InvalidProductServiceException("상품의 이름에 부적절한 단어(비속어가) 포함되면 안됩니다.");
-        }
     }
 
     @Transactional
@@ -55,7 +47,7 @@ public class ProductService {
         final ProductPrice price = new ProductPrice(request.price());
 
         final Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new InvalidProductServiceException("해당 상품이 존재하지 않습니다"));
+                .orElseThrow(() -> new InvalidProductException("해당 상품이 존재하지 않습니다"));
         product.updatePrice(price.getPrice());
 
         final List<Menu> menus = menuRepository.findAllByProductId(productId);

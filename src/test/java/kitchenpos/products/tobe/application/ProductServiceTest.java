@@ -5,7 +5,7 @@ import kitchenpos.common.infra.FakeProfanitiesClient;
 import kitchenpos.common.infra.ProfanityClient;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.tobe.application.exception.InvalidProductServiceException;
+import kitchenpos.products.tobe.domain.exception.InvalidProductException;
 import kitchenpos.products.tobe.ui.dto.ChangeProductRequest;
 import kitchenpos.products.tobe.ui.dto.ChangeProductResponse;
 import kitchenpos.products.tobe.ui.dto.CreateProductRequest;
@@ -86,7 +86,7 @@ class ProductServiceTest {
 
         // when & then
         assertThatThrownBy(() -> productService.changePrice(nonExistentProductUd, request))
-                .isInstanceOf(InvalidProductServiceException.class);
+                .isInstanceOf(InvalidProductException.class);
     }
 
     @Test
