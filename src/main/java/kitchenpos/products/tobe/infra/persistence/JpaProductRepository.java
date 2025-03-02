@@ -1,4 +1,4 @@
-package kitchenpos.products.infra.persistence;
+package kitchenpos.products.tobe.infra.persistence;
 
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;

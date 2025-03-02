@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.products.tobe.domain.vo;
 
 import kitchenpos.products.tobe.domain.exception.InvalidProductException;
 import kitchenpos.products.tobe.domain.vo.ProductName;

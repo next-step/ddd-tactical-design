@@ -1,4 +1,4 @@
-package kitchenpos.products.application.exception;
+package kitchenpos.products.tobe.application.exception;
 
 
 import kitchenpos.global.error.BusinessException;
