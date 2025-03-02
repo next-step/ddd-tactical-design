@@ -19,7 +19,7 @@ public class EatInOrderCompletedEventListener {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener
-    public void handleProductPriceChange(EatInOrderCompletedEvent event) {
+    public void handleEatInOrderCompleted(EatInOrderCompletedEvent event) {
         clearOrderTableUseCase.clear(event.orderTableId());
     }
 }
