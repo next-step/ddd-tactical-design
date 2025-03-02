@@ -4,13 +4,13 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class EatInOrderLineItem {
-    private final Long seq;
+    private final EatInOrderLineItemSeq seq;
     private final UUID menuId;
     private final EatInOrderLineItemQuantity quantity;
     private final EatInOrderLineItemPrice price;
 
     private EatInOrderLineItem(
-            final Long seq,
+            final EatInOrderLineItemSeq seq,
             final UUID menuId,
             final EatInOrderLineItemQuantity quantity,
             final EatInOrderLineItemPrice price
@@ -35,6 +35,25 @@ public class EatInOrderLineItem {
             final Long seq,
             final UUID menuId,
             final long quantity,
+            final long menuPrice
+    ) {
+        return new EatInOrderLineItem(EatInOrderLineItemSeq.of(seq), menuId, EatInOrderLineItemQuantity.of(quantity), EatInOrderLineItemPrice.of(menuPrice));
+    }
+
+    public static EatInOrderLineItem of(
+            final UUID menuId,
+            final long quantity,
+            final long itemPrice,
+            final long menuPrice,
+            final boolean isDisplayedMenu
+    ) {
+        return EatInOrderLineItem.of(null, menuId, quantity, itemPrice, menuPrice, isDisplayedMenu);
+    }
+
+    public static EatInOrderLineItem of(
+            final Long seq,
+            final UUID menuId,
+            final long quantity,
             final long itemPrice,
             final long menuPrice,
             final boolean isDisplayedMenu
@@ -45,20 +64,11 @@ public class EatInOrderLineItem {
         if (itemPrice != menuPrice) {
             throw new IllegalArgumentException("메뉴의 가격과 주문한 메뉴의 가격이 다릅니다.");
         }
-        return new EatInOrderLineItem(seq, menuId, EatInOrderLineItemQuantity.of(quantity), EatInOrderLineItemPrice.of(menuPrice));
-    }
-
-    public static EatInOrderLineItem of(
-            final Long seq,
-            final UUID menuId,
-            final long quantity,
-            final long menuPrice
-    ) {
-        return new EatInOrderLineItem(seq, menuId, EatInOrderLineItemQuantity.of(quantity), EatInOrderLineItemPrice.of(menuPrice));
+        return new EatInOrderLineItem(EatInOrderLineItemSeq.of(seq), menuId, EatInOrderLineItemQuantity.of(quantity), EatInOrderLineItemPrice.of(menuPrice));
     }
 
     public Long getSeq() {
-        return seq;
+        return seq.value();
     }
 
     public UUID getMenuId() {

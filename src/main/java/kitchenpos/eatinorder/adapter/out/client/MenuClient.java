@@ -41,7 +41,6 @@ public class MenuClient implements MenuEatInOrderLineItemMapper {
         validateMenuResponses(orderLineItemRequests, responses);
         return Stream.of(responses)
                 .map(menu -> EatInOrderLineItem.of(
-                        null,
                         menu.getId(),
                         orderLineItemRequests.getQuantity(menu.getId()),
                         orderLineItemRequests.getPrice(menu.getId()),
