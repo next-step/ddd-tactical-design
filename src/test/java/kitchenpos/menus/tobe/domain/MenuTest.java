@@ -114,4 +114,17 @@ class MenuTest {
         // then
         assertThat(menu.isDisplayed()).isTrue();
     }
+
+    @Test
+    void 메뉴를_숨길_수_있다() {
+        // given
+        MenuGroup menuGroup = new MenuGroup("메인 메뉴");
+        Menu menu = new Menu(menuGroup, "치킨 세트", 42_000, true);
+
+        // when
+        menu.hide();
+
+        // then
+        assertThat(menu.isDisplayed()).isFalse();
+    }
 }
