@@ -55,13 +55,20 @@ class MenuTest {
     @ValueSource(ints = {-1, -1000, -10000})
     void 메뉴_가격을_변경할_때_가격이_0원_이상이어야한다(int invalidMenuPrice) {
         // given
+        Product product1 = new Product("후라이드 치킨", valueOf(20000));
+        Product product2 = new Product("양념 치킨", valueOf(22000));
+
         MenuGroup menuGroup = new MenuGroup("메인 메뉴");
         Menu menu = new Menu(menuGroup, "후라이드 치킨", 20_000, true, profanities);
 
+        MenuProduct mp1 = new MenuProduct(menu, product1, 20_000, 1, product1.getId());
+        MenuProduct mp2 = new MenuProduct(menu, product2, 22_000, 1, product2.getId());
+        MenuProducts menuProducts = new MenuProducts(mp1, mp2);
+
         // when & then
-        assertThatThrownBy(() -> menu.changeMenuPrice(invalidMenuPrice))
+        assertThatThrownBy(() -> menu.changeMenuPrice(invalidMenuPrice, menuProducts))
                 .isInstanceOf(InvalidMenuPriceException.class)
-                .hasMessage("메뉴 가격은 0보다 커야 합니다.")
+                .hasMessage("메뉴 가격을 변경할 때 가격이 0원 이상이어야 합니다.")
         ;
     }
 

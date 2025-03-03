@@ -88,15 +88,14 @@ public class Menu {
         this.displayed = displayed;
     }
 
-    public void changeMenuPrice(int price) {
-        this.price = new MenuPrice(price);
-    }
-
-    public void changeMenuPrice(int price, MenuProducts menuProducts) {
-        if (price > menuProducts.total()) {
+    public void changeMenuPrice(int newPrice, MenuProducts menuProducts) {
+        if (newPrice <= 0) {
+            throw new InvalidMenuPriceException("메뉴 가격을 변경할 때 가격이 0원 이상이어야 합니다.");
+        }
+        if (newPrice > menuProducts.total()) {
             throw new InvalidMenuPriceException("메뉴 가격은 포함된 상품들의 총 가격보다 클 수 없습니다.");
         }
-        this.price = new MenuPrice(price);
+        this.price = new MenuPrice(newPrice);
     }
 
     public void display(MenuProducts menuProducts) {
