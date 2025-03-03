@@ -30,7 +30,7 @@ public class EatInOrderService {
         final EatInOrderMenus eatInOrderMenus = eatInOrderMenuRepository.findAllByIdIn(command.menuIds());
         final OrderTable orderTable = orderTableRepository.findById(new OrderTableId(command.orderTableId()))
                 .orElseThrow(IllegalArgumentException::new);
-        if (!orderTable.isOccupiedValue()) {
+        if (orderTable.isNotOccupied()) {
             throw new IllegalArgumentException();
         }
         return eatInOrderRepository.save(eatInOrder(command, eatInOrderMenus, orderTable.id()));

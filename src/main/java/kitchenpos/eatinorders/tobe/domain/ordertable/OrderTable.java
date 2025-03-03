@@ -5,8 +5,6 @@ import kitchenpos.eatinorders.tobe.domain.ordertable.vo.Occupied;
 import kitchenpos.eatinorders.tobe.domain.ordertable.vo.OrderTableId;
 import kitchenpos.eatinorders.tobe.domain.ordertable.vo.OrderTableName;
 
-import java.util.UUID;
-
 public class OrderTable {
     private final OrderTableId id;
     private final OrderTableName name;
@@ -28,10 +26,6 @@ public class OrderTable {
         this.occupied = new Occupied(true);
     }
 
-    public boolean isOccupiedValue() {
-        return occupied.getValue();
-    }
-
     public void changeNumberOfGuests(final int numberOfGuests) {
         if (!occupied.getValue()) {
             throw new IllegalArgumentException();
@@ -39,12 +33,12 @@ public class OrderTable {
         this.numberOfGuests = new NumberOfGuests(numberOfGuests);
     }
 
-    public OrderTableId id() {
-        return id;
+    public boolean isNotOccupied() {
+        return occupied.isNotOccupied();
     }
 
-    public UUID idValue() {
-        return id.getValue();
+    public OrderTableId id() {
+        return id;
     }
 
     public int numberOfGuests() {

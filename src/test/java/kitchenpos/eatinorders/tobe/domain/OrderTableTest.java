@@ -27,7 +27,7 @@ public class OrderTableTest {
         final OrderTable orderTable = new OrderTable("1번", 0, false);
         orderTable.sit();
 
-        assertThat(orderTable.isOccupiedValue()).isTrue();
+        assertThat(orderTable.isNotOccupied()).isFalse();
     }
 
     @DisplayName("방문한 손님 수가 0명 미만이라면 사용중인 테이블의 손님 수를 변경할 수 없다.")
@@ -65,6 +65,6 @@ public class OrderTableTest {
         orderTable.clear();
 
         assertThat(orderTable.numberOfGuests()).isZero();
-        assertThat(orderTable.isOccupiedValue()).isFalse();
+        assertThat(orderTable.isNotOccupied()).isTrue();
     }
 }
