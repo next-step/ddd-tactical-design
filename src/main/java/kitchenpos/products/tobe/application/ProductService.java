@@ -1,10 +1,10 @@
 package kitchenpos.products.tobe.application;
 
-import kitchenpos.common.infra.ProfanityClient;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.tobe.domain.exception.InvalidProductException;
+import kitchenpos.products.tobe.domain.vo.ProfanityClient;
 import kitchenpos.products.tobe.ui.dto.ChangeProductRequest;
 import kitchenpos.products.tobe.ui.dto.ChangeProductResponse;
 import kitchenpos.products.tobe.ui.dto.CreateProductRequest;

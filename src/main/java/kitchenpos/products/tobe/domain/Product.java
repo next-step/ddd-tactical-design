@@ -5,10 +5,10 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import kitchenpos.common.infra.ProfanityClient;
 import kitchenpos.products.tobe.domain.exception.InvalidProductException;
 import kitchenpos.products.tobe.domain.vo.ProductName;
 import kitchenpos.products.tobe.domain.vo.ProductPrice;
+import kitchenpos.products.tobe.domain.vo.ProfanityClient;
 
 import java.math.BigDecimal;
 import java.util.Objects;

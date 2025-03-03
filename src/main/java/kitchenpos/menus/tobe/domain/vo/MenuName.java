@@ -2,7 +2,6 @@ package kitchenpos.menus.tobe.domain.vo;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import kitchenpos.common.infra.ProfanityClient;
 import kitchenpos.menus.tobe.domain.exception.InvalidMenuNameException;
 
 @Embeddable

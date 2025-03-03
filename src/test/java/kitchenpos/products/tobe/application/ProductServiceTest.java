@@ -1,11 +1,11 @@
 package kitchenpos.products.tobe.application;
 
 import static java.math.BigDecimal.valueOf;
-import kitchenpos.common.infra.FakeProfanitiesClient;
-import kitchenpos.common.infra.ProfanityClient;
+import kitchenpos.products.tobe.domain.FakeProfanitiesClient;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.tobe.domain.exception.InvalidProductException;
+import kitchenpos.products.tobe.domain.vo.ProfanityClient;
 import kitchenpos.products.tobe.ui.dto.ChangeProductRequest;
 import kitchenpos.products.tobe.ui.dto.ChangeProductResponse;
 import kitchenpos.products.tobe.ui.dto.CreateProductRequest;

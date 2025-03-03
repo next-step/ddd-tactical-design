@@ -1,8 +1,7 @@
 package kitchenpos.menus.tobe.domain.vo;
 
-import kitchenpos.common.infra.FakeProfanitiesClient;
+import kitchenpos.menus.tobe.domain.FakeProfanitiesClient;
 import kitchenpos.menus.tobe.domain.exception.InvalidMenuNameException;
-import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

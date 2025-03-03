@@ -1,4 +1,9 @@
-package kitchenpos.common.infra;
+package kitchenpos.menus.tobe.domain;
+
+
+
+
+import kitchenpos.menus.tobe.domain.vo.ProfanityClient;
 
 import java.util.Arrays;
 import java.util.List;
