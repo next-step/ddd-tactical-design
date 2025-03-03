@@ -1,6 +1,7 @@
 package kitchenpos.menus.tobe.domain;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
@@ -10,6 +11,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import kitchenpos.menus.tobe.domain.exception.InvalidMenuProductQuantityException;
+import kitchenpos.menus.tobe.domain.vo.MenuProductPrice;
+import kitchenpos.menus.tobe.domain.vo.MenuProductQuantity;
 import kitchenpos.products.tobe.domain.Product;
 
 import java.util.UUID;
@@ -43,11 +46,11 @@ public class MenuProduct {
     )
     private Product product;
 
-    @Column(name = "price", nullable = false)
-    private int price;
+    @Embedded
+    private MenuProductPrice price;
 
-    @Column(name = "quantity", nullable = false)
-    private int quantity;
+    @Embedded
+    private MenuProductQuantity quantity;
 
     @Column(name = "product_id", columnDefinition = "binary(16)", nullable = false)
     private UUID productId;
@@ -62,13 +65,13 @@ public class MenuProduct {
 
         this.menu = menu;
         this.product = product;
-        this.price = price;
-        this.quantity = quantity;
+        this.price = new MenuProductPrice(price);
+        this.quantity = new MenuProductQuantity(quantity);
         this.productId = productId;
     }
 
     public int amount() {
-        return price * quantity;
+        return price.getPrice() * quantity.getQuantity();
     }
 
     public UUID getProductId() {
@@ -76,6 +79,6 @@ public class MenuProduct {
     }
 
     public void changePrice(int price) {
-        this.price = price;
+        this.price = new MenuProductPrice(price);
     }
 }

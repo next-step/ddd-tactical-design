@@ -33,4 +33,16 @@ public class MenuPrice {
     public int getPrice() {
         return price;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MenuPrice menuPrice)) return false;
+        return getPrice() == menuPrice.getPrice();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getPrice());
+    }
 }
