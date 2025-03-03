@@ -12,17 +12,13 @@ public class MenuName {
     protected MenuName() {
     }
 
-    public MenuName(String name) {
+    public MenuName(String name, ProfanityClient profanityChecker) {
         if (name == null || name.isBlank()) {
             throw new InvalidMenuNameException("메뉴 이름이 존재해야 합니다.");
         }
-        this.name = name;
-    }
-
-    public MenuName(String name, ProfanityClient profanityChecker) {
-        this(name);
         if (profanityChecker.containsProfanity(name)) {
             throw new InvalidMenuNameException("메뉴 이름에는 비속어가 포함되면 안됩니다.");
         }
+        this.name = name;
     }
 }

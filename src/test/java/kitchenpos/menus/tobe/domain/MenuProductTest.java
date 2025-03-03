@@ -1,21 +1,32 @@
 package kitchenpos.menus.tobe.domain;
 
 import static java.math.BigDecimal.valueOf;
+import kitchenpos.menus.tobe.domain.vo.DefaultProfanityClient;
 import kitchenpos.menus.tobe.domain.exception.InvalidMenuProductQuantityException;
+import kitchenpos.menus.tobe.domain.vo.ProfanityClient;
 import kitchenpos.products.tobe.domain.Product;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.UUID;
 
 class MenuProductTest {
+
+    private ProfanityClient profanityClient;
+
+    @BeforeEach
+    void setUp() {
+        profanityClient = new DefaultProfanityClient();
+    }
+
     @ParameterizedTest
     @ValueSource(ints = {-1, -100, -99999})
     void 메뉴에_등록된_상품의_수량은_0개_이상이어야_한다(int invalidQuantity) {
         // given
         MenuGroup menuGroup = new MenuGroup("메인 메뉴");
-        Menu menu = new Menu(menuGroup, "후라이드치킨", 20_000, true);
+        Menu menu = new Menu(menuGroup, "후라이드치킨", 20_000, true, profanityClient);
         Product product = new Product("후라이드치킨", valueOf(20_000));
 
         // when & then
