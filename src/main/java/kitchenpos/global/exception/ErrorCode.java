@@ -9,6 +9,8 @@ public enum ErrorCode implements ErrorType {
     NOT_FOUND_MENU("404", "메뉴를 찾을 수 없습니다."),
     NOT_FOUND_MENU_GROUP("404", "메뉴그룹을 찾을 수 없습니다."),
     NOT_FOUND_MENU_PRODUCT("404", "메뉴상품을 찾을 수 없습니다."),
+    NOT_FOUND_ORDER("404", "주문을 찾을 수 없습니다."),
+    NOT_FOUND_ORDER_ITEM("404", "주문항목을 찾을 수 없습니다."),
 
     PRODUCT_PRICE_NOT_ALLOWED("400", "상품가격은 0원 이상이어야 합니다."),
     PRODUCT_NAME_NOT_ALLOWED("400", "상품명은 필수값 입니다."),

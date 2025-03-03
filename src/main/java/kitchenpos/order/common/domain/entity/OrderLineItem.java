@@ -1,5 +1,6 @@
 package kitchenpos.order.common.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -8,9 +9,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
-import java.math.BigDecimal;
 import kitchenpos.menu.domain.model.MenuId;
+import kitchenpos.order.common.domain.model.OrderId;
 
 @Table(name = "order_line_item")
 @Entity
@@ -28,41 +28,26 @@ public class OrderLineItem {
     @Column(name = "quantity", nullable = false)
     private long quantity;
 
-    @Transient
-    private BigDecimal price;
+    @Embedded
+    @AttributeOverride(name = "id", column = @Column(name = "order_id"))
+    @JsonBackReference
+    private OrderId orderId;
 
-    public OrderLineItem() {
-    }
+    public OrderLineItem() {}
 
     public Long getSeq() {
         return seq;
-    }
-
-    public void setSeq(final Long seq) {
-        this.seq = seq;
-    }
-
-    public long getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(final long quantity) {
-        this.quantity = quantity;
     }
 
     public MenuId getMenuId() {
         return menuId;
     }
 
-    public void setMenuId(MenuId menuId) {
-        this.menuId = menuId;
+    public long getQuantity() {
+        return quantity;
     }
 
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
+    public OrderId getOrderId() {
+        return orderId;
     }
 }
