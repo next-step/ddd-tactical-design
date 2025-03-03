@@ -35,15 +35,13 @@ class MenuProductsTest {
     @Test
     void 메뉴에_등록된_상품_개수와_실제_상품_개수가_일치해야_한다() {
         // given
-        MenuGroup menuGroup = new MenuGroup("메인 메뉴");
-        Menu menu = new Menu(menuGroup, "후라이드치킨", 20_000, true, profanities);
         Product product = new Product("후라이드 치킨", valueOf(20_000));
 
         UUID duplicateProductId = product.getId();
 
         // MenuProduct 개수는 2개이지만, 실제 Product는 1개
-        MenuProduct menuProduct1 = new MenuProduct(menu, product, 20_000, 1, duplicateProductId);
-        MenuProduct menuProduct2 = new MenuProduct(menu, product, 20_000, 1, duplicateProductId);
+        MenuProduct menuProduct1 = new MenuProduct(product, 20_000, 1, duplicateProductId);
+        MenuProduct menuProduct2 = new MenuProduct(product, 20_000, 1, duplicateProductId);
 
         // when & then
         assertThatThrownBy(() -> new MenuProducts(menuProduct1, menuProduct2))

@@ -32,14 +32,6 @@ public class MenuProduct {
 
     @ManyToOne(optional = false)
     @JoinColumn(
-            name = "menu_id",
-            columnDefinition = "binary(16)",
-            foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
-    )
-    private Menu menu;
-
-    @ManyToOne(optional = false)
-    @JoinColumn(
             name = "product_id",
             columnDefinition = "binary(16)",
             foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
@@ -58,12 +50,10 @@ public class MenuProduct {
     protected MenuProduct() {
     }
 
-    public MenuProduct(Menu menu, Product product, int price, int quantity, UUID productId) {
+    public MenuProduct(Product product, int price, int quantity, UUID productId) {
         if (quantity < 0) {
             throw new InvalidMenuProductQuantityException("메뉴에 등록된 상품의 수량은 0개 이상이어야 합니다.");
         }
-
-        this.menu = menu;
         this.product = product;
         this.price = new MenuProductPrice(price);
         this.quantity = new MenuProductQuantity(quantity);
@@ -76,9 +66,5 @@ public class MenuProduct {
 
     public UUID getProductId() {
         return productId;
-    }
-
-    public void changePrice(int price) {
-        this.price = new MenuProductPrice(price);
     }
 }
