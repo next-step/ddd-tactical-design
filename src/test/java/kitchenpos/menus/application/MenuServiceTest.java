@@ -14,13 +14,12 @@ import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.application.InMemoryProductRepository;
-import kitchenpos.products.domain.Product;
-import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductRepository;
+import kitchenpos.common.infra.PurgomalumClient;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.AssertionsForClassTypes;
 import org.assertj.core.api.AssertionsForInterfaceTypes;
-import static org.junit.jupiter.api.Assertions.assertAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,6 +30,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class MenuServiceTest {
 
