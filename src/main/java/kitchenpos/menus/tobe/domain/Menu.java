@@ -13,7 +13,7 @@ import kitchenpos.menus.tobe.domain.exception.InvalidMenuPriceException;
 import kitchenpos.menus.tobe.domain.vo.MenuName;
 import kitchenpos.menus.tobe.domain.vo.MenuPrice;
 import kitchenpos.menus.tobe.domain.vo.MenuProducts;
-import kitchenpos.menus.tobe.domain.vo.ProfanityClient;
+import kitchenpos.menus.tobe.domain.vo.Profanities;
 
 import java.util.UUID;
 
@@ -60,13 +60,13 @@ public class Menu {
     protected Menu() {
     }
 
-    public Menu(MenuGroup menuGroup, String name, int price, boolean displayed, ProfanityClient profanityClient) {
+    public Menu(MenuGroup menuGroup, String name, int price, boolean displayed, Profanities profanities) {
         if (menuGroup == null) {
             throw new InvalidMenuGroupEmptyException("메뉴는 반드시 특정 메뉴 그룹에 속해야 합니다.");
         }
         this.id = UUID.randomUUID();
         this.menuGroup = menuGroup;
-        this.name = new MenuName(name, profanityClient);
+        this.name = new MenuName(name, profanities);
         this.price = new MenuPrice(price);
         this.displayed = displayed;
     }
@@ -74,7 +74,7 @@ public class Menu {
     /**
      * 메뉴 가격은 포함된 상품들의 총 가격보다 클 수 없다.
      */
-    public Menu(MenuGroup menuGroup, String name, int price, boolean displayed, MenuProducts menuProducts, ProfanityClient profanityClient) {
+    public Menu(MenuGroup menuGroup, String name, int price, boolean displayed, MenuProducts menuProducts, Profanities profanities) {
         if (menuGroup == null) {
             throw new InvalidMenuGroupEmptyException("메뉴는 반드시 특정 메뉴 그룹에 속해야 합니다.");
         }
@@ -83,7 +83,7 @@ public class Menu {
         }
         this.id = UUID.randomUUID();
         this.menuGroup = menuGroup;
-        this.name = new MenuName(name, profanityClient);
+        this.name = new MenuName(name, profanities);
         this.price = new MenuPrice(price);
         this.displayed = displayed;
     }

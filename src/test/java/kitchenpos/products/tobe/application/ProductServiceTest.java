@@ -5,7 +5,7 @@ import kitchenpos.products.tobe.domain.FakeProfanitiesClient;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.tobe.domain.exception.InvalidProductException;
-import kitchenpos.products.tobe.domain.vo.ProfanityClient;
+import kitchenpos.products.tobe.domain.vo.Profanities;
 import kitchenpos.products.tobe.ui.dto.ChangeProductRequest;
 import kitchenpos.products.tobe.ui.dto.ChangeProductResponse;
 import kitchenpos.products.tobe.ui.dto.CreateProductRequest;
@@ -30,14 +30,14 @@ class ProductServiceTest {
     private ProductService productService;
     private ProductRepository productRepository;
     private MenuRepository menuRepository;
-    private ProfanityClient profanityClient;
+    private Profanities profanities;
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
-        profanityClient = new FakeProfanitiesClient();
-        productService = new ProductService(productRepository, menuRepository, profanityClient);
+        profanities = new FakeProfanitiesClient();
+        productService = new ProductService(productRepository, menuRepository, profanities);
     }
 
     @Test

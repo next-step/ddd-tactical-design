@@ -12,7 +12,7 @@ public class MenuName {
     protected MenuName() {
     }
 
-    public MenuName(String name, ProfanityClient profanityChecker) {
+    public MenuName(String name, Profanities profanityChecker) {
         if (name == null || name.isBlank()) {
             throw new InvalidMenuNameException("메뉴 이름이 존재해야 합니다.");
         }

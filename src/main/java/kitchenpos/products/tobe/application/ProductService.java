@@ -4,7 +4,7 @@ import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.tobe.domain.exception.InvalidProductException;
-import kitchenpos.products.tobe.domain.vo.ProfanityClient;
+import kitchenpos.products.tobe.domain.vo.Profanities;
 import kitchenpos.products.tobe.ui.dto.ChangeProductRequest;
 import kitchenpos.products.tobe.ui.dto.ChangeProductResponse;
 import kitchenpos.products.tobe.ui.dto.CreateProductRequest;
@@ -24,21 +24,21 @@ import java.util.UUID;
 public class ProductService {
     private final ProductRepository productRepository;
     private final MenuRepository menuRepository;
-    private final ProfanityClient profanityClient;
+    private final Profanities profanities;
 
     public ProductService(
             final ProductRepository productRepository,
             final MenuRepository menuRepository,
-            final ProfanityClient profanityClient
+            final Profanities profanities
     ) {
         this.productRepository = productRepository;
         this.menuRepository = menuRepository;
-        this.profanityClient = profanityClient;
+        this.profanities = profanities;
     }
 
     @Transactional
     public CreateProductResponse create(final CreateProductRequest request) {
-        final Product product = new Product(request.name(), request.price(), profanityClient);
+        final Product product = new Product(request.name(), request.price(), profanities);
         return CreateProductResponse.from(productRepository.save(product));
     }
 

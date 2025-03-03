@@ -1,12 +1,12 @@
 package kitchenpos.menus.tobe.domain;
 
-import kitchenpos.menus.tobe.domain.vo.ProfanityClient;
+import kitchenpos.menus.tobe.domain.vo.Profanities;
 
 import java.util.List;
 import java.util.Objects;
 
 
-public class FakeProfanitiesClient implements ProfanityClient {
+public class FakeProfanitiesClient implements Profanities {
 
     private final List<String> profanityNames;
 

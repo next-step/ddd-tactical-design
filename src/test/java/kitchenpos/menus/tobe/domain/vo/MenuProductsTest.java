@@ -16,11 +16,11 @@ import java.util.UUID;
 
 class MenuProductsTest {
 
-    private ProfanityClient profanityClient;
+    private Profanities profanities;
 
     @BeforeEach
     void setUp() {
-        profanityClient = new DefaultProfanityClient();
+        profanities = new DefaultProfanities();
     }
 
     @Test
@@ -35,7 +35,7 @@ class MenuProductsTest {
     void 메뉴에_등록된_상품_개수와_실제_상품_개수가_일치해야_한다() {
         // given
         MenuGroup menuGroup = new MenuGroup("메인 메뉴");
-        Menu menu = new Menu(menuGroup, "후라이드치킨", 20_000, true, profanityClient);
+        Menu menu = new Menu(menuGroup, "후라이드치킨", 20_000, true, profanities);
         Product product = new Product("후라이드 치킨", valueOf(20_000));
 
         UUID duplicateProductId = product.getId();
