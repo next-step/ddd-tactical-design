@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain.vo;
+package kitchenpos.products.tobe.infra;
 
 import kitchenpos.products.tobe.domain.vo.Profanities;
 import org.springframework.stereotype.Component;

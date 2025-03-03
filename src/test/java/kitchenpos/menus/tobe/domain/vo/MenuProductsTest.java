@@ -6,6 +6,7 @@ import kitchenpos.menus.tobe.domain.MenuGroup;
 import kitchenpos.menus.tobe.domain.MenuProduct;
 import kitchenpos.menus.tobe.domain.exception.InvalidMenuProductEmptyException;
 import kitchenpos.menus.tobe.domain.exception.MenuProductCountMismatchException;
+import kitchenpos.menus.tobe.infra.DefaultProfanities;
 import kitchenpos.products.tobe.domain.Product;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.BeforeEach;

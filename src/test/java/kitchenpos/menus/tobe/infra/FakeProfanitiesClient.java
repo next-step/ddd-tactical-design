@@ -1,4 +1,4 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.tobe.infra;
 
 import kitchenpos.menus.tobe.domain.vo.Profanities;
 

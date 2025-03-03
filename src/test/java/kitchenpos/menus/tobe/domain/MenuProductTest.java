@@ -1,7 +1,7 @@
 package kitchenpos.menus.tobe.domain;
 
 import static java.math.BigDecimal.valueOf;
-import kitchenpos.menus.tobe.domain.vo.DefaultProfanities;
+import kitchenpos.menus.tobe.infra.DefaultProfanities;
 import kitchenpos.menus.tobe.domain.exception.InvalidMenuProductQuantityException;
 import kitchenpos.menus.tobe.domain.vo.Profanities;
 import kitchenpos.products.tobe.domain.Product;
