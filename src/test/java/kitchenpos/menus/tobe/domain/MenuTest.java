@@ -16,37 +16,35 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 class MenuTest {
 
+    private MenuGroup menuGroup;
+    private MenuProducts menuProducts;
     private Profanities profanities;
 
     @BeforeEach
     void setUp() {
+        menuGroup = new MenuGroup("메인 메뉴");
         profanities = new DefaultProfanities();
+
+        Product product1 = new Product("후라이드 치킨", valueOf(20000));
+        Product product2 = new Product("양념 치킨", valueOf(22000));
+        MenuProduct mp1 = new MenuProduct(product1, 20000, 1, product1.getId());
+        MenuProduct mp2 = new MenuProduct(product2, 22000, 1, product2.getId());
+        menuProducts = new MenuProducts(mp1, mp2);
     }
 
     @Test
     void 메뉴는_특정_메뉴그룹에_속해야한다() {
         // given when & then
-        assertThatThrownBy(() -> new Menu(null, "치킨 세트", 40000, true, profanities))
+        assertThatThrownBy(() -> new Menu(null, "치킨 세트", 40000, false, menuProducts, profanities))
                 .isInstanceOf(InvalidMenuGroupEmptyException.class)
                 .hasMessage("메뉴는 반드시 특정 메뉴 그룹에 속해야 합니다.");
     }
 
     @Test
     void 메뉴_가격은_포함된_상품들의_총_가격의_합보다_클_수_없다() {
-        // given
-        Product product1 = new Product("후라이드 치킨", valueOf(20_000));
-        Product product2 = new Product("양념 치킨", valueOf(22_000));
-
-        MenuGroup menuGroup = new MenuGroup("메인 메뉴");
-        Menu menu = new Menu(menuGroup, "치킨 세트", 50_000, true, profanities);
-
-        MenuProduct mp1 = new MenuProduct(menu, product1, 20_000, 1, product1.getId());
-        MenuProduct mp2 = new MenuProduct(menu, product2, 22_000, 1, product2.getId());
-        MenuProducts menuProducts = new MenuProducts(mp1, mp2);
-
-        // when & then
+        // given & when & then
         // 상품 총액은 20,000 + 22,000 = 42,000원, 메뉴 가격 50000원이므로 예외 발생해야 함.
-        assertThatThrownBy(() -> new Menu(menuGroup, "치킨 세트", 50_000, true, menuProducts, profanities))
+        assertThatThrownBy(() -> new Menu(menuGroup, "치킨 세트", 50_000, false, menuProducts, profanities))
                 .isInstanceOf(InvalidMenuPriceException.class)
                 .hasMessage("메뉴 가격은 포함된 상품들의 총 가격보다 클 수 없습니다.");
     }
@@ -55,15 +53,7 @@ class MenuTest {
     @ValueSource(ints = {-1, -1000, -10000})
     void 메뉴_가격을_변경할_때_가격이_0원_이상이어야한다(int invalidMenuPrice) {
         // given
-        Product product1 = new Product("후라이드 치킨", valueOf(20000));
-        Product product2 = new Product("양념 치킨", valueOf(22000));
-
-        MenuGroup menuGroup = new MenuGroup("메인 메뉴");
-        Menu menu = new Menu(menuGroup, "후라이드 치킨", 20_000, true, profanities);
-
-        MenuProduct mp1 = new MenuProduct(menu, product1, 20_000, 1, product1.getId());
-        MenuProduct mp2 = new MenuProduct(menu, product2, 22_000, 1, product2.getId());
-        MenuProducts menuProducts = new MenuProducts(mp1, mp2);
+        Menu menu = new Menu(menuGroup, "후라이드 치킨", 20_000, false, menuProducts,  profanities);
 
         // when & then
         assertThatThrownBy(() -> menu.changeMenuPrice(invalidMenuPrice, menuProducts))
@@ -75,16 +65,7 @@ class MenuTest {
     @Test
     void 메뉴_가격을_변경할_때_메뉴_가격은_포함된_상품들의_총_가격의_합보다_클_수_없다() {
         // given
-        Product product1 = new Product("후라이드 치킨", valueOf(20000));
-        Product product2 = new Product("양념 치킨", valueOf(22000));
-
-        MenuGroup menuGroup = new MenuGroup("메인 메뉴");
-        Menu menu = new Menu(menuGroup, "치킨 세트", 44_000, true, profanities);
-
-        MenuProduct mp1 = new MenuProduct(menu, product1, 20_000, 1, product1.getId());
-        MenuProduct mp2 = new MenuProduct(menu, product2, 22_000, 1, product2.getId());
-        MenuProducts menuProducts = new MenuProducts(mp1, mp2);
-
+        Menu menu = new Menu(menuGroup, "치킨 세트", 42_000, false, menuProducts, profanities);
 
         // when & then
         assertThatThrownBy(() -> menu.changeMenuPrice(50_000, menuProducts))
@@ -93,20 +74,15 @@ class MenuTest {
         ;
     }
 
+    // 정책에 따르면 메뉴 가격은 항상 포함된 상품들의 총 가격 이하여야 하므로, 생성자에서 검증하는게 옳다고 본다.
+    // 그렇다면 메뉴 객체가 생성되는 시점에서 이미 유효하지 않은 가격은 걸러져야 하므로
+    // display() 호출 시점에 검증을 기대하는 테스트는 성립하지 않아서 아래 테스트코드는 없애도 되지 않을까 싶다.
     @Test
     void 메뉴_가격이_포함된_상품들의_총_가격의_합보다_크면_메뉴를_표시할_수_없다() {
         // given
-        Product product1 = new Product("후라이드 치킨", valueOf(20000));
-        Product product2 = new Product("양념 치킨", valueOf(22000));
-        MenuGroup menuGroup = new MenuGroup("메인 메뉴");
-        Menu menu = new Menu(menuGroup, "치킨 세트", 50_000, false, profanities);
-
-        MenuProduct mp1 = new MenuProduct(menu, product1, 20_000, 1, product1.getId());
-        MenuProduct mp2 = new MenuProduct(menu, product2, 22_000, 1, product2.getId());
-        MenuProducts menuProducts = new MenuProducts(mp1, mp2);
+        Menu menu = new Menu(menuGroup, "치킨 세트", 42_000, false, menuProducts, profanities);
 
         // when & then
-        // 상품 금액 총액은 42,000원, 메뉴 가격은 50,000원 이므로 예외 발생
         assertThatThrownBy(() -> menu.display(menuProducts))
                 .isInstanceOf(InvalidMenuPriceException.class)
                 .hasMessage("메뉴 가격은 포함된 상품들의 총 가격보다 클 수 없습니다.");
@@ -116,14 +92,7 @@ class MenuTest {
     @Test
     void 메뉴_가격이_포함된_상품들의_총_가격의_합과_같거나_작으면_메뉴를_표시할_수_있다() {
         // given
-        Product product1 = new Product("후라이드 치킨", valueOf(20000));
-        Product product2 = new Product("양념 치킨", valueOf(22000));
-        MenuGroup menuGroup = new MenuGroup("메인 메뉴");
-        Menu menu = new Menu(menuGroup, "치킨 세트", 42_000, false, profanities);
-
-        MenuProduct mp1 = new MenuProduct(menu, product1, 20_000, 1, product1.getId());
-        MenuProduct mp2 = new MenuProduct(menu, product2, 22_000, 1, product2.getId());
-        MenuProducts menuProducts = new MenuProducts(mp1, mp2);
+        Menu menu = new Menu(menuGroup, "치킨 세트", 42_000, false, menuProducts, profanities);
 
         // when
         menu.display(menuProducts);
@@ -135,8 +104,7 @@ class MenuTest {
     @Test
     void 메뉴를_숨길_수_있다() {
         // given
-        MenuGroup menuGroup = new MenuGroup("메인 메뉴");
-        Menu menu = new Menu(menuGroup, "치킨 세트", 42_000, true, profanities);
+        Menu menu = new Menu(menuGroup, "치킨 세트", 42_000, true, menuProducts, profanities);
 
         // when
         menu.hide();

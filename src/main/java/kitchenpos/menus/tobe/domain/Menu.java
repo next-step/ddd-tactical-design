@@ -57,18 +57,14 @@ public class Menu {
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
 
-    protected Menu() {
-    }
+    /**
+     * 메뉴 등록 요청 시 메뉴와 메뉴 상품 간의 가격 검증이 함께 이루어져야 하므로
+     * Menu가 Aggregate Root가 되어 MenuProduct들을 내부에 보유
+     */
+    @Embedded
+    private MenuProducts menuProducts;
 
-    public Menu(MenuGroup menuGroup, String name, int price, boolean displayed, Profanities profanities) {
-        if (menuGroup == null) {
-            throw new InvalidMenuGroupEmptyException("메뉴는 반드시 특정 메뉴 그룹에 속해야 합니다.");
-        }
-        this.id = UUID.randomUUID();
-        this.menuGroup = menuGroup;
-        this.name = new MenuName(name, profanities);
-        this.price = new MenuPrice(price);
-        this.displayed = displayed;
+    protected Menu() {
     }
 
     /**
@@ -86,6 +82,7 @@ public class Menu {
         this.name = new MenuName(name, profanities);
         this.price = new MenuPrice(price);
         this.displayed = displayed;
+        this.menuProducts = menuProducts;
     }
 
     public void changeMenuPrice(int newPrice, MenuProducts menuProducts) {
