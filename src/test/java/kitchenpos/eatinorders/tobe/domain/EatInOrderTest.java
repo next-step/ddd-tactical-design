@@ -155,7 +155,7 @@ public class EatInOrderTest {
                 new EatInOrderId(), eatInOrderStatus, new EatInOrderDateTime(), eatInOrderLineItems, new OrderTableId()
         );
         assertThatThrownBy(eatInOrder::accepted)
-                .isExactlyInstanceOf(IllegalArgumentException.class);
+                .isExactlyInstanceOf(IllegalStateException.class);
     }
 
     @DisplayName("대기중인 매장 주문을 주문 수락으로 변경한다.")
@@ -196,7 +196,7 @@ public class EatInOrderTest {
                 new EatInOrderId(), eatInOrderStatus, new EatInOrderDateTime(), eatInOrderLineItems, new OrderTableId()
         );
         assertThatThrownBy(eatInOrder::served)
-                .isExactlyInstanceOf(IllegalArgumentException.class);
+                .isExactlyInstanceOf(IllegalStateException.class);
     }
 
     @DisplayName("수락중인 매장 주문을 주문 서빙으로 변경한다.")
@@ -239,7 +239,7 @@ public class EatInOrderTest {
                 new EatInOrderId(), eatInOrderStatus, new EatInOrderDateTime(), eatInOrderLineItems, new OrderTableId()
         );
         assertThatThrownBy(eatInOrder::completed)
-                .isExactlyInstanceOf(IllegalArgumentException.class);
+                .isExactlyInstanceOf(IllegalStateException.class);
     }
 
     @DisplayName("서빙중인 매장 주문을 주문 완료로 변경한다.")

@@ -16,21 +16,21 @@ public enum EatInOrderStatus {
         if (WAITING == this) {
             return ACCEPTED;
         }
-        throw new IllegalArgumentException();
+        throw new IllegalStateException();
     }
 
     public EatInOrderStatus served() {
         if (ACCEPTED == this) {
             return SERVED;
         }
-        throw new IllegalArgumentException();
+        throw new IllegalStateException();
     }
 
     public EatInOrderStatus completed() {
         if (SERVED == this) {
             return COMPLETED;
         }
-        throw new IllegalArgumentException();
+        throw new IllegalStateException();
     }
 
     public boolean isSameStatus(final EatInOrderStatus orderStatus) {
