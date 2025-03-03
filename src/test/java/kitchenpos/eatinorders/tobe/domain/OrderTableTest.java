@@ -1,5 +1,7 @@
 package kitchenpos.eatinorders.tobe.domain;
 
+import kitchenpos.eatinorders.tobe.domain.ordertable.EmptyOrderTableOrders;
+import kitchenpos.eatinorders.tobe.domain.ordertable.ExistOrderTableOrders;
 import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTable;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -62,9 +64,17 @@ public class OrderTableTest {
     @Test
     void clear() {
         final OrderTable orderTable = new OrderTable("1번", 10, true);
-        orderTable.clear();
+        orderTable.clear(new EmptyOrderTableOrders());
 
         assertThat(orderTable.numberOfGuests()).isZero();
         assertThat(orderTable.isNotOccupied()).isTrue();
+    }
+
+    @DisplayName("완료되지 않은 주문이 있는 주문 테이블은 빈 테이블로 설정할 수 없다.")
+    @Test
+    void clearWithUncompletedOrders() {
+        final OrderTable orderTable = new OrderTable("1번", 10, true);
+        assertThatThrownBy(() -> orderTable.clear(new ExistOrderTableOrders()))
+                .isInstanceOf(IllegalStateException.class);
     }
 }

@@ -4,6 +4,7 @@ import kitchenpos.eatinorders.tobe.domain.order.InMemoryEatInOrderRepository;
 import kitchenpos.eatinorders.tobe.domain.order.event.EatInOrderCompletedEvent;
 import kitchenpos.eatinorders.tobe.domain.ordertable.InMemoryOrderTableRepository;
 import kitchenpos.eatinorders.tobe.domain.ordertable.vo.OrderTableId;
+import kitchenpos.eatinorders.tobe.infrastructure.DefaultOrderTableOrders;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,7 +18,7 @@ public class OrderTableEventListener {
 
     private final OrderTableService orderTableService = new OrderTableService(
             new InMemoryOrderTableRepository(),
-            new InMemoryEatInOrderRepository()
+            new DefaultOrderTableOrders(new InMemoryEatInOrderRepository())
     );
 
     // @EventListener

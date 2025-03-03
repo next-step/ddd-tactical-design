@@ -45,7 +45,10 @@ public class OrderTable {
         return numberOfGuests.getValue();
     }
 
-    public void clear() {
+    public void clear(final OrderTableOrders orderTableOrders) {
+        if (orderTableOrders.existByOrderTableId(id)) {
+            throw new IllegalStateException();
+        }
         this.numberOfGuests = new NumberOfGuests(0);
         this.occupied = new Occupied(false);
     }

@@ -1,11 +1,8 @@
 package kitchenpos.eatinorders.tobe.application;
 
 import kitchenpos.eatinorders.tobe.application.dto.CreateOrderTableCommand;
-import kitchenpos.eatinorders.tobe.domain.order.EatInOrderRepository;
-import kitchenpos.eatinorders.tobe.domain.order.InMemoryEatInOrderRepository;
-import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderStatus;
-import kitchenpos.eatinorders.tobe.domain.ordertable.InMemoryOrderTableRepository;
 import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTable;
+import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTableOrders;
 import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTableRepository;
 import kitchenpos.eatinorders.tobe.domain.ordertable.vo.OrderTableId;
 
@@ -14,15 +11,12 @@ import java.util.UUID;
 public class OrderTableService {
 
     private final OrderTableRepository orderTableRepository;
-    private final EatInOrderRepository eatInOrderRepository;
+    private final OrderTableOrders orderTableOrders;
 
-    public OrderTableService() {
-        this(new InMemoryOrderTableRepository(), new InMemoryEatInOrderRepository());
-    }
 
-    public OrderTableService(final OrderTableRepository orderTableRepository, final EatInOrderRepository eatInOrderRepository) {
+    public OrderTableService(final OrderTableRepository orderTableRepository, final OrderTableOrders orderTableOrders) {
         this.orderTableRepository = orderTableRepository;
-        this.eatInOrderRepository = eatInOrderRepository;
+        this.orderTableOrders = orderTableOrders;
     }
 
     public OrderTable create(final CreateOrderTableCommand command) {
@@ -48,10 +42,7 @@ public class OrderTableService {
         final OrderTableId id = new OrderTableId(orderTableId);
         final OrderTable orderTable = orderTableRepository.findById(id)
                 .orElseThrow(IllegalArgumentException::new);
-        if (eatInOrderRepository.existsByOrderTableAndStatusNot(id, EatInOrderStatus.COMPLETED)) {
-            throw new IllegalStateException();
-        }
-        orderTable.clear();
+        orderTable.clear(orderTableOrders);
         return orderTableRepository.save(orderTable);
     }
 }
