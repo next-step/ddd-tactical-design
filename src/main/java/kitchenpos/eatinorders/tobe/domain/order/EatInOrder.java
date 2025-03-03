@@ -7,6 +7,7 @@ import kitchenpos.eatinorders.tobe.domain.ordertable.vo.OrderTableId;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import static java.util.Objects.isNull;
@@ -75,5 +76,18 @@ public class EatInOrder {
 
     public List<EatInOrderLineItem> eatInOrderLineItems() {
         return new ArrayList<>(eatInOrderLineItems.eatInOrderLineItems());
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final EatInOrder that = (EatInOrder) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }
