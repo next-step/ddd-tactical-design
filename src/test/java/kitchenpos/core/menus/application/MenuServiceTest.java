@@ -1,6 +1,5 @@
-package kitchenpos.menus.application;
+package kitchenpos.core.menus.application;
 
-import kitchenpos.core.menus.application.MenuService;
 import kitchenpos.core.menus.domain.Menu;
 import kitchenpos.core.menus.domain.MenuGroupRepository;
 import kitchenpos.core.menus.domain.MenuProduct;
@@ -10,8 +9,8 @@ import kitchenpos.core.products.tobe.domain.TobeProductRepository;
 import kitchenpos.core.shared.identifier.ProductId;
 import kitchenpos.core.shared.value.Money;
 import kitchenpos.core.shared.value.Quantity;
-import kitchenpos.products.application.FakeProfanityChecker;
-import kitchenpos.products.application.InMemoryProductRepository;
+import kitchenpos.core.products.application.FakeProfanityChecker;
+import kitchenpos.core.products.application.InMemoryProductRepository;
 import kitchenpos.core.shared.domain.ProfanityChecker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -89,7 +88,7 @@ class MenuServiceTest {
         return Arrays.asList(
             null,
             Arguments.of(Collections.emptyList()),
-            Arguments.of(Arrays.asList(createMenuProductRequest(ProductId.of(INVALID_ID.toString()), 2L)))
+            Arguments.of(Arrays.asList(createMenuProductRequest(ProductId.of(INVALID_ID), 2L)))
         );
     }
 

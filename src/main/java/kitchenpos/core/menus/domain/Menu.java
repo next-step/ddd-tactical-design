@@ -1,15 +1,7 @@
 package kitchenpos.core.menus.domain;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
+import kitchenpos.core.products.tobe.domain.ProductPrice;
 import kitchenpos.core.shared.value.Money;
 
 import java.math.BigDecimal;
@@ -26,7 +18,7 @@ public class Menu {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "price", nullable = false)
+    @AttributeOverride(name = "amount", column = @Column(name = "price", nullable = false, columnDefinition = "decimal(19,2)"))
     private Money price;
 
     @ManyToOne(optional = false)

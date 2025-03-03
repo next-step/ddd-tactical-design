@@ -1,7 +1,7 @@
-package kitchenpos.products.application;
+package kitchenpos.core.products.application;
 
+import kitchenpos.config.UnitTest;
 import kitchenpos.fixture.ProductFixtures;
-import kitchenpos.core.products.application.QueryProductService;
 import kitchenpos.core.products.tobe.domain.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,6 +15,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+@UnitTest
+@DisplayName("[Product] QueryProductService 테스트")
 class QueryProductServiceTest {
     private TobeProductRepository productRepository;
     private QueryProductService sut;
@@ -25,7 +27,7 @@ class QueryProductServiceTest {
         sut = new QueryProductService(productRepository);
     }
 
-    @DisplayName("상품의 목록을 조회할 수 있다.")
+    @DisplayName("성공: 저장된 전체 상품을 조회할 수 있다.")
     @Test
     void findAll() {
         productRepository.save(ProductFixtures.product("후라이드", 16_000L));

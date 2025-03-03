@@ -1,4 +1,4 @@
-package kitchenpos.products.application;
+package kitchenpos.core.products.application;
 
 
 import kitchenpos.core.products.tobe.domain.Product;
@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 
 public class InMemoryProductRepository implements TobeProductRepository {
     private final Map<ProductId, Product> products = new HashMap<>();

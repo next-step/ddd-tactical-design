@@ -10,6 +10,6 @@ import java.util.UUID;
 public class UUIDBasedProductIdGenerator implements ProductIdGenerator {
     @Override
     public ProductId generateId() {
-        return ProductId.of(UUID.randomUUID().toString());
+        return ProductId.of(UUID.randomUUID());
     }
 }

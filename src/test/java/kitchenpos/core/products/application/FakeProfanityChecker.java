@@ -1,4 +1,4 @@
-package kitchenpos.products.application;
+package kitchenpos.core.products.application;
 
 import kitchenpos.core.shared.domain.ProfanityChecker;
 import org.thymeleaf.util.StringUtils;

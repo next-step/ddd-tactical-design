@@ -3,14 +3,16 @@ package kitchenpos.fixture;
 import kitchenpos.core.products.application.dto.CreateProductRequest;
 import kitchenpos.core.products.tobe.domain.*;
 import kitchenpos.core.products.tobe.domain.support.DefaultProductNamePolicy;
-import kitchenpos.core.products.tobe.domain.support.UUIDBasedProductIdGenerator;
 import kitchenpos.core.shared.domain.ProfanityChecker;
+import kitchenpos.core.shared.identifier.ProductId;
 import kitchenpos.core.shared.value.Money;
-import kitchenpos.products.application.FakeProfanityChecker;
+import kitchenpos.core.products.application.FakeProfanityChecker;
+
+import java.util.UUID;
 
 public class ProductFixtures {
 
-    private static ProductIdGenerator productIdGenerator = new UUIDBasedProductIdGenerator();
+    private static ProductIdGenerator productIdGenerator = () -> ProductId.of(UUID.randomUUID());
     private static ProfanityChecker profanityChecker = new FakeProfanityChecker();
     private static ProductNamePolicy productNamePolicy = new DefaultProductNamePolicy(profanityChecker);
 

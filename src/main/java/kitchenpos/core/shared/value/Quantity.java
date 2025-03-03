@@ -3,9 +3,11 @@ package kitchenpos.core.shared.value;
 import kitchenpos.core.shared.domain.ValueObject;
 
 public class Quantity extends ValueObject<Quantity> {
-    private final long value;
+    public static final Quantity ZERO = Quantity.of(0);
 
-    public Quantity(long value) {
+    private final Long value;
+
+    private Quantity(long value) {
         if (value < 0) {
             throw new IllegalArgumentException("수량은 음수가 될 수 없습니다.");
         }

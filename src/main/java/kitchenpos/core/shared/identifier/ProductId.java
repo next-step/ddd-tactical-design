@@ -4,27 +4,28 @@ import jakarta.persistence.Embeddable;
 import kitchenpos.core.products.tobe.domain.exception.InvalidProductIdException;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 @Embeddable
 public class ProductId implements Serializable {
 
-    private String value;
+    private UUID value;
 
     @SuppressWarnings("unused")
     protected ProductId() {}
 
-    private ProductId(String value) {
-        if (value == null || value.isBlank()) {
+    private ProductId(UUID value) {
+        if (value == null) {
             throw new InvalidProductIdException("Product ID 는 null 이거나 빈 값이 될 수 없습니다.");
         }
-        this.value = value.strip();
+        this.value = value;
     }
 
-    public static ProductId of(String value) {
+    public static ProductId of(UUID value) {
         return new ProductId(value);
     }
 
-    public String getValue() {
+    public UUID getValue() {
         return value;
     }
 }

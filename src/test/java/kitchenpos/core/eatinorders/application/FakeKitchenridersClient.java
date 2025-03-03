@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.application;
+package kitchenpos.core.eatinorders.application;
 
 import kitchenpos.data.KitchenridersClient;
 

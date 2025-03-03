@@ -1,5 +1,6 @@
 package kitchenpos.core.products.tobe.domain;
 
+import jakarta.persistence.Embeddable;
 import kitchenpos.core.products.tobe.domain.exception.InvalidProductPriceException;
 import kitchenpos.core.shared.value.Money;
 import kitchenpos.core.shared.domain.ValueObject;
@@ -7,8 +8,12 @@ import kitchenpos.core.shared.value.Quantity;
 
 import java.math.BigDecimal;
 
+@Embeddable
 public class ProductPrice extends ValueObject<ProductPrice> {
     private Money price;
+
+    @SuppressWarnings("unused")
+    protected ProductPrice() {}
 
     private ProductPrice(Money price) {
         if (price == null || price.isLessThan(Money.ZERO)) {

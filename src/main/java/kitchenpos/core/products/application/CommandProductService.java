@@ -39,9 +39,7 @@ public class CommandProductService implements AddProduct, ChangeProductPrice {
         Product product = tobeProductRepository.findById(productId)
                 .map(p -> p.changePrice(request))
                 .orElseThrow(() -> new ProductNotFoundException(productId));
-
-        menuRepository.findAllByProductId(productId)
-                .forEach(Menu::recalculateDisplayStatus);
+        tobeProductRepository.save(product);
         return product;
     }
 
