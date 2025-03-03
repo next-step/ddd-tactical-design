@@ -13,6 +13,8 @@ import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import kitchenpos.global.exception.ErrorCode;
+import kitchenpos.order.common.domain.exception.OrderInvalidException;
 import kitchenpos.order.common.domain.model.OrderId;
 import kitchenpos.order.common.domain.model.OrderLineItems;
 import kitchenpos.order.eatin.domain.model.OrderTableId;
@@ -48,6 +50,16 @@ public class Order {
 
     protected Order() {}
 
+    public Order(OrderId orderId, OrderType type, OrderStatus status, LocalDateTime orderDateTime,
+        OrderLineItems orderLineItems, OrderTableId orderTableId) {
+        this.orderId = orderId;
+        this.type = type;
+        this.status = status;
+        this.orderDateTime = orderDateTime;
+        this.orderLineItems = orderLineItems;
+        this.orderTableId = orderTableId;
+    }
+
     public OrderId getOrderId() {
         return orderId;
     }
@@ -76,6 +88,18 @@ public class Order {
         this.status = orderStatus;
     }
 
+    public boolean isDelivery() {
+        return this.getType() == OrderType.DELIVERY;
+    }
+
+    public boolean isEatIn() {
+        return this.getType() == OrderType.EAT_IN;
+    }
+
+    public boolean isTakeout() {
+        return this.getType() == OrderType.TAKEOUT;
+    }
+
     public boolean isWaiting() {
         return this.getStatus() == OrderStatus.WAITING;
     }
@@ -83,15 +107,31 @@ public class Order {
         return this.getStatus() == OrderStatus.ACCEPTED;
     }
 
-    public void validateWaiting() {
+    public boolean isDelivered() {
+        return this.getStatus() == OrderStatus.DELIVERED;
+    }
+    public boolean isServed() {
+        return this.getStatus() == OrderStatus.SERVED;
+    }
+
+    public void validateIsWaiting() {
         if(!isWaiting()) {
-            throw new IllegalStateException("주문대기 되지 않았습니다.");
+            throw new OrderInvalidException(ErrorCode.ORDER_STATUS_IS_NOT_WAITING.toString());
         }
     }
 
-    public void validateAccepted() {
+    public void validateIsAccepted() {
         if(!isAccepted()) {
-            throw new IllegalStateException("주문수락 되지 않았습니다.");
+            throw new OrderInvalidException(ErrorCode.ORDER_STATUS_IS_NOT_ACCEPTED.toString());
+        }
+    }
+
+    public void validateOrderCompletion() {
+        if (isDelivery() && !isDelivered()) {
+            throw new OrderInvalidException(ErrorCode.ORDER_STATUS_IS_NOT_DELIVERED.toString());
+        }
+        if ((isTakeout() || isEatIn()) && !isServed()) {
+            throw new OrderInvalidException(ErrorCode.ORDER_STATUS_IS_NOT_SERVED.toString());
         }
     }
 }

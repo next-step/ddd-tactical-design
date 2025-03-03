@@ -17,4 +17,6 @@ public interface EatinService {
     OrderTableInfo clear(OrderTableId orderTableId);
 
     OrderTableInfo changeNumberOfGuests(Update request);
+
+    void complete(OrderTableId orderTableId);
 }

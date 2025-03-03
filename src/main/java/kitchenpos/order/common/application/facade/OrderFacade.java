@@ -2,6 +2,7 @@ package kitchenpos.order.common.application.facade;
 
 import java.util.List;
 import java.util.UUID;
+import kitchenpos.order.common.application.dto.OrderRequest;
 import kitchenpos.order.common.application.dto.OrderResponse;
 import kitchenpos.order.common.application.dto.OrderResponse.GetOrder;
 import kitchenpos.order.common.application.dto.OrderTableRequest.Create;
@@ -34,6 +35,10 @@ public class OrderFacade {
         this.eatinService = eatinService;
         this.orderQueryService = orderQueryService;
         this.orderCommandService = orderCommandService;
+    }
+
+    public GetOrder create(OrderRequest.Create request) {
+        return GetOrder.fromVo(orderCommandService.create(request.toVo()));
     }
 
     public OrderResponse.GetOrder accept(final UUID orderId) {

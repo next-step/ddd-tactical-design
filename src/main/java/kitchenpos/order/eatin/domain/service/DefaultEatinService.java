@@ -58,7 +58,7 @@ public class DefaultEatinService implements EatinService {
         final OrderTable orderTable = orderTableRepository.findById(orderTableId)
             .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_ORDER_TABLE.toString()));
 
-        if (orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
+        if (orderRepository.existsByOrderTableIdAndStatusNot(orderTableId, OrderStatus.COMPLETED)) {
             throw new IllegalStateException();
         }
         orderTable.clear();
@@ -74,5 +74,15 @@ public class DefaultEatinService implements EatinService {
 
         orderTable.updateNumberOfGuests(request.guests());
         return OrderTableInfo.fromEntity(orderTable);
+    }
+
+    @Override
+    public void complete(OrderTableId orderTableId) {
+        final OrderTable orderTable = orderTableRepository.findById(orderTableId)
+            .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_ORDER_TABLE.toString()));
+
+        if (!orderRepository.existsByOrderTableIdAndStatusNot(orderTableId, OrderStatus.COMPLETED)) {
+            orderTable.clear();
+        }
     }
 }

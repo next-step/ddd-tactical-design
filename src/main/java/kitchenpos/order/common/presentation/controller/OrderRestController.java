@@ -1,13 +1,18 @@
 package kitchenpos.order.common.presentation.controller;
 
+import jakarta.validation.Valid;
+import java.net.URI;
 import java.util.List;
 import java.util.UUID;
+import kitchenpos.order.common.application.dto.OrderRequest;
 import kitchenpos.order.common.application.dto.OrderResponse;
 import kitchenpos.order.common.application.facade.OrderFacade;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,13 +26,14 @@ public class OrderRestController {
         this.orderFacade = orderFacade;
     }
 
-//    @PostMapping
-//    public ResponseEntity<OrderResponse.GetOrder> create(@RequestBody final Order request) {
-//        final Order response = orderService.create(request);
-//        return ResponseEntity.created(URI.create("/api/orders/" + response.getId()))
-//            .body(response);
-//    }
-//
+    @PostMapping
+    public ResponseEntity<OrderResponse.GetOrder> create(
+        @RequestBody @Valid final OrderRequest.Create request
+    ) {
+        final OrderResponse.GetOrder response = orderFacade.create(request);
+        return ResponseEntity.created(URI.create("/api/orders/" + response.id()))
+            .body(response);
+    }
     @PutMapping("/{orderId}/accept")
     public ResponseEntity<OrderResponse.GetOrder> accept(@PathVariable final UUID orderId) {
         return ResponseEntity.ok(orderFacade.accept(orderId));

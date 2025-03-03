@@ -27,11 +27,11 @@ public record OrderTableRequest() {
     public record UpdateGuests(
         UUID orderTableId,
         @Positive(message = "테이블 인원 0보다 커야 합니다.")
-        int guests
+        int numberOfGuests
     ) {
 
         public OrderTableVo.Update toVo() {
-            return new OrderTableVo.Update(OrderTableId.of(orderTableId), OrderTableGuests.of(guests));
+            return new OrderTableVo.Update(OrderTableId.of(orderTableId), OrderTableGuests.of(numberOfGuests));
         }
     }
 }

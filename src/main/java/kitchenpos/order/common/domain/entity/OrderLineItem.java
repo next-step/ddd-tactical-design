@@ -9,8 +9,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import java.math.BigDecimal;
 import kitchenpos.menu.domain.model.MenuId;
+import kitchenpos.order.common.application.dto.OrderRequest.OrderLineItemCreate;
 import kitchenpos.order.common.domain.model.OrderId;
+import kitchenpos.order.common.domain.model.OrderLineItemQty;
 
 @Table(name = "order_line_item")
 @Entity
@@ -25,15 +29,25 @@ public class OrderLineItem {
     @AttributeOverride(name = "id", column = @Column(name = "menu_id"))
     private MenuId menuId;
 
-    @Column(name = "quantity", nullable = false)
-    private long quantity;
+    @Embedded
+    private OrderLineItemQty quantity;
 
     @Embedded
     @AttributeOverride(name = "id", column = @Column(name = "order_id"))
     @JsonBackReference
     private OrderId orderId;
 
+    @Transient
+    private BigDecimal price;
+
     public OrderLineItem() {}
+
+    public OrderLineItem(MenuId menuId, OrderId orderId, OrderLineItemQty quantity, BigDecimal price) {
+        this.menuId = menuId;
+        this.orderId = orderId;
+        this.quantity = quantity;
+        this.price = price;
+    }
 
     public Long getSeq() {
         return seq;
@@ -43,11 +57,19 @@ public class OrderLineItem {
         return menuId;
     }
 
-    public long getQuantity() {
+    public OrderLineItemQty getQuantity() {
         return quantity;
     }
 
     public OrderId getOrderId() {
         return orderId;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public static OrderLineItem fromDto(OrderLineItemCreate dto) {
+        return new OrderLineItem(MenuId.of(dto.menuId()), null, OrderLineItemQty.of(dto.quantity()), dto.price());
     }
 }

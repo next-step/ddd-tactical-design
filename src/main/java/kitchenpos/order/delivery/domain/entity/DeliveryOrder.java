@@ -3,9 +3,14 @@ package kitchenpos.order.delivery.domain.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import java.time.LocalDateTime;
 import kitchenpos.order.common.domain.entity.Order;
 import kitchenpos.order.common.domain.entity.OrderStatus;
 import kitchenpos.order.common.domain.entity.OrderType;
+import kitchenpos.order.common.domain.model.OrderId;
+import kitchenpos.order.common.domain.model.OrderLineItems;
+import kitchenpos.order.common.domain.model.OrderVo.Create;
+import kitchenpos.order.delivery.domain.model.DeliveryInfo;
 
 @Entity
 @DiscriminatorValue("DELIVERY")
@@ -15,6 +20,21 @@ public class DeliveryOrder extends Order {
     private String deliveryAddress;
 
     protected DeliveryOrder() {}
+
+    public DeliveryOrder(OrderId orderId, OrderLineItems orderLineItems, DeliveryInfo deliveryInfo) {
+        super(orderId, OrderType.DELIVERY, OrderStatus.WAITING, LocalDateTime.now(), orderLineItems, null);
+        this.deliveryAddress = deliveryInfo.address();
+    }
+
+    public static DeliveryOrder createDeliveryOrder(OrderId orderId, Create request, OrderLineItems orderLineItems) {
+        final var deliveryAddress = DeliveryInfo.of(request.deliveryAddress());
+
+        return new DeliveryOrder(orderId, orderLineItems, deliveryAddress);
+    }
+
+    public String getDeliveryAddress() {
+        return deliveryAddress;
+    }
 
     public boolean isDelivery() {
         return this.getType() == OrderType.DELIVERY;

@@ -1,9 +1,9 @@
 package kitchenpos.order.eatin.domain.repository;
 
 import kitchenpos.order.common.domain.entity.OrderStatus;
-import kitchenpos.order.eatin.domain.entity.OrderTable;
+import kitchenpos.order.eatin.domain.model.OrderTableId;
 
 public interface EatinOrderRepository {
-    boolean existsByOrderTableAndStatusNot(OrderTable orderTable, OrderStatus status);
+    boolean existsByOrderTableIdAndStatusNot(OrderTableId orderTableId, OrderStatus status);
 }
 

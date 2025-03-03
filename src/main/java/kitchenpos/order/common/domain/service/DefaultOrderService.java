@@ -1,16 +1,28 @@
 package kitchenpos.order.common.domain.service;
 
-import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 import kitchenpos.global.exception.ErrorCode;
 import kitchenpos.global.exception.NotFoundException;
+import kitchenpos.menu.domain.model.MenuVo.MenuInfo;
+import kitchenpos.order.common.application.MenuContextProvider;
 import kitchenpos.order.common.domain.entity.Order;
+import kitchenpos.order.common.domain.entity.OrderLineItem;
 import kitchenpos.order.common.domain.entity.OrderStatus;
-import kitchenpos.order.common.domain.entity.OrderType;
+import kitchenpos.order.common.domain.exception.OrderHideMenuException;
+import kitchenpos.order.common.domain.exception.OrderMenuInvalidException;
+import kitchenpos.order.common.domain.exception.OrderPriceInvalidException;
 import kitchenpos.order.common.domain.model.OrderId;
+import kitchenpos.order.common.domain.model.OrderLineItems;
 import kitchenpos.order.common.domain.model.OrderVo;
+import kitchenpos.order.common.domain.model.OrderVo.Create;
 import kitchenpos.order.common.domain.model.OrderVo.OrderInfo;
 import kitchenpos.order.common.domain.repository.OrderRepository;
+import kitchenpos.order.delivery.domain.entity.DeliveryOrder;
+import kitchenpos.order.delivery.domain.service.DeliveryService;
+import kitchenpos.order.eatin.domain.model.EatInOrder;
+import kitchenpos.order.eatin.domain.service.EatinService;
+import kitchenpos.order.takeout.domain.model.TakeOutOrder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,9 +31,70 @@ import org.springframework.transaction.annotation.Transactional;
 public class DefaultOrderService implements OrderQueryService, OrderCommandService {
 
     private final OrderRepository orderRepository;
+    private final DeliveryService deliveryService;
+    private final EatinService eatinService;
 
-    public DefaultOrderService(OrderRepository orderRepository) {
+    private final MenuContextProvider menuContextProvider;
+
+    public DefaultOrderService(
+        OrderRepository orderRepository,
+        DeliveryService deliveryService, EatinService eatinService,
+        MenuContextProvider menuContextProvider
+    ) {
         this.orderRepository = orderRepository;
+        this.deliveryService = deliveryService;
+        this.eatinService = eatinService;
+        this.menuContextProvider = menuContextProvider;
+    }
+
+    @Override
+    public OrderVo.OrderInfo create(Create request) {
+        final OrderId orderId = OrderId.of(UUID.randomUUID());
+        OrderLineItems orderLineItems = validateOrderLineItems(orderId, request);
+
+        Order order = switch (request.type()) {
+            case EAT_IN -> EatInOrder.createEatInOrder(orderId, request, orderLineItems);
+            case DELIVERY -> DeliveryOrder.createDeliveryOrder(orderId, request, orderLineItems);
+            case TAKEOUT -> TakeOutOrder.createTakeoutOrder(orderId, orderLineItems);
+        };
+
+        return OrderVo.OrderInfo.fromEntity(orderRepository.save(order));
+    }
+
+    private OrderLineItems validateOrderLineItems(OrderId orderId, Create request) {
+        var menuIds = request.orderLineItems().getItems().stream()
+            .map(OrderLineItem::getMenuId)
+            .toList();
+
+        var menuInfos = menuContextProvider.findMenus(menuIds);
+
+        if (menuInfos.size() != menuIds.size()) {
+            throw new OrderMenuInvalidException();
+        }
+
+        var orderLineItems = request.orderLineItems().getItems().stream()
+            .map(item -> {
+                MenuInfo menuInfo = menuInfos.stream()
+                    .filter(m -> m.id().equals(item.getMenuId()))
+                    .findFirst()
+                    .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_MENU.toString()));
+
+                validateMenu(menuInfo, item);
+
+                return new OrderLineItem(menuInfo.id(), orderId, item.getQuantity(), item.getPrice());
+            })
+            .toList();
+
+        return new OrderLineItems(orderLineItems);
+    }
+
+    private void validateMenu(MenuInfo menuInfo, OrderLineItem item) {
+        if (!menuInfo.displayed()) {
+            throw new OrderHideMenuException();
+        }
+        if (!menuInfo.price().isEqual(item.getPrice())) {
+            throw new OrderPriceInvalidException();
+        }
     }
 
     @Override
@@ -29,20 +102,12 @@ public class DefaultOrderService implements OrderQueryService, OrderCommandServi
         final Order order = orderRepository.findById(orderId)
             .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_ORDER.toString()));
 
-        order.validateWaiting();
+        order.validateIsWaiting();
 
-        if (order.getType() == OrderType.DELIVERY) {
-            BigDecimal sum = BigDecimal.ZERO;
-
-            // TODO: step3 보완
-//            for (final OrderLineItem orderLineItem : order.getOrderLineItems()) {
-//                sum = orderLineItem.getMenu()
-//                    .getPrice()
-//                    .price()
-//                    .multiply(BigDecimal.valueOf(orderLineItem.getQuantity()));
-//            }
-//            deliveryKitchenridersClient.requestDelivery(orderId, sum, order.getDeliveryAddress());
+        if (order.isDelivery()) {
+            deliveryService.requestDelivery(orderId, order.getOrderLineItems());
         }
+
         order.updateOrderStatus(OrderStatus.ACCEPTED);
         return OrderVo.OrderInfo.fromEntity(order);
     }
@@ -52,7 +117,7 @@ public class DefaultOrderService implements OrderQueryService, OrderCommandServi
         final Order order = orderRepository.findById(orderId)
             .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_ORDER.toString()));
 
-        order.validateAccepted();
+        order.validateIsAccepted();
         order.updateOrderStatus(OrderStatus.SERVED);
         return OrderVo.OrderInfo.fromEntity(order);
     }
@@ -61,27 +126,13 @@ public class DefaultOrderService implements OrderQueryService, OrderCommandServi
     public OrderInfo complete(OrderId orderId) {
         final Order order = orderRepository.findById(orderId)
             .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_ORDER.toString()));
-        final OrderType type = order.getType();
-        final OrderStatus status = order.getStatus();
-        if (type == OrderType.DELIVERY) {
-            if (status != OrderStatus.DELIVERED) {
-                throw new IllegalStateException();
-            }
+
+        order.validateOrderCompletion();
+        order.updateOrderStatus(OrderStatus.COMPLETED);
+
+        if (order.isEatIn()) {
+            eatinService.complete(order.getOrderTableId());
         }
-        if (type == OrderType.TAKEOUT || type == OrderType.EAT_IN) {
-            if (status != OrderStatus.SERVED) {
-                throw new IllegalStateException();
-            }
-        }
-//        order.updateOrderStatus(OrderStatus.COMPLETED);
-//        if (type == OrderType.EAT_IN) {
-//            final OrderTableId orderTable = order.getOrderTable();
-//            if (!orderRepository.existsByOrderTableAndStatusNot(orderTable,
-//                OrderStatus.COMPLETED)) {
-//                orderTable.setNumberOfGuests(0);
-//                orderTable.setOccupied(false);
-//            }
-//        }
 
         return OrderVo.OrderInfo.fromEntity(order);
     }

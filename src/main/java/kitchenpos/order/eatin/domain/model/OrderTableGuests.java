@@ -2,7 +2,7 @@ package kitchenpos.order.eatin.domain.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import kitchenpos.menu.domain.exception.MenuProductQtyException;
+import kitchenpos.order.eatin.domain.exception.OrderTableGuestsException;
 
 @Embeddable
 public record OrderTableGuests(
@@ -12,12 +12,12 @@ public record OrderTableGuests(
 
     public static OrderTableGuests of(int guests) {
         if (guests < 0) {
-            throw new MenuProductQtyException();
+            throw new OrderTableGuestsException();
         }
         return new OrderTableGuests(guests);
     }
 
-    public long get() {
+    public int get() {
         return guests;
     }
 }

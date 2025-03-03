@@ -1,38 +1,54 @@
 package kitchenpos.order.common.domain.model;
 
-import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
-import kitchenpos.menu.domain.entity.Menu;
-import kitchenpos.menu.domain.model.MenuGroupId;
 import kitchenpos.menu.domain.model.MenuId;
-import kitchenpos.menu.domain.model.MenuName;
 import kitchenpos.menu.domain.model.MenuPrice;
-import kitchenpos.menu.domain.model.MenuProducts;
-import kitchenpos.menu.domain.model.MenuVo.MenuInfo;
 import kitchenpos.order.common.domain.entity.Order;
+import kitchenpos.order.common.domain.entity.OrderStatus;
+import kitchenpos.order.common.domain.entity.OrderType;
+import kitchenpos.order.eatin.domain.model.OrderTableId;
 
 public record OrderVo() {
 
     public record OrderInfo(
-        OrderId id
+        OrderId id,
+        OrderTableId orderTableId,
+        OrderLineItems orderLineItems,
+        LocalDateTime orderDateTime,
+        OrderStatus status,
+        OrderType type
     ) {
         public static OrderInfo fromEntity(Order entity) {
-            return new OrderInfo(entity.getOrderId());
+            return new OrderInfo(
+                entity.getOrderId(),
+                entity.getOrderTableId(),
+                OrderLineItems.of(entity.getOrderLineItems().getItems()),
+                entity.getOrderDateTime(),
+                entity.getStatus(),
+                entity.getType());
         }
 
         public UUID getOrderId() {
             return id.get();
         }
 
+        public UUID getOrderTableId() {
+            return Optional.ofNullable(orderTableId)
+                .map(OrderTableId::get)
+                .orElse(null);
+        }
+
     }
 
     public record Create(
-        String name,
-        MenuPrice price,
-        MenuGroupId menuGroupId,
-        boolean displayed,
-        MenuProducts menuProducts
+        OrderType type,
+        OrderTableId orderTableId,
+        OrderLineItems orderLineItems,
+        String deliveryAddress
     ) {
+
     }
 
     public record Update(MenuId menuId, MenuPrice price) {}

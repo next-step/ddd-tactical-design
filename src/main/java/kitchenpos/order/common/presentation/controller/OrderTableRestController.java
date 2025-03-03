@@ -50,7 +50,7 @@ public class OrderTableRestController {
         @PathVariable final UUID orderTableId,
         @RequestBody final OrderTableRequest.UpdateGuests request
     ) {
-        return ResponseEntity.ok(orderFacade.changeNumberOfGuests(new UpdateGuests(orderTableId, request.guests())));
+        return ResponseEntity.ok(orderFacade.changeNumberOfGuests(new UpdateGuests(orderTableId, request.numberOfGuests())));
     }
 
     @GetMapping
