@@ -26,7 +26,6 @@ public class EatInOrderService {
     private final EatInOrderRepository eatInOrderRepository = new InMemoryEatInOrderRepository();
     private final ApplicationEventPublisher eventPublisher = new InMemoryApplicationEventPublisher();
 
-
     public EatInOrder create(final CreateEatInOrderCommand command) {
         final EatInOrderMenus eatInOrderMenus = eatInOrderMenuRepository.findAllByIdIn(command.menuIds());
         final OrderTable orderTable = orderTableRepository.findById(new OrderTableId(command.orderTableId()))

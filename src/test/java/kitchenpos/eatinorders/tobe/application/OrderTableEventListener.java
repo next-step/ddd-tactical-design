@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 public class OrderTableEventListener {
     private static final Logger logger = LoggerFactory.getLogger(OrderTableEventListener.class);
 
-    private final OrderTableService orderService = new OrderTableService(
+    private final OrderTableService orderTableService = new OrderTableService(
             new InMemoryOrderTableRepository(),
             new InMemoryEatInOrderRepository()
     );
@@ -25,6 +25,6 @@ public class OrderTableEventListener {
     public void handle(final EatInOrderCompletedEvent event) {
         logger.debug("매장 주문이 완료처리 되었습니다.: {}", event.eventId());
         final OrderTableId orderTableId = event.orderTableId();
-        orderService.clear(orderTableId.getValue());
+        orderTableService.clear(orderTableId.getValue());
     }
 }
