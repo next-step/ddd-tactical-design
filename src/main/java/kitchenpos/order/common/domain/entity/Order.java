@@ -1,5 +1,6 @@
 package kitchenpos.order.common.domain.entity;
 
+import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorType;
@@ -14,6 +15,7 @@ import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import kitchenpos.order.common.domain.model.OrderId;
 import kitchenpos.order.common.domain.model.OrderLineItems;
+import kitchenpos.order.eatin.domain.model.OrderTableId;
 import org.hibernate.annotations.DynamicUpdate;
 
 @Table(name = "orders")
@@ -40,6 +42,10 @@ public class Order {
     @Embedded
     private OrderLineItems orderLineItems;
 
+    @Embedded
+    @AttributeOverride(name = "id", column = @Column(name = "order_table_id"))
+    private OrderTableId orderTableId;
+
     protected Order() {}
 
     public OrderId getOrderId() {
@@ -60,6 +66,10 @@ public class Order {
 
     public OrderLineItems getOrderLineItems() {
         return orderLineItems;
+    }
+
+    public OrderTableId getOrderTableId() {
+        return orderTableId;
     }
 
     public void updateOrderStatus(OrderStatus orderStatus) {

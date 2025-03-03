@@ -13,7 +13,7 @@ import kitchenpos.order.eatin.domain.entity.OrderTable;
 public class EatInOrder extends Order {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_table_id", columnDefinition = "binary(16)")
+    @JoinColumn(name = "order_table_id", insertable = false, updatable = false)
     private OrderTable orderTable;
 
     protected EatInOrder() {}

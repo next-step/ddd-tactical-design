@@ -11,6 +11,7 @@ import kitchenpos.global.exception.NotFoundException;
 public class OrderTableId implements Serializable {
 
     private static final long serialVersionUID = -161403658033403389L;
+
     private UUID id;
 
     protected OrderTableId() {}
@@ -39,8 +40,8 @@ public class OrderTableId implements Serializable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        OrderTableId menuId = (OrderTableId) o;
-        return Objects.equals(id, menuId.id);
+        OrderTableId orderTableId = (OrderTableId) o;
+        return Objects.equals(id, orderTableId.id);
     }
 
     @Override

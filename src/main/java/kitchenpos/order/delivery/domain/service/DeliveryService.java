@@ -1,9 +1,9 @@
 package kitchenpos.order.delivery.domain.service;
 
-import kitchenpos.order.delivery.application.DeliveryUsecase;
-import org.springframework.stereotype.Service;
+import kitchenpos.order.common.domain.model.OrderId;
+import kitchenpos.order.common.domain.model.OrderVo;
 
-@Service
-public class DeliveryService implements DeliveryUsecase {
-
+public interface DeliveryService {
+    OrderVo.OrderInfo startDelivery(final OrderId orderId);
+    OrderVo.OrderInfo completeDelivery(final OrderId orderId);
 }

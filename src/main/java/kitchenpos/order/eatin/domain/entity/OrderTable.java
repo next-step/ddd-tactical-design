@@ -5,37 +5,39 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import kitchenpos.order.eatin.domain.model.OrderTableGuests;
 import kitchenpos.order.eatin.domain.model.OrderTableId;
 import kitchenpos.order.eatin.domain.model.OrderTableName;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Table(name = "order_table")
 @Entity
+@DynamicUpdate
 public class OrderTable {
 
     @EmbeddedId
-    private OrderTableId id;
+    private OrderTableId orderTableId;
 
     @Embedded
     private OrderTableName name;
 
-    @Column(name = "number_of_guests", nullable = false)
-    private int numberOfGuests;
+    @Embedded
+    private OrderTableGuests numberOfGuests;
 
     @Column(name = "occupied", nullable = false)
     private boolean occupied;
 
     protected OrderTable() {}
 
-
-    public OrderTableId getId() {
-        return id;
+    public OrderTableId getOrderTableId() {
+        return orderTableId;
     }
 
     public OrderTableName getName() {
         return name;
     }
 
-    public int getNumberOfGuests() {
+    public OrderTableGuests getNumberOfGuests() {
         return numberOfGuests;
     }
 
@@ -43,10 +45,29 @@ public class OrderTable {
         return occupied;
     }
 
-    public OrderTable(OrderTableId id, OrderTableName name, int numberOfGuests, boolean occupied) {
-        this.id = id;
+    public OrderTable(OrderTableId orderTableId, OrderTableName name, OrderTableGuests numberOfGuests, boolean occupied) {
+        this.orderTableId = orderTableId;
         this.name = name;
         this.numberOfGuests = numberOfGuests;
         this.occupied = occupied;
+    }
+
+    public void updateOccupied(boolean occupied) {
+        this.occupied = occupied;
+    }
+
+    public void updateNumberOfGuests(OrderTableGuests guests) {
+        this.numberOfGuests = guests;
+    }
+
+    public void clear() {
+        updateNumberOfGuests(OrderTableGuests.of(0));
+        updateOccupied(false);
+    }
+
+    public void validateOccupied(){
+        if (!this.occupied) {
+            throw new IllegalStateException();
+        };
     }
 }
