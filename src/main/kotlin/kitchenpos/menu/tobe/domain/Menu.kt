@@ -19,8 +19,8 @@ class Menu(
     @Id
     var id: UUID? = null,
 
-    @Column(name = "name", nullable = false)
-    val name: String,
+    @Embedded
+    val menuName: MenuName,
 
     @Column(name = "price", nullable = false)
     var price: BigDecimal,

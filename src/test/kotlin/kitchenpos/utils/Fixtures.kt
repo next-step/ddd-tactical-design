@@ -3,6 +3,8 @@ package kitchenpos.utils
 import java.util.*
 import kitchenpos.menu.domain.MenuGroup
 import kitchenpos.menu.tobe.domain.Menu
+import kitchenpos.menu.tobe.domain.MenuName
+import kitchenpos.menu.tobe.domain.MenuNamePolicy
 import kitchenpos.menu.tobe.domain.MenuProduct
 import kitchenpos.menu.tobe.domain.MenuProducts
 import kitchenpos.product.tobe.domain.Product
@@ -38,7 +40,7 @@ class Fixtures {
         ): Menu {
             return Menu(
                 id = id,
-                name = name,
+                menuName = MenuName(MenuNamePolicy(FakeProfanities()), name),
                 price = price.toBigDecimal(),
                 displayed = displayed,
                 menuGroup = menuGroup,
