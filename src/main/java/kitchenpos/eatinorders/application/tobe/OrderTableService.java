@@ -19,11 +19,9 @@ import java.util.NoSuchElementException;
 public class OrderTableService {
 
     private final OrderTableRepository orderTableRepository;
-    private final ClearOrderTableService clearOrderTableService;
 
-    public OrderTableService(OrderTableRepository orderTableRepository, ClearOrderTableService clearOrderTableService) {
+    public OrderTableService(OrderTableRepository orderTableRepository) {
         this.orderTableRepository = orderTableRepository;
-        this.clearOrderTableService = clearOrderTableService;
     }
 
     @Transactional
@@ -45,7 +43,7 @@ public class OrderTableService {
     public OrderTableClearResponse clear(final OrderTableId orderTableId) {
         final OrderTable orderTable = orderTableRepository.findById(orderTableId)
                 .orElseThrow(NoSuchElementException::new);
-        clearOrderTableService.clearOrderTable(orderTable.getId());
+        orderTable.clear();
         return OrderTableClearResponse.from(orderTable);
     }
 

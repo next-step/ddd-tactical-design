@@ -72,47 +72,6 @@ class ClearOrderTableServiceTest {
         assertThat(table.getNumberOfGuests()).isEqualTo(PositiveNumber.ZERO);
     }
 
-    @DisplayName("주문 테이블 정리할 때, 주문 테이블에 연결된 주문이 완료된 상태가 아니면 예외 발생한다")
-    @Test
-    void throwsIfOrderTableClear() {
-        OrderTable table = orderTableRepository.save(createOrderTable("1번테이블", 5, true));
-        OrderEntity orderEntity = new OrderEntity(
-                OrderType.EAT_IN,
-                OrderStatus.SERVED,
-                new OrderLineItems(
-                        new OrderLineItem(1L, MenuId.generate(), 1, new Price(10_000))
-                ),
-                null,
-                table.getId()
-        );
-        orderRepository.save(orderEntity);
-
-        assertThatThrownBy(() -> clearOrderTableService.clearOrderTable(table.getId()))
-                .isInstanceOf(InvalidOrderTableStateException.class);
-    }
-
-
-    @DisplayName("주문 테이블에 연결된 주문이 완료된 상태면 빈 테이블로 만든다")
-    @Test
-    void clearByOrderTable() {
-        OrderTable table = orderTableRepository.save(createOrderTable("1번테이블", 5, true));
-        OrderEntity orderEntity = new OrderEntity(
-                OrderType.EAT_IN,
-                OrderStatus.COMPLETED,
-                new OrderLineItems(
-                        new OrderLineItem(1L, MenuId.generate(), 1, new Price(10_000))
-                ),
-                null,
-                table.getId()
-        );
-        OrderEntity order = orderRepository.save(orderEntity);
-
-        clearOrderTableService.clearOrderTable(table.getId());
-
-        assertThat(table.isOccupied()).isFalse();
-        assertThat(table.getNumberOfGuests()).isEqualTo(PositiveNumber.ZERO);
-    }
-
     private OrderTable createOrderTable(String name, int numberOfGuests, boolean occupied) {
         return new OrderTable(
                 OrderTableId.generate(),

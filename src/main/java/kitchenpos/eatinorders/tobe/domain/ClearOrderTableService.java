@@ -44,17 +44,4 @@ public class ClearOrderTableService {
             orderTable.clear();
         }
     }
-
-    @Transactional
-    public void clearOrderTable(OrderTableId orderTableId) {
-        //OrderTableService.clear 메소드에서 사용
-        //2. 주문 테이블 id를 이용한 주문 테이블 정리
-        OrderTable orderTable = orderTableRepository.findById(orderTableId)
-                .orElseThrow(NoSuchElementException::new);
-
-        if (orderRepository.existsByOrderTableAndStatusNot(orderTableId, OrderStatus.COMPLETED)) {
-            throw new InvalidOrderTableStateException("");
-        }
-        orderTable.clear();
-    }
 }

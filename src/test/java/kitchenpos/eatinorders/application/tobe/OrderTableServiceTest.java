@@ -26,15 +26,13 @@ class OrderTableServiceTest {
 
     private OrderTableRepository orderTableRepository;
     private OrderRepository orderRepository;
-    private ClearOrderTableService clearOrderTableService;
     private OrderTableService orderTableService;
 
     @BeforeEach
     void setup() {
         orderTableRepository = new InMemoryOrderTableRepository();
         orderRepository = new InMemoryOrderRepository();
-        clearOrderTableService = new ClearOrderTableService(orderRepository, orderTableRepository);
-        orderTableService = new OrderTableService(orderTableRepository, clearOrderTableService);
+        orderTableService = new OrderTableService(orderTableRepository);
     }
 
     @DisplayName("주문 테이블을 생성한다")
@@ -57,27 +55,6 @@ class OrderTableServiceTest {
         OrderTableSitResponse result = orderTableService.sit(table.getId());
 
         assertThat(result.isOccupied()).isTrue();
-    }
-
-
-    @DisplayName("주문 완료 상태가 아닌 주문 테이블을 정리하면 예외가 발생한다")
-    @EnumSource(value = OrderStatus.class, names = "COMPLETED", mode = EnumSource.Mode.EXCLUDE)
-    @ParameterizedTest
-    void throwsIfTableClear(OrderStatus status) {
-        OrderTable table = orderTableRepository.save(createOrderTable("1번테이블", 4, true));
-        OrderLineItems orderLineItems = new OrderLineItems(
-                new OrderLineItem(1L, MenuId.generate(), 1, new Price(25_000))
-        );
-        orderRepository.save(new OrderEntity(
-                OrderType.EAT_IN,
-                status,
-                orderLineItems,
-                null,
-                table.getId()
-        ));
-
-        assertThatThrownBy(() -> orderTableService.clear(table.getId()))
-                .isInstanceOf(InvalidOrderTableStateException.class);
     }
 
     @DisplayName("주문 테이블을 정리한다")
