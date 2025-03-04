@@ -1,33 +1,37 @@
 package kitchenpos.order.common.domain.entity;
 
-import jakarta.persistence.CascadeType;
+import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorColumn;
+import jakarta.persistence.DiscriminatorType;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
-import kitchenpos.order.eatin.domain.entity.OrderTable;
+import kitchenpos.global.exception.ErrorCode;
+import kitchenpos.order.common.domain.exception.OrderInvalidException;
+import kitchenpos.order.common.domain.model.OrderId;
+import kitchenpos.order.common.domain.model.OrderLineItems;
+import kitchenpos.order.eatin.domain.model.OrderTableId;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Table(name = "orders")
 @Entity
+@DynamicUpdate
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 public class Order {
 
-    @Column(name = "id", columnDefinition = "binary(16)")
-    @Id
-    private UUID id;
+    @EmbeddedId
+    private OrderId orderId;
 
-    @Column(name = "type", nullable = false, columnDefinition = "varchar(255)")
     @Enumerated(EnumType.STRING)
+    @Column(name = "type", nullable = false, columnDefinition = "varchar(255)", insertable = false, updatable = false)
     private OrderType type;
 
     @Column(name = "status", nullable = false, columnDefinition = "varchar(255)")
@@ -37,93 +41,97 @@ public class Order {
     @Column(name = "order_date_time", nullable = false)
     private LocalDateTime orderDateTime;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(
-        name = "order_id",
-        nullable = false,
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_order_line_item_to_orders")
-    )
-    private List<OrderLineItem> orderLineItems;
+    @Embedded
+    private OrderLineItems orderLineItems;
 
-    @Column(name = "delivery_address")
-    private String deliveryAddress;
+    @Embedded
+    @AttributeOverride(name = "id", column = @Column(name = "order_table_id"))
+    private OrderTableId orderTableId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(
-        name = "order_table_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_orders_to_order_table")
-    )
-    private OrderTable orderTable;
+    protected Order() {}
 
-    @Transient
-    private UUID orderTableId;
-
-    public Order() {
+    public Order(OrderId orderId, OrderType type, OrderStatus status, LocalDateTime orderDateTime,
+        OrderLineItems orderLineItems, OrderTableId orderTableId) {
+        this.orderId = orderId;
+        this.type = type;
+        this.status = status;
+        this.orderDateTime = orderDateTime;
+        this.orderLineItems = orderLineItems;
+        this.orderTableId = orderTableId;
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(final UUID id) {
-        this.id = id;
+    public OrderId getOrderId() {
+        return orderId;
     }
 
     public OrderType getType() {
         return type;
     }
 
-    public void setType(final OrderType type) {
-        this.type = type;
-    }
-
     public OrderStatus getStatus() {
         return status;
-    }
-
-    public void setStatus(final OrderStatus status) {
-        this.status = status;
     }
 
     public LocalDateTime getOrderDateTime() {
         return orderDateTime;
     }
 
-    public void setOrderDateTime(final LocalDateTime orderDateTime) {
-        this.orderDateTime = orderDateTime;
-    }
-
-    public List<OrderLineItem> getOrderLineItems() {
+    public OrderLineItems getOrderLineItems() {
         return orderLineItems;
     }
 
-    public void setOrderLineItems(final List<OrderLineItem> orderLineItems) {
-        this.orderLineItems = orderLineItems;
-    }
-
-    public String getDeliveryAddress() {
-        return deliveryAddress;
-    }
-
-    public void setDeliveryAddress(final String deliveryAddress) {
-        this.deliveryAddress = deliveryAddress;
-    }
-
-    public OrderTable getOrderTable() {
-        return orderTable;
-    }
-
-    public void setOrderTable(final OrderTable orderTable) {
-        this.orderTable = orderTable;
-    }
-
-    public UUID getOrderTableId() {
+    public OrderTableId getOrderTableId() {
         return orderTableId;
     }
 
-    public void setOrderTableId(final UUID orderTableId) {
-        this.orderTableId = orderTableId;
+    public void updateOrderStatus(OrderStatus orderStatus) {
+        this.status = orderStatus;
+    }
+
+    public boolean isDelivery() {
+        return this.getType() == OrderType.DELIVERY;
+    }
+
+    public boolean isEatIn() {
+        return this.getType() == OrderType.EAT_IN;
+    }
+
+    public boolean isTakeout() {
+        return this.getType() == OrderType.TAKEOUT;
+    }
+
+    public boolean isWaiting() {
+        return this.getStatus() == OrderStatus.WAITING;
+    }
+    public boolean isAccepted() {
+        return this.getStatus() == OrderStatus.ACCEPTED;
+    }
+
+    public boolean isDelivered() {
+        return this.getStatus() == OrderStatus.DELIVERED;
+    }
+    public boolean isServed() {
+        return this.getStatus() == OrderStatus.SERVED;
+    }
+
+    public void validateIsWaiting() {
+        if(!isWaiting()) {
+            throw new OrderInvalidException(ErrorCode.ORDER_STATUS_IS_NOT_WAITING.toString());
+        }
+    }
+
+    public void validateIsAccepted() {
+        if(!isAccepted()) {
+            throw new OrderInvalidException(ErrorCode.ORDER_STATUS_IS_NOT_ACCEPTED.toString());
+        }
+    }
+
+    public void validateOrderCompletion() {
+        if (isDelivery() && !isDelivered()) {
+            throw new OrderInvalidException(ErrorCode.ORDER_STATUS_IS_NOT_DELIVERED.toString());
+        }
+        if ((isTakeout() || isEatIn()) && !isServed()) {
+            throw new OrderInvalidException(ErrorCode.ORDER_STATUS_IS_NOT_SERVED.toString());
+        }
     }
 }

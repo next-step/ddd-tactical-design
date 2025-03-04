@@ -1,9 +1,9 @@
 package kitchenpos.order.takeout.domain.service;
 
-import kitchenpos.order.takeout.application.TakeoutUsecase;
-import org.springframework.stereotype.Service;
+import kitchenpos.order.common.domain.model.OrderId;
+import kitchenpos.order.common.domain.model.OrderLineItems;
+import kitchenpos.order.takeout.domain.model.TakeOutOrder;
 
-@Service
-public class TakeoutService implements TakeoutUsecase {
-
+public interface TakeoutService {
+    TakeOutOrder createTakeoutOrder(OrderId orderId, OrderLineItems orderLineItems);
 }

@@ -1,5 +1,6 @@
 package kitchenpos.order.common.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -11,6 +12,9 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import java.math.BigDecimal;
 import kitchenpos.menu.domain.model.MenuId;
+import kitchenpos.order.common.application.dto.OrderRequest.OrderLineItemCreate;
+import kitchenpos.order.common.domain.model.OrderId;
+import kitchenpos.order.common.domain.model.OrderLineItemQty;
 
 @Table(name = "order_line_item")
 @Entity
@@ -25,44 +29,47 @@ public class OrderLineItem {
     @AttributeOverride(name = "id", column = @Column(name = "menu_id"))
     private MenuId menuId;
 
-    @Column(name = "quantity", nullable = false)
-    private long quantity;
+    @Embedded
+    private OrderLineItemQty quantity;
+
+    @Embedded
+    @AttributeOverride(name = "id", column = @Column(name = "order_id"))
+    @JsonBackReference
+    private OrderId orderId;
 
     @Transient
     private BigDecimal price;
 
-    public OrderLineItem() {
+    public OrderLineItem() {}
+
+    public OrderLineItem(MenuId menuId, OrderId orderId, OrderLineItemQty quantity, BigDecimal price) {
+        this.menuId = menuId;
+        this.orderId = orderId;
+        this.quantity = quantity;
+        this.price = price;
     }
 
     public Long getSeq() {
         return seq;
     }
 
-    public void setSeq(final Long seq) {
-        this.seq = seq;
-    }
-
-    public long getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(final long quantity) {
-        this.quantity = quantity;
-    }
-
     public MenuId getMenuId() {
         return menuId;
     }
 
-    public void setMenuId(MenuId menuId) {
-        this.menuId = menuId;
+    public OrderLineItemQty getQuantity() {
+        return quantity;
+    }
+
+    public OrderId getOrderId() {
+        return orderId;
     }
 
     public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
+    public static OrderLineItem fromDto(OrderLineItemCreate dto, OrderId orderId, OrderType type) {
+        return new OrderLineItem(MenuId.of(dto.menuId()), orderId, OrderLineItemQty.of(dto.quantity(), type), dto.price());
     }
 }
