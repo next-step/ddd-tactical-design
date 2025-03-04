@@ -43,7 +43,6 @@ class Fixtures {
                 displayed = displayed,
                 menuGroup = menuGroup,
                 menuProducts = menuProducts,
-                menuGroupId = menuGroup.id
             )
         }
 
@@ -53,8 +52,7 @@ class Fixtures {
         ): MenuProduct {
             return MenuProduct(
                 product = product,
-                quantity = quantity,
-                productId = product.id!!
+                quantity = quantity
             )
         }
 

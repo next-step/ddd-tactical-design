@@ -9,8 +9,6 @@ import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
-import jakarta.persistence.Transient
-import java.util.*
 import kitchenpos.product.tobe.domain.Product
 
 @Table(name = "menu_product")
@@ -30,9 +28,10 @@ class MenuProduct(
     var product: Product,
 
     @Column(name = "quantity", nullable = false)
-    val quantity: Long,
-
-    @Transient
-    val productId: UUID
+    val quantity: Long
 ) {
+
+    init {
+        require(quantity >= 0) { "메뉴 상품의 수량은 0개 이상이어야 합니다." }
+    }
 }

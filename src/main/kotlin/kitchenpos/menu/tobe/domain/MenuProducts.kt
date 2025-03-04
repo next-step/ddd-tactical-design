@@ -18,13 +18,14 @@ class MenuProducts(
     )
     val menuProducts: List<MenuProduct>
 ) {
+    init {
+        require(menuProducts.isNotEmpty()) { "메뉴 상품은 필수로 입력해야 합니다." }
+    }
+
     fun amount(): BigDecimal {
         var sum = BigDecimal.ZERO
         menuProducts.forEach { menuProduct ->
-            sum = sum.add(
-                menuProduct.product.productPrice.price
-                    .multiply(BigDecimal.valueOf(menuProduct.quantity))
-            )
+            sum += (menuProduct.product.productPrice.price * menuProduct.quantity.toBigDecimal())
         }
         return sum
     }

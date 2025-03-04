@@ -8,7 +8,6 @@ import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
-import jakarta.persistence.Transient
 import java.math.BigDecimal
 import java.util.*
 import kitchenpos.menu.domain.MenuGroup
@@ -39,9 +38,6 @@ class Menu(
 
     @Embedded
     val menuProducts: MenuProducts,
-
-    @Transient
-    val menuGroupId: UUID,
 ) {
 
     fun amount(): BigDecimal {
