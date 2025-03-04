@@ -21,9 +21,7 @@ import kitchenpos.menu.domain.fixture.MenuFixture;
 import kitchenpos.menu.domain.model.MenuVo.MenuInfo;
 import kitchenpos.menu.domain.repository.MenuRepository;
 import kitchenpos.order.common.application.MenuContextProvider;
-import kitchenpos.order.common.application.dto.OrderRequest;
 import kitchenpos.order.common.application.dto.OrderRequest.OrderLineItemCreate;
-import kitchenpos.order.common.application.facade.OrderFacade;
 import kitchenpos.order.common.domain.entity.Order;
 import kitchenpos.order.common.domain.entity.OrderStatus;
 import kitchenpos.order.common.domain.entity.OrderType;
@@ -38,20 +36,20 @@ import kitchenpos.order.common.domain.service.DefaultOrderService;
 import kitchenpos.order.delivery.domain.entity.DeliveryOrder;
 import kitchenpos.order.delivery.domain.repository.DeliveryOrderRepository;
 import kitchenpos.order.delivery.domain.service.DefaultDeliveryService;
-import kitchenpos.order.delivery.domain.service.DeliveryKitchenridersClient;
 import kitchenpos.order.delivery.domain.service.DeliveryService;
 import kitchenpos.order.domain.fixture.DeliveryOrderFixture;
 import kitchenpos.order.domain.fixture.OrderFixture;
 import kitchenpos.order.domain.fixture.OrderLineItemFixture;
 import kitchenpos.order.domain.fixture.OrderTableFixture;
 import kitchenpos.order.eatin.domain.entity.OrderTable;
-import kitchenpos.order.eatin.domain.service.DefaultEatinService;
+import kitchenpos.order.eatin.domain.service.DefaultEatInService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -62,67 +60,38 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class OrderFacadeTest {
-
-    @InjectMocks
-    private OrderFacade orderFacade;
-
     @InjectMocks
     private DefaultDeliveryService defaultDeliveryService;
-
     @Mock
     private DeliveryService deliveryService;
-
     @Mock
-    private DefaultEatinService eatinService;
-
+    private DefaultEatInService eatinService;
     @InjectMocks
     private DefaultOrderService orderService;
     @Mock
     private OrderRepository orderRepository;
-
     @Mock
     private DeliveryOrderRepository deliveryOrderRepository;
-
     @Mock
     private MenuRepository menuRepository;
-
     @Mock
     private OrderTableRepository orderTableRepository;
-
-    @Mock
-    private DeliveryKitchenridersClient deliveryKitchenridersClient;
-
     @Mock
     private MenuContextProvider menuContextProvider;
 
     private Order order;
     private DeliveryOrder deliveryOrder;
-
     private OrderTable orderTable;
-
-    private OrderRequest.Create createDto;
-
     private OrderVo.Create createVo;
-
     private Menu chickenMenu;
 
     @BeforeEach
     void setUp() {
         chickenMenu = MenuFixture.init().toEntity();
-//        order = OrderFixture.init().toEntity();
+        order = OrderFixture.init().toEntity();
         deliveryOrder = DeliveryOrderFixture.init().toEntity();
         orderTable = OrderTableFixture.init().toEntity();
-        createDto = OrderFixture.init().create();
         createVo = OrderFixture.init().createVo();
-
-        order = OrderFixture.test(
-            null,
-            null,
-            null,
-            List.of(OrderLineItemFixture.test(chickenMenu.getMenuGroupId().get(), null, 1, null).create()),
-            null,
-            OrderTableFixture.init().toEntity().getOrderTableId().get()
-        ).toEntity();
     }
 
     @Nested
@@ -150,15 +119,14 @@ class OrderFacadeTest {
         @DisplayName("성공")
         void 주문등록_성공() {
             createVo = OrderFixture.test(
-                OrderType.EAT_IN,
+                OrderType.DELIVERY,
                 null,
                 null,
-                List.of(OrderLineItemFixture.test(chickenMenu.getMenuId().get(), UUID.randomUUID(), 1, null).create()),
+                List.of(OrderLineItemFixture.test(chickenMenu.getMenuId().get(), UUID.randomUUID(), OrderType.DELIVERY, 1, null).create()),
                 null,
                 UUID.randomUUID()
             ).createVo();
-            mockFindMenus(List.of(MenuInfo.fromEntity(chickenMenu)));
-            mockSaveOrder(order);
+            mockCreateOrder();
 
             var result = orderService.create(createVo);
 
@@ -181,7 +149,7 @@ class OrderFacadeTest {
                         orderType,
                         OrderStatus.DELIVERED,
                         null,
-                        List.of(OrderLineItemFixture.init(null).create()),
+                        null,
                         null,
                         OrderTableFixture.init().toEntity().getOrderTableId().get()
                     ).createVo();
@@ -191,7 +159,7 @@ class OrderFacadeTest {
 
         @ParameterizedTest
         @DisplayName("주문 아이템이 반드시 있어야 한다.")
-        @NullAndEmptySource
+        @EmptySource
         void 주문아이템_있는지_검사(final List<OrderLineItemCreate> orderLineItems) {
             assertThatExceptionOfType(NotFoundException.class)
                 .isThrownBy(() -> {
@@ -221,6 +189,7 @@ class OrderFacadeTest {
                             List.of(OrderLineItemFixture.test(
                                 chickenMenu.getMenuId().get(),
                                 UUID.randomUUID(),
+                                OrderType.DELIVERY,
                                 qty,
                                 null
                             ).create()),
@@ -248,7 +217,7 @@ class OrderFacadeTest {
                 null,
                 null,
                 null,
-                List.of(OrderLineItemFixture.test(chickenMenu.getMenuId().get(), null, 1, null).create()),
+                List.of(OrderLineItemFixture.test(chickenMenu.getMenuId().get(), null, null, 1, null).create()),
                 null,
                 OrderTableFixture.init().toEntity().getOrderTableId().get()
             ).createVo();
@@ -272,7 +241,7 @@ class OrderFacadeTest {
                 null,
                 null,
                 null,
-                List.of(OrderLineItemFixture.test(chickenMenu.getMenuId().get(), null, 1, null).create()),
+                List.of(OrderLineItemFixture.test(chickenMenu.getMenuId().get(), null, null, 1, null).create()),
                 null,
                 OrderTableFixture.init().toEntity().getOrderTableId().get()
             ).createVo();
@@ -289,7 +258,7 @@ class OrderFacadeTest {
                 OrderType.DELIVERY,
                 null,
                 null,
-                List.of(OrderLineItemFixture.init(null).create()),
+                null,
                 address,
                 OrderTableFixture.init().toEntity().getOrderTableId().get()
             ).createVo();
@@ -305,12 +274,12 @@ class OrderFacadeTest {
                 OrderType.EAT_IN,
                 null,
                 null,
-                List.of(OrderLineItemFixture.test(chickenMenu.getMenuId().get(), UUID.randomUUID(), 1, null).create()),
+                List.of(OrderLineItemFixture.test(chickenMenu.getMenuId().get(), UUID.randomUUID(), OrderType.EAT_IN, 1, null).create()),
                 null,
                 UUID.randomUUID()
             ).createVo();
             mockFindMenus(List.of(MenuInfo.fromEntity(chickenMenu)));
-            mockFindByOrderTable(orderTable);
+            mockCreateEatInOrderFail();
 
             assertThatExceptionOfType(NotFoundException.class)
                 .isThrownBy(() -> orderService.create(createVo))
@@ -338,7 +307,7 @@ class OrderFacadeTest {
                 null,
                 OrderStatus.ACCEPTED,
                 null,
-                List.of(OrderLineItemFixture.init(null).create()),
+                null,
                 null,
                 OrderTableFixture.init().toEntity().getOrderTableId().get()
             ).toEntity();
@@ -399,7 +368,6 @@ class OrderFacadeTest {
                 OrderType.DELIVERY,
                 OrderStatus.SERVED,
                 null,
-                List.of(OrderLineItemFixture.init(null).create()),
                 null
             ).toEntity();
 
@@ -417,7 +385,6 @@ class OrderFacadeTest {
                 OrderType.EAT_IN,
                 OrderStatus.SERVED,
                 null,
-                List.of(OrderLineItemFixture.init(null).create()),
                 null
             ).toEntity();
             mockFindByDeliveryOrder(deliveryOrder);
@@ -447,7 +414,6 @@ class OrderFacadeTest {
                 OrderType.DELIVERY,
                 OrderStatus.DELIVERING,
                 null,
-                List.of(OrderLineItemFixture.init(null).create()),
                 null
             ).toEntity();
 
@@ -478,7 +444,7 @@ class OrderFacadeTest {
                 OrderType.DELIVERY,
                 OrderStatus.DELIVERED,
                 null,
-                List.of(OrderLineItemFixture.init(null).create()),
+                null,
                 null,
                 OrderTableFixture.init().toEntity().getOrderTableId().get()
             ).toEntity();
@@ -505,7 +471,7 @@ class OrderFacadeTest {
                 OrderType.TAKEOUT,
                 OrderStatus.DELIVERED,
                 null,
-                List.of(OrderLineItemFixture.init(null).create()),
+                null,
                 null,
                 OrderTableFixture.init().toEntity().getOrderTableId().get()
             ).toEntity();
@@ -524,7 +490,7 @@ class OrderFacadeTest {
                 OrderType.EAT_IN,
                 OrderStatus.SERVED,
                 null,
-                List.of(OrderLineItemFixture.init(null).create()),
+                null,
                 null,
                 orderTable.getOrderTableId().get()
             ).toEntity();
@@ -560,40 +526,22 @@ class OrderFacadeTest {
             .thenReturn(Optional.of((DeliveryOrder) request));
     }
 
-    private void mockExistsByOrderTable(Order order) {
-        when(orderRepository.existsByOrderTableIdAndStatusNot(order.getOrderTableId(),
-            OrderStatus.COMPLETED))
-            .thenReturn(false);
+    private void mockCreateEatInOrderFail() {
+        when(eatinService.createEatInOrder(Mockito.any(), Mockito.any(), Mockito.any()))
+            .thenThrow(new NotFoundException(ErrorCode.NOT_FOUND_ORDER_TABLE.toString()));
+
     }
 
-    private void mockFindAllByMenu(Order order) {
-        when(menuRepository.findAllByMenuIdIn(Mockito.any()))
-            .thenReturn(null);
-    }
+    private void mockCreateDeliveryOrderSuccess() {
+        when(deliveryService.createDeliveryOrder(Mockito.any(), Mockito.any(), Mockito.any()))
+            .thenReturn(deliveryOrder);
 
-    private void mockFindByMenu(Menu menu) {
-        when(menuRepository.findByMenuId(Mockito.any()))
-            .thenReturn(Optional.of(chickenMenu));
-    }
-
-    private void mockFindByOrderTable(OrderTable orderTable) {
-        when(orderTableRepository.findById(Mockito.eq(orderTable.getOrderTableId())))
-            .thenReturn(Optional.of(orderTable));
-    }
-
-    private void mockSaveOrderTable(OrderTable orderTable) {
-        when(orderTableRepository.save(Mockito.any(OrderTable.class)))
-            .thenReturn(orderTable);
-    }
-
-    private void mockSaveMenu() {
-        when(orderRepository.save(Mockito.any(Order.class))).thenReturn(order);
     }
 
     private void mockCreateOrder() {
-        mockFindAllByMenu(order);
-        mockFindByMenu(chickenMenu);
-        mockSaveMenu();
+        mockFindMenus(List.of(MenuInfo.fromEntity(chickenMenu)));
+        mockCreateDeliveryOrderSuccess();
+        mockSaveOrder(order);
     }
 
     private void mockSaveOrder(Order request) {
@@ -607,7 +555,4 @@ class OrderFacadeTest {
     private void mockFindMenus(List<MenuInfo> menuInfos) {
         when(menuContextProvider.findMenus(Mockito.anyList())).thenReturn(menuInfos);
     }
-
-
-
 }

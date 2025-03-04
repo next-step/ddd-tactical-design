@@ -16,7 +16,7 @@ import kitchenpos.order.eatin.domain.entity.OrderTable;
 import kitchenpos.order.eatin.domain.exception.OrderTableGuestsException;
 import kitchenpos.order.eatin.domain.model.OrderTableVo;
 import kitchenpos.order.eatin.domain.repository.EatinOrderRepository;
-import kitchenpos.order.eatin.domain.service.DefaultEatinService;
+import kitchenpos.order.eatin.domain.service.DefaultEatInService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -34,23 +34,20 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class OrderTableFacadeTest {
 
     @InjectMocks
-    private DefaultEatinService eatinService;
-
+    private DefaultEatInService eatinService;
     @Mock
     private OrderTableRepository orderTableRepository;
     @Mock
     private EatinOrderRepository orderRepository;
-
     private OrderTable orderTable;
     private OrderTableVo.Create createOrderTable;
     private OrderTableVo.Update updateOrderTable;
 
     @BeforeEach
     void setUp() {
-        eatinService = new DefaultEatinService(orderRepository, orderTableRepository);
+        eatinService = new DefaultEatInService(orderRepository, orderTableRepository);
         orderTable = OrderTableFixture.init().toEntity();
         createOrderTable = OrderTableFixture.init().create();
-
     }
 
     @Nested

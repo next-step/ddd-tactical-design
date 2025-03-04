@@ -1,6 +1,5 @@
 package kitchenpos.order.domain.fixture;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -28,21 +27,21 @@ public record DeliveryOrderFixture(UUID id,
             UUID.randomUUID(),
             DEFAULT_ORDER_TYPE,
             DEFAULT_ORDER_STATUS,
-            List.of(OrderLineItemFixture.init(null).create()),
+            List.of(OrderLineItemFixture.init(null, DEFAULT_ORDER_TYPE).create()),
             DEFAULT_DELIVERY_ADDRESS
         );
     }
 
-    public static DeliveryOrderFixture test(OrderType 주문유형,
+    public static DeliveryOrderFixture test(
+        OrderType 주문유형,
         OrderStatus 주문상태,
-        LocalDateTime 주문시간,
         List<OrderLineItemCreate> 주문아이템,
         String 배달지주소) {
         return new DeliveryOrderFixture(
             UUID.randomUUID(),
             주문유형,
             Objects.requireNonNullElse(주문상태, DEFAULT_ORDER_STATUS),
-            주문아이템,
+            Objects.requireNonNullElse(주문아이템, List.of(OrderLineItemFixture.init(null, 주문유형).create())),
             Objects.requireNonNullElse(배달지주소, DEFAULT_DELIVERY_ADDRESS)
         );
     }
@@ -53,7 +52,7 @@ public record DeliveryOrderFixture(UUID id,
             주문유형,
             주문상태,
             new OrderLineItems(주문아이템.stream()
-            .map(주문항목 -> OrderLineItem.fromDto(주문항목, OrderId.of(id)))
+            .map(주문항목 -> OrderLineItem.fromDto(주문항목, OrderId.of(id), 주문유형))
             .collect(Collectors.toList())),
             DeliveryInfo.of(배달지주소)
         );

@@ -15,7 +15,6 @@ import kitchenpos.order.common.domain.model.OrderId;
 import kitchenpos.order.common.domain.model.OrderLineItems;
 import kitchenpos.order.common.domain.model.OrderVo;
 import kitchenpos.order.eatin.domain.model.OrderTableId;
-import org.flywaydb.core.internal.util.CollectionsUtils;
 
 public record OrderFixture(UUID id,
                            OrderType 주문유형,
@@ -36,7 +35,7 @@ public record OrderFixture(UUID id,
             DEFAULT_ORDER_TYPE,
             DEFAULT_ORDER_STATUS,
             DEFAULT_ORDER_TIME,
-            List.of(OrderLineItemFixture.init(null).create()),
+            List.of(OrderLineItemFixture.init(null, DEFAULT_ORDER_TYPE).create()),
             DEFAULT_DELIVERY_ADDRESS,
             OrderTableFixture.init().toEntity().getOrderTableId().get()
         );
@@ -53,7 +52,7 @@ public record OrderFixture(UUID id,
             Objects.requireNonNullElse(주문유형, DEFAULT_ORDER_TYPE),
             Objects.requireNonNullElse(주문상태, DEFAULT_ORDER_STATUS),
             Objects.requireNonNullElse(주문시간, DEFAULT_ORDER_TIME),
-            주문아이템,
+            Objects.requireNonNullElse(주문아이템, List.of(OrderLineItemFixture.init(null, DEFAULT_ORDER_TYPE).create())),
             배달지주소,
             주문테이블아이디
         );
@@ -66,7 +65,7 @@ public record OrderFixture(UUID id,
             주문상태,
             주문시간,
             new OrderLineItems(주문아이템.stream()
-            .map(주문항목 -> OrderLineItem.fromDto(주문항목, OrderId.of(id)))
+            .map(주문항목 -> OrderLineItem.fromDto(주문항목, OrderId.of(id), 주문유형))
             .collect(Collectors.toList())),
             OrderTableId.of(주문테이블아이디)
         );
@@ -80,10 +79,9 @@ public record OrderFixture(UUID id,
             주문유형,
             OrderTableId.of(주문테이블아이디),
             OrderLineItems.of(
-                CollectionsUtils.hasItems(주문아이템) ?
                 주문아이템.stream()
-                .map(주문항목 -> OrderLineItem.fromDto(주문항목, OrderId.of(id)))
-                .collect(Collectors.toList()) : null),
+                .map(주문항목 -> OrderLineItem.fromDto(주문항목, OrderId.of(id), 주문유형))
+                .collect(Collectors.toList())),
             배달지주소);
     }
 
