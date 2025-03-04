@@ -95,17 +95,4 @@ class OrderLineItemsTest {
         assertThat(result1).isTrue();
         assertThat(result2).isFalse();
     }
-    
-    @DisplayName("주문 항목의 수량이 음수가 있는지 확인한다")
-    @Test
-    void hasNegativeQuantity(){
-        OrderLineItems orderLineItems = new OrderLineItems(
-                new OrderLineItem(1L, MenuId.generate(), -1, new Price(10_000)),
-                new OrderLineItem(2L, MenuId.generate(), 1, new Price(20_000))
-        );
-
-        boolean result = orderLineItems.hasNegativeQuantity();
-
-        assertThat(result).isTrue();
-    }
 }

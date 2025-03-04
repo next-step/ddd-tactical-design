@@ -5,6 +5,7 @@ import kitchenpos.common.vo.Price;
 import kitchenpos.eatinorders.tobe.domain.exception.InvalidOrderLineItemsException;
 import kitchenpos.menus.tobe.domain.MenuId;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -60,12 +61,7 @@ public class OrderLineItems {
                 .noneMatch(item -> item.isSameMenuPrice(id, price));
     }
 
-    public boolean hasNegativeQuantity() {
-        return orderLineItems.stream()
-                .anyMatch(orderLineItem -> orderLineItem.quantity() < 0);
-    }
-
     public List<OrderLineItem> getOrderLineItems() {
-        return orderLineItems;
+        return new ArrayList<>(orderLineItems);
     }
 }
