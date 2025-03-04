@@ -69,7 +69,7 @@ public class OrderLineItem {
         return price;
     }
 
-    public static OrderLineItem fromDto(OrderLineItemCreate dto) {
-        return new OrderLineItem(MenuId.of(dto.menuId()), null, OrderLineItemQty.of(dto.quantity()), dto.price());
+    public static OrderLineItem fromDto(OrderLineItemCreate dto, OrderId orderId) {
+        return new OrderLineItem(MenuId.of(dto.menuId()), orderId, OrderLineItemQty.of(dto.quantity()), dto.price());
     }
 }

@@ -22,7 +22,7 @@ public class OrderTableId implements Serializable {
 
     public static OrderTableId of(UUID id) {
         if (id == null) {
-            throw new NotFoundException(ErrorCode.NOT_FOUND_ORDER.toString());
+            throw new NotFoundException(ErrorCode.NOT_FOUND_ORDER_TABLE.toString());
         }
         return new OrderTableId(id);
     }

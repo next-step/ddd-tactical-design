@@ -27,7 +27,7 @@ public record OrderRequest() {
                 type,
                 OrderTableId.of(orderTableId),
                 OrderLineItems.of(orderLineItems.stream()
-                    .map(OrderLineItem::fromDto)
+                    .map(item -> OrderLineItem.fromDto(item, null))
                     .collect(Collectors.toList())),
                 deliveryAddress
             );

@@ -1,14 +1,14 @@
 package kitchenpos.order.common.domain.model;
 
 import jakarta.persistence.Embeddable;
-import kitchenpos.menu.domain.exception.MenuProductQtyException;
+import kitchenpos.order.common.domain.exception.OrderLineItemQtyException;
 
 @Embeddable
 public record OrderLineItemQty(long quantity) {
 
     public static OrderLineItemQty of(long quantity) {
         if (quantity < 0) {
-            throw new MenuProductQtyException();
+            throw new OrderLineItemQtyException();
         }
         return new OrderLineItemQty(quantity);
     }

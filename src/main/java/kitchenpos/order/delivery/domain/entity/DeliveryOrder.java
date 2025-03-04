@@ -21,6 +21,11 @@ public class DeliveryOrder extends Order {
 
     protected DeliveryOrder() {}
 
+    public DeliveryOrder(OrderId orderId, OrderType orderType, OrderStatus orderStatus, OrderLineItems orderLineItems, DeliveryInfo deliveryInfo) {
+        super(orderId, orderType, orderStatus, LocalDateTime.now(), orderLineItems, null);
+        this.deliveryAddress = deliveryInfo.address();
+    }
+
     public DeliveryOrder(OrderId orderId, OrderLineItems orderLineItems, DeliveryInfo deliveryInfo) {
         super(orderId, OrderType.DELIVERY, OrderStatus.WAITING, LocalDateTime.now(), orderLineItems, null);
         this.deliveryAddress = deliveryInfo.address();

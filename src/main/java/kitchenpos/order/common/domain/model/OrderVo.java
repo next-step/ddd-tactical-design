@@ -1,6 +1,7 @@
 package kitchenpos.order.common.domain.model;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import kitchenpos.menu.domain.model.MenuId;
@@ -48,6 +49,11 @@ public record OrderVo() {
         OrderLineItems orderLineItems,
         String deliveryAddress
     ) {
+        public Create {
+            if (Objects.isNull(type)) {
+                throw new IllegalArgumentException();
+            }
+        }
 
     }
 
