@@ -1,5 +1,6 @@
 package kitchenpos.eatinorders.tobe.domain;
 
+import kitchenpos.common.event.Events;
 import kitchenpos.eatinorders.tobe.domain.common.*;
 import kitchenpos.eatinorders.tobe.domain.exception.InvalidOrderLineItemsException;
 import kitchenpos.eatinorders.tobe.domain.exception.InvalidOrderStatusException;
@@ -57,6 +58,7 @@ public class EatInOrder {
             throw new InvalidOrderStatusException("서빙된 주문만 완료 가능합니다");
         }
         order.changeStatus(OrderStatus.COMPLETED);
+        Events.raise(new OrderCompleteEvent(getId()));
     }
 
     public OrderEntity toEntity() {
@@ -67,7 +69,7 @@ public class EatInOrder {
         return toEntity().id();
     }
 
-    public OrderType getType(){
+    public OrderType getType() {
         return toEntity().type();
     }
 
