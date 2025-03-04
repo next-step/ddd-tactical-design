@@ -1,0 +1,93 @@
+package kitchenpos.eatinorders.tobe.domain.order;
+
+import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderDateTime;
+import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderId;
+import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderStatus;
+import kitchenpos.eatinorders.tobe.domain.ordertable.vo.OrderTableId;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
+
+import static java.util.Objects.isNull;
+
+public class EatInOrder {
+    private final EatInOrderId id;
+    private EatInOrderStatus eatInOrderStatus;
+    private final EatInOrderDateTime eatInOrderDateTime;
+    private final EatInOrderLineItems eatInOrderLineItems;
+    private final OrderTableId orderTableId;
+
+    public EatInOrder(final List<EatInOrderLineItem> eatInOrderLineItems, final EatInOrderMenus eatInOrderMenus, final OrderTableId orderTableId) {
+        this(new EatInOrderId(), EatInOrderStatus.WAITING, new EatInOrderDateTime(), new EatInOrderLineItems(eatInOrderMenus, eatInOrderLineItems), orderTableId);
+    }
+
+    public EatInOrder(final EatInOrderId id, final EatInOrderStatus eatInOrderStatus,
+                      final EatInOrderDateTime eatInOrderDateTime, final EatInOrderLineItems eatInOrderLineItems, final OrderTableId orderTableId) {
+        verify(id, eatInOrderStatus, eatInOrderDateTime, eatInOrderLineItems, orderTableId);
+        this.id = id;
+        this.eatInOrderStatus = eatInOrderStatus;
+        this.eatInOrderDateTime = eatInOrderDateTime;
+        this.eatInOrderLineItems = eatInOrderLineItems;
+        this.orderTableId = orderTableId;
+        eatInOrderLineItems.setEatInOrderId(id);
+    }
+
+    private void verify(final EatInOrderId id, final EatInOrderStatus eatInOrderStatus,
+                        final EatInOrderDateTime eatInOrderDateTime, final EatInOrderLineItems eatInOrderLineItems,
+                        final OrderTableId orderTable) {
+        if (isNull(id) || isNull(eatInOrderStatus) || isNull(eatInOrderDateTime) || isNull(eatInOrderLineItems) || isNull(orderTable)) {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    public void accepted() {
+        this.eatInOrderStatus = eatInOrderStatus.accepted();
+    }
+
+    public void served() {
+        this.eatInOrderStatus = eatInOrderStatus.served();
+    }
+
+    public void completed() {
+        this.eatInOrderStatus = eatInOrderStatus.completed();
+    }
+
+    public boolean isSameOrderTable(final OrderTableId orderTableId) {
+        return this.orderTableId.equals(orderTableId);
+    }
+
+    public boolean isSameStatus(final EatInOrderStatus orderStatus) {
+        return this.eatInOrderStatus.isSameStatus(orderStatus);
+    }
+
+    public EatInOrderId id() {
+        return id;
+    }
+
+    public UUID idValue() {
+        return id.getValue();
+    }
+
+    public OrderTableId orderTableId() {
+        return orderTableId;
+    }
+
+    public List<EatInOrderLineItem> eatInOrderLineItems() {
+        return new ArrayList<>(eatInOrderLineItems.eatInOrderLineItems());
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final EatInOrder that = (EatInOrder) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
+}
