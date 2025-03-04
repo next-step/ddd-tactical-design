@@ -56,7 +56,7 @@ class Menu(
         for (menuProduct in menuProducts) {
             sum = sum.add(
                 menuProduct.product
-                    .price
+                    .productPrice.price
                     .multiply(BigDecimal.valueOf(menuProduct.quantity))
             )
         }

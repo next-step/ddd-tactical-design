@@ -14,11 +14,11 @@ class ProductTest {
     fun createProduct() {
         val product = Product(
             productName = ProductName(ProductNamePolicy(FakeProfanities()), "양념치킨"),
-            price = BigDecimal.valueOf(16000)
+            productPrice = ProductPrice(ProductPricePolicy(), BigDecimal.valueOf(16000))
         )
 
         assertThat(product.productName.name).isEqualTo("양념치킨")
-        assertThat(product.price).isEqualTo(BigDecimal.valueOf(16000))
+        assertThat(product.productPrice.price).isEqualTo(BigDecimal.valueOf(16000))
     }
 
     @Test
@@ -27,7 +27,7 @@ class ProductTest {
         assertThatIllegalArgumentException().isThrownBy {
             Product(
                 productName = ProductName(ProductNamePolicy(FakeProfanities()), "양념치킨"),
-                price = BigDecimal.valueOf(-1)
+                productPrice = ProductPrice(ProductPricePolicy(), BigDecimal.valueOf(-1))
             )
         }
     }
@@ -37,12 +37,12 @@ class ProductTest {
     fun changePrice() {
         val product = Product(
             productName = ProductName(ProductNamePolicy(FakeProfanities()), "양념치킨"),
-            price = BigDecimal.valueOf(16000)
+            productPrice = ProductPrice(ProductPricePolicy(), BigDecimal.valueOf(16000))
         )
 
-        product.changePrice(BigDecimal.valueOf(17000))
+        product.changePrice(ProductPrice(ProductPricePolicy(), BigDecimal.valueOf(17000)))
 
-        assertThat(product.price).isEqualTo(BigDecimal.valueOf(17000))
+        assertThat(product.productPrice.price).isEqualTo(BigDecimal.valueOf(17000))
     }
 
     @Test
@@ -50,11 +50,11 @@ class ProductTest {
     fun changePriceFail() {
         val product = Product(
             productName = ProductName(ProductNamePolicy(FakeProfanities()), "양념치킨"),
-            price = BigDecimal.valueOf(16000)
+            productPrice = ProductPrice(ProductPricePolicy(), BigDecimal.valueOf(16000))
         )
 
         assertThatIllegalArgumentException().isThrownBy {
-            product.changePrice(BigDecimal.valueOf(-1))
+            product.changePrice(ProductPrice(ProductPricePolicy(), BigDecimal.valueOf(-1)))
         }
     }
 }

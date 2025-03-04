@@ -9,6 +9,8 @@ import kitchenpos.product.tobe.application.dto.ProductResp
 import kitchenpos.product.tobe.domain.Product
 import kitchenpos.product.tobe.domain.ProductName
 import kitchenpos.product.tobe.domain.ProductNamePolicy
+import kitchenpos.product.tobe.domain.ProductPrice
+import kitchenpos.product.tobe.domain.ProductPricePolicy
 import kitchenpos.product.tobe.domain.ProductRepository
 import org.springframework.stereotype.Service
 
@@ -22,7 +24,8 @@ class ProductService(
     fun create(request: CreateProductReq): ProductResp {
         val product = productRepository.save(
             Product(
-                productName = ProductName(ProductNamePolicy(profanities), request.name), price = request.price
+                productName = ProductName(ProductNamePolicy(profanities), request.name),
+                productPrice = ProductPrice(ProductPricePolicy(), request.price)
             )
         )
         return ProductResp.of(product)
@@ -35,7 +38,8 @@ class ProductService(
     fun changePrice(productId: UUID, request: ChangeProductPriceReq): ProductResp {
         val product =
             productRepository.findById(productId).orElseThrow { throw NoSuchElementException("상품을 찾을 수 없습니다.") }
-        product.changePrice(request.price)
+        product.changePrice(ProductPrice(ProductPricePolicy(), request.price))
+
         val menus = menuRepository.findAllByProductId(productId)
         menus.forEach { menu ->
             run {

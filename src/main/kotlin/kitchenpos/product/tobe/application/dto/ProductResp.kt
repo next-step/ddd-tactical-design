@@ -14,7 +14,7 @@ data class ProductResp(
             return ProductResp(
                 id = entity.id!!,
                 name = entity.productName.name,
-                price = entity.price
+                price = entity.productPrice.price
             )
         }
     }

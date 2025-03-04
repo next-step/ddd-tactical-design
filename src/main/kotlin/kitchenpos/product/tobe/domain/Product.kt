@@ -5,7 +5,6 @@ import jakarta.persistence.Embedded
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.Table
-import java.math.BigDecimal
 import java.util.*
 
 @Table(name = "product")
@@ -18,16 +17,10 @@ class Product(
     @Embedded
     var productName: ProductName,
 
-    @Column(name = "price", nullable = false)
-    var price: BigDecimal,
+    @Embedded
+    var productPrice: ProductPrice
 ) {
-
-    init {
-        require(price >= BigDecimal.ZERO) { "상품 가격은 0원 이상이어야 합니다." }
-    }
-
-    fun changePrice(price: BigDecimal) {
-        require(price >= BigDecimal.ZERO) { "상품 가격은 0원 이상이어야 합니다." }
-        this.price = price
+    fun changePrice(productPrice: ProductPrice) {
+        this.productPrice = productPrice
     }
 }
