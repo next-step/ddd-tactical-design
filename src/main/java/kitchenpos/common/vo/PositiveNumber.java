@@ -10,6 +10,8 @@ public class PositiveNumber {
 
     private int value;
 
+    public static PositiveNumber ZERO = new PositiveNumber(0);
+
     protected PositiveNumber() {
     }
 

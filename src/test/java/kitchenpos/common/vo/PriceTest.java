@@ -54,4 +54,26 @@ class PriceTest {
 
         assertThat(result).isTrue();
     }
+
+    @DisplayName("동일한 가격인지 확인한다")
+    @Test
+    void same(){
+        Price price1 = new Price(2000);
+        Price price2 = new Price(2000);
+
+        boolean result = price1.same(price2);
+
+        assertThat(result).isTrue();
+    }
+    
+    @DisplayName("가격이 다른지 확인한다")
+    @Test
+    void result(){
+        Price price1 = new Price(1000);
+        Price price2 = new Price(2000);
+
+        boolean result = price1.different(price2);
+
+        assertThat(result).isTrue();
+    }
 }

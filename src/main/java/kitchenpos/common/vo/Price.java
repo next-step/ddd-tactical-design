@@ -55,12 +55,25 @@ public class Price {
         return new Price(result);
     }
 
+    public Price multiply(long quantity) {
+        BigDecimal result = value.multiply(BigDecimal.valueOf(quantity));
+        return new Price(result);
+    }
+
     public Price multiply(PositiveNumber quantity) {
         return multiply(quantity.getValue());
     }
 
     public boolean isGreaterThan(Price other) {
         return value.compareTo(other.value) > 0;
+    }
+
+    public boolean same(Price other){
+        return other.equals(this);
+    }
+
+    public boolean different(Price other){
+        return !same(other);
     }
 
     public BigDecimal getValue() {
