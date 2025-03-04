@@ -2,6 +2,7 @@ package kitchenpos.product.tobe.application
 
 import java.math.BigDecimal
 import kitchenpos.common.domain.Profanities
+import kitchenpos.menu.tobe.domain.MenuDisplay
 import kitchenpos.menu.tobe.domain.MenuProducts
 import kitchenpos.menu.tobe.domain.MenuRepository
 import kitchenpos.menu.tobe.infra.FakeMenuRepository
@@ -92,7 +93,7 @@ class ProductServiceTest {
             Fixtures.menu(
                 name = "양념치킨 세트",
                 price = 32000,
-                displayed = true,
+                display = MenuDisplay.DISPLAYED,
                 menuProducts = MenuProducts(listOf(Fixtures.menuProduct(product, 2)))
             )
         )
@@ -102,6 +103,6 @@ class ProductServiceTest {
 
         // then
         assertThat(changedProduct.price).isEqualTo(BigDecimal.valueOf(15000))
-        assertThat(menu.displayed).isFalse()
+        assertThat(menu.menuDisplay).isEqualTo(MenuDisplay.NOT_DISPLAYED)
     }
 }

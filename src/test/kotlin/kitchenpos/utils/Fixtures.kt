@@ -3,6 +3,7 @@ package kitchenpos.utils
 import java.util.*
 import kitchenpos.menu.domain.MenuGroup
 import kitchenpos.menu.tobe.domain.Menu
+import kitchenpos.menu.tobe.domain.MenuDisplay
 import kitchenpos.menu.tobe.domain.MenuName
 import kitchenpos.menu.tobe.domain.MenuNamePolicy
 import kitchenpos.menu.tobe.domain.MenuPrice
@@ -35,7 +36,7 @@ class Fixtures {
             id: UUID = UUID.randomUUID(),
             name: String,
             price: Long,
-            displayed: Boolean,
+            display: MenuDisplay,
             menuGroup: MenuGroup = menuGroup(),
             menuProducts: MenuProducts = MenuProducts(listOf()),
         ): Menu {
@@ -43,7 +44,7 @@ class Fixtures {
                 id = id,
                 menuName = MenuName(MenuNamePolicy(FakeProfanities()), name),
                 menuPrice = MenuPrice(price.toBigDecimal()),
-                displayed = displayed,
+                menuDisplay = display,
                 menuGroup = menuGroup,
                 menuProducts = menuProducts,
             )

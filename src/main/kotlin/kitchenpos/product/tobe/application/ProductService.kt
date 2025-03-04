@@ -2,6 +2,7 @@ package kitchenpos.product.tobe.application
 
 import java.util.*
 import kitchenpos.common.domain.Profanities
+import kitchenpos.menu.tobe.domain.MenuDisplay
 import kitchenpos.menu.tobe.domain.MenuRepository
 import kitchenpos.product.tobe.application.dto.ChangeProductPriceReq
 import kitchenpos.product.tobe.application.dto.CreateProductReq
@@ -45,7 +46,7 @@ class ProductService(
             run {
                 if (menu.menuPrice.price > menu.amount()) {
                     //TODO Menu 리팩토링 시 처리
-                    menu.displayed = false
+                    menu.menuDisplay = MenuDisplay.NOT_DISPLAYED
                 }
             }
         }

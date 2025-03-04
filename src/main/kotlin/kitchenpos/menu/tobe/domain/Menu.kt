@@ -3,6 +3,8 @@ package kitchenpos.menu.tobe.domain
 import jakarta.persistence.Column
 import jakarta.persistence.Embedded
 import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
 import jakarta.persistence.ForeignKey
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
@@ -11,6 +13,8 @@ import jakarta.persistence.Table
 import java.math.BigDecimal
 import java.util.*
 import kitchenpos.menu.domain.MenuGroup
+import org.hibernate.annotations.JdbcTypeCode
+import org.hibernate.type.SqlTypes
 
 @Table(name = "menu")
 @Entity(name = "TobeMenu")
@@ -33,8 +37,10 @@ class Menu(
     )
     val menuGroup: MenuGroup,
 
-    @Column(name = "displayed", nullable = false)
-    var displayed: Boolean,
+    @Enumerated(value = EnumType.STRING)
+    @Column(nullable = false)
+    @JdbcTypeCode(value = SqlTypes.VARCHAR)
+    var menuDisplay: MenuDisplay,
 
     @Embedded
     val menuProducts: MenuProducts,
@@ -42,5 +48,23 @@ class Menu(
 
     fun amount(): BigDecimal {
         return menuProducts.amount()
+    }
+
+    fun changePrice(menuPrice: MenuPrice) {
+        if (menuPrice.price > menuProducts.amount()) {
+            throw IllegalArgumentException("메뉴가격은 메뉴금액 이하여야 합니다.")
+        }
+        this.menuPrice = menuPrice
+    }
+
+    fun display() {
+        if (menuPrice.price > menuProducts.amount()) {
+            throw IllegalArgumentException("메뉴가격은 메뉴금액 이하여야 합니다.")
+        }
+        menuDisplay = MenuDisplay.DISPLAYED
+    }
+
+    fun notDisplay() {
+        menuDisplay = MenuDisplay.NOT_DISPLAYED
     }
 }
