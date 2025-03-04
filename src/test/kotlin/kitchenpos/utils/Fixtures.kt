@@ -5,6 +5,7 @@ import kitchenpos.menu.domain.MenuGroup
 import kitchenpos.menu.tobe.domain.Menu
 import kitchenpos.menu.tobe.domain.MenuName
 import kitchenpos.menu.tobe.domain.MenuNamePolicy
+import kitchenpos.menu.tobe.domain.MenuPrice
 import kitchenpos.menu.tobe.domain.MenuProduct
 import kitchenpos.menu.tobe.domain.MenuProducts
 import kitchenpos.product.tobe.domain.Product
@@ -41,7 +42,7 @@ class Fixtures {
             return Menu(
                 id = id,
                 menuName = MenuName(MenuNamePolicy(FakeProfanities()), name),
-                price = price.toBigDecimal(),
+                menuPrice = MenuPrice(price.toBigDecimal()),
                 displayed = displayed,
                 menuGroup = menuGroup,
                 menuProducts = menuProducts,

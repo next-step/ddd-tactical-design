@@ -15,7 +15,7 @@ class Product(
     var id: UUID? = null,
 
     @Embedded
-    var productName: ProductName,
+    val productName: ProductName,
 
     @Embedded
     var productPrice: ProductPrice

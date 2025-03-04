@@ -22,8 +22,8 @@ class Menu(
     @Embedded
     val menuName: MenuName,
 
-    @Column(name = "price", nullable = false)
-    var price: BigDecimal,
+    @Embedded
+    var menuPrice: MenuPrice,
 
     @ManyToOne(optional = false)
     @JoinColumn(

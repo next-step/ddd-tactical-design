@@ -43,7 +43,7 @@ class ProductService(
         val menus = menuRepository.findAllByProductId(productId)
         menus.forEach { menu ->
             run {
-                if (menu.price > menu.amount()) {
+                if (menu.menuPrice.price > menu.amount()) {
                     //TODO Menu 리팩토링 시 처리
                     menu.displayed = false
                 }
