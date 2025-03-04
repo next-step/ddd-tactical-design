@@ -45,19 +45,19 @@ class Menu(
     val menuProducts: MenuProducts,
 ) {
 
-    fun amount(): BigDecimal {
-        return menuProducts.amount()
+    fun amount(menuAmountService: MenuAmountService): BigDecimal {
+        return menuProducts.amount(menuAmountService)
     }
 
-    fun changePrice(menuPrice: MenuPrice) {
-        if (menuPrice.price > menuProducts.amount()) {
+    fun changePrice(menuAmountService: MenuAmountService, menuPrice: MenuPrice) {
+        if (menuPrice.price > menuProducts.amount(menuAmountService)) {
             throw IllegalArgumentException("메뉴가격은 메뉴금액 이하여야 합니다.")
         }
         this.menuPrice = menuPrice
     }
 
-    fun display() {
-        if (menuPrice.price > menuProducts.amount()) {
+    fun display(menuAmountService: MenuAmountService) {
+        if (menuPrice.price > menuProducts.amount(menuAmountService)) {
             throw IllegalArgumentException("메뉴가격은 메뉴금액 이하여야 합니다.")
         }
         menuDisplay = MenuDisplay.DISPLAYED

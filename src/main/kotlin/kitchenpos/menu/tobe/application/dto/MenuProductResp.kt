@@ -12,7 +12,7 @@ data class MenuProductResp(
         fun of(menuProduct: MenuProduct): MenuProductResp {
             return MenuProductResp(
                 seq = menuProduct.seq!!,
-                productId = menuProduct.product.id!!,
+                productId = menuProduct.productId!!,
                 quantity = menuProduct.quantity
             )
         }

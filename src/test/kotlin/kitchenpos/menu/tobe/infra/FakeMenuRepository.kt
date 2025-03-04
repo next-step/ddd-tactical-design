@@ -30,6 +30,6 @@ class FakeMenuRepository(
     }
 
     override fun findAllByProductId(productId: UUID): List<Menu> {
-        return menus.values.filter { it.menuProducts.menuProducts.any { it.product.id == productId } }
+        return menus.values.filter { it.menuProducts.menuProducts.any { it.productId == productId } }
     }
 }

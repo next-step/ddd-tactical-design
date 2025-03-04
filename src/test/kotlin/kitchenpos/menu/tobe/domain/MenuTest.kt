@@ -10,7 +10,6 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
 class MenuTest {
-
     @Test
     @DisplayName("Menu를 생성한다")
     fun create() {
@@ -59,7 +58,7 @@ class MenuTest {
         )
 
         // when
-        menu.changePrice(MenuPrice(BigDecimal.valueOf(31000)))
+        menu.changePrice({ 32000.toBigDecimal()}, MenuPrice(BigDecimal.valueOf(31000)))
 
         // then
         assertThat(menu.menuPrice.price).isEqualTo(BigDecimal.valueOf(31000))
@@ -83,7 +82,7 @@ class MenuTest {
 
         // when then
         assertThatIllegalArgumentException().isThrownBy {
-            menu.changePrice(MenuPrice(BigDecimal.valueOf(33000)))
+            menu.changePrice({ (32000).toBigDecimal() }, MenuPrice(BigDecimal.valueOf(33000)))
         }
     }
 
@@ -104,7 +103,7 @@ class MenuTest {
         )
 
         // when
-        menu.display()
+        menu.display({ (32000).toBigDecimal() })
 
         // then
         assertThat(menu.menuDisplay).isEqualTo(MenuDisplay.DISPLAYED)
@@ -130,7 +129,7 @@ class MenuTest {
 
         // when then
         assertThatIllegalArgumentException().isThrownBy {
-            menu.display()
+            menu.display({ (32000).toBigDecimal() })
         }
     }
 

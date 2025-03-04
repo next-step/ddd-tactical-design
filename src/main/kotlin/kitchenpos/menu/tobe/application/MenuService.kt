@@ -36,7 +36,7 @@ class MenuService(
             menuProducts = MenuProducts(request.menuProducts.map { menuProductReq ->
                 val product = products.find { it.id == menuProductReq.productId }
                     ?: throw NoSuchElementException("존재하지 않는 상품입니다.")
-                MenuProduct(product = product, quantity = menuProductReq.quantity)
+                MenuProduct(productId = product.id, quantity = menuProductReq.quantity)
             })
         )
         menuRepository.save(menu)

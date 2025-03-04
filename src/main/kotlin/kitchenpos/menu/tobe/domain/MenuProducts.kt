@@ -22,11 +22,7 @@ class MenuProducts(
         require(menuProducts.isNotEmpty()) { "메뉴 상품은 필수로 입력해야 합니다." }
     }
 
-    fun amount(): BigDecimal {
-        var sum = BigDecimal.ZERO
-        menuProducts.forEach { menuProduct ->
-            sum += (menuProduct.product.productPrice.price * menuProduct.quantity.toBigDecimal())
-        }
-        return sum
+    fun amount(menuAmountService: MenuAmountService): BigDecimal {
+        return menuAmountService.amount(this)
     }
 }

@@ -55,7 +55,17 @@ class Fixtures {
             quantity: Long,
         ): MenuProduct {
             return MenuProduct(
-                product = product,
+                productId = product.id,
+                quantity = quantity
+            )
+        }
+
+        fun menuProduct(
+            productId: UUID,
+            quantity: Long,
+        ): MenuProduct {
+            return MenuProduct(
+                productId = productId,
                 quantity = quantity
             )
         }
