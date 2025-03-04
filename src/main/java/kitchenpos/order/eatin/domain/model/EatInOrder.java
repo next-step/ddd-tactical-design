@@ -32,8 +32,4 @@ public class EatInOrder extends Order {
     public static EatInOrder createEatInOrder(OrderId orderId, Create request, OrderLineItems orderLineItems) {
         return new EatInOrder(orderId, orderLineItems, request.orderTableId());
     }
-
-    public EatInOrder(OrderTable orderTable) {
-        this.orderTable = orderTable;
-    }
 }

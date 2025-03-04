@@ -5,8 +5,12 @@ import java.util.UUID;
 import kitchenpos.global.exception.ErrorCode;
 import kitchenpos.global.exception.NotFoundException;
 import kitchenpos.order.common.domain.entity.OrderStatus;
+import kitchenpos.order.common.domain.model.OrderId;
+import kitchenpos.order.common.domain.model.OrderLineItems;
+import kitchenpos.order.common.domain.model.OrderVo;
 import kitchenpos.order.common.domain.repository.OrderTableRepository;
 import kitchenpos.order.eatin.domain.entity.OrderTable;
+import kitchenpos.order.eatin.domain.model.EatInOrder;
 import kitchenpos.order.eatin.domain.model.OrderTableId;
 import kitchenpos.order.eatin.domain.model.OrderTableName;
 import kitchenpos.order.eatin.domain.model.OrderTableVo.Create;
@@ -18,12 +22,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Service
-public class DefaultEatinService implements EatinService {
+public class DefaultEatInService implements EatInService {
 
     private final EatinOrderRepository orderRepository;
     private final OrderTableRepository orderTableRepository;
 
-    public DefaultEatinService(EatinOrderRepository orderRepository, OrderTableRepository orderTableRepository) {
+    public DefaultEatInService(EatinOrderRepository orderRepository, OrderTableRepository orderTableRepository) {
         this.orderRepository = orderRepository;
         this.orderTableRepository = orderTableRepository;
     }
@@ -84,5 +88,15 @@ public class DefaultEatinService implements EatinService {
         if (!orderRepository.existsByOrderTableIdAndStatusNot(orderTableId, OrderStatus.COMPLETED)) {
             orderTable.clear();
         }
+    }
+
+    @Override
+    public EatInOrder createEatInOrder(OrderId orderId, OrderVo.Create request, OrderLineItems orderLineItems) {
+        final OrderTable orderTable = orderTableRepository.findById(request.orderTableId())
+            .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_ORDER_TABLE.toString()));
+
+        orderTable.validateOccupied();
+
+        return EatInOrder.createEatInOrder(orderId, request, orderLineItems);
     }
 }

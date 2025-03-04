@@ -40,7 +40,8 @@ public enum ErrorCode implements ErrorType {
     ORDER_STATUS_IS_NOT_WAITING("400", "주문대기 상태가 아닙니다."),
     ORDER_STATUS_IS_NOT_ACCEPTED("400", "주문수락 상태가 아닙니다."),
     ORDER_STATUS_IS_NOT_DELIVERED("400", "배달완료 상태가 아닙니다."),
-    ORDER_STATUS_IS_NOT_SERVED("400", "주문제공 상태가 아닙니다.");
+    ORDER_STATUS_IS_NOT_SERVED("400", "주문제공 상태가 아닙니다."),
+    ORDER_TYPE_IS_NOT_ALLOWED("400", "유효한 주문유형이 아닙니다.");
 
     private final String code;
     private final String message;

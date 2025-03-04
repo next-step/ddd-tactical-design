@@ -15,8 +15,7 @@ public class TakeOutOrder extends Order {
 
     protected TakeOutOrder() {}
 
-    public TakeOutOrder(OrderId orderId,
-        OrderLineItems orderLineItems) {
+    public TakeOutOrder(OrderId orderId, OrderLineItems orderLineItems) {
         super(orderId, OrderType.TAKEOUT, OrderStatus.WAITING, LocalDateTime.now(), orderLineItems, null);
     }
 

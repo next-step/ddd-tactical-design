@@ -12,17 +12,16 @@ import kitchenpos.order.common.domain.entity.OrderStatus;
 import kitchenpos.order.common.domain.exception.OrderHideMenuException;
 import kitchenpos.order.common.domain.exception.OrderMenuInvalidException;
 import kitchenpos.order.common.domain.exception.OrderPriceInvalidException;
+import kitchenpos.order.common.domain.exception.OrderTypeInvalidException;
 import kitchenpos.order.common.domain.model.OrderId;
 import kitchenpos.order.common.domain.model.OrderLineItems;
 import kitchenpos.order.common.domain.model.OrderVo;
 import kitchenpos.order.common.domain.model.OrderVo.Create;
 import kitchenpos.order.common.domain.model.OrderVo.OrderInfo;
 import kitchenpos.order.common.domain.repository.OrderRepository;
-import kitchenpos.order.delivery.domain.entity.DeliveryOrder;
 import kitchenpos.order.delivery.domain.service.DeliveryService;
-import kitchenpos.order.eatin.domain.model.EatInOrder;
-import kitchenpos.order.eatin.domain.service.EatinService;
-import kitchenpos.order.takeout.domain.model.TakeOutOrder;
+import kitchenpos.order.eatin.domain.service.EatInService;
+import kitchenpos.order.takeout.domain.service.TakeoutService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,30 +31,35 @@ public class DefaultOrderService implements OrderQueryService, OrderCommandServi
 
     private final OrderRepository orderRepository;
     private final DeliveryService deliveryService;
-    private final EatinService eatinService;
+    private final EatInService eatinService;
+    private final TakeoutService takeoutService;
 
     private final MenuContextProvider menuContextProvider;
 
     public DefaultOrderService(
         OrderRepository orderRepository,
-        DeliveryService deliveryService, EatinService eatinService,
+        DeliveryService deliveryService,
+        EatInService eatinService,
+        TakeoutService takeoutService,
         MenuContextProvider menuContextProvider
     ) {
         this.orderRepository = orderRepository;
         this.deliveryService = deliveryService;
         this.eatinService = eatinService;
+        this.takeoutService = takeoutService;
         this.menuContextProvider = menuContextProvider;
     }
 
     @Override
-    public OrderVo.OrderInfo create(Create request) {
+    public OrderVo.OrderInfo create(OrderVo.Create request) {
         final OrderId orderId = OrderId.of(UUID.randomUUID());
         OrderLineItems orderLineItems = validateOrderLineItems(orderId, request);
 
         Order order = switch (request.type()) {
-            case EAT_IN -> EatInOrder.createEatInOrder(orderId, request, orderLineItems);
-            case DELIVERY -> DeliveryOrder.createDeliveryOrder(orderId, request, orderLineItems);
-            case TAKEOUT -> TakeOutOrder.createTakeoutOrder(orderId, orderLineItems);
+            case EAT_IN -> eatinService.createEatInOrder(orderId, request, orderLineItems);
+            case DELIVERY -> deliveryService.createDeliveryOrder(orderId, request, orderLineItems);
+            case TAKEOUT -> takeoutService.createTakeoutOrder(orderId, orderLineItems);
+            default -> throw new OrderTypeInvalidException();
         };
 
         return OrderVo.OrderInfo.fromEntity(orderRepository.save(order));

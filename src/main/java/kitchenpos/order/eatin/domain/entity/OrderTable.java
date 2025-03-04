@@ -66,7 +66,7 @@ public class OrderTable {
     }
 
     public void validateOccupied(){
-        if (!this.occupied) {
+        if (!this.isOccupied()) {
             throw new IllegalStateException();
         };
     }

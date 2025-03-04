@@ -8,6 +8,7 @@ import kitchenpos.order.common.domain.entity.OrderStatus;
 import kitchenpos.order.common.domain.model.OrderId;
 import kitchenpos.order.common.domain.model.OrderLineItems;
 import kitchenpos.order.common.domain.model.OrderVo;
+import kitchenpos.order.common.domain.model.OrderVo.Create;
 import kitchenpos.order.delivery.domain.entity.DeliveryOrder;
 import kitchenpos.order.delivery.domain.repository.DeliveryOrderRepository;
 import org.springframework.stereotype.Service;
@@ -61,5 +62,10 @@ public class DefaultDeliveryService implements DeliveryService {
             .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         deliveryKitchenridersClient.requestDelivery(orderId.get(), sum, order.getDeliveryAddress());
+    }
+
+    @Override
+    public DeliveryOrder createDeliveryOrder(OrderId orderId, Create request, OrderLineItems orderLineItems) {
+        return DeliveryOrder.createDeliveryOrder(orderId, request, orderLineItems);
     }
 }

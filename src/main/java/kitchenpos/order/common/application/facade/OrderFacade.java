@@ -14,20 +14,20 @@ import kitchenpos.order.common.domain.service.OrderCommandService;
 import kitchenpos.order.common.domain.service.OrderQueryService;
 import kitchenpos.order.delivery.domain.service.DeliveryService;
 import kitchenpos.order.eatin.domain.model.OrderTableId;
-import kitchenpos.order.eatin.domain.service.EatinService;
+import kitchenpos.order.eatin.domain.service.EatInService;
 import org.springframework.stereotype.Component;
 
 @Component
 public class OrderFacade {
     private final DeliveryService deliveryService;
-    private final EatinService eatinService;
+    private final EatInService eatinService;
     private final OrderQueryService orderQueryService;
 
     private final OrderCommandService orderCommandService;
 
     public OrderFacade(
         DeliveryService deliveryService,
-        EatinService eatinService,
+        EatInService eatinService,
         OrderQueryService orderQueryService,
         OrderCommandService orderCommandService
     ) {
