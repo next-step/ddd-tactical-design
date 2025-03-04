@@ -1,9 +1,9 @@
 package kitchenpos.eatinorders.application.tobe;
 
+import kitchenpos.eatinorders.presentation.dto.*;
 import kitchenpos.eatinorders.tobe.domain.*;
 import kitchenpos.eatinorders.tobe.domain.common.OrderEntity;
 import kitchenpos.eatinorders.tobe.domain.common.OrderId;
-import kitchenpos.eatinorders.presentation.dto.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,13 +15,11 @@ public class EatInOrderService {
     private final OrderRepository orderRepository;
     private final OrderTableRepository orderTableRepository;
     private final OrderLineItemsValidator orderLineItemsValidator;
-    private final ClearOrderTableService clearOrderTableService;
 
-    public EatInOrderService(OrderRepository orderRepository, OrderTableRepository orderTableRepository, OrderLineItemsValidator orderLineItemsValidator, ClearOrderTableService clearOrderTableService) {
+    public EatInOrderService(OrderRepository orderRepository, OrderTableRepository orderTableRepository, OrderLineItemsValidator orderLineItemsValidator) {
         this.orderRepository = orderRepository;
         this.orderTableRepository = orderTableRepository;
         this.orderLineItemsValidator = orderLineItemsValidator;
-        this.clearOrderTableService = clearOrderTableService;
     }
 
     @Transactional
@@ -30,8 +28,7 @@ public class EatInOrderService {
 
         final OrderTable orderTable = orderTableRepository.findById(request.getOrderTableId())
                 .orElseThrow(NoSuchElementException::new);
-        OrderEntity orderEntity = EatInOrderCreateRequest.toEntity(request);
-        EatInOrder eatInOrder = new EatInOrder(orderEntity);
+        EatInOrder eatInOrder = EatInOrderCreateRequest.from(request);
         eatInOrder.createOrder(orderTable);
 
         orderRepository.save(eatInOrder.toEntity());
@@ -43,7 +40,13 @@ public class EatInOrderService {
         final OrderEntity order = orderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
 
-        EatInOrder eatInOrder = new EatInOrder(order);
+        EatInOrder eatInOrder = new EatInOrder(
+                order.id(),
+                order.status(),
+                order.orderLineItems(),
+                order.orderTableId(),
+                order.orderDateTime()
+        );
         eatInOrder.accept();
 
         return EatInOrderAcceptResponse.from(eatInOrder);
@@ -54,7 +57,13 @@ public class EatInOrderService {
         final OrderEntity order = orderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
 
-        EatInOrder eatInOrder = new EatInOrder(order);
+        EatInOrder eatInOrder = new EatInOrder(
+                order.id(),
+                order.status(),
+                order.orderLineItems(),
+                order.orderTableId(),
+                order.orderDateTime()
+        );
         eatInOrder.serve();
 
         return EatInOrderServedResponse.from(eatInOrder);
@@ -65,10 +74,15 @@ public class EatInOrderService {
         final OrderEntity order = orderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
 
-        EatInOrder eatInOrder = new EatInOrder(order);
+        EatInOrder eatInOrder = new EatInOrder(
+                order.id(),
+                order.status(),
+                order.orderLineItems(),
+                order.orderTableId(),
+                order.orderDateTime()
+        );
         eatInOrder.complete();
 
-        clearOrderTableService.clearOrderTable(order.id());
         return EatInOrderCompletedResponse.from(eatInOrder);
     }
 }

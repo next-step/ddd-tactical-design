@@ -1,6 +1,8 @@
 package kitchenpos.eatinorders.presentation.dto;
 
 import kitchenpos.eatinorders.tobe.domain.EatInOrder;
+import kitchenpos.eatinorders.tobe.domain.EatInOrderLineItems;
+import kitchenpos.eatinorders.tobe.domain.EatInOrderStatus;
 import kitchenpos.eatinorders.tobe.domain.OrderTableId;
 import kitchenpos.eatinorders.tobe.domain.common.OrderId;
 import kitchenpos.eatinorders.tobe.domain.common.OrderLineItems;
@@ -12,9 +14,9 @@ public class EatInOrderAcceptResponse {
 
     private OrderId id;
 
-    private OrderStatus status;
+    private EatInOrderStatus status;
 
-    private OrderLineItems orderLineItems;
+    private EatInOrderLineItems orderLineItems;
 
     private OrderTableId orderTableId;
 
@@ -30,7 +32,7 @@ public class EatInOrderAcceptResponse {
         );
     }
 
-    public EatInOrderAcceptResponse(OrderId id, OrderStatus status, OrderLineItems orderLineItems, OrderTableId orderTableId, LocalDateTime orderDateTime) {
+    public EatInOrderAcceptResponse(OrderId id, EatInOrderStatus status, EatInOrderLineItems orderLineItems, OrderTableId orderTableId, LocalDateTime orderDateTime) {
         this.id = id;
         this.status = status;
         this.orderLineItems = orderLineItems;
@@ -42,11 +44,11 @@ public class EatInOrderAcceptResponse {
         return id;
     }
 
-    public OrderStatus getStatus() {
+    public EatInOrderStatus getStatus() {
         return status;
     }
 
-    public OrderLineItems getOrderLineItems() {
+    public EatInOrderLineItems getOrderLineItems() {
         return orderLineItems;
     }
 
