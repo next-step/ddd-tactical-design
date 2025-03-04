@@ -1,13 +1,15 @@
 package kitchenpos.core.shared.identifier;
 
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.Transient;
 import kitchenpos.core.products.tobe.domain.exception.InvalidProductIdException;
+import kitchenpos.core.shared.domain.ValueObject;
 
 import java.io.Serializable;
 import java.util.UUID;
 
 @Embeddable
-public class ProductId implements Serializable {
+public class ProductId extends ValueObject<ProductId> {
 
     private UUID value;
 
@@ -27,5 +29,11 @@ public class ProductId implements Serializable {
 
     public UUID getValue() {
         return value;
+    }
+
+    @Override
+    @Transient
+    protected Object[] getEqualityFields() {
+        return new Object[] { value };
     }
 }

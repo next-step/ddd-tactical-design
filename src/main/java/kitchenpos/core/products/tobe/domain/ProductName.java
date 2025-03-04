@@ -6,6 +6,7 @@ import kitchenpos.core.products.tobe.domain.exception.InvalidProductNameExceptio
 import kitchenpos.core.products.tobe.domain.support.ProductNameValidationResult;
 import kitchenpos.core.shared.domain.ProfanityChecker;
 import kitchenpos.core.shared.domain.ValueObject;
+import org.jetbrains.annotations.NotNull;
 
 @Embeddable
 public class ProductName extends ValueObject<ProductName> {
@@ -19,7 +20,7 @@ public class ProductName extends ValueObject<ProductName> {
         this.name = name;
     }
 
-    public static ProductName create(ProductNamePolicy policy, String name) {
+    public static ProductName create(@NotNull ProductNamePolicy policy, String name) {
         ProductNameValidationResult result = policy.validate(name);
         if (!result.valid()) {
             throw new InvalidProductNameException((String.join("; ", result.errorMessages())));

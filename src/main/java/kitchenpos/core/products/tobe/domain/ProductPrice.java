@@ -1,6 +1,7 @@
 package kitchenpos.core.products.tobe.domain;
 
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.Transient;
 import kitchenpos.core.products.tobe.domain.exception.InvalidProductPriceException;
 import kitchenpos.core.shared.value.Money;
 import kitchenpos.core.shared.domain.ValueObject;
@@ -35,6 +36,7 @@ public class ProductPrice extends ValueObject<ProductPrice> {
 
 
     @Override
+    @Transient
     protected Object[] getEqualityFields() {
         return new Object[] { price };
     }
