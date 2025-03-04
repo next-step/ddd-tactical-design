@@ -1,12 +1,12 @@
-package kitchenpos.eatinorders.ui.tobe;
+package kitchenpos.eatinorders.presentation.tobe;
 
 import kitchenpos.eatinorders.application.tobe.OrderTableService;
 import kitchenpos.eatinorders.tobe.domain.OrderTable;
 import kitchenpos.eatinorders.tobe.domain.OrderTableId;
-import kitchenpos.eatinorders.ui.dto.OrderTableChangeNumberOfGuestsResponse;
-import kitchenpos.eatinorders.ui.dto.OrderTableClearResponse;
-import kitchenpos.eatinorders.ui.dto.OrderTableCreateResponse;
-import kitchenpos.eatinorders.ui.dto.OrderTableSitResponse;
+import kitchenpos.eatinorders.presentation.dto.OrderTableChangeNumberOfGuestsResponse;
+import kitchenpos.eatinorders.presentation.dto.OrderTableClearResponse;
+import kitchenpos.eatinorders.presentation.dto.OrderTableCreateResponse;
+import kitchenpos.eatinorders.presentation.dto.OrderTableSitResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

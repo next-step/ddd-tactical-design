@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.ui.dto;
+package kitchenpos.eatinorders.presentation.dto;
 
 import kitchenpos.eatinorders.tobe.domain.EatInOrder;
 import kitchenpos.eatinorders.tobe.domain.OrderTableId;

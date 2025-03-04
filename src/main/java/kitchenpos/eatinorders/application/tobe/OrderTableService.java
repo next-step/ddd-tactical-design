@@ -5,10 +5,10 @@ import kitchenpos.eatinorders.tobe.domain.ClearOrderTableService;
 import kitchenpos.eatinorders.tobe.domain.OrderTable;
 import kitchenpos.eatinorders.tobe.domain.OrderTableId;
 import kitchenpos.eatinorders.tobe.domain.OrderTableRepository;
-import kitchenpos.eatinorders.ui.dto.OrderTableChangeNumberOfGuestsResponse;
-import kitchenpos.eatinorders.ui.dto.OrderTableClearResponse;
-import kitchenpos.eatinorders.ui.dto.OrderTableCreateResponse;
-import kitchenpos.eatinorders.ui.dto.OrderTableSitResponse;
+import kitchenpos.eatinorders.presentation.dto.OrderTableChangeNumberOfGuestsResponse;
+import kitchenpos.eatinorders.presentation.dto.OrderTableClearResponse;
+import kitchenpos.eatinorders.presentation.dto.OrderTableCreateResponse;
+import kitchenpos.eatinorders.presentation.dto.OrderTableSitResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

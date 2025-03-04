@@ -1,8 +1,8 @@
-package kitchenpos.eatinorders.ui.tobe;
+package kitchenpos.eatinorders.presentation.tobe;
 
 import kitchenpos.eatinorders.application.tobe.EatInOrderService;
 import kitchenpos.eatinorders.tobe.domain.common.OrderId;
-import kitchenpos.eatinorders.ui.dto.*;
+import kitchenpos.eatinorders.presentation.dto.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

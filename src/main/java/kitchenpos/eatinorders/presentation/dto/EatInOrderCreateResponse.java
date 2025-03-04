@@ -1,16 +1,18 @@
-package kitchenpos.eatinorders.ui.dto;
+package kitchenpos.eatinorders.presentation.dto;
 
 import kitchenpos.eatinorders.tobe.domain.EatInOrder;
 import kitchenpos.eatinorders.tobe.domain.OrderTableId;
 import kitchenpos.eatinorders.tobe.domain.common.OrderId;
 import kitchenpos.eatinorders.tobe.domain.common.OrderLineItems;
 import kitchenpos.eatinorders.tobe.domain.common.OrderStatus;
+import kitchenpos.eatinorders.tobe.domain.common.OrderType;
 
 import java.time.LocalDateTime;
 
-public class EatInOrderAcceptResponse {
-
+public class EatInOrderCreateResponse {
     private OrderId id;
+
+    private OrderType orderType;
 
     private OrderStatus status;
 
@@ -20,9 +22,10 @@ public class EatInOrderAcceptResponse {
 
     private LocalDateTime orderDateTime;
 
-    public static EatInOrderAcceptResponse from(EatInOrder order) {
-        return new EatInOrderAcceptResponse(
+    public static EatInOrderCreateResponse from(EatInOrder order) {
+        return new EatInOrderCreateResponse(
                 order.getId(),
+                order.getType(),
                 order.getStatus(),
                 order.getOrderLineItems(),
                 order.getOrderTableId(),
@@ -30,8 +33,9 @@ public class EatInOrderAcceptResponse {
         );
     }
 
-    public EatInOrderAcceptResponse(OrderId id, OrderStatus status, OrderLineItems orderLineItems, OrderTableId orderTableId, LocalDateTime orderDateTime) {
+    public EatInOrderCreateResponse(OrderId id, OrderType orderType, OrderStatus status, OrderLineItems orderLineItems, OrderTableId orderTableId, LocalDateTime orderDateTime) {
         this.id = id;
+        this.orderType = orderType;
         this.status = status;
         this.orderLineItems = orderLineItems;
         this.orderTableId = orderTableId;
@@ -40,6 +44,10 @@ public class EatInOrderAcceptResponse {
 
     public OrderId getId() {
         return id;
+    }
+
+    public OrderType getOrderType() {
+        return orderType;
     }
 
     public OrderStatus getStatus() {

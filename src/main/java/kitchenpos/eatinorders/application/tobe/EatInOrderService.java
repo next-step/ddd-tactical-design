@@ -3,9 +3,7 @@ package kitchenpos.eatinorders.application.tobe;
 import kitchenpos.eatinorders.tobe.domain.*;
 import kitchenpos.eatinorders.tobe.domain.common.OrderEntity;
 import kitchenpos.eatinorders.tobe.domain.common.OrderId;
-import kitchenpos.eatinorders.tobe.domain.common.OrderStatus;
-import kitchenpos.eatinorders.tobe.domain.exception.InvalidOrderStatusException;
-import kitchenpos.eatinorders.ui.dto.*;
+import kitchenpos.eatinorders.presentation.dto.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

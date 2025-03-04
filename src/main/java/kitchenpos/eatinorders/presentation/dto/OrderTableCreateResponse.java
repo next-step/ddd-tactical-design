@@ -1,11 +1,11 @@
-package kitchenpos.eatinorders.ui.dto;
+package kitchenpos.eatinorders.presentation.dto;
 
 import kitchenpos.common.vo.PositiveNumber;
 import kitchenpos.eatinorders.tobe.domain.OrderTable;
 import kitchenpos.eatinorders.tobe.domain.OrderTableId;
 import kitchenpos.eatinorders.tobe.domain.OrderTableName;
 
-public class OrderTableChangeNumberOfGuestsResponse {
+public class OrderTableCreateResponse {
 
     private OrderTableId id;
 
@@ -15,8 +15,8 @@ public class OrderTableChangeNumberOfGuestsResponse {
 
     private boolean occupied;
 
-    public static OrderTableChangeNumberOfGuestsResponse from(OrderTable orderTable) {
-        return new OrderTableChangeNumberOfGuestsResponse(
+    public static OrderTableCreateResponse from(OrderTable orderTable) {
+        return new OrderTableCreateResponse(
                 orderTable.getId(),
                 orderTable.getName(),
                 orderTable.getNumberOfGuests(),
@@ -25,7 +25,7 @@ public class OrderTableChangeNumberOfGuestsResponse {
     }
 
 
-    public OrderTableChangeNumberOfGuestsResponse(OrderTableId id, OrderTableName name, PositiveNumber numberOfGuests, boolean occupied) {
+    public OrderTableCreateResponse(OrderTableId id, OrderTableName name, PositiveNumber numberOfGuests, boolean occupied) {
         this.id = id;
         this.name = name;
         this.numberOfGuests = numberOfGuests;

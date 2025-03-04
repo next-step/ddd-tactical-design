@@ -7,7 +7,7 @@ import kitchenpos.eatinorders.infra.InMemoryOrderTableRepository;
 import kitchenpos.eatinorders.tobe.domain.*;
 import kitchenpos.eatinorders.tobe.domain.common.*;
 import kitchenpos.eatinorders.tobe.domain.exception.InvalidOrderStatusException;
-import kitchenpos.eatinorders.ui.dto.*;
+import kitchenpos.eatinorders.presentation.dto.*;
 import kitchenpos.menus.infra.InMemoryMenuRepository;
 import kitchenpos.menus.tobe.domain.*;
 import kitchenpos.products.tobe.domain.ProductId;
