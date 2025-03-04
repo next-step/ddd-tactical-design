@@ -10,11 +10,13 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 import java.util.Optional;
 import kitchenpos.order.common.domain.entity.OrderStatus;
-import kitchenpos.order.eatin.domain.entity.OrderTable;
-import kitchenpos.order.domain.fixture.OrderTableFixture;
-import kitchenpos.order.common.domain.repository.OrderRepository;
 import kitchenpos.order.common.domain.repository.OrderTableRepository;
-import kitchenpos.order.eatin.domain.service.OrderTableService;
+import kitchenpos.order.domain.fixture.OrderTableFixture;
+import kitchenpos.order.eatin.domain.entity.OrderTable;
+import kitchenpos.order.eatin.domain.exception.OrderTableGuestsException;
+import kitchenpos.order.eatin.domain.model.OrderTableVo;
+import kitchenpos.order.eatin.domain.repository.EatinOrderRepository;
+import kitchenpos.order.eatin.domain.service.DefaultEatinService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -32,17 +34,23 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class OrderTableFacadeTest {
 
     @InjectMocks
-    private OrderTableService orderTableService;
+    private DefaultEatinService eatinService;
+
     @Mock
     private OrderTableRepository orderTableRepository;
     @Mock
-    private OrderRepository orderRepository;
+    private EatinOrderRepository orderRepository;
 
     private OrderTable orderTable;
+    private OrderTableVo.Create createOrderTable;
+    private OrderTableVo.Update updateOrderTable;
 
     @BeforeEach
     void setUp() {
-        orderTable = OrderTableFixture.init().create();
+        eatinService = new DefaultEatinService(orderRepository, orderTableRepository);
+        orderTable = OrderTableFixture.init().toEntity();
+        createOrderTable = OrderTableFixture.init().create();
+
     }
 
     @Nested
@@ -70,10 +78,12 @@ class OrderTableFacadeTest {
         @DisplayName("성공")
         @ValueSource(strings = {"1번 테이블", "2번 테이블"})
         void 주문_테이블_등록성공(final String name) {
-            orderTable = OrderTableFixture.test(name, 0, false).create();
+
+            mockSaveOrderTable();
 
             assertThatCode(() -> {
-                orderTableService.create(orderTable);
+                createOrderTable = OrderTableFixture.test(name, 0, false).create();
+                eatinService.create(createOrderTable);
             }).doesNotThrowAnyException();
 
         }
@@ -83,9 +93,11 @@ class OrderTableFacadeTest {
         @NullAndEmptySource
         @ValueSource(strings = {" ", "   ", "\t", "\n"})
         void 테이블명_공란_검사(final String name) {
-            orderTable = OrderTableFixture.test(name, 0, false).create();
             assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> orderTableService.create(orderTable));
+                .isThrownBy(() -> {
+                    createOrderTable = OrderTableFixture.test(name, 0, false).create();
+                    eatinService.create(createOrderTable);
+                });
 
         }
     }
@@ -100,7 +112,7 @@ class OrderTableFacadeTest {
             mockFindByOrderTable();
 
             assertThatCode(() -> {
-                orderTableService.sit(orderTable.getId());
+                eatinService.sit(orderTable.getOrderTableId());
             }).doesNotThrowAnyException();
 
         }
@@ -110,9 +122,9 @@ class OrderTableFacadeTest {
         void 테이블_사용처리() {
             mockFindByOrderTable();
 
-            var result = orderTableService.sit(orderTable.getId());
+            var result = eatinService.sit(orderTable.getOrderTableId());
 
-            assertThat(result.isOccupied()).isTrue();
+            assertThat(result.occupied()).isTrue();
 
         }
     }
@@ -130,7 +142,7 @@ class OrderTableFacadeTest {
             mockExistsByOrderTable(false);
 
             assertThatCode(() -> {
-                orderTableService.clear(orderTable.getId());
+                eatinService.clear(orderTable.getOrderTableId());
             }).doesNotThrowAnyException();
 
         }
@@ -143,7 +155,7 @@ class OrderTableFacadeTest {
             mockExistsByOrderTable(true);
 
             assertThatExceptionOfType(IllegalStateException.class)
-                .isThrownBy(() -> orderTableService.clear(orderTable.getId()));
+                .isThrownBy(() -> eatinService.clear(orderTable.getOrderTableId()));
         }
 
         @Test
@@ -152,9 +164,9 @@ class OrderTableFacadeTest {
             mockFindByOrderTable();
             mockExistsByOrderTable(false);
 
-            var result = orderTableService.clear(orderTable.getId());
+            var result = eatinService.clear(orderTable.getOrderTableId());
 
-            assertThat(result.isOccupied()).isFalse();
+            assertThat(result.occupied()).isFalse();
         }
     }
 
@@ -165,12 +177,14 @@ class OrderTableFacadeTest {
         @Test
         @DisplayName("성공")
         void 주문_테이블_인원변경_성공() {
-            orderTable = OrderTableFixture.test("1번 테이블", 3, true).create();
+
+            orderTable = OrderTableFixture.test("1법 테이블", 1, true).toEntity();
 
             mockFindByOrderTable();
 
+            updateOrderTable = OrderTableFixture.test("1번 테이블", 3, true).update();
             assertThatCode(() -> {
-                orderTableService.changeNumberOfGuests(orderTable.getId(), orderTable);
+                eatinService.changeNumberOfGuests(updateOrderTable);
             }).doesNotThrowAnyException();
 
         }
@@ -179,19 +193,22 @@ class OrderTableFacadeTest {
         @DisplayName("테이블 사용중인 상태여야 한다.")
         void 테이블_사용여부_검사() {
             mockFindByOrderTable();
+            updateOrderTable = OrderTableFixture.test("1번 테이블", 3, true).update();
 
             assertThatExceptionOfType(IllegalStateException.class)
                 .isThrownBy(
-                    () -> orderTableService.changeNumberOfGuests(orderTable.getId(), orderTable));
+                    () -> eatinService.changeNumberOfGuests(updateOrderTable));
         }
 
         @Test
         @DisplayName("테이블 인원 수는 0명 이상이어야 한다.")
         void 테이블_인원수_허용범위_검사() {
-            orderTable = OrderTableFixture.test("test", -1, false).create();
-            assertThatExceptionOfType(IllegalArgumentException.class)
+            assertThatExceptionOfType(OrderTableGuestsException.class)
                 .isThrownBy(
-                    () -> orderTableService.changeNumberOfGuests(orderTable.getId(), orderTable));
+                    () -> {
+                        updateOrderTable = OrderTableFixture.test("test", -1, false).update();
+                        eatinService.changeNumberOfGuests(updateOrderTable);
+                    });
 
         }
     }
@@ -202,7 +219,11 @@ class OrderTableFacadeTest {
     }
 
     private void mockExistsByOrderTable(boolean status) {
-        when(orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED))
+        when(orderRepository.existsByOrderTableIdAndStatusNot(orderTable.getOrderTableId(), OrderStatus.COMPLETED))
             .thenReturn(status);
+    }
+
+    private void mockSaveOrderTable() {
+        when(orderTableRepository.save(Mockito.any(OrderTable.class))).thenReturn(orderTable);
     }
 }

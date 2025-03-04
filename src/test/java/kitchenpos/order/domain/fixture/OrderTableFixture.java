@@ -2,6 +2,12 @@ package kitchenpos.order.domain.fixture;
 
 import java.util.UUID;
 import kitchenpos.order.eatin.domain.entity.OrderTable;
+import kitchenpos.order.eatin.domain.model.OrderTableGuests;
+import kitchenpos.order.eatin.domain.model.OrderTableId;
+import kitchenpos.order.eatin.domain.model.OrderTableName;
+import kitchenpos.order.eatin.domain.model.OrderTableVo;
+import kitchenpos.order.eatin.domain.model.OrderTableVo.Create;
+import kitchenpos.order.eatin.domain.model.OrderTableVo.Update;
 
 public record OrderTableFixture(UUID id, String 테이블명, int 인원수, boolean 사용여부) {
 
@@ -27,13 +33,16 @@ public record OrderTableFixture(UUID id, String 테이블명, int 인원수, boo
         );
     }
 
-    public OrderTable create() {
-        var orderTable = new OrderTable();
-        orderTable.setId(id);
-        orderTable.setName(테이블명);
-        orderTable.setNumberOfGuests(인원수);
-        orderTable.setOccupied(사용여부);
-        return orderTable;
+    public OrderTable toEntity() {
+        return new OrderTable(OrderTableId.of(id), OrderTableName.of(테이블명), OrderTableGuests.of(인원수), 사용여부);
+    }
+
+    public OrderTableVo.Create create() {
+        return new Create(OrderTableName.of(테이블명), OrderTableGuests.of(인원수), 사용여부);
+    }
+
+    public OrderTableVo.Update update() {
+        return new Update(OrderTableId.of(id), OrderTableGuests.of(인원수));
     }
 }
 
