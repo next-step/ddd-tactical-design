@@ -1,7 +1,7 @@
 package kitchenpos.utils
 
 import java.util.*
-import kitchenpos.menu.domain.MenuGroup
+import kitchenpos.menu.tobe.domain.MenuGroup
 import kitchenpos.menu.tobe.domain.Menu
 import kitchenpos.menu.tobe.domain.MenuDisplay
 import kitchenpos.menu.tobe.domain.MenuName
@@ -64,9 +64,7 @@ class Fixtures {
             id: UUID = UUID.randomUUID(),
             name: String = "두마리메뉴",
         ): MenuGroup {
-            val menuGroup = MenuGroup()
-            menuGroup.id = id
-            menuGroup.name = name
+            val menuGroup = MenuGroup(id, name)
             return menuGroup
         }
     }

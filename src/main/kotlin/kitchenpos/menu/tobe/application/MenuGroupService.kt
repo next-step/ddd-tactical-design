@@ -16,6 +16,7 @@ class MenuGroupService(
     fun create(request: CreateMenuGroupReq): MenuGroupResp {
         val menuGroup = MenuGroup(
             name = request.name
+
         )
         menuGroupRepository.save(menuGroup)
         return MenuGroupResp.of(menuGroup)

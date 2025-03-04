@@ -12,7 +12,6 @@ import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import java.math.BigDecimal
 import java.util.*
-import kitchenpos.menu.domain.MenuGroup
 import org.hibernate.annotations.JdbcTypeCode
 import org.hibernate.type.SqlTypes
 

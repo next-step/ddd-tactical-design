@@ -9,6 +9,10 @@ class FakeMenuRepository(
 ) : MenuRepository {
 
     override fun save(menu: Menu): Menu {
+        menu.id = UUID.randomUUID()
+        menu.menuProducts.menuProducts.forEachIndexed { index, menuProduct ->
+            menuProduct.seq = index.toLong()
+        }
         menus[menu.id!!] = menu
         return menu
     }
