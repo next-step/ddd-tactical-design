@@ -4,6 +4,7 @@ import java.util.*
 import kitchenpos.menu.domain.MenuGroup
 import kitchenpos.menu.tobe.domain.Menu
 import kitchenpos.menu.tobe.domain.MenuProduct
+import kitchenpos.menu.tobe.domain.MenuProducts
 import kitchenpos.product.tobe.domain.Product
 import kitchenpos.product.tobe.domain.ProductName
 import kitchenpos.product.tobe.domain.ProductNamePolicy
@@ -33,7 +34,7 @@ class Fixtures {
             price: Long,
             displayed: Boolean,
             menuGroup: MenuGroup = menuGroup(),
-            menuProducts: List<MenuProduct> = emptyList()
+            menuProducts: MenuProducts = MenuProducts(listOf()),
         ): Menu {
             return Menu(
                 id = id,

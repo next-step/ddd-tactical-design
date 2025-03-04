@@ -1,13 +1,12 @@
 package kitchenpos.menu.tobe.domain
 
-import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
+import jakarta.persistence.Embedded
 import jakarta.persistence.Entity
 import jakarta.persistence.ForeignKey
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
-import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
 import jakarta.persistence.Transient
 import java.math.BigDecimal
@@ -38,29 +37,14 @@ class Menu(
     @Column(name = "displayed", nullable = false)
     var displayed: Boolean,
 
-    @OneToMany(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
-    @JoinColumn(
-        name = "menu_id",
-        nullable = false,
-        columnDefinition = "binary(16)",
-        foreignKey = ForeignKey(name = "fk_menu_product_to_menu")
-    )
-    val menuProducts: List<MenuProduct>,
+    @Embedded
+    val menuProducts: MenuProducts,
 
     @Transient
     val menuGroupId: UUID,
 ) {
 
     fun amount(): BigDecimal {
-        var sum = BigDecimal.ZERO
-        for (menuProduct in menuProducts) {
-            sum = sum.add(
-                menuProduct.product
-                    .productPrice.price
-                    .multiply(BigDecimal.valueOf(menuProduct.quantity))
-            )
-        }
-        return sum
+        return menuProducts.amount()
     }
-
 }

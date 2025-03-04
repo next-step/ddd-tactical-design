@@ -2,6 +2,7 @@ package kitchenpos.product.tobe.application
 
 import java.math.BigDecimal
 import kitchenpos.common.domain.Profanities
+import kitchenpos.menu.tobe.domain.MenuProducts
 import kitchenpos.menu.tobe.domain.MenuRepository
 import kitchenpos.menu.tobe.infra.FakeMenuRepository
 import kitchenpos.product.tobe.application.dto.ChangeProductPriceReq
@@ -92,7 +93,7 @@ class ProductServiceTest {
                 name = "양념치킨 세트",
                 price = 32000,
                 displayed = true,
-                menuProducts = listOf(Fixtures.menuProduct(product, 2))
+                menuProducts = MenuProducts(listOf(Fixtures.menuProduct(product, 2)))
             )
         )
 
