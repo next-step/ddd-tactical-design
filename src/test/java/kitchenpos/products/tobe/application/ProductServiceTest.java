@@ -19,6 +19,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -31,13 +32,14 @@ class ProductServiceTest {
     private ProductRepository productRepository;
     private MenuRepository menuRepository;
     private Profanities profanities;
+    private ApplicationEventPublisher eventPublisher;
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
         profanities = new FakeProfanitiesClient();
-        productService = new ProductService(productRepository, menuRepository, profanities);
+        productService = new ProductService(productRepository, menuRepository, profanities, eventPublisher);
     }
 
     @Test

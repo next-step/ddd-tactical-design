@@ -5,6 +5,7 @@ import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.tobe.domain.exception.InvalidProductException;
 import kitchenpos.products.tobe.domain.vo.Profanities;
+import kitchenpos.products.tobe.event.ProductPriceChangedEvent;
 import kitchenpos.products.tobe.ui.dto.ChangeProductRequest;
 import kitchenpos.products.tobe.ui.dto.ChangeProductResponse;
 import kitchenpos.products.tobe.ui.dto.CreateProductRequest;
@@ -13,6 +14,7 @@ import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.vo.ProductPrice;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.products.tobe.ui.dto.FindProductResponse;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,15 +27,16 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final MenuRepository menuRepository;
     private final Profanities profanities;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public ProductService(
-            final ProductRepository productRepository,
-            final MenuRepository menuRepository,
-            final Profanities profanities
-    ) {
+    public ProductService(final ProductRepository productRepository,
+                          final MenuRepository menuRepository,
+                          final Profanities profanities,
+                          final ApplicationEventPublisher eventPublisher) {
         this.productRepository = productRepository;
         this.menuRepository = menuRepository;
         this.profanities = profanities;
+        this.eventPublisher = eventPublisher;
     }
 
     @Transactional
@@ -50,20 +53,7 @@ public class ProductService {
                 .orElseThrow(() -> new InvalidProductException("해당 상품이 존재하지 않습니다"));
         product.updatePrice(price.getPrice());
 
-        final List<Menu> menus = menuRepository.findAllByProductId(productId);
-        for (final Menu menu : menus) {
-            BigDecimal sum = BigDecimal.ZERO;
-            for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-                sum = sum.add(
-                        menuProduct.getProduct()
-                                .getPrice()
-                                .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-                );
-            }
-            if (menu.getPrice().compareTo(sum) > 0) {
-                menu.setDisplayed(false);
-            }
-        }
+        eventPublisher.publishEvent(new ProductPriceChangedEvent(productId, price.getPrice()));
         return ChangeProductResponse.from(product);
     }
 
