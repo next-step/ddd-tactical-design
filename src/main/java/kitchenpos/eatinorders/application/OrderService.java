@@ -10,6 +10,7 @@ import kitchenpos.eatinorders.domain.OrderTableRepository;
 import kitchenpos.eatinorders.domain.OrderType;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.products.tobe.domain.Price;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -111,13 +112,13 @@ public class OrderService {
             throw new IllegalStateException();
         }
         if (order.getType() == OrderType.DELIVERY) {
-            BigDecimal sum = BigDecimal.ZERO;
+            Price sum = Price.ZERO;
             for (final OrderLineItem orderLineItem : order.getOrderLineItems()) {
                 sum = orderLineItem.getMenu()
                     .getPrice()
                     .multiply(BigDecimal.valueOf(orderLineItem.getQuantity()));
             }
-            kitchenridersClient.requestDelivery(orderId, sum, order.getDeliveryAddress());
+            kitchenridersClient.requestDelivery(orderId, sum.getPrice(), order.getDeliveryAddress());
         }
         order.setStatus(OrderStatus.ACCEPTED);
         return order;

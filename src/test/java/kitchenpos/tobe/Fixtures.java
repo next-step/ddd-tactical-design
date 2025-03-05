@@ -1,16 +1,13 @@
-package kitchenpos;
+package kitchenpos.tobe;
 
-import kitchenpos.eatinorders.domain.Order;
-import kitchenpos.eatinorders.domain.OrderLineItem;
-import kitchenpos.eatinorders.domain.OrderStatus;
-import kitchenpos.eatinorders.domain.OrderTable;
-import kitchenpos.eatinorders.domain.OrderType;
+import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.products.application.FakePurgomalumClient;
-import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.domain.PurgomalumClient;
 import kitchenpos.products.tobe.domain.Price;
+import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductId;
 import kitchenpos.products.tobe.domain.ProductName;
 
@@ -22,7 +19,6 @@ import java.util.UUID;
 
 public class Fixtures {
     public static final UUID INVALID_ID = new UUID(0L, 0L);
-    public static final ProductId INVALID_PRODUCT_ID = new ProductId(new UUID(0L, 0L));
 
     public static Menu menu() {
         return menu(19_000L, true, menuProduct());
@@ -31,12 +27,12 @@ public class Fixtures {
     public static Menu menu(final long price, final MenuProduct... menuProducts) {
         return menu(price, false, menuProducts);
     }
-
+    public static PurgomalumClient purgomalumClient = new FakePurgomalumClient();
     public static Menu menu(final long price, final boolean displayed, final MenuProduct... menuProducts) {
         final Menu menu = new Menu();
         menu.setId(UUID.randomUUID());
         menu.setName("후라이드+후라이드");
-        menu.setPrice(new Price(BigDecimal.valueOf(price)));
+        menu.setPrice(new Price(new BigDecimal(price)));
         menu.setMenuGroup(menuGroup());
         menu.setDisplayed(displayed);
         menu.setMenuProducts(Arrays.asList(menuProducts));
@@ -127,10 +123,9 @@ public class Fixtures {
     }
 
     public static Product product(final String name, final long price) {
-        return new Product(
-                new ProductId(UUID.randomUUID()),
-                new ProductName(name, new FakePurgomalumClient()),
-                new Price(new BigDecimal(price))
+        final Product product = new Product(
+                new ProductId(UUID.randomUUID()), new ProductName(name, purgomalumClient),new Price(BigDecimal.valueOf(price))
         );
+        return product;
     }
 }

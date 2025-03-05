@@ -9,6 +9,7 @@ import kitchenpos.eatinorders.domain.OrderTableRepository;
 import kitchenpos.eatinorders.domain.OrderType;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.products.tobe.domain.Price;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -389,7 +390,7 @@ class OrderServiceTest {
         final OrderLineItem orderLineItem = new OrderLineItem();
         orderLineItem.setSeq(new Random().nextLong());
         orderLineItem.setMenuId(menuId);
-        orderLineItem.setPrice(BigDecimal.valueOf(price));
+        orderLineItem.setPrice(new Price(BigDecimal.valueOf(price)));
         orderLineItem.setQuantity(quantity);
         return orderLineItem;
     }

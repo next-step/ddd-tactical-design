@@ -1,18 +1,8 @@
 package kitchenpos.menus.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
-import kitchenpos.products.domain.Product;
-
-import java.util.UUID;
+import jakarta.persistence.*;
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductId;
 
 @Table(name = "menu_product")
 @Entity
@@ -34,7 +24,7 @@ public class MenuProduct {
     private long quantity;
 
     @Transient
-    private UUID productId;
+    private ProductId productId;
 
     public MenuProduct() {
     }
@@ -63,11 +53,11 @@ public class MenuProduct {
         this.quantity = quantity;
     }
 
-    public UUID getProductId() {
+    public ProductId getProductId() {
         return productId;
     }
 
-    public void setProductId(final UUID productId) {
+    public void setProductId(final ProductId productId) {
         this.productId = productId;
     }
 }
