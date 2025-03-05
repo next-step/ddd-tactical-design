@@ -1,9 +1,9 @@
 package kitchenpos.utils
 
 import java.util.*
-import kitchenpos.menu.tobe.domain.MenuGroup
 import kitchenpos.menu.tobe.domain.Menu
 import kitchenpos.menu.tobe.domain.MenuDisplay
+import kitchenpos.menu.tobe.domain.MenuGroup
 import kitchenpos.menu.tobe.domain.MenuName
 import kitchenpos.menu.tobe.domain.MenuNamePolicy
 import kitchenpos.menu.tobe.domain.MenuPrice
@@ -22,7 +22,7 @@ class Fixtures {
 
         fun product(
             id: UUID = UUID.randomUUID(),
-            name: String,
+            name: String = "후라이드",
             price: Long
         ): Product {
             return Product(
@@ -34,11 +34,11 @@ class Fixtures {
 
         fun menu(
             id: UUID = UUID.randomUUID(),
-            name: String,
+            name: String = "후라이드1마리",
             price: Long,
-            display: MenuDisplay,
+            display: MenuDisplay = MenuDisplay.DISPLAYED,
             menuGroup: MenuGroup = menuGroup(),
-            menuProducts: MenuProducts = MenuProducts(listOf()),
+            menuProducts: MenuProducts = MenuProducts(listOf(menuProduct())),
         ): Menu {
             return Menu(
                 id = id,
@@ -51,28 +51,21 @@ class Fixtures {
         }
 
         fun menuProduct(
-            product: Product,
-            quantity: Long,
+            seq: Long = 1,
+            productId: UUID = UUID.randomUUID(),
+            quantity: Long = 1,
         ): MenuProduct {
             return MenuProduct(
-                productId = product.id,
-                quantity = quantity
-            )
-        }
-
-        fun menuProduct(
-            productId: UUID,
-            quantity: Long,
-        ): MenuProduct {
-            return MenuProduct(
+                seq = seq,
                 productId = productId,
                 quantity = quantity
             )
         }
 
+
         fun menuGroup(
             id: UUID = UUID.randomUUID(),
-            name: String = "두마리메뉴",
+            name: String = "추천메뉴",
         ): MenuGroup {
             val menuGroup = MenuGroup(id, name)
             return menuGroup

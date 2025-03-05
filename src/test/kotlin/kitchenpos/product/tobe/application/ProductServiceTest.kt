@@ -98,7 +98,7 @@ class ProductServiceTest {
                 name = "양념치킨 세트",
                 price = 32000,
                 display = MenuDisplay.DISPLAYED,
-                menuProducts = MenuProducts(listOf(Fixtures.menuProduct(product, 2)))
+                menuProducts = MenuProducts(listOf(Fixtures.menuProduct(productId = product.id!!, quantity = 2)))
             )
         )
 
