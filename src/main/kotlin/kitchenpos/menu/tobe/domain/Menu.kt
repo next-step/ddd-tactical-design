@@ -69,6 +69,10 @@ class Menu(
         menuDisplay = MenuDisplay.NOT_DISPLAYED
     }
 
+    fun canDisplay(menuAmountService: MenuAmountService): Boolean {
+        return menuPrice.price <= menuAmountService.amount(menuProducts)
+    }
+
     private fun validateMenuPrice(menuAmountService: MenuAmountService, menuPrice: MenuPrice) {
         if (menuPrice.price > menuAmountService.amount(menuProducts)) {
             throw IllegalArgumentException("메뉴가격은 메뉴금액 이하여야 합니다.")

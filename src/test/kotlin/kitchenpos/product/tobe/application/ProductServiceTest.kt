@@ -2,11 +2,12 @@ package kitchenpos.product.tobe.application
 
 import java.math.BigDecimal
 import kitchenpos.common.domain.Profanities
-import kitchenpos.menu.tobe.domain.MenuAmountService
 import kitchenpos.menu.tobe.domain.MenuDisplay
+import kitchenpos.menu.tobe.domain.MenuProductPriceChanged
 import kitchenpos.menu.tobe.domain.MenuProducts
 import kitchenpos.menu.tobe.domain.MenuRepository
 import kitchenpos.menu.tobe.infra.DefaultMenuAmountService
+import kitchenpos.menu.tobe.infra.DefaultMenuProductPriceChanged
 import kitchenpos.menu.tobe.infra.FakeMenuRepository
 import kitchenpos.product.tobe.application.dto.ChangeProductPriceReq
 import kitchenpos.product.tobe.application.dto.CreateProductReq
@@ -25,15 +26,16 @@ class ProductServiceTest {
     private lateinit var menuRepository: MenuRepository
     private lateinit var profanities: Profanities
     private lateinit var productService: ProductService
-    private lateinit var menuAmountService: MenuAmountService
+    private lateinit var menuProductPriceChanged: MenuProductPriceChanged
 
     @BeforeEach
     fun setUp() {
         productRepository = FakeProductRepository()
         menuRepository = FakeMenuRepository()
         profanities = FakeProfanities()
-        menuAmountService = DefaultMenuAmountService(productRepository)
-        productService = ProductService(productRepository, menuRepository, profanities, menuAmountService)
+        menuProductPriceChanged =
+            DefaultMenuProductPriceChanged(menuRepository, DefaultMenuAmountService(productRepository))
+        productService = ProductService(productRepository, profanities, menuProductPriceChanged)
     }
 
     @Test
@@ -89,7 +91,7 @@ class ProductServiceTest {
     }
 
     @Test
-    @DisplayName("`Product`의 `price`를 변경 할 때 `Product`를 포함한 `Menu`들 중 `Menu Price > Menu Amount`인 `Menu`는 `Not Displayed`된다")
+    @DisplayName("`Product price`를 변경 할 때 `Product`를 포함한 `Menu`들 중 `Menu Price > Menu Amount`인 `Menu`는 `Not Displayed`된다")
     fun changePriceMenuNotDisplayed() {
         // given
         val product = productRepository.save(Fixtures.product(name = "양념치킨", price = 16000))
