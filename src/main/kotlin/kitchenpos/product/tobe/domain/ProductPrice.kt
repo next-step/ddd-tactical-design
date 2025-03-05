@@ -6,20 +6,13 @@ import java.math.BigDecimal
 
 @Embeddable
 class ProductPrice(
-
-    productPricePolicy: ProductPricePolicy,
-
     @Column(name = "price", nullable = false)
     val price: BigDecimal
 
-) : Comparable<ProductPrice> {
+) {
 
     init {
-        productPricePolicy.validate(price)
-    }
-
-    override fun compareTo(other: ProductPrice): Int {
-        return price.compareTo(other.price)
+        require(price >= BigDecimal.ZERO) { "상품 가격은 0원 이상이어야 합니다." }
     }
 
     override fun equals(other: Any?): Boolean {
