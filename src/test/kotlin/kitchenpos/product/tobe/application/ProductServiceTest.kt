@@ -95,6 +95,7 @@ class ProductServiceTest {
         val product = productRepository.save(Fixtures.product(name = "양념치킨", price = 16000))
         val menu = menuRepository.save(
             Fixtures.menu(
+                menuAmountService = { BigDecimal.valueOf(32000) },
                 name = "양념치킨 세트",
                 price = 32000,
                 display = MenuDisplay.DISPLAYED,

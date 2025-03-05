@@ -181,7 +181,7 @@ docker compose -p kitchenpos up -d
 #### 기능
 - `MenuGroup`를 등록
 - `MenuGroup`를 전체조회
--
+
 ### 메뉴
 #### 속성
 - `Menu`는 식별자와 `MenuGroup`, `price`, `name`, `displayed`, `MenuProduct`를 가진다.
@@ -193,7 +193,7 @@ docker compose -p kitchenpos up -d
 - `MenuProduct`의 `quantity`는 0개 이상이어야 한다.
 #### 기능
 - `Menu`를 전체조회
-- `Menu`를 생성
+- `Menu`를 등록
     - `MenuPrice <= MenuAmount`를 만족하지 못하면 `Menu`는 생성되지 못한다
 - `Menu`의 `price`를 변경
     - `MenuPrice <= MenuAmount`를 만족하지 못하면 `price`는 변경되지 못한다

@@ -1,9 +1,11 @@
 package kitchenpos.menu.tobe.application
 
+import java.util.*
 import kitchenpos.common.domain.Profanities
 import kitchenpos.menu.tobe.application.dto.CreateMenuReq
 import kitchenpos.menu.tobe.application.dto.MenuResp
 import kitchenpos.menu.tobe.domain.Menu
+import kitchenpos.menu.tobe.domain.MenuAmountService
 import kitchenpos.menu.tobe.domain.MenuGroupRepository
 import kitchenpos.menu.tobe.domain.MenuName
 import kitchenpos.menu.tobe.domain.MenuNamePolicy
@@ -11,6 +13,7 @@ import kitchenpos.menu.tobe.domain.MenuPrice
 import kitchenpos.menu.tobe.domain.MenuProduct
 import kitchenpos.menu.tobe.domain.MenuProducts
 import kitchenpos.menu.tobe.domain.MenuRepository
+import kitchenpos.product.tobe.application.dto.ChangeProductPriceReq
 import kitchenpos.product.tobe.domain.ProductRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -20,7 +23,8 @@ class MenuService(
     private val menuRepository: MenuRepository,
     private val menuGroupRepository: MenuGroupRepository,
     private val productRepository: ProductRepository,
-    private val profanities: Profanities
+    private val profanities: Profanities,
+    private val menuAmountService: MenuAmountService,
 ) {
     @Transactional
     fun create(request: CreateMenuReq): MenuResp {
@@ -29,6 +33,7 @@ class MenuService(
         val products = productRepository.findAllByIdIn(request.menuProducts.map { it.productId })
 
         val menu = Menu(
+            menuAmountService = menuAmountService,
             menuName = MenuName(menuNamePolicy = MenuNamePolicy(profanities), name = request.name),
             menuPrice = MenuPrice(request.price.toBigDecimal()),
             menuGroup = menuGroup,
@@ -43,4 +48,11 @@ class MenuService(
         return MenuResp.of(menu)
     }
 
+    @Transactional
+    fun changePrice(menuId: UUID, request: ChangeProductPriceReq) {
+        val menu = menuRepository.findById(menuId)
+            .orElseThrow { NoSuchElementException("존재하지 않는 메뉴입니다.") }
+        menu.changePrice(menuAmountService = menuAmountService, MenuPrice(request.price))
+        menuRepository.save(menu)
+    }
 }

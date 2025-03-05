@@ -28,6 +28,7 @@ class MenuTest {
     fun create() {
         // when
         val menu = Fixtures.menu(
+            menuAmountService = { BigDecimal.valueOf(33000) },
             name = "후라이드+양념치킨",
             price = 33000,
             display = MenuDisplay.DISPLAYED,
@@ -54,6 +55,7 @@ class MenuTest {
         // given
         val menuAmount = BigDecimal.valueOf(32000)
         val menu = Fixtures.menu(
+            menuAmountService = { menuAmount },
             name = "후라이드2마리",
             price = 32000,
             display = MenuDisplay.DISPLAYED,
@@ -77,6 +79,7 @@ class MenuTest {
         // given
         val menuAmount = BigDecimal.valueOf(32000)
         val menu = Fixtures.menu(
+            menuAmountService = { menuAmount },
             name = "후라이드2마리",
             price = 32000,
             display = MenuDisplay.DISPLAYED,
@@ -99,6 +102,7 @@ class MenuTest {
         // given
         val menuAmount = BigDecimal.valueOf(32000)
         val menu = Fixtures.menu(
+            menuAmountService = { menuAmount },
             name = "후라이드2마리",
             price = 32000,
             display = MenuDisplay.NOT_DISPLAYED,
@@ -120,8 +124,8 @@ class MenuTest {
     @DisplayName("Menu가 Menu Price > Menu Amount이면 Display할 수 없다")
     fun displayMenuFail() {
         // given
-        val menuAmount = BigDecimal.valueOf(31000)
         val menu = Fixtures.menu(
+            menuAmountService = { BigDecimal.valueOf(32000) },
             name = "후라이드2마리",
             price = 32000,
             display = MenuDisplay.NOT_DISPLAYED,
@@ -131,6 +135,9 @@ class MenuTest {
                 )
             )
         )
+
+        // given 변경된 메뉴금액
+        val menuAmount = BigDecimal.valueOf(31000)
 
         // when then
         assertThatIllegalArgumentException().isThrownBy {
@@ -143,6 +150,7 @@ class MenuTest {
     fun notDisplayMenu() {
         // given
         val menu = Fixtures.menu(
+            menuAmountService = { BigDecimal.valueOf(32000) },
             name = "후라이드2마리",
             price = 32000,
             display = MenuDisplay.DISPLAYED,

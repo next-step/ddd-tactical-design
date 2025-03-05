@@ -26,6 +26,6 @@ class FakeProductRepository(
     }
 
     override fun findAllByIdIn(ids: List<UUID>): List<Product> {
-        return ids.map { products[it]!! }
+        return products.filterKeys { ids.contains(it) }.values.toList()
     }
 }

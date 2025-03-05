@@ -2,6 +2,7 @@ package kitchenpos.utils
 
 import java.util.*
 import kitchenpos.menu.tobe.domain.Menu
+import kitchenpos.menu.tobe.domain.MenuAmountService
 import kitchenpos.menu.tobe.domain.MenuDisplay
 import kitchenpos.menu.tobe.domain.MenuGroup
 import kitchenpos.menu.tobe.domain.MenuName
@@ -33,6 +34,7 @@ class Fixtures {
         }
 
         fun menu(
+            menuAmountService: MenuAmountService,
             id: UUID = UUID.randomUUID(),
             name: String = "후라이드1마리",
             price: Long,
@@ -41,6 +43,7 @@ class Fixtures {
             menuProducts: MenuProducts = MenuProducts(listOf(menuProduct())),
         ): Menu {
             return Menu(
+                menuAmountService = menuAmountService,
                 id = id,
                 menuName = MenuName(MenuNamePolicy(FakeProfanities()), name),
                 menuPrice = MenuPrice(price.toBigDecimal()),

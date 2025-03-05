@@ -18,6 +18,8 @@ import org.hibernate.type.SqlTypes
 @Table(name = "menu")
 @Entity(name = "TobeMenu")
 class Menu(
+    menuAmountService: MenuAmountService,
+
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
     var id: UUID? = null,
@@ -45,25 +47,31 @@ class Menu(
     val menuProducts: MenuProducts,
 ) {
 
+    init {
+        validateMenuPrice(menuAmountService, menuPrice)
+    }
+
     fun amount(menuAmountService: MenuAmountService): BigDecimal {
         return menuProducts.amount(menuAmountService)
     }
 
     fun changePrice(menuAmountService: MenuAmountService, menuPrice: MenuPrice) {
-        if (menuPrice.price > menuProducts.amount(menuAmountService)) {
-            throw IllegalArgumentException("메뉴가격은 메뉴금액 이하여야 합니다.")
-        }
+        validateMenuPrice(menuAmountService, menuPrice)
         this.menuPrice = menuPrice
     }
 
     fun display(menuAmountService: MenuAmountService) {
-        if (menuPrice.price > menuProducts.amount(menuAmountService)) {
-            throw IllegalArgumentException("메뉴가격은 메뉴금액 이하여야 합니다.")
-        }
+        validateMenuPrice(menuAmountService, menuPrice)
         menuDisplay = MenuDisplay.DISPLAYED
     }
 
     fun notDisplay() {
         menuDisplay = MenuDisplay.NOT_DISPLAYED
+    }
+
+    private fun validateMenuPrice(menuAmountService: MenuAmountService, menuPrice: MenuPrice) {
+        if (menuPrice.price > menuAmountService.amount(menuProducts)) {
+            throw IllegalArgumentException("메뉴가격은 메뉴금액 이하여야 합니다.")
+        }
     }
 }
