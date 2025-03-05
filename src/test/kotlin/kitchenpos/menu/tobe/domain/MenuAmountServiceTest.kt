@@ -6,7 +6,6 @@ import kitchenpos.product.tobe.domain.ProductRepository
 import kitchenpos.product.tobe.infra.FakeProductRepository
 import kitchenpos.utils.Fixtures
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -37,7 +36,7 @@ class MenuAmountServiceTest {
         )
 
         // when
-        val amount = menuProducts.amount(menuAmountService)
+        val amount = menuAmountService.amount(menuProducts)
 
         // then
         assertThat(amount).isEqualTo(BigDecimal.valueOf(50000))

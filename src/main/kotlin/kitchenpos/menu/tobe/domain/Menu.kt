@@ -52,7 +52,7 @@ class Menu(
     }
 
     fun amount(menuAmountService: MenuAmountService): BigDecimal {
-        return menuProducts.amount(menuAmountService)
+        return menuAmountService.amount(menuProducts)
     }
 
     fun changePrice(menuAmountService: MenuAmountService, menuPrice: MenuPrice) {

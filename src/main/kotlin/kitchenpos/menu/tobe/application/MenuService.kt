@@ -55,4 +55,18 @@ class MenuService(
         menu.changePrice(menuAmountService = menuAmountService, MenuPrice(request.price))
         menuRepository.save(menu)
     }
+
+    @Transactional
+    fun display(menuId: UUID) {
+        val menu = menuRepository.findById(menuId)
+            .orElseThrow { NoSuchElementException("존재하지 않는 메뉴입니다.") }
+        menu.display(menuAmountService)
+    }
+
+    @Transactional
+    fun notDisplay(menuId: UUID) {
+        val menu = menuRepository.findById(menuId)
+            .orElseThrow { NoSuchElementException("존재하지 않는 메뉴입니다.") }
+        menu.notDisplay()
+    }
 }

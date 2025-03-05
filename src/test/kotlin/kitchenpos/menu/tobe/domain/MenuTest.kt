@@ -50,7 +50,7 @@ class MenuTest {
     }
 
     @Test
-    @DisplayName("Menu의 가격을 변경한다")
+    @DisplayName("MenuPrice를 변경한다")
     fun changeMenuPrice() {
         // given
         val menuAmount = BigDecimal.valueOf(32000)
@@ -74,7 +74,7 @@ class MenuTest {
     }
 
     @Test
-    @DisplayName("Menu의 가격을 변경할 때 Menu Price > Menu Amount이면 변경할 수 없다")
+    @DisplayName("MenuPrice를 변경할 때 MenuPrice > MenuAmount이면 변경할 수 없다")
     fun changeMenuPriceFail() {
         // given
         val menuAmount = BigDecimal.valueOf(32000)

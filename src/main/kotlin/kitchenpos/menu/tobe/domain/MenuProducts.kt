@@ -5,7 +5,6 @@ import jakarta.persistence.Embeddable
 import jakarta.persistence.ForeignKey
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.OneToMany
-import java.math.BigDecimal
 
 @Embeddable
 class MenuProducts(
@@ -20,9 +19,5 @@ class MenuProducts(
 ) {
     init {
         require(menuProducts.isNotEmpty()) { "메뉴 상품은 필수로 입력해야 합니다." }
-    }
-
-    fun amount(menuAmountService: MenuAmountService): BigDecimal {
-        return menuAmountService.amount(this)
     }
 }

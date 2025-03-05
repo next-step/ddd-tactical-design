@@ -227,4 +227,71 @@ class MenuServiceTest {
             menuService.changePrice(menu.id!!, request)
         }
     }
+
+    @DisplayName("Menu를 Display한다")
+    @Test
+    fun menuDisplay() {
+        // given
+        val menu = menuRepository.save(
+            Fixtures.menu(
+                menuAmountService = menuAmountService,
+                name = "후라이드2마리",
+                price = 32_000,
+                display = MenuDisplay.NOT_DISPLAYED,
+                menuGroup = menuGroup,
+                menuProducts = MenuProducts(
+                    listOf(Fixtures.menuProduct(productId = product.id!!, quantity = 2))
+                ),
+            )
+        )
+
+        // when
+        menuService.display(menu.id!!)
+
+        // then
+        assertThat(menu.menuDisplay).isEqualTo(MenuDisplay.DISPLAYED)
+    }
+
+    @DisplayName("존재하지 않는 Menu는 Displayed할 수 없다")
+    @Test
+    fun displayInvalidMenuId() {
+        // when then
+        assertThatThrownBy {
+            menuService.display(Fixtures.INVALID_UUID)
+        }.isInstanceOf(NoSuchElementException::class.java)
+    }
+
+    @DisplayName("Menu를 Not Displayed 한다")
+    @Test
+    fun menuNotDisplay() {
+        // given
+        val menu = menuRepository.save(
+            Fixtures.menu(
+                menuAmountService = menuAmountService,
+                name = "후라이드2마리",
+                price = 32_000,
+                display = MenuDisplay.DISPLAYED,
+                menuGroup = menuGroup,
+                menuProducts = MenuProducts(
+                    listOf(Fixtures.menuProduct(productId = product.id!!, quantity = 2))
+                ),
+            )
+        )
+
+        // when
+        menuService.notDisplay(menu.id!!)
+
+        // then
+        assertThat(menu.menuDisplay).isEqualTo(MenuDisplay.NOT_DISPLAYED)
+    }
+
+    @DisplayName("존재하지 않는 Menu는 Not Displayed 할 수 없다")
+    @Test
+    fun notDisplayInvalidMenuId() {
+        // when then
+        assertThatThrownBy {
+            menuService.notDisplay(Fixtures.INVALID_UUID)
+        }.isInstanceOf(NoSuchElementException::class.java)
+    }
+
 }
