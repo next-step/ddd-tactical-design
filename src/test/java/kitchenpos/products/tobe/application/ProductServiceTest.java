@@ -2,8 +2,6 @@ package kitchenpos.products.tobe.application;
 
 import static java.math.BigDecimal.valueOf;
 import kitchenpos.products.tobe.infra.FakeProfanitiesClient;
-import kitchenpos.menus.application.InMemoryMenuRepository;
-import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.tobe.domain.exception.InvalidProductException;
 import kitchenpos.products.tobe.domain.vo.Profanities;
 import kitchenpos.products.tobe.ui.dto.ChangeProductRequest;
@@ -30,16 +28,14 @@ class ProductServiceTest {
 
     private ProductService productService;
     private ProductRepository productRepository;
-    private MenuRepository menuRepository;
     private Profanities profanities;
     private ApplicationEventPublisher eventPublisher;
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
-        menuRepository = new InMemoryMenuRepository();
         profanities = new FakeProfanitiesClient();
-        productService = new ProductService(productRepository, menuRepository, profanities, eventPublisher);
+        productService = new ProductService(productRepository, profanities, eventPublisher);
     }
 
     @Test

@@ -1,6 +1,5 @@
 package kitchenpos.products.tobe.application;
 
-import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.tobe.domain.exception.InvalidProductException;
 import kitchenpos.products.tobe.domain.vo.Profanities;
 import kitchenpos.products.tobe.domain.event.ProductPriceChangedEvent;
@@ -22,16 +21,13 @@ import java.util.UUID;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
-    private final MenuRepository menuRepository;
     private final Profanities profanities;
     private final ApplicationEventPublisher eventPublisher;
 
     public ProductService(final ProductRepository productRepository,
-                          final MenuRepository menuRepository,
                           final Profanities profanities,
                           final ApplicationEventPublisher eventPublisher) {
         this.productRepository = productRepository;
-        this.menuRepository = menuRepository;
         this.profanities = profanities;
         this.eventPublisher = eventPublisher;
     }
