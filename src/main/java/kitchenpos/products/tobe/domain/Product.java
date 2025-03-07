@@ -5,10 +5,10 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import kitchenpos.common.infra.ProfanityClient;
 import kitchenpos.products.tobe.domain.exception.InvalidProductException;
 import kitchenpos.products.tobe.domain.vo.ProductName;
 import kitchenpos.products.tobe.domain.vo.ProductPrice;
+import kitchenpos.products.tobe.domain.vo.Profanities;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -57,7 +57,7 @@ public class Product {
 
     public Product(final String name,
                    final BigDecimal price,
-                   final ProfanityClient profanityChecker) {
+                   final Profanities profanityChecker) {
         this.id = UUID.randomUUID();
         if (profanityChecker.containsProfanity(name)) {
             throw new InvalidProductException("상품의 이름에 부적절한 단어(비속어)가 포함되면 안됩니다.");

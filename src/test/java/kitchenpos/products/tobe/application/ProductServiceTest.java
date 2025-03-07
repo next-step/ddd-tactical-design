@@ -1,11 +1,11 @@
 package kitchenpos.products.tobe.application;
 
 import static java.math.BigDecimal.valueOf;
-import kitchenpos.common.infra.FakeProfanitiesClient;
-import kitchenpos.common.infra.ProfanityClient;
+import kitchenpos.products.tobe.infra.FakeProfanitiesClient;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.tobe.domain.exception.InvalidProductException;
+import kitchenpos.products.tobe.domain.vo.Profanities;
 import kitchenpos.products.tobe.ui.dto.ChangeProductRequest;
 import kitchenpos.products.tobe.ui.dto.ChangeProductResponse;
 import kitchenpos.products.tobe.ui.dto.CreateProductRequest;
@@ -19,6 +19,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -30,14 +31,15 @@ class ProductServiceTest {
     private ProductService productService;
     private ProductRepository productRepository;
     private MenuRepository menuRepository;
-    private ProfanityClient profanityClient;
+    private Profanities profanities;
+    private ApplicationEventPublisher eventPublisher;
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
-        profanityClient = new FakeProfanitiesClient();
-        productService = new ProductService(productRepository, menuRepository, profanityClient);
+        profanities = new FakeProfanitiesClient();
+        productService = new ProductService(productRepository, menuRepository, profanities, eventPublisher);
     }
 
     @Test

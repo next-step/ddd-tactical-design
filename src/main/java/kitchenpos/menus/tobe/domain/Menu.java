@@ -13,6 +13,7 @@ import kitchenpos.menus.tobe.domain.exception.InvalidMenuPriceException;
 import kitchenpos.menus.tobe.domain.vo.MenuName;
 import kitchenpos.menus.tobe.domain.vo.MenuPrice;
 import kitchenpos.menus.tobe.domain.vo.MenuProducts;
+import kitchenpos.menus.tobe.domain.vo.Profanities;
 
 import java.util.UUID;
 
@@ -56,24 +57,20 @@ public class Menu {
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
 
-    protected Menu() {
-    }
+    /**
+     * 메뉴 등록 요청 시 메뉴와 메뉴 상품 간의 가격 검증이 함께 이루어져야 하므로
+     * Menu가 Aggregate Root가 되어 MenuProduct들을 내부에 보유
+     */
+    @Embedded
+    private MenuProducts menuProducts;
 
-    public Menu(MenuGroup menuGroup, String name, int price, boolean displayed) {
-        if (menuGroup == null) {
-            throw new InvalidMenuGroupEmptyException("메뉴는 반드시 특정 메뉴 그룹에 속해야 합니다.");
-        }
-        this.id = UUID.randomUUID();
-        this.menuGroup = menuGroup;
-        this.name = new MenuName(name);
-        this.price = new MenuPrice(price);
-        this.displayed = displayed;
+    protected Menu() {
     }
 
     /**
      * 메뉴 가격은 포함된 상품들의 총 가격보다 클 수 없다.
      */
-    public Menu(MenuGroup menuGroup, String name, int price, boolean displayed, MenuProducts menuProducts) {
+    public Menu(MenuGroup menuGroup, String name, int price, boolean displayed, MenuProducts menuProducts, Profanities profanities) {
         if (menuGroup == null) {
             throw new InvalidMenuGroupEmptyException("메뉴는 반드시 특정 메뉴 그룹에 속해야 합니다.");
         }
@@ -82,20 +79,20 @@ public class Menu {
         }
         this.id = UUID.randomUUID();
         this.menuGroup = menuGroup;
-        this.name = new MenuName(name);
+        this.name = new MenuName(name, profanities);
         this.price = new MenuPrice(price);
         this.displayed = displayed;
+        this.menuProducts = menuProducts;
     }
 
-    public void changeMenuPrice(int price) {
-        this.price = new MenuPrice(price);
-    }
-
-    public void changeMenuPrice(int price, MenuProducts menuProducts) {
-        if (price > menuProducts.total()) {
+    public void changeMenuPrice(int newPrice, MenuProducts menuProducts) {
+        if (newPrice <= 0) {
+            throw new InvalidMenuPriceException("메뉴 가격을 변경할 때 가격이 0원 이상이어야 합니다.");
+        }
+        if (newPrice > menuProducts.total()) {
             throw new InvalidMenuPriceException("메뉴 가격은 포함된 상품들의 총 가격보다 클 수 없습니다.");
         }
-        this.price = new MenuPrice(price);
+        this.price = new MenuPrice(newPrice);
     }
 
     public void display(MenuProducts menuProducts) {

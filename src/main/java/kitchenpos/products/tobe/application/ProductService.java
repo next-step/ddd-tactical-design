@@ -1,10 +1,9 @@
 package kitchenpos.products.tobe.application;
 
-import kitchenpos.common.infra.ProfanityClient;
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.tobe.domain.exception.InvalidProductException;
+import kitchenpos.products.tobe.domain.vo.Profanities;
+import kitchenpos.products.tobe.domain.event.ProductPriceChangedEvent;
 import kitchenpos.products.tobe.ui.dto.ChangeProductRequest;
 import kitchenpos.products.tobe.ui.dto.ChangeProductResponse;
 import kitchenpos.products.tobe.ui.dto.CreateProductRequest;
@@ -13,10 +12,10 @@ import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.vo.ProductPrice;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.products.tobe.ui.dto.FindProductResponse;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,21 +23,22 @@ import java.util.UUID;
 public class ProductService {
     private final ProductRepository productRepository;
     private final MenuRepository menuRepository;
-    private final ProfanityClient profanityClient;
+    private final Profanities profanities;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public ProductService(
-            final ProductRepository productRepository,
-            final MenuRepository menuRepository,
-            final ProfanityClient profanityClient
-    ) {
+    public ProductService(final ProductRepository productRepository,
+                          final MenuRepository menuRepository,
+                          final Profanities profanities,
+                          final ApplicationEventPublisher eventPublisher) {
         this.productRepository = productRepository;
         this.menuRepository = menuRepository;
-        this.profanityClient = profanityClient;
+        this.profanities = profanities;
+        this.eventPublisher = eventPublisher;
     }
 
     @Transactional
     public CreateProductResponse create(final CreateProductRequest request) {
-        final Product product = new Product(request.name(), request.price(), profanityClient);
+        final Product product = new Product(request.name(), request.price(), profanities);
         return CreateProductResponse.from(productRepository.save(product));
     }
 
@@ -50,20 +50,7 @@ public class ProductService {
                 .orElseThrow(() -> new InvalidProductException("해당 상품이 존재하지 않습니다"));
         product.updatePrice(price.getPrice());
 
-        final List<Menu> menus = menuRepository.findAllByProductId(productId);
-        for (final Menu menu : menus) {
-            BigDecimal sum = BigDecimal.ZERO;
-            for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-                sum = sum.add(
-                        menuProduct.getProduct()
-                                .getPrice()
-                                .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-                );
-            }
-            if (menu.getPrice().compareTo(sum) > 0) {
-                menu.setDisplayed(false);
-            }
-        }
+        eventPublisher.publishEvent(new ProductPriceChangedEvent(productId, price.getPrice()));
         return ChangeProductResponse.from(product);
     }
 

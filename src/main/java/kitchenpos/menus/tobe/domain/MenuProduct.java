@@ -1,6 +1,7 @@
 package kitchenpos.menus.tobe.domain;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
@@ -10,6 +11,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import kitchenpos.menus.tobe.domain.exception.InvalidMenuProductQuantityException;
+import kitchenpos.menus.tobe.domain.vo.MenuProductPrice;
+import kitchenpos.menus.tobe.domain.vo.MenuProductQuantity;
 import kitchenpos.products.tobe.domain.Product;
 
 import java.util.UUID;
@@ -29,25 +32,17 @@ public class MenuProduct {
 
     @ManyToOne(optional = false)
     @JoinColumn(
-            name = "menu_id",
-            columnDefinition = "binary(16)",
-            foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
-    )
-    private Menu menu;
-
-    @ManyToOne(optional = false)
-    @JoinColumn(
             name = "product_id",
             columnDefinition = "binary(16)",
             foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
     )
     private Product product;
 
-    @Column(name = "price", nullable = false)
-    private int price;
+    @Embedded
+    private MenuProductPrice price;
 
-    @Column(name = "quantity", nullable = false)
-    private int quantity;
+    @Embedded
+    private MenuProductQuantity quantity;
 
     @Column(name = "product_id", columnDefinition = "binary(16)", nullable = false)
     private UUID productId;
@@ -55,27 +50,21 @@ public class MenuProduct {
     protected MenuProduct() {
     }
 
-    public MenuProduct(Menu menu, Product product, int price, int quantity, UUID productId) {
+    public MenuProduct(Product product, int price, int quantity, UUID productId) {
         if (quantity < 0) {
             throw new InvalidMenuProductQuantityException("메뉴에 등록된 상품의 수량은 0개 이상이어야 합니다.");
         }
-
-        this.menu = menu;
         this.product = product;
-        this.price = price;
-        this.quantity = quantity;
+        this.price = new MenuProductPrice(price);
+        this.quantity = new MenuProductQuantity(quantity);
         this.productId = productId;
     }
 
     public int amount() {
-        return price * quantity;
+        return price.getPrice() * quantity.getQuantity();
     }
 
     public UUID getProductId() {
         return productId;
-    }
-
-    public void changePrice(int price) {
-        this.price = price;
     }
 }
