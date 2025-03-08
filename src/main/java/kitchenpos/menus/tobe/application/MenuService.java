@@ -10,9 +10,9 @@ import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.event.ProductPriceChangedEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -155,9 +155,10 @@ public class MenuService {
         return menuRepository.findAll();
     }
 
-    @EventListener
+    @Transactional // ProductService와 별도로 새로운 트랜잭션으로 시작
+    @TransactionalEventListener // default: AFTER_COMMIT -> 트랜잭션 커밋 후 실행
     public void handleProductPriceChanged(final ProductPriceChangedEvent event) {
-        final List<Menu> menus = menuRepository.findAllByProductId(event.getProductId());
+        final List<Menu> menus = menuRepository.findAllByProductId(event.productId());
 
         for (final Menu menu : menus) {
             BigDecimal sum = BigDecimal.ZERO;

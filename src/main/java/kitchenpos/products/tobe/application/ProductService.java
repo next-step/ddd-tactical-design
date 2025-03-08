@@ -46,6 +46,7 @@ public class ProductService {
                 .orElseThrow(() -> new InvalidProductException("해당 상품이 존재하지 않습니다"));
         product.updatePrice(price.getPrice());
 
+        // 트랜잭션이 성공적으로 커밋된 후 ProductPriceChangedEvent 이벤트 리스너가 실행됨
         eventPublisher.publishEvent(new ProductPriceChangedEvent(productId, price.getPrice()));
         return ChangeProductResponse.from(product);
     }
