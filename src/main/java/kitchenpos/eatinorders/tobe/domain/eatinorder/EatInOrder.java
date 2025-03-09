@@ -106,10 +106,8 @@ public class EatInOrder {
     }
 
     public void completed() {
-        if (type == OrderType.TAKEOUT || type == OrderType.EAT_IN) {
-            if (status != EatInOrderStatus.SERVED) {
-                throw new IllegalStateException(ERROR_STATUS_NOT_SERVED);
-            }
+        if (status != EatInOrderStatus.SERVED) {
+            throw new IllegalStateException(ERROR_STATUS_NOT_SERVED);
         }
         this.status = EatInOrderStatus.COMPLETED;
     }
