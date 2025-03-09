@@ -74,16 +74,25 @@ class MenuTest {
         ;
     }
 
-    // 정책에 따르면 메뉴 가격은 항상 포함된 상품들의 총 가격 이하여야 하므로, 생성자에서 검증하는게 옳다고 본다.
-    // 그렇다면 메뉴 객체가 생성되는 시점에서 이미 유효하지 않은 가격은 걸러져야 하므로
-    // display() 호출 시점에 검증을 기대하는 테스트는 성립하지 않아서 아래 테스트코드는 없애도 되지 않을까 싶다.
+    /**
+     * `display()` 호출 시 메뉴 가격이 포함된 상품들의 총 가격보다 크다면 예외가 발생해야 한다.
+     *
+     * - `Menu` 생성 시에는 정상적인 가격(40,000원)으로 생성해야 함.
+     * - 이후 **상품 가격이 변경된 상황**을 가정하고 `display()`를 호출해야 테스트가 올바르게 수행됨.
+     */
     @Test
     void 메뉴_가격이_포함된_상품들의_총_가격의_합보다_크면_메뉴를_표시할_수_없다() {
         // given
         Menu menu = new Menu(menuGroup, "치킨 세트", 42_000, false, menuProducts, profanities);
 
+        Product product1 = new Product("후라이드 치킨", valueOf(18_000));
+        Product product2 = new Product("양념 치킨", valueOf(20_000));
+        MenuProduct mp1 = new MenuProduct(product1, 18_000, 1, product1.getId());
+        MenuProduct mp2 = new MenuProduct(product2, 20_000, 1, product2.getId());
+        MenuProducts 변경된_상품_목록 = new MenuProducts(mp1, mp2);
+
         // when & then
-        assertThatThrownBy(() -> menu.display(menuProducts))
+        assertThatThrownBy(() -> menu.display(변경된_상품_목록))
                 .isInstanceOf(InvalidMenuPriceException.class)
                 .hasMessage("메뉴 가격은 포함된 상품들의 총 가격보다 클 수 없습니다.");
         assertThat(menu.isDisplayed()).isFalse();
