@@ -19,15 +19,16 @@ public class TobeRestaurantTableService {
     private final RestaurantTableRepository restaurantTableRepository;
     private final TobeEatInOrderRepository eatInOrderRepository;
 
-    public TobeRestaurantTableService(final RestaurantTableRepository restaurantTableRepository, TobeEatInOrderRepository eatInOrderRepository) {
+    public TobeRestaurantTableService(final RestaurantTableRepository restaurantTableRepository,
+        TobeEatInOrderRepository eatInOrderRepository) {
         this.restaurantTableRepository = restaurantTableRepository;
         this.eatInOrderRepository = eatInOrderRepository;
     }
 
     @Transactional(readOnly = true)
     public RestaurantTable getById(UUID restaurantTableId) {
-        return restaurantTableRepository.findById(restaurantTableId).orElseThrow(
-            () -> new NoSuchElementException(
+        return restaurantTableRepository.findById(restaurantTableId)
+            .orElseThrow(() -> new NoSuchElementException(
                 "RestaurantTable not found with id: " + restaurantTableId));
     }
 
@@ -47,7 +48,8 @@ public class TobeRestaurantTableService {
     @Transactional
     public RestaurantTableResponse clear(final UUID restaurantTableId) {
         final RestaurantTable restaurantTable = getById(restaurantTableId);
-        if (eatInOrderRepository.existsByRestaurantTableIdAndStatusNot(restaurantTableId, EatInOrderStatus.COMPLETED)) {
+        if (eatInOrderRepository.existsByRestaurantTableIdAndStatusNot(restaurantTableId,
+            EatInOrderStatus.COMPLETED)) {
             throw new IllegalStateException();
         }
         restaurantTable.clear();

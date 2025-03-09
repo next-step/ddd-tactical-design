@@ -8,14 +8,20 @@ import kitchenpos.eatinorders.tobe.domain.eatinorder.EatInOrderLineItem;
 import kitchenpos.eatinorders.tobe.domain.eatinorder.EatInOrderStatus;
 import kitchenpos.shared.domain.OrderType;
 
-public record EatInOrderResponse(UUID id, OrderType type, EatInOrderStatus status,
+public record EatInOrderResponse(UUID id,
+                                 OrderType type,
+                                 EatInOrderStatus status,
                                  LocalDateTime orderDateTime,
                                  List<EatInOrderLineItem> eatInOrderLineItems,
                                  UUID restaurantTableId) {
 
     public static EatInOrderResponse from(EatInOrder eatInOrder) {
-        return new EatInOrderResponse(eatInOrder.getId(), eatInOrder.getType(),
-            eatInOrder.getStatus(), eatInOrder.getOrderDateTime(), eatInOrder.getOrderLineItems(),
+        return new EatInOrderResponse(
+            eatInOrder.getId(),
+            eatInOrder.getType(),
+            eatInOrder.getStatus(),
+            eatInOrder.getOrderDateTime(),
+            eatInOrder.getOrderLineItems(),
             eatInOrder.getRestaurantTableId());
     }
 }

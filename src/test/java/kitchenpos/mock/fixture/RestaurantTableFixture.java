@@ -15,10 +15,17 @@ public class RestaurantTableFixture {
 
     public static EatInOrder eatInorder(EatInOrderStatus eatInOrderStatus,
         RestaurantTable restaurantTable) {
+
         final List<EatInOrderLineItem> eatInOrderLineItems = List.of(
             new EatInOrderLineItem(1L, UUID.randomUUID(), 1));
-        return new EatInOrder(UUID.randomUUID(), OrderType.EAT_IN, eatInOrderStatus,
-            LocalDateTime.now(), eatInOrderLineItems, restaurantTable.getId());
+
+        return new EatInOrder(
+            UUID.randomUUID(),
+            OrderType.EAT_IN,
+            eatInOrderStatus,
+            LocalDateTime.now(),
+            eatInOrderLineItems,
+            restaurantTable.getId());
     }
 
     public static RestaurantTable orderTable(boolean occupied, int numberOfGuests) {

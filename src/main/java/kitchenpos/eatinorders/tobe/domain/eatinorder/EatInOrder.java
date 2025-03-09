@@ -50,7 +50,7 @@ public class EatInOrder {
     public EatInOrder(UUID id, OrderType type, EatInOrderStatus status, LocalDateTime orderDateTime,
         List<EatInOrderLineItem> eatInOrderLineItems, UUID restaurantTableId) {
         this.id = new EatInOrderId(id);
-        validate(type);
+        validateType(type);
         this.type = type;
         this.status = status;
         this.orderDateTime = new EatInOrderDateTime(orderDateTime);
@@ -61,7 +61,7 @@ public class EatInOrder {
     protected EatInOrder() {
     }
 
-    private static void validate(OrderType type) {
+    private static void validateType(OrderType type) {
         if (Objects.isNull(type)) {
             throw new IllegalArgumentException(ERROR_MESSAGE_VALUE_NULL);
         }

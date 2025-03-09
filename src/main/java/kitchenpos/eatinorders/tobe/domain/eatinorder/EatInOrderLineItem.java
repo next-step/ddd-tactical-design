@@ -37,7 +37,8 @@ public class EatInOrderLineItem {
         this.quantity = new EatInOrderLineItemQuantity(quantity);
     }
 
-    public EatInOrderLineItem(UUID menuId, BigDecimal price, MenuValidationService menuValidationService,
+    public EatInOrderLineItem(UUID menuId, BigDecimal price,
+        MenuValidationService menuValidationService,
         long quantity) {
         menuValidationService.validateDisplayedAndPrice(menuId, price);
         this.menuId = new MenuId(menuId);
