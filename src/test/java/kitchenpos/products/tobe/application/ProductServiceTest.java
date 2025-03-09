@@ -1,10 +1,6 @@
 package kitchenpos.products.tobe.application;
 
-import kitchenpos.products.infra.PurgomalumClient;
-import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductName;
-import kitchenpos.products.tobe.domain.ProductPrice;
-import kitchenpos.products.tobe.domain.ProductRepository;
+import kitchenpos.products.tobe.domain.*;
 import kitchenpos.products.tobe.ui.ProductChangePriceRequest;
 import kitchenpos.products.tobe.ui.ProductCreateRequest;
 import org.jetbrains.annotations.NotNull;
@@ -21,21 +17,21 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class ProductServiceTest {
     private ProductRepository productRepository;
-    private PurgomalumClient purgomalumClient;
+    private ProfanityChecker profanityChecker;
     private ProductService productService;
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
-        purgomalumClient = new FakePurgomalumClient();
-        productService = new ProductService(productRepository, purgomalumClient);
+        profanityChecker = new FakePurgomalumClient();
+        productService = new ProductService(productRepository, profanityChecker);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
     @Test
     void create() {
         // given
-        final ProductName expectedName = new ProductName("후라이드", purgomalumClient::containsProfanity);
+        final ProductName expectedName = new ProductName("후라이드", profanityChecker::containsProfanity);
         final ProductPrice expectedPrice = new ProductPrice(BigDecimal.valueOf(16_000L));
         final ProductCreateRequest request = new ProductCreateRequest(expectedName.value(), expectedPrice.value());
 
@@ -57,7 +53,7 @@ class ProductServiceTest {
         // given
         final ProductPrice expectedPrice = new ProductPrice(BigDecimal.valueOf(15_000L));
         final ProductChangePriceRequest request = new ProductChangePriceRequest(expectedPrice.value());
-        final UUID productId = productRepository.save(createProduct("후라이드", 16_000L, purgomalumClient)).getId();
+        final UUID productId = productRepository.save(createProduct("후라이드", 16_000L, profanityChecker)).getId();
 
         // when
         final Product actual = productService.changePrice(productId, request);
@@ -71,8 +67,8 @@ class ProductServiceTest {
     @Test
     void findAll() {
         // given
-        productRepository.save(createProduct("후라이드", 16_000L, purgomalumClient));
-        productRepository.save(createProduct("양념치킨", 16_000L, purgomalumClient));
+        productRepository.save(createProduct("후라이드", 16_000L, profanityChecker));
+        productRepository.save(createProduct("양념치킨", 16_000L, profanityChecker));
 
         // when
         final List<Product> actual = productService.findAll();
@@ -81,8 +77,8 @@ class ProductServiceTest {
         assertThat(actual).hasSize(2);
     }
 
-    private @NotNull Product createProduct(String name, long price, PurgomalumClient purgomalumClient) {
-        final ProductName productName = new ProductName(name, purgomalumClient::containsProfanity);
+    private @NotNull Product createProduct(String name, long price, ProfanityChecker profanityChecker) {
+        final ProductName productName = new ProductName(name, profanityChecker);
         final ProductPrice productPrice = new ProductPrice(BigDecimal.valueOf(price));
         return new Product(UUID.randomUUID(), productName, productPrice);
     }
