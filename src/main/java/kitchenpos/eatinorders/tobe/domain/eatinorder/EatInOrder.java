@@ -92,23 +92,23 @@ public class EatInOrder {
     }
 
     public void accepted() {
-        if (getStatus() != EatInOrderStatus.WAITING) {
-            throw new IllegalStateException(ERROR_STATUS_NOT_WAITING);
-        }
+        validateStatus(EatInOrderStatus.WAITING, ERROR_STATUS_NOT_WAITING);
         this.status = EatInOrderStatus.ACCEPTED;
     }
 
     public void served() {
-        if (getStatus() != EatInOrderStatus.ACCEPTED) {
-            throw new IllegalStateException(ERROR_STATUS_NOT_ACCEPTED);
-        }
+        validateStatus(EatInOrderStatus.ACCEPTED, ERROR_STATUS_NOT_ACCEPTED);
         this.status = EatInOrderStatus.SERVED;
     }
 
     public void completed() {
-        if (status != EatInOrderStatus.SERVED) {
-            throw new IllegalStateException(ERROR_STATUS_NOT_SERVED);
-        }
+        validateStatus(EatInOrderStatus.SERVED, ERROR_STATUS_NOT_SERVED);
         this.status = EatInOrderStatus.COMPLETED;
+    }
+
+    private void validateStatus(EatInOrderStatus status, String message) {
+        if (this.status != status) {
+            throw new IllegalStateException(message);
+        }
     }
 }
