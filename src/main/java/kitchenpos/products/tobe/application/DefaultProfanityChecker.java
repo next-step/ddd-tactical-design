@@ -1,7 +1,7 @@
 package kitchenpos.products.tobe.application;
 
-import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.ProfanityChecker;
+import kitchenpos.products.tobe.infra.PurgomalumClient;
 import org.springframework.stereotype.Component;
 
 @Component
