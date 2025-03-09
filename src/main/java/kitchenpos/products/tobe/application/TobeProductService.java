@@ -43,7 +43,7 @@ public class TobeProductService {
                 () -> new NoSuchElementException("Product not found with id: " + productId));
         product.changePrice(request.price());
 
-        // ACL을 통한 메뉴 표시 상태 업데이트
+        // Menu Context 결합
         menuDisplayService.updateMenusDisplayStatusByProductId(productId);
         return ProductResponse.from(product);
     }
