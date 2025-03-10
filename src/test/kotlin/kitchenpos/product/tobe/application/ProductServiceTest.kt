@@ -2,11 +2,8 @@ package kitchenpos.product.tobe.application
 
 import java.math.BigDecimal
 import kitchenpos.common.domain.Profanities
-import kitchenpos.menu.tobe.domain.MenuProductPriceChanged
 import kitchenpos.menu.tobe.domain.MenuRepository
 import kitchenpos.menu.tobe.domain.ProductClient
-import kitchenpos.menu.tobe.infra.DefaultMenuAmountService
-import kitchenpos.menu.tobe.infra.DefaultMenuProductPriceChanged
 import kitchenpos.menu.tobe.infra.DefaultProductClient
 import kitchenpos.menu.tobe.infra.FakeMenuRepository
 import kitchenpos.product.tobe.application.dto.ChangeProductPriceReq
@@ -27,7 +24,6 @@ class ProductServiceTest {
     private lateinit var menuRepository: MenuRepository
     private lateinit var profanities: Profanities
     private lateinit var productService: ProductService
-    private lateinit var menuProductPriceChanged: MenuProductPriceChanged
 
     @BeforeEach
     fun setUp() {
@@ -35,9 +31,7 @@ class ProductServiceTest {
         productClient = DefaultProductClient(productRepository)
         menuRepository = FakeMenuRepository()
         profanities = FakeProfanities()
-        menuProductPriceChanged =
-            DefaultMenuProductPriceChanged(menuRepository, DefaultMenuAmountService(productClient = productClient))
-        productService = ProductService(productRepository, profanities, menuProductPriceChanged)
+        productService = ProductService(productRepository, profanities)
     }
 
     @Test

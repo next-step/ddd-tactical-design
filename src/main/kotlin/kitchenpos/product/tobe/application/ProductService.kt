@@ -2,7 +2,6 @@ package kitchenpos.product.tobe.application
 
 import java.util.*
 import kitchenpos.common.domain.Profanities
-import kitchenpos.menu.tobe.domain.MenuProductPriceChanged
 import kitchenpos.product.tobe.application.dto.ChangeProductPriceReq
 import kitchenpos.product.tobe.application.dto.CreateProductReq
 import kitchenpos.product.tobe.application.dto.ProductResp
@@ -18,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional
 class ProductService(
     private val productRepository: ProductRepository,
     private val profanities: Profanities,
-    private val menuProductPriceChanged: MenuProductPriceChanged,
 ) {
 
     @Transactional

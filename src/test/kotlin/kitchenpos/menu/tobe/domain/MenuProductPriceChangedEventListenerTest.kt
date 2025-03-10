@@ -2,10 +2,11 @@ package kitchenpos.menu.tobe.domain
 
 import java.math.BigDecimal
 import kitchenpos.menu.tobe.infra.DefaultMenuAmountService
-import kitchenpos.menu.tobe.infra.DefaultMenuProductPriceChanged
+import kitchenpos.menu.tobe.infra.DefaultMenuProductPriceChangedEventListener
 import kitchenpos.menu.tobe.infra.DefaultProductClient
 import kitchenpos.menu.tobe.infra.FakeMenuRepository
 import kitchenpos.product.tobe.domain.ProductPrice
+import kitchenpos.product.tobe.domain.ProductPriceChangedEvent
 import kitchenpos.product.tobe.domain.ProductRepository
 import kitchenpos.product.tobe.infra.FakeProductRepository
 import kitchenpos.utils.Fixtures
@@ -21,7 +22,7 @@ class MenuProductPriceChangedEventListenerTest {
     private lateinit var menuAmountService: MenuAmountService
     private lateinit var productClient: ProductClient
 
-    private lateinit var menuProductPriceChanged: MenuProductPriceChanged
+    private lateinit var menuProductPriceChangedEventListener: MenuProductPriceChangedEventListener
 
     @BeforeEach
     fun setUp() {
@@ -29,7 +30,8 @@ class MenuProductPriceChangedEventListenerTest {
         productRepository = FakeProductRepository()
         productClient = DefaultProductClient(productRepository)
         menuAmountService = DefaultMenuAmountService(productClient)
-        menuProductPriceChanged = DefaultMenuProductPriceChanged(menuRepository, menuAmountService)
+        menuProductPriceChangedEventListener =
+            DefaultMenuProductPriceChangedEventListener(menuRepository, menuAmountService)
     }
 
     @Test
@@ -66,7 +68,7 @@ class MenuProductPriceChangedEventListenerTest {
 
         // when productPrice 15000원으로 변경
         product.changePrice(ProductPrice(BigDecimal.valueOf(15_000)))
-        menuProductPriceChanged.changedProduct(product.id)
+        menuProductPriceChangedEventListener.handle(ProductPriceChangedEvent(product.id))
 
         // then
         assertAll(
