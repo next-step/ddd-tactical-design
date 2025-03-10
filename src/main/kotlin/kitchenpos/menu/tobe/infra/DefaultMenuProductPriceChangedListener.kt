@@ -1,5 +1,6 @@
 package kitchenpos.menu.tobe.infra
 
+import kitchenpos.common.annotation.DomainService
 import kitchenpos.menu.tobe.domain.MenuAmountService
 import kitchenpos.menu.tobe.domain.MenuProductPriceChangedListener
 import kitchenpos.menu.tobe.domain.MenuRepository
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Component
 import org.springframework.transaction.event.TransactionPhase
 import org.springframework.transaction.event.TransactionalEventListener
 
-@Component
+@DomainService
 class DefaultMenuProductPriceChangedListener(
     private val menuRepository: MenuRepository,
     private val amountService: MenuAmountService,

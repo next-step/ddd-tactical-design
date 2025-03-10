@@ -2,11 +2,11 @@ package kitchenpos.menu.tobe.infra
 
 import java.math.BigDecimal
 import java.util.*
+import kitchenpos.common.annotation.DomainService
 import kitchenpos.menu.tobe.domain.ProductClient
 import kitchenpos.product.tobe.domain.ProductRepository
-import org.springframework.stereotype.Component
 
-@Component
+@DomainService
 class DefaultProductClient(
     private val productRepository: ProductRepository,
 ) : ProductClient {
