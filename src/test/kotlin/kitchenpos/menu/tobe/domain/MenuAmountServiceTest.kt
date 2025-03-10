@@ -2,6 +2,7 @@ package kitchenpos.menu.tobe.domain
 
 import java.math.BigDecimal
 import kitchenpos.menu.tobe.infra.DefaultMenuAmountService
+import kitchenpos.menu.tobe.infra.DefaultProductClient
 import kitchenpos.product.tobe.domain.ProductRepository
 import kitchenpos.product.tobe.infra.FakeProductRepository
 import kitchenpos.utils.Fixtures
@@ -12,12 +13,14 @@ import org.junit.jupiter.api.Test
 
 class MenuAmountServiceTest {
     private lateinit var productRepository: ProductRepository
+    private lateinit var productClient: ProductClient
     private lateinit var menuAmountService: MenuAmountService
 
     @BeforeEach
     fun setUp() {
         productRepository = FakeProductRepository()
-        menuAmountService = DefaultMenuAmountService(productRepository)
+        productClient = DefaultProductClient(productRepository)
+        menuAmountService = DefaultMenuAmountService(productClient)
     }
 
 

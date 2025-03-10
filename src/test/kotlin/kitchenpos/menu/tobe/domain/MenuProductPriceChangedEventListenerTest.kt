@@ -3,6 +3,7 @@ package kitchenpos.menu.tobe.domain
 import java.math.BigDecimal
 import kitchenpos.menu.tobe.infra.DefaultMenuAmountService
 import kitchenpos.menu.tobe.infra.DefaultMenuProductPriceChanged
+import kitchenpos.menu.tobe.infra.DefaultProductClient
 import kitchenpos.menu.tobe.infra.FakeMenuRepository
 import kitchenpos.product.tobe.domain.ProductPrice
 import kitchenpos.product.tobe.domain.ProductRepository
@@ -14,10 +15,11 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 
-class MenuProductPriceChangedTest {
+class MenuProductPriceChangedEventListenerTest {
     private lateinit var menuRepository: MenuRepository
     private lateinit var productRepository: ProductRepository
     private lateinit var menuAmountService: MenuAmountService
+    private lateinit var productClient: ProductClient
 
     private lateinit var menuProductPriceChanged: MenuProductPriceChanged
 
@@ -25,7 +27,8 @@ class MenuProductPriceChangedTest {
     fun setUp() {
         menuRepository = FakeMenuRepository()
         productRepository = FakeProductRepository()
-        menuAmountService = DefaultMenuAmountService(productRepository)
+        productClient = DefaultProductClient(productRepository)
+        menuAmountService = DefaultMenuAmountService(productClient)
         menuProductPriceChanged = DefaultMenuProductPriceChanged(menuRepository, menuAmountService)
     }
 
@@ -43,7 +46,7 @@ class MenuProductPriceChangedTest {
             display = MenuDisplay.DISPLAYED,
             menuProducts = MenuProducts(
                 listOf(
-                    Fixtures.menuProduct(productId = product.id!!, quantity = 1)
+                    Fixtures.menuProduct(productId = product.id, quantity = 1)
                 )
             )
         )
@@ -53,7 +56,7 @@ class MenuProductPriceChangedTest {
             display = MenuDisplay.DISPLAYED,
             menuProducts = MenuProducts(
                 listOf(
-                    Fixtures.menuProduct(productId = product.id!!, quantity = 1)
+                    Fixtures.menuProduct(productId = product.id, quantity = 1)
                 )
             )
         )
@@ -63,7 +66,7 @@ class MenuProductPriceChangedTest {
 
         // when productPrice 15000원으로 변경
         product.changePrice(ProductPrice(BigDecimal.valueOf(15_000)))
-        menuProductPriceChanged.changedProduct(product.id!!)
+        menuProductPriceChanged.changedProduct(product.id)
 
         // then
         assertAll(

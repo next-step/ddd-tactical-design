@@ -6,7 +6,6 @@ import jakarta.persistence.ForeignKey
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.OneToMany
 import java.math.BigDecimal
-import java.util.*
 
 @Embeddable
 class MenuProducts(
@@ -26,13 +25,9 @@ class MenuProducts(
     fun amount(productClient: ProductClient): BigDecimal {
         var sum = BigDecimal.ZERO
         menuProducts.forEach { menuProduct ->
-            val productPrice = productClient.getPrice(menuProduct.productId!!)
+            val productPrice = productClient.getProductPrice(menuProduct.productId)
             sum += productPrice * menuProduct.quantity.toBigDecimal()
         }
         return sum
     }
-}
-
-interface ProductClient {
-    fun getPrice(productId: UUID): BigDecimal
 }

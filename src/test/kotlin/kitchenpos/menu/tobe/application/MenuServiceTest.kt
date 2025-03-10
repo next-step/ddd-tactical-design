@@ -10,7 +10,9 @@ import kitchenpos.menu.tobe.domain.MenuGroup
 import kitchenpos.menu.tobe.domain.MenuGroupRepository
 import kitchenpos.menu.tobe.domain.MenuProducts
 import kitchenpos.menu.tobe.domain.MenuRepository
+import kitchenpos.menu.tobe.domain.ProductClient
 import kitchenpos.menu.tobe.infra.DefaultMenuAmountService
+import kitchenpos.menu.tobe.infra.DefaultProductClient
 import kitchenpos.menu.tobe.infra.FakeMenuGroupRepository
 import kitchenpos.menu.tobe.infra.FakeMenuRepository
 import kitchenpos.product.tobe.application.dto.ChangeProductPriceReq
@@ -31,6 +33,7 @@ class MenuServiceTest {
     private lateinit var menuRepository: MenuRepository
     private lateinit var menuGroupRepository: MenuGroupRepository
     private lateinit var productRepository: ProductRepository
+    private lateinit var productClient: ProductClient
     private lateinit var profanities: Profanities
     private lateinit var menuAmountService: MenuAmountService
 
@@ -43,7 +46,8 @@ class MenuServiceTest {
         menuGroupRepository = FakeMenuGroupRepository()
         productRepository = FakeProductRepository()
         profanities = FakeProfanities()
-        menuAmountService = DefaultMenuAmountService(productRepository)
+        productClient = DefaultProductClient(productRepository)
+        menuAmountService = DefaultMenuAmountService(productClient)
         menuService =
             MenuService(menuRepository, menuGroupRepository, productRepository, profanities, menuAmountService)
 

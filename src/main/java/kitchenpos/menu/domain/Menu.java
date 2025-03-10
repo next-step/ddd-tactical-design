@@ -10,16 +10,14 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
-
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 @Table(name = "menu")
 @Entity
 public class Menu {
+
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
     private UUID id;
@@ -38,8 +36,7 @@ public class Menu {
     )
     private MenuGroup menuGroup;
 
-    @Column(name = "displayed", nullable = false)
-    @JdbcTypeCode(value = SqlTypes.VARCHAR)
+    @Column(name = "displayed", columnDefinition = "varchar(255)", nullable = false)
     private boolean displayed;
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
