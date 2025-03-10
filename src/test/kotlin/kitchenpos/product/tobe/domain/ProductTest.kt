@@ -1,6 +1,7 @@
 package kitchenpos.product.tobe.domain
 
 import java.math.BigDecimal
+import kitchenpos.product.tobe.infra.DefaultProductNamePolicy
 import kitchenpos.product.tobe.infra.FakeProfanities
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
@@ -9,11 +10,13 @@ import org.junit.jupiter.api.Test
 
 
 class ProductTest {
+    private val productNamePolicy: ProductNamePolicy = DefaultProductNamePolicy(FakeProfanities())
+
     @Test
     @DisplayName("`Product`를 등록한다")
     fun createProduct() {
         val product = Product(
-            productName = ProductName(ProductNamePolicy(FakeProfanities()), "양념치킨"),
+            productName = ProductName(productNamePolicy, "양념치킨"),
             productPrice = ProductPrice(BigDecimal.valueOf(16000))
         )
 
@@ -26,7 +29,7 @@ class ProductTest {
     fun createProductPriceFail() {
         assertThatIllegalArgumentException().isThrownBy {
             Product(
-                productName = ProductName(ProductNamePolicy(FakeProfanities()), "양념치킨"),
+                productName = ProductName(productNamePolicy, "양념치킨"),
                 productPrice = ProductPrice(BigDecimal.valueOf(-1))
             )
         }
@@ -36,7 +39,7 @@ class ProductTest {
     @DisplayName("`Product`의 `price`를 변경한다")
     fun changePrice() {
         val product = Product(
-            productName = ProductName(ProductNamePolicy(FakeProfanities()), "양념치킨"),
+            productName = ProductName(productNamePolicy, "양념치킨"),
             productPrice = ProductPrice(BigDecimal.valueOf(16000))
         )
 
@@ -49,7 +52,7 @@ class ProductTest {
     @DisplayName("`Product`의 `price`를 변경할 때 `price`는 0원 미만일 수 없다")
     fun changePriceFail() {
         val product = Product(
-            productName = ProductName(ProductNamePolicy(FakeProfanities()), "양념치킨"),
+            productName = ProductName(productNamePolicy, "양념치킨"),
             productPrice = ProductPrice(BigDecimal.valueOf(16000))
         )
 

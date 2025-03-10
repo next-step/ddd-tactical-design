@@ -1,7 +1,6 @@
 package kitchenpos.menu.tobe.application
 
 import java.math.BigDecimal
-import kitchenpos.common.domain.Profanities
 import kitchenpos.menu.tobe.application.dto.CreateMenuProductReq
 import kitchenpos.menu.tobe.application.dto.CreateMenuReq
 import kitchenpos.menu.tobe.domain.MenuAmountService
@@ -12,6 +11,7 @@ import kitchenpos.menu.tobe.domain.MenuProducts
 import kitchenpos.menu.tobe.domain.MenuRepository
 import kitchenpos.menu.tobe.domain.ProductClient
 import kitchenpos.menu.tobe.infra.DefaultMenuAmountService
+import kitchenpos.menu.tobe.infra.DefaultMenuNamePolicy
 import kitchenpos.menu.tobe.infra.DefaultProductClient
 import kitchenpos.menu.tobe.infra.FakeMenuGroupRepository
 import kitchenpos.menu.tobe.infra.FakeMenuRepository
@@ -34,7 +34,6 @@ class MenuServiceTest {
     private lateinit var menuGroupRepository: MenuGroupRepository
     private lateinit var productRepository: ProductRepository
     private lateinit var productClient: ProductClient
-    private lateinit var profanities: Profanities
     private lateinit var menuAmountService: MenuAmountService
 
     private lateinit var menuGroup: MenuGroup
@@ -45,11 +44,16 @@ class MenuServiceTest {
         menuRepository = FakeMenuRepository()
         menuGroupRepository = FakeMenuGroupRepository()
         productRepository = FakeProductRepository()
-        profanities = FakeProfanities()
         productClient = DefaultProductClient(productRepository)
         menuAmountService = DefaultMenuAmountService(productClient)
         menuService =
-            MenuService(menuRepository, menuGroupRepository, productRepository, profanities, menuAmountService)
+            MenuService(
+                menuRepository,
+                menuGroupRepository,
+                productRepository,
+                DefaultMenuNamePolicy(FakeProfanities()),
+                menuAmountService
+            )
 
         menuGroup = menuGroupRepository.save(Fixtures.menuGroup(name = "추천메뉴"))
         product = productRepository.save(Fixtures.product(name = "후라이드", price = 16_000))

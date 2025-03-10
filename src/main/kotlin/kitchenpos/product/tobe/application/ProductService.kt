@@ -1,7 +1,6 @@
 package kitchenpos.product.tobe.application
 
 import java.util.*
-import kitchenpos.common.domain.Profanities
 import kitchenpos.product.tobe.application.dto.ChangeProductPriceReq
 import kitchenpos.product.tobe.application.dto.CreateProductReq
 import kitchenpos.product.tobe.application.dto.ProductResp
@@ -16,14 +15,14 @@ import org.springframework.transaction.annotation.Transactional
 @Service("tobeProductService")
 class ProductService(
     private val productRepository: ProductRepository,
-    private val profanities: Profanities,
+    private val productNamePolicy: ProductNamePolicy,
 ) {
 
     @Transactional
     fun create(request: CreateProductReq): ProductResp {
         val product = productRepository.save(
             Product(
-                productName = ProductName(ProductNamePolicy(profanities), request.name),
+                productName = ProductName(productNamePolicy, request.name),
                 productPrice = ProductPrice(request.price)
             )
         )

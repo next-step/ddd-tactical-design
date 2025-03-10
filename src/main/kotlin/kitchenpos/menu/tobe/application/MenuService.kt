@@ -1,7 +1,6 @@
 package kitchenpos.menu.tobe.application
 
 import java.util.*
-import kitchenpos.common.domain.Profanities
 import kitchenpos.menu.tobe.application.dto.CreateMenuReq
 import kitchenpos.menu.tobe.application.dto.MenuResp
 import kitchenpos.menu.tobe.domain.Menu
@@ -23,7 +22,7 @@ class MenuService(
     private val menuRepository: MenuRepository,
     private val menuGroupRepository: MenuGroupRepository,
     private val productRepository: ProductRepository,
-    private val profanities: Profanities,
+    private val menuNamePolicy: MenuNamePolicy,
     private val menuAmountService: MenuAmountService,
 ) {
     @Transactional
@@ -34,7 +33,7 @@ class MenuService(
 
         val menu = Menu(
             menuAmountService = menuAmountService,
-            menuName = MenuName(menuNamePolicy = MenuNamePolicy(profanities), name = request.name),
+            menuName = MenuName(menuNamePolicy = menuNamePolicy, name = request.name),
             menuPrice = MenuPrice(request.price.toBigDecimal()),
             menuGroup = menuGroup,
             menuDisplay = request.display,

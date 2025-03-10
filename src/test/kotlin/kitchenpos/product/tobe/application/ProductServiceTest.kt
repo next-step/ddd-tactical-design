@@ -1,7 +1,6 @@
 package kitchenpos.product.tobe.application
 
 import java.math.BigDecimal
-import kitchenpos.common.domain.Profanities
 import kitchenpos.menu.tobe.domain.MenuRepository
 import kitchenpos.menu.tobe.domain.ProductClient
 import kitchenpos.menu.tobe.infra.DefaultProductClient
@@ -9,6 +8,7 @@ import kitchenpos.menu.tobe.infra.FakeMenuRepository
 import kitchenpos.product.tobe.application.dto.ChangeProductPriceReq
 import kitchenpos.product.tobe.application.dto.CreateProductReq
 import kitchenpos.product.tobe.domain.ProductRepository
+import kitchenpos.product.tobe.infra.DefaultProductNamePolicy
 import kitchenpos.product.tobe.infra.FakeProductRepository
 import kitchenpos.product.tobe.infra.FakeProfanities
 import kitchenpos.utils.Fixtures
@@ -22,7 +22,6 @@ class ProductServiceTest {
     private lateinit var productRepository: ProductRepository
     private lateinit var productClient: ProductClient
     private lateinit var menuRepository: MenuRepository
-    private lateinit var profanities: Profanities
     private lateinit var productService: ProductService
 
     @BeforeEach
@@ -30,8 +29,7 @@ class ProductServiceTest {
         productRepository = FakeProductRepository()
         productClient = DefaultProductClient(productRepository)
         menuRepository = FakeMenuRepository()
-        profanities = FakeProfanities()
-        productService = ProductService(productRepository, profanities)
+        productService = ProductService(productRepository, DefaultProductNamePolicy(FakeProfanities()))
     }
 
     @Test

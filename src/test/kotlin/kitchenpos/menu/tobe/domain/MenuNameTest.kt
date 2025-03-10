@@ -1,5 +1,6 @@
 package kitchenpos.menu.tobe.domain
 
+import kitchenpos.menu.tobe.infra.DefaultMenuNamePolicy
 import kitchenpos.product.tobe.infra.FakeProfanities
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -14,7 +15,7 @@ class MenuNameTest {
     @DisplayName("MenuName을 생성한다")
     fun create() {
         val name = "양념치킨"
-        val menuName = MenuName(menuNamePolicy = MenuNamePolicy(FakeProfanities()), name = name)
+        val menuName = MenuName(menuNamePolicy = DefaultMenuNamePolicy(FakeProfanities()), name = name)
 
         assertEquals(name, menuName.name)
     }
@@ -24,7 +25,7 @@ class MenuNameTest {
     @EmptySource
     fun createFail(name: String) {
         assertThatIllegalArgumentException().isThrownBy {
-            MenuName(menuNamePolicy = MenuNamePolicy(FakeProfanities()), name = name)
+            MenuName(menuNamePolicy = DefaultMenuNamePolicy(FakeProfanities()), name = name)
         }
     }
 
@@ -33,7 +34,7 @@ class MenuNameTest {
     @CsvSource(value = ["욕설메뉴", "비속어"])
     fun createProfanityFail(name: String) {
         assertThatIllegalArgumentException().isThrownBy {
-            MenuName(menuNamePolicy = MenuNamePolicy(FakeProfanities(listOf("욕설", "비속어"))), name = name)
+            MenuName(menuNamePolicy = DefaultMenuNamePolicy(FakeProfanities(listOf("욕설", "비속어"))), name = name)
         }
     }
 }
