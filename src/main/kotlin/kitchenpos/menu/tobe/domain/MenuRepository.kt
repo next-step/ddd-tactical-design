@@ -4,7 +4,7 @@ import java.util.*
 import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Repository
 
-@Repository("tobeMenuRepository")
+@Repository
 @Primary
 interface MenuRepository {
     fun save(menu: Menu): Menu

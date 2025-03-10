@@ -21,12 +21,10 @@ class Fixtures {
         val INVALID_UUID = UUID(0L, 0L);
 
         fun product(
-            id: UUID = UUID.randomUUID(),
             name: String = "후라이드",
             price: Long
         ): Product {
             return Product(
-                id = id,
                 productName = ProductName(ProductNamePolicy(FakeProfanities()), name),
                 productPrice = ProductPrice(price.toBigDecimal())
             )
@@ -34,7 +32,6 @@ class Fixtures {
 
         fun menu(
             menuAmountService: MenuAmountService,
-            id: UUID = UUID.randomUUID(),
             name: String = "후라이드1마리",
             price: Long,
             display: MenuDisplay = MenuDisplay.DISPLAYED,
@@ -43,7 +40,6 @@ class Fixtures {
         ): Menu {
             return Menu(
                 menuAmountService = menuAmountService,
-                id = id,
                 menuName = MenuName(MenuNamePolicy(FakeProfanities()), name),
                 menuPrice = MenuPrice(price.toBigDecimal()),
                 menuDisplay = display,
@@ -66,10 +62,9 @@ class Fixtures {
 
 
         fun menuGroup(
-            id: UUID = UUID.randomUUID(),
             name: String = "추천메뉴",
         ): MenuGroup {
-            val menuGroup = MenuGroup(id, name)
+            val menuGroup = MenuGroup(name = name)
             return menuGroup
         }
     }

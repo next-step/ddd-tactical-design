@@ -2,9 +2,7 @@ package kitchenpos.product.tobe.application
 
 import java.math.BigDecimal
 import kitchenpos.common.domain.Profanities
-import kitchenpos.menu.tobe.domain.MenuDisplay
 import kitchenpos.menu.tobe.domain.MenuProductPriceChanged
-import kitchenpos.menu.tobe.domain.MenuProducts
 import kitchenpos.menu.tobe.domain.MenuRepository
 import kitchenpos.menu.tobe.infra.DefaultMenuAmountService
 import kitchenpos.menu.tobe.infra.DefaultMenuProductPriceChanged
@@ -75,10 +73,10 @@ class ProductServiceTest {
         val product = productRepository.save(Fixtures.product(name = "양념치킨", price = 16000))
 
         // when
-        val changedProduct = productService.changePrice(product.id!!, ChangeProductPriceReq(BigDecimal.valueOf(17000)))
+        productService.changePrice(product.id, ChangeProductPriceReq(BigDecimal.valueOf(17000)))
 
         // then
-        assertThat(changedProduct.price).isEqualTo(BigDecimal.valueOf(17000))
+        assertThat(product.productPrice.price).isEqualTo(BigDecimal.valueOf(17000))
     }
 
     @Test
@@ -88,28 +86,5 @@ class ProductServiceTest {
         Assertions.assertThatThrownBy {
             productService.changePrice(Fixtures.INVALID_UUID, ChangeProductPriceReq(BigDecimal.valueOf(17000)))
         }.isInstanceOf(NoSuchElementException::class.java)
-    }
-
-    @Test
-    @DisplayName("`Product price`를 변경 할 때 `Product`를 포함한 `Menu`들 중 `Menu Price > Menu Amount`인 `Menu`는 `Not Displayed`된다")
-    fun changePriceMenuNotDisplayed() {
-        // given
-        val product = productRepository.save(Fixtures.product(name = "양념치킨", price = 16000))
-        val menu = menuRepository.save(
-            Fixtures.menu(
-                menuAmountService = { BigDecimal.valueOf(32000) },
-                name = "양념치킨 세트",
-                price = 32000,
-                display = MenuDisplay.DISPLAYED,
-                menuProducts = MenuProducts(listOf(Fixtures.menuProduct(productId = product.id!!, quantity = 2)))
-            )
-        )
-
-        // when
-        val changedProduct = productService.changePrice(product.id!!, ChangeProductPriceReq(BigDecimal.valueOf(15000)))
-
-        // then
-        assertThat(changedProduct.price).isEqualTo(BigDecimal.valueOf(15000))
-        assertThat(menu.menuDisplay).isEqualTo(MenuDisplay.NOT_DISPLAYED)
     }
 }

@@ -22,7 +22,7 @@ class Menu(
 
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
-    var id: UUID? = null,
+    var id: UUID = UUID.randomUUID(),
 
     @Embedded
     val menuName: MenuName,
@@ -39,7 +39,7 @@ class Menu(
     val menuGroup: MenuGroup,
 
     @Enumerated(value = EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "displayed", nullable = false)
     @JdbcTypeCode(value = SqlTypes.VARCHAR)
     var menuDisplay: MenuDisplay,
 

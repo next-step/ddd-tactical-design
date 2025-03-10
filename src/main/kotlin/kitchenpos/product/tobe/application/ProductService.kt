@@ -12,6 +12,7 @@ import kitchenpos.product.tobe.domain.ProductNamePolicy
 import kitchenpos.product.tobe.domain.ProductPrice
 import kitchenpos.product.tobe.domain.ProductRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service("tobeProductService")
 class ProductService(
@@ -20,6 +21,7 @@ class ProductService(
     private val menuProductPriceChanged: MenuProductPriceChanged,
 ) {
 
+    @Transactional
     fun create(request: CreateProductReq): ProductResp {
         val product = productRepository.save(
             Product(
@@ -34,12 +36,11 @@ class ProductService(
         return productRepository.findAll().map(ProductResp::of)
     }
 
-    fun changePrice(productId: UUID, request: ChangeProductPriceReq): ProductResp {
+    @Transactional
+    fun changePrice(productId: UUID, request: ChangeProductPriceReq) {
         val product =
             productRepository.findById(productId).orElseThrow { throw NoSuchElementException("상품을 찾을 수 없습니다.") }
         product.changePrice(ProductPrice(request.price))
-
-        menuProductPriceChanged.changedProduct(productId)
-        return ProductResp.of(productRepository.save(product))
+        productRepository.save(product)
     }
 }

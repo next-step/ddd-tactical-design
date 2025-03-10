@@ -14,6 +14,8 @@ import jakarta.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Table(name = "menu")
 @Entity
@@ -37,6 +39,7 @@ public class Menu {
     private MenuGroup menuGroup;
 
     @Column(name = "displayed", nullable = false)
+    @JdbcTypeCode(value = SqlTypes.VARCHAR)
     private boolean displayed;
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})

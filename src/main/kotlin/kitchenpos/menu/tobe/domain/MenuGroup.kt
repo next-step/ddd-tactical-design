@@ -11,7 +11,7 @@ import java.util.*
 class MenuGroup(
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
-    var id: UUID? = null,
+    var id: UUID = UUID.randomUUID(),
 
     @Column(name = "name", nullable = false)
     val name: String,
