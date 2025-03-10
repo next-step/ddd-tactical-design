@@ -51,10 +51,6 @@ class Menu(
         validateMenuPrice(menuAmountService, menuPrice)
     }
 
-    fun amount(menuAmountService: MenuAmountService): BigDecimal {
-        return menuAmountService.amount(menuProducts)
-    }
-
     fun changePrice(menuAmountService: MenuAmountService, menuPrice: MenuPrice) {
         validateMenuPrice(menuAmountService, menuPrice)
         this.menuPrice = menuPrice
