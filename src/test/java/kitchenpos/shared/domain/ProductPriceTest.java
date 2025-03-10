@@ -1,7 +1,8 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.shared.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
 import org.junit.jupiter.api.DisplayName;

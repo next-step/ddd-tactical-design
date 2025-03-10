@@ -9,6 +9,7 @@ import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.util.UUID;
 import kitchenpos.shared.client.PurgomalumClient;
+import kitchenpos.shared.domain.ProductPrice;
 
 @Table(name = "product")
 @Entity(name = "TobeProduct")

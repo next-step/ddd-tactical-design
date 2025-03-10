@@ -39,10 +39,10 @@ public class FakeMenuRepository implements TobeMenuRepository {
     }
 
     @Override
-    public List<Menu> findAllByIdIn(List<UUID> ids) {
+    public int countAllByIdIn(List<UUID> ids) {
         return ids.stream()
             .map(dataMap::get)
             .filter(Objects::nonNull)
-            .toList();
+            .toList().size();
     }
 }

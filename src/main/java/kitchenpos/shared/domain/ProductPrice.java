@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.shared.domain;
 
 import jakarta.persistence.Embeddable;
 import java.math.BigDecimal;

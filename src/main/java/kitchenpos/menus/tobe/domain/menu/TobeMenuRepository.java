@@ -12,6 +12,6 @@ public interface TobeMenuRepository {
 
     List<Menu> findAll();
 
-    List<Menu> findAllByIdIn(List<UUID> ids);
+    int countAllByIdIn(List<UUID> ids);
 }
 

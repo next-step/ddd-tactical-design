@@ -8,7 +8,7 @@ import jakarta.persistence.OneToMany;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
-import kitchenpos.menus.tobe.domain.ohs.ProductPriceService;
+import kitchenpos.menus.tobe.domain.ProductPriceService;
 
 @Embeddable
 public class MenuProducts {

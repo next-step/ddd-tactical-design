@@ -1,22 +1,22 @@
-package kitchenpos.menus.tobe.infra.acl;
+package kitchenpos.menus.tobe.infra.ohs;
 
 import java.util.List;
 import java.util.UUID;
+import kitchenpos.annotations.OpenHostService;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.tobe.domain.acl.MenuDisplayTranslator;
-import org.springframework.stereotype.Component;
+import kitchenpos.products.tobe.domain.MenuDisplayService;
 import org.springframework.transaction.annotation.Transactional;
 
-// MenuProductPort 인터페이스의 구현체
-// ACL(Anti-Corruption Layer)의 일부로, 메뉴 바운디드 컨텍스트의 구현 세부사항을 캡슐화
-
-@Component
-public class MenuDisplayTranslatorImpl implements MenuDisplayTranslator {
+@OpenHostService(
+    description = "상품 가격 변경 시 메뉴 표시 상태를 업데이트하는 서비스",
+    downstreamContexts = {"ProductsContext"}
+)
+public class MenuDisplayServiceImpl implements MenuDisplayService {
 
     private final MenuRepository menuRepository;
 
-    public MenuDisplayTranslatorImpl(MenuRepository menuRepository) {
+    public MenuDisplayServiceImpl(MenuRepository menuRepository) {
         this.menuRepository = menuRepository;
     }
 

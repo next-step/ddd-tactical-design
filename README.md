@@ -7,6 +7,41 @@ cd docker
 docker compose -p kitchenpos up -d
 ```
 
+## Bounded Context Map
+
+![img.png](bounded_context_map_v1.png)
+
+```mermaid
+graph TB
+    %% 바운디드 컨텍스트 정의
+    E[eatInOrders Context]
+    D[deliveryOrders Context]
+    T[takeOutOrders Context]
+    M[menus Context]
+    P[products Context]
+    SK[Shared Kernel]
+
+    %% OHS 관계
+    P -- "OHS: ProductPriceServiceImpl\n(제품 가격 정보 제공)" --> M
+    M -- "OHS: MenuValidationServiceImpl\n(메뉴 유효성 제공)" --> E
+    M -- "OHS: MenuDisplayServiceImpl\n(메뉴 표시 제공)" --> P
+
+    %% ACL 관계 (주문 컨텍스트 내부 처리)
+    M -. "ACL: ProductPriceClient\n(제품 가격 모델 변환)" .-> P
+
+    %% Shared Kernel 관계 (공통 사용)
+    SK -- "ProductPrice" --> P
+    SK -- "ProductPrice" --> M
+    SK -- "OrderType" --> E
+    SK -- "OrderType" --> T
+    SK -- "OrderType" --> D
+
+    %% 스타일 지정
+    classDef context fill:#f5f5f5,stroke:#333,stroke-width:2px,rx:8px,ry:8px;
+    class E,D,T,M,P,SK context;
+```
+
+
 ## 요구 사항
 
 ### 상품

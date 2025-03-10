@@ -1,18 +1,17 @@
 package kitchenpos.products.tobe.infra.ohs;
 
-import java.math.BigDecimal;
 import java.util.NoSuchElementException;
 import java.util.UUID;
-import kitchenpos.menus.tobe.domain.ohs.ProductPriceService;
+import kitchenpos.annotations.OpenHostService;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.TobeProductRepository;
-import org.springframework.stereotype.Component;
+import kitchenpos.shared.domain.ProductPrice;
 
-// OHS(Open Host Service)
-// 서비스 제공자 Product는 사용자 Menu의 요건에 최적화된 공표된 언어(published language)를 구현한다.
-
-@Component
-public class ProductPriceServiceImpl implements ProductPriceService {
+@OpenHostService(
+    description = "상품 가격을 제공하는 서비스",
+    downstreamContexts = {"MenusContext"}
+)
+public class ProductPriceServiceImpl {
 
     private final TobeProductRepository productRepository;
 
@@ -20,11 +19,9 @@ public class ProductPriceServiceImpl implements ProductPriceService {
         this.productRepository = productRepository;
     }
 
-    @Override
-    public BigDecimal getPriceByProductId(UUID productId) {
-        final Product product = productRepository.findById(productId)
-            .orElseThrow(
-                () -> new NoSuchElementException("Product not found with id: " + productId));
-        return product.getPrice();
+    public ProductPrice getPriceByProductId(UUID productId) {
+        final Product product = productRepository.findById(productId).orElseThrow(
+            () -> new NoSuchElementException("Product not found with id: " + productId));
+        return new ProductPrice(product.getPrice());
     }
 }

@@ -3,9 +3,9 @@ package kitchenpos.products.tobe.application;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
+import kitchenpos.products.tobe.domain.MenuDisplayService;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.TobeProductRepository;
-import kitchenpos.products.tobe.domain.acl.MenuDisplayTranslator;
 import kitchenpos.products.tobe.dto.ProductRequest;
 import kitchenpos.products.tobe.dto.ProductResponse;
 import kitchenpos.shared.client.PurgomalumClient;
@@ -17,16 +17,16 @@ public class TobeProductService {
 
     private final TobeProductRepository productRepository;
     private final PurgomalumClient purgomalumClient;
-    private final MenuDisplayTranslator menuDisplayTranslator;
+    private final MenuDisplayService menuDisplayService;
 
     public TobeProductService(
         final TobeProductRepository productRepository,
         final PurgomalumClient purgomalumClient,
-        final MenuDisplayTranslator menuDisplayTranslator
+        final MenuDisplayService menuDisplayService
     ) {
         this.productRepository = productRepository;
         this.purgomalumClient = purgomalumClient;
-        this.menuDisplayTranslator = menuDisplayTranslator;
+        this.menuDisplayService = menuDisplayService;
     }
 
     @Transactional
@@ -43,8 +43,8 @@ public class TobeProductService {
                 () -> new NoSuchElementException("Product not found with id: " + productId));
         product.changePrice(request.price());
 
-        // ACL을 통한 메뉴 표시 상태 업데이트
-        menuDisplayTranslator.updateMenusDisplayStatusByProductId(productId);
+        // Menu Context 결합
+        menuDisplayService.updateMenusDisplayStatusByProductId(productId);
         return ProductResponse.from(product);
     }
 

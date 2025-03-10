@@ -17,24 +17,40 @@ public class MenuFixture {
     public static final String MENU_NAME = "간장 치킨";
     private static final FakePurgomalumClient purgomalumClient = new FakePurgomalumClient();
 
-    public static Menu create(String name, BigDecimal price, MenuGroup menuGroup,
-        List<MenuProduct> menuProducts, FakeProductPriceAdapter productPriceAdapter) {
+    public static Menu create(String name,
+        BigDecimal price,
+        MenuGroup menuGroup,
+        List<MenuProduct> menuProducts,
+        FakeProductPriceAdapter productPriceAdapter) {
 
-        return new Menu(UUID.randomUUID(), name, purgomalumClient, price, menuGroup.getId(), true,
-            menuProducts, productPriceAdapter);
+        return new Menu(
+            UUID.randomUUID(),
+            name,
+            purgomalumClient,
+            price,
+            menuGroup.getId(),
+            true,
+            menuProducts,
+            productPriceAdapter);
     }
 
     public static MenuCreateRequest createCreateRequest(UUID menuGroupId,
         List<MenuProduct> menuProducts) {
 
-        return new MenuCreateRequest(MENU_NAME, TestUtil.PRICE, menuGroupId,
+        return new MenuCreateRequest(
+            MENU_NAME,
+            TestUtil.PRICE,
+            menuGroupId,
             toMenuProductRequests(menuProducts),
             true);
     }
 
     public static MenuCreateRequest toRequest(Menu menu) {
 
-        return new MenuCreateRequest(menu.getName(), menu.getPrice(), menu.getMenuGroupId(),
+        return new MenuCreateRequest(
+            menu.getName(),
+            menu.getPrice(),
+            menu.getMenuGroupId(),
             toMenuProductRequests(menu.getMenuProducts()),
             menu.isDisplayed());
     }

@@ -2,7 +2,7 @@ package kitchenpos.mock.adapter;
 
 import java.math.BigDecimal;
 import java.util.UUID;
-import kitchenpos.menus.tobe.domain.ohs.ProductPriceService;
+import kitchenpos.menus.tobe.domain.ProductPriceService;
 import kitchenpos.mock.TestUtil;
 import kitchenpos.mock.persistence.FakeProductRepository;
 

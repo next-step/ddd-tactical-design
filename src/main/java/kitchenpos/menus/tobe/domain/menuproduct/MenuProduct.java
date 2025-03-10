@@ -10,7 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.util.UUID;
-import kitchenpos.menus.tobe.domain.ohs.ProductPriceService;
+import kitchenpos.menus.tobe.domain.ProductPriceService;
 import kitchenpos.products.tobe.domain.ProductId;
 
 @Table(name = "menu_product")

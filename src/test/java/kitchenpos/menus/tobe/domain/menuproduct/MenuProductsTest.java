@@ -30,7 +30,7 @@ class MenuProductsTest {
             new MenuProduct(seq, product.getId(), quantity),
             new MenuProduct((seq + 1), product.getId(), quantity)
         );
-        
+
         // when
         MenuProducts menuProducts = new MenuProducts(menuProductList);
 
@@ -38,12 +38,12 @@ class MenuProductsTest {
         assertThat(menuProducts).isNotNull();
         assertThat(menuProducts.getValue()).hasSize(2);
         assertThat(menuProducts.getValue()).containsExactlyElementsOf(menuProductList);
-        
-        // 각 MenuProduct의 속성 검증
+
         menuProducts.getValue().forEach(menuProduct -> {
             assertThat(menuProduct.getProductId()).isEqualTo(product.getId());
             assertThat(menuProduct.getQuantity()).isEqualTo(quantity);
-            assertThat(menuProduct.calculatePrice(productPriceAdapter)).isEqualTo(price.multiply(BigDecimal.valueOf(quantity)));
+            assertThat(menuProduct.calculatePrice(productPriceAdapter)).isEqualTo(
+                price.multiply(BigDecimal.valueOf(quantity)));
         });
     }
 

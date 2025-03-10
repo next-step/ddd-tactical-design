@@ -28,7 +28,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class TobeMenuServiceTest {
+class TobeMenuValidationServiceImplTest {
 
     private static final String MENU_NAME = "두마리 치킨";
     private static final String BAD_MENU_NAME = "bad 두마리 치킨";
