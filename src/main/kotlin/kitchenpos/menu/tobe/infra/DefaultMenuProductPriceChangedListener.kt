@@ -1,7 +1,7 @@
 package kitchenpos.menu.tobe.infra
 
 import kitchenpos.menu.tobe.domain.MenuAmountService
-import kitchenpos.menu.tobe.domain.MenuProductPriceChangedEventListener
+import kitchenpos.menu.tobe.domain.MenuProductPriceChangedListener
 import kitchenpos.menu.tobe.domain.MenuRepository
 import kitchenpos.product.tobe.domain.ProductPriceChangedEvent
 import org.springframework.stereotype.Component
@@ -9,10 +9,10 @@ import org.springframework.transaction.event.TransactionPhase
 import org.springframework.transaction.event.TransactionalEventListener
 
 @Component
-class DefaultMenuProductPriceChangedEventListener(
+class DefaultMenuProductPriceChangedListener(
     private val menuRepository: MenuRepository,
     private val amountService: MenuAmountService,
-) : MenuProductPriceChangedEventListener {
+) : MenuProductPriceChangedListener {
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     override fun handle(event: ProductPriceChangedEvent) {

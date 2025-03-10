@@ -2,7 +2,7 @@ package kitchenpos.menu.tobe.domain
 
 import java.math.BigDecimal
 import kitchenpos.menu.tobe.infra.DefaultMenuAmountService
-import kitchenpos.menu.tobe.infra.DefaultMenuProductPriceChangedEventListener
+import kitchenpos.menu.tobe.infra.DefaultMenuProductPriceChangedListener
 import kitchenpos.menu.tobe.infra.DefaultProductClient
 import kitchenpos.menu.tobe.infra.FakeMenuRepository
 import kitchenpos.product.tobe.domain.ProductPrice
@@ -16,13 +16,13 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 
-class MenuProductPriceChangedEventListenerTest {
+class MenuProductPriceChangedListenerTest {
     private lateinit var menuRepository: MenuRepository
     private lateinit var productRepository: ProductRepository
     private lateinit var menuAmountService: MenuAmountService
     private lateinit var productClient: ProductClient
 
-    private lateinit var menuProductPriceChangedEventListener: MenuProductPriceChangedEventListener
+    private lateinit var menuProductPriceChangedListener: MenuProductPriceChangedListener
 
     @BeforeEach
     fun setUp() {
@@ -30,8 +30,8 @@ class MenuProductPriceChangedEventListenerTest {
         productRepository = FakeProductRepository()
         productClient = DefaultProductClient(productRepository)
         menuAmountService = DefaultMenuAmountService(productClient)
-        menuProductPriceChangedEventListener =
-            DefaultMenuProductPriceChangedEventListener(menuRepository, menuAmountService)
+        menuProductPriceChangedListener =
+            DefaultMenuProductPriceChangedListener(menuRepository, menuAmountService)
     }
 
     @Test
@@ -68,7 +68,7 @@ class MenuProductPriceChangedEventListenerTest {
 
         // when productPrice 15000원으로 변경
         product.changePrice(ProductPrice(BigDecimal.valueOf(15_000)))
-        menuProductPriceChangedEventListener.handle(ProductPriceChangedEvent(product.id))
+        menuProductPriceChangedListener.handle(ProductPriceChangedEvent(product.id))
 
         // then
         assertAll(

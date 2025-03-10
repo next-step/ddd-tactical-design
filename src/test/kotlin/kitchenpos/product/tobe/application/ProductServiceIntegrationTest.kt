@@ -3,7 +3,7 @@ package kitchenpos.product.tobe.application
 import java.math.BigDecimal
 import kitchenpos.menu.tobe.domain.MenuDisplay
 import kitchenpos.menu.tobe.domain.MenuGroupRepository
-import kitchenpos.menu.tobe.domain.MenuProductPriceChangedEventListener
+import kitchenpos.menu.tobe.domain.MenuProductPriceChangedListener
 import kitchenpos.menu.tobe.domain.MenuProducts
 import kitchenpos.menu.tobe.domain.MenuRepository
 import kitchenpos.product.tobe.application.dto.ChangeProductPriceReq
@@ -32,7 +32,7 @@ class ProductServiceIntegrationTest {
     private lateinit var events: ApplicationEvents
 
     @SpyBean
-    private lateinit var menuProductPriceChangedEventListener: MenuProductPriceChangedEventListener
+    private lateinit var menuProductPriceChangedListener: MenuProductPriceChangedListener
 
     @Autowired
     private lateinit var productRepository: ProductRepository
@@ -95,7 +95,7 @@ class ProductServiceIntegrationTest {
         // given
         val product = productRepository.save(Fixtures.product(name = "양념치킨", price = 16000))
         doThrow(RuntimeException::class.java)
-            .`when`(menuProductPriceChangedEventListener)
+            .`when`(menuProductPriceChangedListener)
             .handle(any())
 
         // when
