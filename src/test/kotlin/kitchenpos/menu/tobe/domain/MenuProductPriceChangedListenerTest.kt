@@ -1,7 +1,6 @@
 package kitchenpos.menu.tobe.domain
 
 import java.math.BigDecimal
-import kitchenpos.menu.tobe.application.DefaultMenuAmountService
 import kitchenpos.menu.tobe.application.MenuProductPriceChangedListener
 import kitchenpos.menu.tobe.infra.DefaultProductClient
 import kitchenpos.menu.tobe.infra.FakeMenuRepository
@@ -19,7 +18,6 @@ import org.junit.jupiter.api.assertAll
 class MenuProductPriceChangedListenerTest {
     private lateinit var menuRepository: MenuRepository
     private lateinit var productRepository: ProductRepository
-    private lateinit var menuAmountService: MenuAmountService
     private lateinit var productClient: ProductClient
 
     private lateinit var menuProductPriceChangedListener: MenuProductPriceChangedListener
@@ -29,11 +27,10 @@ class MenuProductPriceChangedListenerTest {
         menuRepository = FakeMenuRepository()
         productRepository = FakeProductRepository()
         productClient = DefaultProductClient(productRepository)
-        menuAmountService = DefaultMenuAmountService(productClient)
         menuProductPriceChangedListener =
             MenuProductPriceChangedListener(
                 menuRepository,
-                menuAmountService
+                productClient
             )
     }
 
@@ -46,7 +43,7 @@ class MenuProductPriceChangedListenerTest {
 
         // given menuPrice 14000원, 16000원
         val menu_14000 = Fixtures.menu(
-            menuAmountService = menuAmountService,
+            productClient = productClient,
             price = 14_000,
             display = MenuDisplay.DISPLAYED,
             menuProducts = MenuProducts(
@@ -56,7 +53,7 @@ class MenuProductPriceChangedListenerTest {
             )
         )
         val menu_16000 = Fixtures.menu(
-            menuAmountService = menuAmountService,
+            productClient = productClient,
             price = 16_000,
             display = MenuDisplay.DISPLAYED,
             menuProducts = MenuProducts(

@@ -3,7 +3,6 @@ package kitchenpos.menu.tobe.application
 import java.math.BigDecimal
 import kitchenpos.menu.tobe.application.dto.CreateMenuProductReq
 import kitchenpos.menu.tobe.application.dto.CreateMenuReq
-import kitchenpos.menu.tobe.domain.MenuAmountService
 import kitchenpos.menu.tobe.domain.MenuDisplay
 import kitchenpos.menu.tobe.domain.MenuGroup
 import kitchenpos.menu.tobe.domain.MenuGroupRepository
@@ -33,7 +32,6 @@ class MenuServiceTest {
     private lateinit var menuGroupRepository: MenuGroupRepository
     private lateinit var productRepository: ProductRepository
     private lateinit var productClient: ProductClient
-    private lateinit var menuAmountService: MenuAmountService
 
     private lateinit var menuGroup: MenuGroup
     private lateinit var product: Product
@@ -44,14 +42,13 @@ class MenuServiceTest {
         menuGroupRepository = FakeMenuGroupRepository()
         productRepository = FakeProductRepository()
         productClient = DefaultProductClient(productRepository)
-        menuAmountService = DefaultMenuAmountService(productClient)
         menuService =
             MenuService(
                 menuRepository,
                 menuGroupRepository,
                 productRepository,
                 MenuNamePolicy(FakeProfanities()),
-                menuAmountService
+                productClient
             )
 
         menuGroup = menuGroupRepository.save(Fixtures.menuGroup(name = "추천메뉴"))
@@ -63,7 +60,7 @@ class MenuServiceTest {
     fun create() {
         // given
         val request = CreateMenuReq(
-            menuGroupId = menuGroup.id!!,
+            menuGroupId = menuGroup.id,
             name = "후라이드1마리",
             price = 16_000,
             display = MenuDisplay.DISPLAYED,
@@ -171,7 +168,7 @@ class MenuServiceTest {
         // given
         val menu = menuRepository.save(
             Fixtures.menu(
-                menuAmountService = menuAmountService,
+                productClient = productClient,
                 name = "후라이드2마리",
                 price = 32_000,
                 display = MenuDisplay.DISPLAYED,
@@ -215,7 +212,7 @@ class MenuServiceTest {
         // given
         val menu = menuRepository.save(
             Fixtures.menu(
-                menuAmountService = menuAmountService,
+                productClient = productClient,
                 name = "후라이드2마리",
                 price = 32_000,
                 display = MenuDisplay.DISPLAYED,
@@ -241,7 +238,7 @@ class MenuServiceTest {
         // given
         val menu = menuRepository.save(
             Fixtures.menu(
-                menuAmountService = menuAmountService,
+                productClient = productClient,
                 name = "후라이드2마리",
                 price = 32_000,
                 display = MenuDisplay.NOT_DISPLAYED,
@@ -274,7 +271,7 @@ class MenuServiceTest {
         // given
         val menu = menuRepository.save(
             Fixtures.menu(
-                menuAmountService = menuAmountService,
+                productClient = productClient,
                 name = "후라이드2마리",
                 price = 32_000,
                 display = MenuDisplay.DISPLAYED,

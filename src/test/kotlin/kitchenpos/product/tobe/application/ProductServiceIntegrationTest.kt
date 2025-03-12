@@ -6,6 +6,7 @@ import kitchenpos.menu.tobe.domain.MenuDisplay
 import kitchenpos.menu.tobe.domain.MenuGroupRepository
 import kitchenpos.menu.tobe.domain.MenuProducts
 import kitchenpos.menu.tobe.domain.MenuRepository
+import kitchenpos.menu.tobe.domain.ProductClient
 import kitchenpos.product.tobe.application.dto.ChangeProductPriceReq
 import kitchenpos.product.tobe.application.dto.CreateProductReq
 import kitchenpos.product.tobe.domain.ProductPriceChangedEvent
@@ -38,6 +39,9 @@ class ProductServiceIntegrationTest {
     private lateinit var productRepository: ProductRepository
 
     @Autowired
+    private lateinit var productClient: ProductClient
+
+    @Autowired
     private lateinit var menuRepository: MenuRepository
 
     @Autowired
@@ -68,8 +72,8 @@ class ProductServiceIntegrationTest {
         val product = productRepository.save(Fixtures.product(name = "양념치킨", price = 16000))
         val menu = menuRepository.save(
             Fixtures.menu(
+                productClient = productClient,
                 menuGroup = menuGroup,
-                menuAmountService = { BigDecimal.valueOf(32000) },
                 name = "양념치킨 세트",
                 price = 32000,
                 display = MenuDisplay.DISPLAYED,

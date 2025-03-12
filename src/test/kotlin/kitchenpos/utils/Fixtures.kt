@@ -2,7 +2,6 @@ package kitchenpos.utils
 
 import java.util.*
 import kitchenpos.menu.tobe.domain.Menu
-import kitchenpos.menu.tobe.domain.MenuAmountService
 import kitchenpos.menu.tobe.domain.MenuDisplay
 import kitchenpos.menu.tobe.domain.MenuGroup
 import kitchenpos.menu.tobe.domain.MenuName
@@ -10,6 +9,7 @@ import kitchenpos.menu.tobe.domain.MenuNamePolicy
 import kitchenpos.menu.tobe.domain.MenuPrice
 import kitchenpos.menu.tobe.domain.MenuProduct
 import kitchenpos.menu.tobe.domain.MenuProducts
+import kitchenpos.menu.tobe.domain.ProductClient
 import kitchenpos.product.tobe.domain.Product
 import kitchenpos.product.tobe.domain.ProductName
 import kitchenpos.product.tobe.domain.ProductNamePolicy
@@ -31,7 +31,7 @@ class Fixtures {
         }
 
         fun menu(
-            menuAmountService: MenuAmountService,
+            productClient: ProductClient,
             name: String = "후라이드1마리",
             price: Long,
             display: MenuDisplay = MenuDisplay.DISPLAYED,
@@ -39,7 +39,7 @@ class Fixtures {
             menuProducts: MenuProducts = MenuProducts(listOf(menuProduct())),
         ): Menu {
             return Menu(
-                menuAmountService = menuAmountService,
+                productClient = productClient,
                 menuName = MenuName(MenuNamePolicy(FakeProfanities()), name),
                 menuPrice = MenuPrice(price.toBigDecimal()),
                 menuDisplay = display,

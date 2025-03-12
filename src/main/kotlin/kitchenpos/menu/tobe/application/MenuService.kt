@@ -4,7 +4,6 @@ import java.util.*
 import kitchenpos.menu.tobe.application.dto.CreateMenuReq
 import kitchenpos.menu.tobe.application.dto.MenuResp
 import kitchenpos.menu.tobe.domain.Menu
-import kitchenpos.menu.tobe.domain.MenuAmountService
 import kitchenpos.menu.tobe.domain.MenuGroupRepository
 import kitchenpos.menu.tobe.domain.MenuName
 import kitchenpos.menu.tobe.domain.MenuNamePolicy
@@ -12,6 +11,7 @@ import kitchenpos.menu.tobe.domain.MenuPrice
 import kitchenpos.menu.tobe.domain.MenuProduct
 import kitchenpos.menu.tobe.domain.MenuProducts
 import kitchenpos.menu.tobe.domain.MenuRepository
+import kitchenpos.menu.tobe.domain.ProductClient
 import kitchenpos.product.tobe.application.dto.ChangeProductPriceReq
 import kitchenpos.product.tobe.domain.ProductRepository
 import org.springframework.stereotype.Service
@@ -23,7 +23,7 @@ class MenuService(
     private val menuGroupRepository: MenuGroupRepository,
     private val productRepository: ProductRepository,
     private val menuNamePolicy: MenuNamePolicy,
-    private val menuAmountService: MenuAmountService,
+    private val productClient: ProductClient,
 ) {
     @Transactional
     fun create(request: CreateMenuReq): MenuResp {
@@ -32,7 +32,7 @@ class MenuService(
         val products = productRepository.findAllByIdIn(request.menuProducts.map { it.productId })
 
         val menu = Menu(
-            menuAmountService = menuAmountService,
+            productClient = productClient,
             menuName = MenuName(menuNamePolicy = menuNamePolicy, name = request.name),
             menuPrice = MenuPrice(request.price.toBigDecimal()),
             menuGroup = menuGroup,
@@ -51,7 +51,7 @@ class MenuService(
     fun changePrice(menuId: UUID, request: ChangeProductPriceReq) {
         val menu = menuRepository.findById(menuId)
             .orElseThrow { NoSuchElementException("존재하지 않는 메뉴입니다.") }
-        menu.changePrice(menuAmountService = menuAmountService, MenuPrice(request.price))
+        menu.changePrice(productClient = productClient, MenuPrice(request.price))
         menuRepository.save(menu)
     }
 
@@ -59,7 +59,7 @@ class MenuService(
     fun display(menuId: UUID) {
         val menu = menuRepository.findById(menuId)
             .orElseThrow { NoSuchElementException("존재하지 않는 메뉴입니다.") }
-        menu.display(menuAmountService)
+        menu.display(productClient)
     }
 
     @Transactional

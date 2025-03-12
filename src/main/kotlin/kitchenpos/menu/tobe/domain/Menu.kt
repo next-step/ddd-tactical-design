@@ -10,7 +10,6 @@ import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
-import java.math.BigDecimal
 import java.util.*
 import org.hibernate.annotations.JdbcTypeCode
 import org.hibernate.type.SqlTypes
@@ -18,7 +17,7 @@ import org.hibernate.type.SqlTypes
 @Table(name = "menu")
 @Entity(name = "TobeMenu")
 class Menu(
-    menuAmountService: MenuAmountService,
+    productClient: ProductClient,
 
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
@@ -48,16 +47,16 @@ class Menu(
 ) {
 
     init {
-        validateMenuPrice(menuAmountService, menuPrice)
+        validateMenuPrice(productClient, menuPrice)
     }
 
-    fun changePrice(menuAmountService: MenuAmountService, menuPrice: MenuPrice) {
-        validateMenuPrice(menuAmountService, menuPrice)
+    fun changePrice(productClient: ProductClient, menuPrice: MenuPrice) {
+        validateMenuPrice(productClient, menuPrice)
         this.menuPrice = menuPrice
     }
 
-    fun display(menuAmountService: MenuAmountService) {
-        validateMenuPrice(menuAmountService, menuPrice)
+    fun display(productClient: ProductClient) {
+        validateMenuPrice(productClient, menuPrice)
         menuDisplay = MenuDisplay.DISPLAYED
     }
 
@@ -65,12 +64,12 @@ class Menu(
         menuDisplay = MenuDisplay.NOT_DISPLAYED
     }
 
-    fun canDisplay(menuAmountService: MenuAmountService): Boolean {
-        return menuPrice.price <= menuAmountService.amount(menuProducts)
+    fun canDisplay(productClient: ProductClient): Boolean {
+        return menuPrice.price <= menuProducts.amount(productClient)
     }
 
-    private fun validateMenuPrice(menuAmountService: MenuAmountService, menuPrice: MenuPrice) {
-        if (menuPrice.price > menuAmountService.amount(menuProducts)) {
+    private fun validateMenuPrice(productClient: ProductClient, menuPrice: MenuPrice) {
+        if (menuPrice.price > menuProducts.amount(productClient)) {
             throw IllegalArgumentException("메뉴가격은 메뉴금액 이하여야 합니다.")
         }
     }

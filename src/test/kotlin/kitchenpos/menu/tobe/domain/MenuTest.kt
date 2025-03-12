@@ -10,16 +10,24 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
 class MenuTest {
-    private lateinit var menuGroup: MenuGroup
-    private lateinit var productId1: UUID
-    private lateinit var productId2: UUID
+    private lateinit var productClient: ProductClient
+
+    private val menuGroup: MenuGroup = Fixtures.menuGroup(name = "추천메뉴")
+    private val productId1: UUID = UUID.randomUUID()
+    private val productId2: UUID = UUID.randomUUID()
 
 
     @BeforeEach
     fun setUp() {
-        menuGroup = Fixtures.menuGroup(name = "추천메뉴")
-        productId1 = UUID.randomUUID()
-        productId2 = UUID.randomUUID()
+        productClient = object : ProductClient {
+            override fun getProductPrice(productId: UUID): BigDecimal {
+                return when (productId) {
+                    productId1 -> BigDecimal.valueOf(16000)
+                    productId2 -> BigDecimal.valueOf(17000)
+                    else -> throw IllegalArgumentException()
+                }
+            }
+        }
     }
 
 
@@ -28,7 +36,7 @@ class MenuTest {
     fun create() {
         // when
         val menu = Fixtures.menu(
-            menuAmountService = { BigDecimal.valueOf(33000) },
+            productClient = productClient,
             name = "후라이드+양념치킨",
             price = 33000,
             display = MenuDisplay.DISPLAYED,
@@ -55,7 +63,7 @@ class MenuTest {
         // given
         val menuAmount = BigDecimal.valueOf(32000)
         val menu = Fixtures.menu(
-            menuAmountService = { menuAmount },
+            productClient = productClient,
             name = "후라이드2마리",
             price = 32000,
             display = MenuDisplay.DISPLAYED,
@@ -67,7 +75,7 @@ class MenuTest {
         )
 
         // when
-        menu.changePrice({ menuAmount }, MenuPrice(BigDecimal.valueOf(31000)))
+        menu.changePrice(productClient, MenuPrice(BigDecimal.valueOf(31000)))
 
         // then
         assertThat(menu.menuPrice.price).isEqualTo(BigDecimal.valueOf(31000))
@@ -79,7 +87,7 @@ class MenuTest {
         // given
         val menuAmount = BigDecimal.valueOf(32000)
         val menu = Fixtures.menu(
-            menuAmountService = { menuAmount },
+            productClient = productClient,
             name = "후라이드2마리",
             price = 32000,
             display = MenuDisplay.DISPLAYED,
@@ -92,7 +100,7 @@ class MenuTest {
 
         // when then
         assertThatIllegalArgumentException().isThrownBy {
-            menu.changePrice({ menuAmount }, MenuPrice(BigDecimal.valueOf(33000)))
+            menu.changePrice(productClient, MenuPrice(BigDecimal.valueOf(33000)))
         }
     }
 
@@ -100,9 +108,8 @@ class MenuTest {
     @DisplayName("Menu를 Display한다")
     fun displayMenu() {
         // given
-        val menuAmount = BigDecimal.valueOf(32000)
         val menu = Fixtures.menu(
-            menuAmountService = { menuAmount },
+            productClient = productClient,
             name = "후라이드2마리",
             price = 32000,
             display = MenuDisplay.NOT_DISPLAYED,
@@ -114,7 +121,7 @@ class MenuTest {
         )
 
         // when
-        menu.display({ menuAmount })
+        menu.display(productClient)
 
         // then
         assertThat(menu.menuDisplay).isEqualTo(MenuDisplay.DISPLAYED)
@@ -125,7 +132,7 @@ class MenuTest {
     fun displayMenuFail() {
         // given
         val menu = Fixtures.menu(
-            menuAmountService = { BigDecimal.valueOf(32000) },
+            productClient = productClient,
             name = "후라이드2마리",
             price = 32000,
             display = MenuDisplay.NOT_DISPLAYED,
@@ -137,11 +144,18 @@ class MenuTest {
         )
 
         // given 변경된 메뉴금액
-        val menuAmount = BigDecimal.valueOf(31000)
+        productClient = object : ProductClient {
+            override fun getProductPrice(productId: UUID): BigDecimal {
+                return when (productId) {
+                    productId1 -> BigDecimal.valueOf(15000)
+                    else -> throw IllegalArgumentException()
+                }
+            }
+        }
 
         // when then
         assertThatIllegalArgumentException().isThrownBy {
-            menu.display({ menuAmount })
+            menu.display(productClient)
         }
     }
 
@@ -150,7 +164,7 @@ class MenuTest {
     fun notDisplayMenu() {
         // given
         val menu = Fixtures.menu(
-            menuAmountService = { BigDecimal.valueOf(32000) },
+            productClient = productClient,
             name = "후라이드2마리",
             price = 32000,
             display = MenuDisplay.DISPLAYED,
