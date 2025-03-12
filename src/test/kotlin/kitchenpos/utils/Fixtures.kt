@@ -6,14 +6,14 @@ import kitchenpos.menu.tobe.domain.MenuAmountService
 import kitchenpos.menu.tobe.domain.MenuDisplay
 import kitchenpos.menu.tobe.domain.MenuGroup
 import kitchenpos.menu.tobe.domain.MenuName
+import kitchenpos.menu.tobe.domain.MenuNamePolicy
 import kitchenpos.menu.tobe.domain.MenuPrice
 import kitchenpos.menu.tobe.domain.MenuProduct
 import kitchenpos.menu.tobe.domain.MenuProducts
-import kitchenpos.menu.tobe.infra.DefaultMenuNamePolicy
 import kitchenpos.product.tobe.domain.Product
 import kitchenpos.product.tobe.domain.ProductName
+import kitchenpos.product.tobe.domain.ProductNamePolicy
 import kitchenpos.product.tobe.domain.ProductPrice
-import kitchenpos.product.tobe.infra.DefaultProductNamePolicy
 import kitchenpos.product.tobe.infra.FakeProfanities
 
 class Fixtures {
@@ -25,7 +25,7 @@ class Fixtures {
             price: Long
         ): Product {
             return Product(
-                productName = ProductName(DefaultProductNamePolicy(FakeProfanities()), name),
+                productName = ProductName(ProductNamePolicy(FakeProfanities()), name),
                 productPrice = ProductPrice(price.toBigDecimal())
             )
         }
@@ -40,7 +40,7 @@ class Fixtures {
         ): Menu {
             return Menu(
                 menuAmountService = menuAmountService,
-                menuName = MenuName(DefaultMenuNamePolicy(FakeProfanities()), name),
+                menuName = MenuName(MenuNamePolicy(FakeProfanities()), name),
                 menuPrice = MenuPrice(price.toBigDecimal()),
                 menuDisplay = display,
                 menuGroup = menuGroup,

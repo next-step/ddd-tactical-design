@@ -1,7 +1,7 @@
 package kitchenpos.menu.tobe.domain
 
 import java.math.BigDecimal
-import kitchenpos.menu.tobe.infra.DefaultMenuAmountService
+import kitchenpos.menu.tobe.application.DefaultMenuAmountService
 import kitchenpos.menu.tobe.infra.DefaultProductClient
 import kitchenpos.product.tobe.domain.ProductRepository
 import kitchenpos.product.tobe.infra.FakeProductRepository

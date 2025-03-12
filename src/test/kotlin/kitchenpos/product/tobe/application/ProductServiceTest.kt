@@ -7,8 +7,8 @@ import kitchenpos.menu.tobe.infra.DefaultProductClient
 import kitchenpos.menu.tobe.infra.FakeMenuRepository
 import kitchenpos.product.tobe.application.dto.ChangeProductPriceReq
 import kitchenpos.product.tobe.application.dto.CreateProductReq
+import kitchenpos.product.tobe.domain.ProductNamePolicy
 import kitchenpos.product.tobe.domain.ProductRepository
-import kitchenpos.product.tobe.infra.DefaultProductNamePolicy
 import kitchenpos.product.tobe.infra.FakeProductRepository
 import kitchenpos.product.tobe.infra.FakeProfanities
 import kitchenpos.utils.Fixtures
@@ -29,7 +29,7 @@ class ProductServiceTest {
         productRepository = FakeProductRepository()
         productClient = DefaultProductClient(productRepository)
         menuRepository = FakeMenuRepository()
-        productService = ProductService(productRepository, DefaultProductNamePolicy(FakeProfanities()))
+        productService = ProductService(productRepository, ProductNamePolicy(FakeProfanities()))
     }
 
     @Test

@@ -1,9 +1,9 @@
 package kitchenpos.product.tobe.application
 
 import java.math.BigDecimal
+import kitchenpos.menu.tobe.application.MenuProductPriceChangedListener
 import kitchenpos.menu.tobe.domain.MenuDisplay
 import kitchenpos.menu.tobe.domain.MenuGroupRepository
-import kitchenpos.menu.tobe.domain.MenuProductPriceChangedListener
 import kitchenpos.menu.tobe.domain.MenuProducts
 import kitchenpos.menu.tobe.domain.MenuRepository
 import kitchenpos.product.tobe.application.dto.ChangeProductPriceReq

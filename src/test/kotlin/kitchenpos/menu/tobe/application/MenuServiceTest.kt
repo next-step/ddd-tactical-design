@@ -7,11 +7,10 @@ import kitchenpos.menu.tobe.domain.MenuAmountService
 import kitchenpos.menu.tobe.domain.MenuDisplay
 import kitchenpos.menu.tobe.domain.MenuGroup
 import kitchenpos.menu.tobe.domain.MenuGroupRepository
+import kitchenpos.menu.tobe.domain.MenuNamePolicy
 import kitchenpos.menu.tobe.domain.MenuProducts
 import kitchenpos.menu.tobe.domain.MenuRepository
 import kitchenpos.menu.tobe.domain.ProductClient
-import kitchenpos.menu.tobe.infra.DefaultMenuAmountService
-import kitchenpos.menu.tobe.infra.DefaultMenuNamePolicy
 import kitchenpos.menu.tobe.infra.DefaultProductClient
 import kitchenpos.menu.tobe.infra.FakeMenuGroupRepository
 import kitchenpos.menu.tobe.infra.FakeMenuRepository
@@ -51,7 +50,7 @@ class MenuServiceTest {
                 menuRepository,
                 menuGroupRepository,
                 productRepository,
-                DefaultMenuNamePolicy(FakeProfanities()),
+                MenuNamePolicy(FakeProfanities()),
                 menuAmountService
             )
 

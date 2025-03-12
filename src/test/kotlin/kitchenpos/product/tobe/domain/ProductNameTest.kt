@@ -1,6 +1,5 @@
 package kitchenpos.product.tobe.domain
 
-import kitchenpos.product.tobe.infra.DefaultProductNamePolicy
 import kitchenpos.product.tobe.infra.FakeProfanities
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -16,7 +15,7 @@ class ProductNameTest {
     @DisplayName("`ProductName`을 생성한다")
     fun createProductName() {
         val name = "양념치킨"
-        val productName = ProductName(productNamePolicy = DefaultProductNamePolicy(FakeProfanities()), name = name)
+        val productName = ProductName(productNamePolicy = ProductNamePolicy(FakeProfanities()), name = name)
 
         assertEquals(name, productName.name)
     }
@@ -26,7 +25,7 @@ class ProductNameTest {
     @ParameterizedTest
     fun createProductNameFail(name: String) {
         assertThatIllegalArgumentException().isThrownBy {
-            ProductName(productNamePolicy = DefaultProductNamePolicy(FakeProfanities()), name = name)
+            ProductName(productNamePolicy = ProductNamePolicy(FakeProfanities()), name = name)
         }
     }
 
@@ -35,7 +34,7 @@ class ProductNameTest {
     @CsvSource(value = ["욕설상품", "비속어"])
     fun createProductNameProfanityFail(name: String) {
         assertThatIllegalArgumentException().isThrownBy {
-            ProductName(productNamePolicy = DefaultProductNamePolicy(FakeProfanities(listOf("욕설", "비속어"))), name = name)
+            ProductName(productNamePolicy = ProductNamePolicy(FakeProfanities(listOf("욕설", "비속어"))), name = name)
         }
     }
 

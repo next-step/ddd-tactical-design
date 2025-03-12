@@ -1,4 +1,4 @@
-package kitchenpos.menu.tobe.infra
+package kitchenpos.menu.tobe.application
 
 import java.math.BigDecimal
 import kitchenpos.common.annotation.DomainService

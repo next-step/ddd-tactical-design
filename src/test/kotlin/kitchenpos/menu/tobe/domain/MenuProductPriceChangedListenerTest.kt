@@ -1,8 +1,8 @@
 package kitchenpos.menu.tobe.domain
 
 import java.math.BigDecimal
-import kitchenpos.menu.tobe.infra.DefaultMenuAmountService
-import kitchenpos.menu.tobe.infra.DefaultMenuProductPriceChangedListener
+import kitchenpos.menu.tobe.application.DefaultMenuAmountService
+import kitchenpos.menu.tobe.application.MenuProductPriceChangedListener
 import kitchenpos.menu.tobe.infra.DefaultProductClient
 import kitchenpos.menu.tobe.infra.FakeMenuRepository
 import kitchenpos.product.tobe.domain.ProductPrice
@@ -31,7 +31,10 @@ class MenuProductPriceChangedListenerTest {
         productClient = DefaultProductClient(productRepository)
         menuAmountService = DefaultMenuAmountService(productClient)
         menuProductPriceChangedListener =
-            DefaultMenuProductPriceChangedListener(menuRepository, menuAmountService)
+            MenuProductPriceChangedListener(
+                menuRepository,
+                menuAmountService
+            )
     }
 
     @Test

@@ -1,7 +1,6 @@
 package kitchenpos.product.tobe.domain
 
 import java.math.BigDecimal
-import kitchenpos.product.tobe.infra.DefaultProductNamePolicy
 import kitchenpos.product.tobe.infra.FakeProfanities
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
@@ -10,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 
 class ProductTest {
-    private val productNamePolicy: ProductNamePolicy = DefaultProductNamePolicy(FakeProfanities())
+    private val productNamePolicy: ProductNamePolicy = ProductNamePolicy(FakeProfanities())
 
     @Test
     @DisplayName("`Product`를 등록한다")
