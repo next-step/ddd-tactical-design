@@ -1,31 +1,33 @@
 package kitchenpos.menu.tobe.domain
 
-import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
+import jakarta.persistence.Embedded
 import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
 import jakarta.persistence.ForeignKey
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
-import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
-import jakarta.persistence.Transient
-import java.math.BigDecimal
 import java.util.*
-import kitchenpos.menu.domain.MenuGroup
+import org.hibernate.annotations.JdbcTypeCode
+import org.hibernate.type.SqlTypes
 
 @Table(name = "menu")
 @Entity(name = "TobeMenu")
 class Menu(
+    productInfos: Map<UUID, ProductInfo>,
+
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
-    var id: UUID? = null,
+    var id: UUID = UUID.randomUUID(),
 
-    @Column(name = "name", nullable = false)
-    val name: String,
+    @Embedded
+    val menuName: MenuName,
 
-    @Column(name = "price", nullable = false)
-    var price: BigDecimal,
+    @Embedded
+    var menuPrice: MenuPrice,
 
     @ManyToOne(optional = false)
     @JoinColumn(
@@ -35,32 +37,47 @@ class Menu(
     )
     val menuGroup: MenuGroup,
 
+    @Enumerated(value = EnumType.STRING)
     @Column(name = "displayed", nullable = false)
-    var displayed: Boolean,
+    @JdbcTypeCode(value = SqlTypes.VARCHAR)
+    var menuDisplay: MenuDisplay,
 
-    @OneToMany(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
-    @JoinColumn(
-        name = "menu_id",
-        nullable = false,
-        columnDefinition = "binary(16)",
-        foreignKey = ForeignKey(name = "fk_menu_product_to_menu")
-    )
-    val menuProducts: List<MenuProduct>,
-
-    @Transient
-    val menuGroupId: UUID,
+    @Embedded
+    val menuProducts: MenuProducts,
 ) {
 
-    fun amount(): BigDecimal {
-        var sum = BigDecimal.ZERO
-        for (menuProduct in menuProducts) {
-            sum = sum.add(
-                menuProduct.product
-                    .price
-                    .multiply(BigDecimal.valueOf(menuProduct.quantity))
-            )
-        }
-        return sum
+    init {
+        validateMenuPrice(productInfos)
     }
 
+    fun changePrice(productPrices: Map<UUID, ProductInfo>, changeMenuPrice: MenuPrice) {
+        validateMenuPrice(productPrices, changeMenuPrice)
+        this.menuPrice = changeMenuPrice
+    }
+
+    fun display(productPrices: Map<UUID, ProductInfo>) {
+        validateMenuPrice(productPrices)
+        menuDisplay = MenuDisplay.DISPLAYED
+    }
+
+    fun canDisplay(productPrices: Map<UUID, ProductInfo>): Boolean {
+        return menuPrice.price <= menuProducts.amount(productPrices)
+    }
+
+    fun notDisplay() {
+        menuDisplay = MenuDisplay.NOT_DISPLAYED
+    }
+
+    fun productIds(): List<UUID> {
+        return menuProducts.productIds()
+    }
+
+    private fun validateMenuPrice(
+        productInfos: Map<UUID, ProductInfo>,
+        menuPrice: MenuPrice = this.menuPrice
+    ) {
+        if (menuPrice.price > menuProducts.amount(productInfos)) {
+            throw IllegalArgumentException("메뉴가격은 메뉴금액 이하여야 합니다.")
+        }
+    }
 }

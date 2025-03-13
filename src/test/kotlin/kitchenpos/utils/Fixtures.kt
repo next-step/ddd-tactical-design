@@ -1,12 +1,19 @@
 package kitchenpos.utils
 
 import java.util.*
-import kitchenpos.menu.domain.MenuGroup
 import kitchenpos.menu.tobe.domain.Menu
+import kitchenpos.menu.tobe.domain.MenuDisplay
+import kitchenpos.menu.tobe.domain.MenuGroup
+import kitchenpos.menu.tobe.domain.MenuName
+import kitchenpos.menu.tobe.domain.MenuNamePolicy
+import kitchenpos.menu.tobe.domain.MenuPrice
 import kitchenpos.menu.tobe.domain.MenuProduct
+import kitchenpos.menu.tobe.domain.MenuProducts
+import kitchenpos.menu.tobe.domain.ProductInfo
 import kitchenpos.product.tobe.domain.Product
 import kitchenpos.product.tobe.domain.ProductName
 import kitchenpos.product.tobe.domain.ProductNamePolicy
+import kitchenpos.product.tobe.domain.ProductPrice
 import kitchenpos.product.tobe.infra.FakeProfanities
 
 class Fixtures {
@@ -14,54 +21,50 @@ class Fixtures {
         val INVALID_UUID = UUID(0L, 0L);
 
         fun product(
-            id: UUID = UUID.randomUUID(),
-            name: String,
+            name: String = "후라이드",
             price: Long
         ): Product {
             return Product(
-                id = id,
                 productName = ProductName(ProductNamePolicy(FakeProfanities()), name),
-                price = price.toBigDecimal()
+                productPrice = ProductPrice(price.toBigDecimal())
             )
         }
 
         fun menu(
-            id: UUID = UUID.randomUUID(),
-            name: String,
+            productInfos: Map<UUID, ProductInfo>,
+            name: String = "후라이드1마리",
             price: Long,
-            displayed: Boolean,
+            display: MenuDisplay = MenuDisplay.DISPLAYED,
             menuGroup: MenuGroup = menuGroup(),
-            menuProducts: List<MenuProduct> = emptyList()
+            menuProducts: MenuProducts = MenuProducts(listOf(menuProduct())),
         ): Menu {
             return Menu(
-                id = id,
-                name = name,
-                price = price.toBigDecimal(),
-                displayed = displayed,
+                productInfos = productInfos,
+                menuName = MenuName(MenuNamePolicy(FakeProfanities()), name),
+                menuPrice = MenuPrice(price.toBigDecimal()),
+                menuDisplay = display,
                 menuGroup = menuGroup,
                 menuProducts = menuProducts,
-                menuGroupId = menuGroup.id
             )
         }
 
         fun menuProduct(
-            product: Product,
-            quantity: Long,
+            seq: Long = 1,
+            productId: UUID = UUID.randomUUID(),
+            quantity: Long = 1,
         ): MenuProduct {
             return MenuProduct(
-                product = product,
-                quantity = quantity,
-                productId = product.id!!
+                seq = seq,
+                productId = productId,
+                quantity = quantity
             )
         }
 
+
         fun menuGroup(
-            id: UUID = UUID.randomUUID(),
-            name: String = "두마리메뉴",
+            name: String = "추천메뉴",
         ): MenuGroup {
-            val menuGroup = MenuGroup()
-            menuGroup.id = id
-            menuGroup.name = name
+            val menuGroup = MenuGroup(name = name)
             return menuGroup
         }
     }

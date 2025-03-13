@@ -1,11 +1,11 @@
 package kitchenpos.product.tobe.application
 
 import java.math.BigDecimal
-import kitchenpos.common.domain.Profanities
 import kitchenpos.menu.tobe.domain.MenuRepository
 import kitchenpos.menu.tobe.infra.FakeMenuRepository
 import kitchenpos.product.tobe.application.dto.ChangeProductPriceReq
 import kitchenpos.product.tobe.application.dto.CreateProductReq
+import kitchenpos.product.tobe.domain.ProductNamePolicy
 import kitchenpos.product.tobe.domain.ProductRepository
 import kitchenpos.product.tobe.infra.FakeProductRepository
 import kitchenpos.product.tobe.infra.FakeProfanities
@@ -19,15 +19,13 @@ import org.junit.jupiter.api.Test
 class ProductServiceTest {
     private lateinit var productRepository: ProductRepository
     private lateinit var menuRepository: MenuRepository
-    private lateinit var profanities: Profanities
     private lateinit var productService: ProductService
 
     @BeforeEach
     fun setUp() {
         productRepository = FakeProductRepository()
         menuRepository = FakeMenuRepository()
-        profanities = FakeProfanities()
-        productService = ProductService(productRepository, menuRepository, profanities)
+        productService = ProductService(productRepository, ProductNamePolicy(FakeProfanities()))
     }
 
     @Test
@@ -67,10 +65,10 @@ class ProductServiceTest {
         val product = productRepository.save(Fixtures.product(name = "양념치킨", price = 16000))
 
         // when
-        val changedProduct = productService.changePrice(product.id!!, ChangeProductPriceReq(BigDecimal.valueOf(17000)))
+        productService.changePrice(product.id, ChangeProductPriceReq(BigDecimal.valueOf(17000)))
 
         // then
-        assertThat(changedProduct.price).isEqualTo(BigDecimal.valueOf(17000))
+        assertThat(product.productPrice.price).isEqualTo(BigDecimal.valueOf(17000))
     }
 
     @Test
@@ -80,27 +78,5 @@ class ProductServiceTest {
         Assertions.assertThatThrownBy {
             productService.changePrice(Fixtures.INVALID_UUID, ChangeProductPriceReq(BigDecimal.valueOf(17000)))
         }.isInstanceOf(NoSuchElementException::class.java)
-    }
-
-    @Test
-    @DisplayName("`Product`의 `price`를 변경 할 때 `Product`를 포함한 `Menu`들 중 `Menu Price > Menu Amount`인 `Menu`는 `Not Displayed`된다")
-    fun changePriceMenuNotDisplayed() {
-        // given
-        val product = productRepository.save(Fixtures.product(name = "양념치킨", price = 16000))
-        val menu = menuRepository.save(
-            Fixtures.menu(
-                name = "양념치킨 세트",
-                price = 32000,
-                displayed = true,
-                menuProducts = listOf(Fixtures.menuProduct(product, 2))
-            )
-        )
-
-        // when
-        val changedProduct = productService.changePrice(product.id!!, ChangeProductPriceReq(BigDecimal.valueOf(15000)))
-
-        // then
-        assertThat(changedProduct.price).isEqualTo(BigDecimal.valueOf(15000))
-        assertThat(menu.displayed).isFalse()
     }
 }

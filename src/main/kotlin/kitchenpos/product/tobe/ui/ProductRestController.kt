@@ -31,8 +31,8 @@ class ProductRestController(
     fun changePrice(
         @PathVariable productId: UUID,
         @RequestBody request: ChangeProductPriceReq
-    ): ResponseEntity<ProductResp> {
-        return ResponseEntity.ok(productService.changePrice(productId, request))
+    ): ResponseEntity<Void> {
+        return ResponseEntity.ok().build()
     }
 
     @GetMapping

@@ -9,16 +9,18 @@ import org.junit.jupiter.api.Test
 
 
 class ProductTest {
+    private val productNamePolicy: ProductNamePolicy = ProductNamePolicy(FakeProfanities())
+
     @Test
     @DisplayName("`Product`를 등록한다")
     fun createProduct() {
         val product = Product(
-            productName = ProductName(ProductNamePolicy(FakeProfanities()), "양념치킨"),
-            price = BigDecimal.valueOf(16000)
+            productName = ProductName(productNamePolicy, "양념치킨"),
+            productPrice = ProductPrice(BigDecimal.valueOf(16000))
         )
 
         assertThat(product.productName.name).isEqualTo("양념치킨")
-        assertThat(product.price).isEqualTo(BigDecimal.valueOf(16000))
+        assertThat(product.productPrice.price).isEqualTo(BigDecimal.valueOf(16000))
     }
 
     @Test
@@ -26,8 +28,8 @@ class ProductTest {
     fun createProductPriceFail() {
         assertThatIllegalArgumentException().isThrownBy {
             Product(
-                productName = ProductName(ProductNamePolicy(FakeProfanities()), "양념치킨"),
-                price = BigDecimal.valueOf(-1)
+                productName = ProductName(productNamePolicy, "양념치킨"),
+                productPrice = ProductPrice(BigDecimal.valueOf(-1))
             )
         }
     }
@@ -36,25 +38,25 @@ class ProductTest {
     @DisplayName("`Product`의 `price`를 변경한다")
     fun changePrice() {
         val product = Product(
-            productName = ProductName(ProductNamePolicy(FakeProfanities()), "양념치킨"),
-            price = BigDecimal.valueOf(16000)
+            productName = ProductName(productNamePolicy, "양념치킨"),
+            productPrice = ProductPrice(BigDecimal.valueOf(16000))
         )
 
-        product.changePrice(BigDecimal.valueOf(17000))
+        product.changePrice(ProductPrice(BigDecimal.valueOf(17000)))
 
-        assertThat(product.price).isEqualTo(BigDecimal.valueOf(17000))
+        assertThat(product.productPrice.price).isEqualTo(BigDecimal.valueOf(17000))
     }
 
     @Test
     @DisplayName("`Product`의 `price`를 변경할 때 `price`는 0원 미만일 수 없다")
     fun changePriceFail() {
         val product = Product(
-            productName = ProductName(ProductNamePolicy(FakeProfanities()), "양념치킨"),
-            price = BigDecimal.valueOf(16000)
+            productName = ProductName(productNamePolicy, "양념치킨"),
+            productPrice = ProductPrice(BigDecimal.valueOf(16000))
         )
 
         assertThatIllegalArgumentException().isThrownBy {
-            product.changePrice(BigDecimal.valueOf(-1))
+            product.changePrice(ProductPrice(BigDecimal.valueOf(-1)))
         }
     }
 }
