@@ -6,6 +6,7 @@ import jakarta.persistence.ForeignKey
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.OneToMany
 import java.math.BigDecimal
+import java.util.*
 
 @Embeddable
 class MenuProducts(
@@ -22,12 +23,17 @@ class MenuProducts(
         require(menuProducts.isNotEmpty()) { "메뉴 상품은 필수로 입력해야 합니다." }
     }
 
-    fun amount(productClient: ProductClient): BigDecimal {
+    fun amount(productPrices: Map<UUID, ProductInfo>): BigDecimal {
         var sum = BigDecimal.ZERO
         menuProducts.forEach { menuProduct ->
-            val productPrice = productClient.getProductPrice(menuProduct.productId)
-            sum += productPrice * menuProduct.quantity.toBigDecimal()
+            val productInfo = productPrices[menuProduct.productId]
+                ?: throw NoSuchElementException("상품을 찾을 수 없습니다.")
+            sum += productInfo.price * menuProduct.quantity.toBigDecimal()
         }
         return sum
+    }
+
+    fun productIds(): List<UUID> {
+        return menuProducts.map { it.productId }
     }
 }

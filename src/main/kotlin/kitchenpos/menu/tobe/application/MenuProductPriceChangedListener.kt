@@ -17,7 +17,8 @@ class MenuProductPriceChangedListener(
     fun handle(event: ProductPriceChangedEvent) {
         val menus = menuRepository.findAllByProductId(event.productId)
         menus.forEach {
-            if (!it.canDisplay(productClient)) {
+            val productInfos = productClient.getProducts(it.productIds())
+            if (!it.canDisplay(productInfos)) {
                 it.notDisplay()
             }
         }

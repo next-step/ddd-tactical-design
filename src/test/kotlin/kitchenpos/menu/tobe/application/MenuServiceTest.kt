@@ -10,6 +10,7 @@ import kitchenpos.menu.tobe.domain.MenuNamePolicy
 import kitchenpos.menu.tobe.domain.MenuProducts
 import kitchenpos.menu.tobe.domain.MenuRepository
 import kitchenpos.menu.tobe.domain.ProductClient
+import kitchenpos.menu.tobe.domain.ProductInfo
 import kitchenpos.menu.tobe.infra.DefaultProductClient
 import kitchenpos.menu.tobe.infra.FakeMenuGroupRepository
 import kitchenpos.menu.tobe.infra.FakeMenuRepository
@@ -46,13 +47,12 @@ class MenuServiceTest {
             MenuService(
                 menuRepository,
                 menuGroupRepository,
-                productRepository,
                 MenuNamePolicy(FakeProfanities()),
                 productClient
             )
 
         menuGroup = menuGroupRepository.save(Fixtures.menuGroup(name = "추천메뉴"))
-        product = productRepository.save(Fixtures.product(name = "후라이드", price = 16_000))
+        product = productRepository.save(Fixtures.product(name = "후라이드", price = 10_000))
     }
 
     @DisplayName("Menu를 등록한다")
@@ -62,12 +62,12 @@ class MenuServiceTest {
         val request = CreateMenuReq(
             menuGroupId = menuGroup.id,
             name = "후라이드1마리",
-            price = 16_000,
+            price = 10_000,
             display = MenuDisplay.DISPLAYED,
             menuProducts = listOf(
                 CreateMenuProductReq(
                     seq = 1,
-                    productId = product.id!!,
+                    productId = product.id,
                     quantity = 1
                 )
             )
@@ -81,7 +81,7 @@ class MenuServiceTest {
         assertAll(
             { assertThat(menuResp.id).isNotNull() },
             { assertThat(menuResp.name).isEqualTo("후라이드1마리") },
-            { assertThat(menuResp.price).isEqualTo(BigDecimal.valueOf(16000)) },
+            { assertThat(menuResp.price).isEqualTo(BigDecimal.valueOf(10000)) },
             { assertThat(menuResp.display).isEqualTo(MenuDisplay.DISPLAYED) },
             { assertThat(menuResp.menuGroup.id).isEqualTo(menuGroup.id) },
             { assertThat(menuResp.menuProducts).hasSize(1) }
@@ -93,14 +93,14 @@ class MenuServiceTest {
     fun createWithInvalidProducts() {
         // given
         val request = CreateMenuReq(
-            menuGroupId = menuGroup.id!!,
+            menuGroupId = menuGroup.id,
             name = "후라이드1마리",
-            price = 16_000,
+            price = 10_000,
             display = MenuDisplay.DISPLAYED,
             menuProducts = listOf(
                 CreateMenuProductReq(
                     seq = 1,
-                    productId = product.id!!,
+                    productId = product.id,
                     quantity = 1
                 ),
                 CreateMenuProductReq(
@@ -123,12 +123,12 @@ class MenuServiceTest {
         val request = CreateMenuReq(
             menuGroupId = Fixtures.INVALID_UUID,
             name = "후라이드1마리",
-            price = 16_000,
+            price = 10_000,
             display = MenuDisplay.DISPLAYED,
             menuProducts = listOf(
                 CreateMenuProductReq(
                     seq = 1,
-                    productId = product.id!!,
+                    productId = product.id,
                     quantity = 1
                 )
             )
@@ -145,14 +145,14 @@ class MenuServiceTest {
     fun createWithInvalidPrice() {
         // given
         val request = CreateMenuReq(
-            menuGroupId = menuGroup.id!!,
+            menuGroupId = menuGroup.id,
             name = "후라이드2마리",
-            price = 32_001,
+            price = 21_000,
             display = MenuDisplay.DISPLAYED,
             menuProducts = listOf(
                 CreateMenuProductReq(
                     seq = 1,
-                    productId = product.id!!,
+                    productId = product.id,
                     quantity = 2
                 )
             )
@@ -168,25 +168,25 @@ class MenuServiceTest {
         // given
         val menu = menuRepository.save(
             Fixtures.menu(
-                productClient = productClient,
+                productInfos = mapOf(product.id to ProductInfo(product.id, product.productPrice.price)),
                 name = "후라이드2마리",
-                price = 32_000,
+                price = 20_000,
                 display = MenuDisplay.DISPLAYED,
                 menuGroup = menuGroup,
                 menuProducts = MenuProducts(
-                    listOf(Fixtures.menuProduct(productId = product.id!!, quantity = 2))
+                    listOf(Fixtures.menuProduct(productId = product.id, quantity = 2))
                 ),
             )
         )
         val request = ChangeProductPriceReq(
-            price = BigDecimal.valueOf(31_000)
+            price = BigDecimal.valueOf(19_000)
         )
 
         // when
-        menuService.changePrice(menu.id!!, request)
+        menuService.changePrice(menu.id, request)
 
         // then
-        assertThat(menu.menuPrice.price).isEqualTo(BigDecimal.valueOf(31_000))
+        assertThat(menu.menuPrice.price).isEqualTo(BigDecimal.valueOf(19_000))
     }
 
     @DisplayName("존재하지 않는 Menu는 MenuPrice를 변경할 수 없다")
@@ -194,7 +194,7 @@ class MenuServiceTest {
     fun changePriceInvalidMenuId() {
         // given
         val request = ChangeProductPriceReq(
-            price = BigDecimal.valueOf(31_000)
+            price = BigDecimal.valueOf(19_000)
         )
 
         // when then
@@ -212,23 +212,23 @@ class MenuServiceTest {
         // given
         val menu = menuRepository.save(
             Fixtures.menu(
-                productClient = productClient,
+                productInfos = mapOf(product.id to ProductInfo(product.id, product.productPrice.price)),
                 name = "후라이드2마리",
-                price = 32_000,
+                price = 20_000,
                 display = MenuDisplay.DISPLAYED,
                 menuGroup = menuGroup,
                 menuProducts = MenuProducts(
-                    listOf(Fixtures.menuProduct(productId = product.id!!, quantity = 2))
+                    listOf(Fixtures.menuProduct(productId = product.id, quantity = 2))
                 ),
             )
         )
         val request = ChangeProductPriceReq(
-            price = BigDecimal.valueOf(33_000)
+            price = BigDecimal.valueOf(21_000)
         )
 
         // when then
         assertThatIllegalArgumentException().isThrownBy {
-            menuService.changePrice(menu.id!!, request)
+            menuService.changePrice(menu.id, request)
         }
     }
 
@@ -238,13 +238,13 @@ class MenuServiceTest {
         // given
         val menu = menuRepository.save(
             Fixtures.menu(
-                productClient = productClient,
+                productInfos = mapOf(product.id to ProductInfo(product.id, product.productPrice.price)),
                 name = "후라이드2마리",
-                price = 32_000,
-                display = MenuDisplay.NOT_DISPLAYED,
+                price = 20_000,
+                display = MenuDisplay.DISPLAYED,
                 menuGroup = menuGroup,
                 menuProducts = MenuProducts(
-                    listOf(Fixtures.menuProduct(productId = product.id!!, quantity = 2))
+                    listOf(Fixtures.menuProduct(productId = product.id, quantity = 2))
                 ),
             )
         )
@@ -271,13 +271,13 @@ class MenuServiceTest {
         // given
         val menu = menuRepository.save(
             Fixtures.menu(
-                productClient = productClient,
+                productInfos = mapOf(product.id to ProductInfo(product.id, product.productPrice.price)),
                 name = "후라이드2마리",
-                price = 32_000,
+                price = 20_000,
                 display = MenuDisplay.DISPLAYED,
                 menuGroup = menuGroup,
                 menuProducts = MenuProducts(
-                    listOf(Fixtures.menuProduct(productId = product.id!!, quantity = 2))
+                    listOf(Fixtures.menuProduct(productId = product.id, quantity = 2))
                 ),
             )
         )

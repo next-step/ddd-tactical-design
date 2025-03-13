@@ -2,8 +2,6 @@ package kitchenpos.product.tobe.application
 
 import java.math.BigDecimal
 import kitchenpos.menu.tobe.domain.MenuRepository
-import kitchenpos.menu.tobe.domain.ProductClient
-import kitchenpos.menu.tobe.infra.DefaultProductClient
 import kitchenpos.menu.tobe.infra.FakeMenuRepository
 import kitchenpos.product.tobe.application.dto.ChangeProductPriceReq
 import kitchenpos.product.tobe.application.dto.CreateProductReq
@@ -20,14 +18,12 @@ import org.junit.jupiter.api.Test
 
 class ProductServiceTest {
     private lateinit var productRepository: ProductRepository
-    private lateinit var productClient: ProductClient
     private lateinit var menuRepository: MenuRepository
     private lateinit var productService: ProductService
 
     @BeforeEach
     fun setUp() {
         productRepository = FakeProductRepository()
-        productClient = DefaultProductClient(productRepository)
         menuRepository = FakeMenuRepository()
         productService = ProductService(productRepository, ProductNamePolicy(FakeProfanities()))
     }

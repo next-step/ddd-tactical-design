@@ -17,7 +17,7 @@ import org.hibernate.type.SqlTypes
 @Table(name = "menu")
 @Entity(name = "TobeMenu")
 class Menu(
-    productClient: ProductClient,
+    productInfos: Map<UUID, ProductInfo>,
 
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
@@ -47,29 +47,36 @@ class Menu(
 ) {
 
     init {
-        validateMenuPrice(productClient, menuPrice)
+        validateMenuPrice(productInfos)
     }
 
-    fun changePrice(productClient: ProductClient, menuPrice: MenuPrice) {
-        validateMenuPrice(productClient, menuPrice)
-        this.menuPrice = menuPrice
+    fun changePrice(productPrices: Map<UUID, ProductInfo>, changeMenuPrice: MenuPrice) {
+        validateMenuPrice(productPrices, changeMenuPrice)
+        this.menuPrice = changeMenuPrice
     }
 
-    fun display(productClient: ProductClient) {
-        validateMenuPrice(productClient, menuPrice)
+    fun display(productPrices: Map<UUID, ProductInfo>) {
+        validateMenuPrice(productPrices)
         menuDisplay = MenuDisplay.DISPLAYED
+    }
+
+    fun canDisplay(productPrices: Map<UUID, ProductInfo>): Boolean {
+        return menuPrice.price <= menuProducts.amount(productPrices)
     }
 
     fun notDisplay() {
         menuDisplay = MenuDisplay.NOT_DISPLAYED
     }
 
-    fun canDisplay(productClient: ProductClient): Boolean {
-        return menuPrice.price <= menuProducts.amount(productClient)
+    fun productIds(): List<UUID> {
+        return menuProducts.productIds()
     }
 
-    private fun validateMenuPrice(productClient: ProductClient, menuPrice: MenuPrice) {
-        if (menuPrice.price > menuProducts.amount(productClient)) {
+    private fun validateMenuPrice(
+        productInfos: Map<UUID, ProductInfo>,
+        menuPrice: MenuPrice = this.menuPrice
+    ) {
+        if (menuPrice.price > menuProducts.amount(productInfos)) {
             throw IllegalArgumentException("메뉴가격은 메뉴금액 이하여야 합니다.")
         }
     }

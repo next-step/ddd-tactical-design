@@ -43,7 +43,7 @@ class MenuProductPriceChangedListenerTest {
 
         // given menuPrice 14000원, 16000원
         val menu_14000 = Fixtures.menu(
-            productClient = productClient,
+            productInfos = mapOf(product.id to ProductInfo(product.id, BigDecimal.valueOf(16_000))),
             price = 14_000,
             display = MenuDisplay.DISPLAYED,
             menuProducts = MenuProducts(
@@ -53,7 +53,7 @@ class MenuProductPriceChangedListenerTest {
             )
         )
         val menu_16000 = Fixtures.menu(
-            productClient = productClient,
+            productInfos = mapOf(product.id to ProductInfo(product.id, BigDecimal.valueOf(16_000))),
             price = 16_000,
             display = MenuDisplay.DISPLAYED,
             menuProducts = MenuProducts(
@@ -70,7 +70,7 @@ class MenuProductPriceChangedListenerTest {
         product.changePrice(ProductPrice(BigDecimal.valueOf(15_000)))
         menuProductPriceChangedListener.handle(ProductPriceChangedEvent(product.id))
 
-        // then
+        // then 16000원이였던 메뉴만 NotDisplayed
         assertAll(
             { assertThat(menu_14000.menuDisplay).isEqualTo(MenuDisplay.DISPLAYED) },
             { assertThat(menu_16000.menuDisplay).isEqualTo(MenuDisplay.NOT_DISPLAYED) },
