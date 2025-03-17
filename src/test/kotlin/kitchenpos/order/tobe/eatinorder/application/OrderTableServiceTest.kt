@@ -1,9 +1,13 @@
 package kitchenpos.order.tobe.eatinorder.application
 
+import java.util.*
 import kitchenpos.order.tobe.eatinorder.application.dto.CreateOrderTableReq
+import kitchenpos.order.tobe.eatinorder.domain.EatInOrderRepository
+import kitchenpos.order.tobe.eatinorder.domain.EatInOrderStatus
 import kitchenpos.order.tobe.eatinorder.domain.OrderTableOccupancy
 import kitchenpos.order.tobe.eatinorder.domain.OrderTableRepository
 import kitchenpos.order.tobe.eatinorder.domain.OrderTableStatus
+import kitchenpos.order.tobe.eatinorder.infra.FakeEatInOrderRepository
 import kitchenpos.order.tobe.eatinorder.infra.FakeOrderTableRepository
 import kitchenpos.utils.Fixtures
 import org.assertj.core.api.Assertions.assertThat
@@ -16,11 +20,13 @@ import org.junit.jupiter.api.Test
 class OrderTableServiceTest {
     private lateinit var orderTableService: OrderTableService
     private lateinit var orderTableRepository: OrderTableRepository
+    private lateinit var eatInOrderRepository: EatInOrderRepository
 
     @BeforeEach
     fun setUp() {
         orderTableRepository = FakeOrderTableRepository()
-        orderTableService = OrderTableService(orderTableRepository)
+        eatInOrderRepository = FakeEatInOrderRepository()
+        orderTableService = OrderTableService(orderTableRepository, eatInOrderRepository)
     }
 
     @Test
@@ -95,6 +101,32 @@ class OrderTableServiceTest {
         assertThatThrownBy { orderTableService.empty(Fixtures.INVALID_UUID) }
             .isInstanceOf(NoSuchElementException::class.java)
             .hasMessage("주문 테이블을 찾을 수 없습니다.")
+    }
+
+    @Test
+    @DisplayName("Complete되지 않은 EatInOrder가 있는 OrderTable은 EmptyTable로 변경할 수 없다")
+    fun changeEmptyTableFailOrderNotComplete() {
+        // given
+        val orderTable = orderTableRepository.save(
+            Fixtures.orderTable(
+                orderTableOccupancy = OrderTableOccupancy(
+                    4,
+                    OrderTableStatus.OCCUPIED
+                )
+            )
+        )
+        eatInOrderRepository.save(
+            Fixtures.eatInOrder(
+                menuId = UUID.randomUUID(),
+                orderTableId = orderTable.id,
+                status = EatInOrderStatus.WAITING
+            )
+        )
+
+        // when then
+        assertThatThrownBy { orderTableService.empty(orderTable.id) }
+            .isInstanceOf(IllegalStateException::class.java)
+            .hasMessage("주문테이블에 완료되지않은 주문이 존재합니다.")
     }
 
     @Test
