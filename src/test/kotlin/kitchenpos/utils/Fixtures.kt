@@ -11,6 +11,7 @@ import kitchenpos.menu.tobe.domain.MenuProduct
 import kitchenpos.menu.tobe.domain.MenuProducts
 import kitchenpos.menu.tobe.domain.ProductInfo
 import kitchenpos.order.tobe.eatinorder.domain.OrderTable
+import kitchenpos.order.tobe.eatinorder.domain.OrderTableName
 import kitchenpos.order.tobe.eatinorder.domain.OrderTableOccupancy
 import kitchenpos.order.tobe.eatinorder.domain.OrderTableStatus
 import kitchenpos.product.tobe.domain.Product
@@ -73,12 +74,12 @@ class Fixtures {
 
         fun orderTable(
             id: UUID = UUID.randomUUID(),
-            name: String = "테이블1",
+            name: OrderTableName = OrderTableName("테이블1"),
             orderTableOccupancy: OrderTableOccupancy = OrderTableOccupancy(0, OrderTableStatus.EMPTY)
         ): OrderTable {
             return OrderTable(
                 id = id,
-                name = name,
+                orderTableName = name,
                 orderTableOccupancy = orderTableOccupancy
             )
         }

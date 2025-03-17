@@ -1,0 +1,9 @@
+package kitchenpos.order.tobe.eatinorder.infra
+
+import java.util.*
+import kitchenpos.order.tobe.eatinorder.domain.OrderTable
+import kitchenpos.order.tobe.eatinorder.domain.OrderTableRepository
+import org.springframework.data.jpa.repository.JpaRepository
+
+interface JpaTobeOrderTableRepository : OrderTableRepository, JpaRepository<OrderTable, UUID> {
+}

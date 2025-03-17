@@ -14,8 +14,8 @@ class OrderTable(
     @Id
     val id: UUID = UUID.randomUUID(),
 
-    @Column(name = "name", nullable = false)
-    var name: String,
+    @Embedded
+    val orderTableName: OrderTableName,
 
     @Embedded
     var orderTableOccupancy: OrderTableOccupancy,

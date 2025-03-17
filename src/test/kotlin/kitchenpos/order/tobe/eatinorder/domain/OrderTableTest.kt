@@ -13,14 +13,14 @@ class OrderTableTest {
         // when
         val orderTable = OrderTable(
             id = UUID.randomUUID(),
-            name = "테이블1",
+            orderTableName = OrderTableName("테이블1"),
             orderTableOccupancy = OrderTableOccupancy(0, OrderTableStatus.EMPTY)
         )
 
         // then
         assertAll(
             { assertNotNull(orderTable.id) },
-            { assertEquals(orderTable.name, "테이블1") },
+            { assertEquals(orderTable.orderTableName.name, "테이블1") },
             { assertEquals(orderTable.orderTableOccupancy.numberOfGuests, 0) },
             { assertEquals(orderTable.orderTableOccupancy.status, OrderTableStatus.EMPTY) }
         )
