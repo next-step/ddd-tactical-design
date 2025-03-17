@@ -21,7 +21,7 @@ class EatInOrderLineItem(
     @Column(name = "quantity", nullable = false)
     var quantity: Long,
 
-    @Column(name = "order_id")
+    @Column(name = "menu_id")
     var menuId: UUID,
 ) {
     companion object {

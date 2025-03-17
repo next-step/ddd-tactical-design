@@ -5,5 +5,5 @@ import kitchenpos.order.tobe.eatinorder.domain.OrderTable
 import kitchenpos.order.tobe.eatinorder.domain.OrderTableRepository
 import org.springframework.data.jpa.repository.JpaRepository
 
-interface JpaTobeOrderTableRepository : OrderTableRepository, JpaRepository<OrderTable, UUID> {
+interface TobeJpaOrderTableRepository : OrderTableRepository, JpaRepository<OrderTable, UUID> {
 }

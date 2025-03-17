@@ -10,6 +10,7 @@ import jakarta.persistence.InheritanceType
 import jakarta.persistence.Table
 import java.time.LocalDateTime
 import java.util.*
+import org.springframework.data.domain.AbstractAggregateRoot
 
 @Table(name = "orders")
 @Entity(name = "TobeOrder")
@@ -22,6 +23,6 @@ abstract class Order(
 
     @Column(name = "order_date_time", nullable = false)
     val orderDateTime: LocalDateTime = LocalDateTime.now(),
-) {
+) : AbstractAggregateRoot<Order>() {
     abstract val type: OrderType
 }

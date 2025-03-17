@@ -9,6 +9,5 @@ import org.springframework.stereotype.Repository
 interface EatInOrderRepository {
     fun save(order: EatInOrder): EatInOrder
     fun findById(id: UUID): Optional<EatInOrder>
-    fun existsByOrderTableAndStatusNot(orderTable: OrderTable?, status: EatInOrderStatus?): Boolean
 }
 

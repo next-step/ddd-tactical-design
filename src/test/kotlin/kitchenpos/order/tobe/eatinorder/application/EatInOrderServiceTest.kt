@@ -12,6 +12,7 @@ import kitchenpos.order.tobe.eatinorder.application.dto.CreateEatInOrderReq
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrderRepository
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrderStatus
 import kitchenpos.order.tobe.eatinorder.domain.OrderTableOccupancy
+import kitchenpos.order.tobe.eatinorder.domain.OrderTableRepository
 import kitchenpos.order.tobe.eatinorder.domain.OrderTableStatus
 import kitchenpos.order.tobe.eatinorder.infra.DefaultEatInOrderOrderTableClient
 import kitchenpos.order.tobe.eatinorder.infra.FakeEatInOrderRepository
@@ -29,6 +30,7 @@ class EatInOrderServiceTest {
     private lateinit var eatInOrderService: EatInOrderService
 
     private lateinit var eatInOrderRepository: EatInOrderRepository
+    private lateinit var orderTableRepository: OrderTableRepository
 
     private lateinit var menuId: UUID
     private lateinit var orderTableId: UUID
@@ -36,7 +38,7 @@ class EatInOrderServiceTest {
     @BeforeEach
     fun setUp() {
         val menuRepository = FakeMenuRepository()
-        val orderTableRepository = FakeOrderTableRepository()
+        orderTableRepository = FakeOrderTableRepository()
 
         eatInOrderRepository = FakeEatInOrderRepository()
         eatInOrderService = EatInOrderService(
@@ -202,5 +204,32 @@ class EatInOrderServiceTest {
         assertThatThrownBy {
             eatInOrderService.serve(nonExistEatInOrderId)
         }.isInstanceOf(NoSuchElementException::class.java)
+    }
+
+    @Test
+    @DisplayName("EatInOrder를 complete한다")
+    fun complete() {
+        // given
+        val eatInOrderId = eatInOrderRepository.save(
+            Fixtures.eatInOrder(
+                orderTableId = orderTableId,
+                menuId = menuId,
+                status = EatInOrderStatus.SERVED
+            )
+        ).id
+
+        // when
+        eatInOrderService.complete(eatInOrderId)
+
+        // then
+        val eatInOrder = eatInOrderRepository.findById(eatInOrderId).get()
+        val orderTable = orderTableRepository.findById(orderTableId).get()
+        assertAll(
+            { assertThat(eatInOrder.status).isEqualTo(EatInOrderStatus.COMPLETED) },
+            { assertThat(orderTable.orderTableOccupancy.numberOfGuests).isEqualTo(0) },
+            { assertThat(orderTable.orderTableOccupancy.status).isEqualTo(OrderTableStatus.EMPTY) }
+        )
+
+
     }
 }
