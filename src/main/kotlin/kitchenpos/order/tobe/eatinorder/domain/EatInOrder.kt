@@ -42,7 +42,20 @@ class EatInOrder(
         }
     }
 
-
     override val type: OrderType
         get() = OrderType.EAT_IN
+
+    fun accept() {
+        check(status == EatInOrderStatus.WAITING) {
+            "접수할 수 있는 상태가 아닙니다."
+        }
+        status = EatInOrderStatus.ACCEPTED
+    }
+
+    fun serve() {
+        check(status == EatInOrderStatus.ACCEPTED) {
+            "서빙할 수 있는 상태가 아닙니다."
+        }
+        status = EatInOrderStatus.SERVED
+    }
 }

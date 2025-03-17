@@ -10,8 +10,10 @@ import kitchenpos.menu.tobe.domain.MenuPrice
 import kitchenpos.menu.tobe.domain.MenuProduct
 import kitchenpos.menu.tobe.domain.MenuProducts
 import kitchenpos.menu.tobe.domain.ProductInfo
-import kitchenpos.order.tobe.common.OrderMenuInfo
+import kitchenpos.order.tobe.eatinorder.domain.EatInOrder
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrderLineItem
+import kitchenpos.order.tobe.eatinorder.domain.EatInOrderLineItems
+import kitchenpos.order.tobe.eatinorder.domain.EatInOrderStatus
 import kitchenpos.order.tobe.eatinorder.domain.OrderTable
 import kitchenpos.order.tobe.eatinorder.domain.OrderTableName
 import kitchenpos.order.tobe.eatinorder.domain.OrderTableOccupancy
@@ -95,6 +97,34 @@ class Fixtures {
                 seq = seq,
                 menuId = menuId,
                 quantity = quantity,
+            )
+        }
+
+        fun eatInOrder(
+            menuId: UUID,
+            orderTableId: UUID,
+            status: EatInOrderStatus,
+        ): EatInOrder {
+            return eatInOrder(
+                orderLineItems = EatInOrderLineItems(
+                    listOf(
+                        EatInOrderLineItem(1, 1, menuId)
+                    )
+                ),
+                orderTableId = orderTableId,
+                status = status
+            )
+        }
+
+        fun eatInOrder(
+            orderLineItems: EatInOrderLineItems,
+            orderTableId: UUID = UUID.randomUUID(),
+            status: EatInOrderStatus,
+            ): EatInOrder {
+            return EatInOrder(
+                orderLineItems = orderLineItems,
+                orderTableId = orderTableId,
+                status = status
             )
         }
     }

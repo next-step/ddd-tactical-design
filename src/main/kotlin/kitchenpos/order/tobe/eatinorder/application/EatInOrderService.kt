@@ -34,4 +34,19 @@ class EatInOrderService(
         return eatInOrderRepository.save(eatInOrder).id
     }
 
+    @Transactional
+    fun accept(orderId: UUID) {
+        val eatInOrder = eatInOrderRepository.findById(orderId).orElseThrow {
+            NoSuchElementException("주문이 존재하지 않습니다.")
+        }
+        eatInOrder.accept()
+    }
+
+    @Transactional
+    fun serve(orderId: UUID) {
+        val eatInOrder = eatInOrderRepository.findById(orderId).orElseThrow {
+            NoSuchElementException("주문이 존재하지 않습니다.")
+        }
+        eatInOrder.serve()
+    }
 }

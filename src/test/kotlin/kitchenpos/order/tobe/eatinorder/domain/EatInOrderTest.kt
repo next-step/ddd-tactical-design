@@ -9,6 +9,8 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.EnumSource
 
 class EatInOrderTest {
     private lateinit var menuInfo: OrderMenuInfo
@@ -70,6 +72,96 @@ class EatInOrderTest {
                     )
                 ),
             )
+        }
+    }
+
+    @Test
+    @DisplayName("EatInOrder를 accept한다")
+    fun accept() {
+        val eatInOrder = EatInOrder(
+            orderTableId = orderTableInfo.orderTableId,
+            orderLineItems = EatInOrderLineItems(
+                listOf(
+                    EatInOrderLineItem(
+                        seq = 1,
+                        menuId = menuInfo.menuId,
+                        quantity = 1,
+                    )
+                )
+            ),
+            status = EatInOrderStatus.WAITING
+        )
+
+        eatInOrder.accept()
+
+        assertThat(eatInOrder.status).isEqualTo(EatInOrderStatus.ACCEPTED)
+    }
+
+    @ParameterizedTest
+    @EnumSource(EatInOrderStatus::class, mode = EnumSource.Mode.EXCLUDE, names = ["WAITING"])
+    @DisplayName("EatInOrder는 waiting 상태에서만 accept할 수 있다")
+    fun acceptFail(status: EatInOrderStatus) {
+        val eatInOrder = EatInOrder(
+            orderTableId = orderTableInfo.orderTableId,
+            orderLineItems = EatInOrderLineItems(
+                listOf(
+                    EatInOrderLineItem(
+                        seq = 1,
+                        menuId = menuInfo.menuId,
+                        quantity = 1,
+                    )
+                )
+            ),
+            status = status
+        )
+
+        assertThatIllegalStateException().isThrownBy {
+            eatInOrder.accept()
+        }
+    }
+
+    @Test
+    @DisplayName("EatInOrder를 serve한다")
+    fun serve() {
+        val eatInOrder = EatInOrder(
+            orderTableId = orderTableInfo.orderTableId,
+            orderLineItems = EatInOrderLineItems(
+                listOf(
+                    EatInOrderLineItem(
+                        seq = 1,
+                        menuId = menuInfo.menuId,
+                        quantity = 1,
+                    )
+                )
+            ),
+            status = EatInOrderStatus.ACCEPTED
+        )
+
+        eatInOrder.serve()
+
+        assertThat(eatInOrder.status).isEqualTo(EatInOrderStatus.SERVED)
+    }
+
+    @ParameterizedTest
+    @EnumSource(EatInOrderStatus::class, mode = EnumSource.Mode.EXCLUDE, names = ["ACCEPTED"])
+    @DisplayName("EatInOrder는 accepted 상태에서만 serve할 수 있다")
+    fun serveFail(status: EatInOrderStatus) {
+        val eatInOrder = EatInOrder(
+            orderTableId = orderTableInfo.orderTableId,
+            orderLineItems = EatInOrderLineItems(
+                listOf(
+                    EatInOrderLineItem(
+                        seq = 1,
+                        menuId = menuInfo.menuId,
+                        quantity = 1,
+                    )
+                )
+            ),
+            status = status
+        )
+
+        assertThatIllegalStateException().isThrownBy {
+            eatInOrder.serve()
         }
     }
 }

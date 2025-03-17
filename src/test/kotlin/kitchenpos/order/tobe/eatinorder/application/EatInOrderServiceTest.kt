@@ -17,7 +17,6 @@ import kitchenpos.order.tobe.eatinorder.infra.DefaultEatInOrderOrderTableClient
 import kitchenpos.order.tobe.eatinorder.infra.FakeEatInOrderRepository
 import kitchenpos.order.tobe.eatinorder.infra.FakeOrderTableRepository
 import kitchenpos.utils.Fixtures
-import kotlin.NoSuchElementException
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.BeforeEach
@@ -140,4 +139,68 @@ class EatInOrderServiceTest {
         }.isInstanceOf(NoSuchElementException::class.java)
     }
 
+
+    @Test
+    @DisplayName("EatInOrder를 accept한다")
+    fun accept() {
+        // given
+        val eatInOrderId = eatInOrderRepository.save(
+            Fixtures.eatInOrder(
+                orderTableId = orderTableId,
+                menuId = menuId,
+                status = EatInOrderStatus.WAITING
+            )
+        ).id
+
+        // when
+        eatInOrderService.accept(eatInOrderId)
+
+        // then
+        val eatInOrder = eatInOrderRepository.findById(eatInOrderId).get()
+        assertThat(eatInOrder.status).isEqualTo(EatInOrderStatus.ACCEPTED)
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 EatInOrder를 accept할 수 없다")
+    fun acceptFailNonExistEatInOrder() {
+        // given
+        val nonExistEatInOrderId = Fixtures.INVALID_UUID
+
+        // when & then
+        assertThatThrownBy {
+            eatInOrderService.accept(nonExistEatInOrderId)
+        }.isInstanceOf(NoSuchElementException::class.java)
+    }
+
+    @Test
+    @DisplayName("EatInOrder를 serve한다")
+    fun serve() {
+        // given
+        val eatInOrderId = eatInOrderRepository.save(
+            Fixtures.eatInOrder(
+                orderTableId = orderTableId,
+                menuId = menuId,
+                status = EatInOrderStatus.ACCEPTED
+            )
+        ).id
+
+        // when
+        eatInOrderService.serve(eatInOrderId)
+
+        // then
+        val eatInOrder = eatInOrderRepository.findById(eatInOrderId).get()
+        assertThat(eatInOrder.status).isEqualTo(EatInOrderStatus.SERVED)
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 EatInOrder를 serve할 수 없다")
+    fun serveFailNonExistEatInOrder() {
+        // given
+        val nonExistEatInOrderId = Fixtures.INVALID_UUID
+
+        // when & then
+        assertThatThrownBy {
+            eatInOrderService.serve(nonExistEatInOrderId)
+        }.isInstanceOf(NoSuchElementException::class.java)
+    }
 }
