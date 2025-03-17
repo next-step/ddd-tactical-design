@@ -23,9 +23,26 @@ class EatInOrder(
     var status: EatInOrderStatus,
 
     @Column(name = "order_table_id")
-    val orderTableId: UUID,
+    val orderTableId: UUID
 
-    ) : Order() {
+) : Order() {
+    companion object {
+        fun create(
+            orderTableInfo: EatInOrderOrderTableInfo,
+            orderLineItems: EatInOrderLineItems,
+        ): EatInOrder {
+            check(orderTableInfo.orderTableStatus == OrderTableStatus.OCCUPIED) {
+                "주문 테이블은 주문이 가능한 상태여야 합니다."
+            }
+            return EatInOrder(
+                orderLineItems = orderLineItems,
+                orderTableId = orderTableInfo.orderTableId,
+                status = EatInOrderStatus.WAITING
+            )
+        }
+    }
+
+
     override val type: OrderType
         get() = OrderType.EAT_IN
 }

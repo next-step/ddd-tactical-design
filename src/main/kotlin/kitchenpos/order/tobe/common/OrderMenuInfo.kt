@@ -1,11 +1,9 @@
 package kitchenpos.order.tobe.common
 
-import java.math.BigDecimal
 import java.util.*
+import kitchenpos.menu.tobe.domain.MenuDisplay
 
 data class OrderMenuInfo(
     val menuId: UUID,
-    val menuPrice: BigDecimal,
-    val isDisplay: Boolean,
-) {
-}
+    val menuDisplay: MenuDisplay,
+)

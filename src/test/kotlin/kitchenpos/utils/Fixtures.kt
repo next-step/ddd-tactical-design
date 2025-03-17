@@ -10,6 +10,8 @@ import kitchenpos.menu.tobe.domain.MenuPrice
 import kitchenpos.menu.tobe.domain.MenuProduct
 import kitchenpos.menu.tobe.domain.MenuProducts
 import kitchenpos.menu.tobe.domain.ProductInfo
+import kitchenpos.order.tobe.common.OrderMenuInfo
+import kitchenpos.order.tobe.eatinorder.domain.EatInOrderLineItem
 import kitchenpos.order.tobe.eatinorder.domain.OrderTable
 import kitchenpos.order.tobe.eatinorder.domain.OrderTableName
 import kitchenpos.order.tobe.eatinorder.domain.OrderTableOccupancy
@@ -81,6 +83,18 @@ class Fixtures {
                 id = id,
                 orderTableName = name,
                 orderTableOccupancy = orderTableOccupancy
+            )
+        }
+
+        fun orderLineItem(
+            seq: Long = 1,
+            menuId: UUID = UUID.randomUUID(),
+            quantity: Long = 1
+        ): EatInOrderLineItem {
+            return EatInOrderLineItem(
+                seq = seq,
+                menuId = menuId,
+                quantity = quantity,
             )
         }
     }

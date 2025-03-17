@@ -1,11 +1,10 @@
-package kitchenpos.order.tobe.common
+package kitchenpos.order.tobe.eatinorder.domain
 
-import kitchenpos.order.tobe.eatinorder.domain.EatInOrderLineItems
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-class EatInEatInOrderLineItemsTest {
+class EatInOrderLineItemsTest {
 
     @Test
     @DisplayName("OrderLineItems는 빈 목록이 될 수 없다.")

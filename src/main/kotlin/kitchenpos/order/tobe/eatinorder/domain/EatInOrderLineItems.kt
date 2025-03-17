@@ -15,9 +15,9 @@ class EatInOrderLineItems(
         columnDefinition = "binary(16)",
         foreignKey = ForeignKey(name = "fk_order_line_item_to_orders")
     )
-    val eatInOrderLineItems: List<EatInOrderLineItem>,
+    val orderLineItems: List<EatInOrderLineItem>,
 ) {
     init {
-        require(eatInOrderLineItems.isNotEmpty()) { "주문 항목은 빈 목록이 될 수 없습니다." }
+        require(orderLineItems.isNotEmpty()) { "주문 항목은 빈 목록이 될 수 없습니다." }
     }
 }

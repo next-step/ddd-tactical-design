@@ -7,13 +7,12 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 import java.util.*
+import kitchenpos.menu.tobe.domain.MenuDisplay
 import kitchenpos.order.tobe.common.OrderMenuInfo
 
 @Table(name = "order_line_item")
 @Entity(name = "TobeOrderLineItem")
 class EatInOrderLineItem(
-    orderMenuInfo: OrderMenuInfo,
-
     @Column(name = "seq")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -25,7 +24,18 @@ class EatInOrderLineItem(
     @Column(name = "order_id")
     var menuId: UUID,
 ) {
-    init {
-        check(orderMenuInfo.isDisplay) { "주문 가능한 메뉴만 주문할 수 있습니다." }
+    companion object {
+        fun create(
+            seq: Long,
+            menuInfo: OrderMenuInfo,
+            quantity: Long,
+        ): EatInOrderLineItem {
+            check(menuInfo.menuDisplay == MenuDisplay.DISPLAYED) { "노출한 메뉴만 주문할 수 있습니다." }
+            return EatInOrderLineItem(
+                seq = seq,
+                quantity = quantity,
+                menuId = menuInfo.menuId,
+            )
+        }
     }
 }

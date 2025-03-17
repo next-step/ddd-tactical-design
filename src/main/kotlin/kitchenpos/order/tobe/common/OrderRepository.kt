@@ -1,7 +1,6 @@
 package kitchenpos.order.tobe.common
 
 import java.util.*
-import kitchenpos.order.common.domain.Order
 import org.springframework.stereotype.Repository
 
 @Repository("tobeOrderRepository")
