@@ -10,6 +10,9 @@ import kitchenpos.menu.tobe.domain.MenuPrice
 import kitchenpos.menu.tobe.domain.MenuProduct
 import kitchenpos.menu.tobe.domain.MenuProducts
 import kitchenpos.menu.tobe.domain.ProductInfo
+import kitchenpos.order.tobe.eatinorder.domain.OrderTable
+import kitchenpos.order.tobe.eatinorder.domain.OrderTableOccupancy
+import kitchenpos.order.tobe.eatinorder.domain.OrderTableStatus
 import kitchenpos.product.tobe.domain.Product
 import kitchenpos.product.tobe.domain.ProductName
 import kitchenpos.product.tobe.domain.ProductNamePolicy
@@ -66,6 +69,18 @@ class Fixtures {
         ): MenuGroup {
             val menuGroup = MenuGroup(name = name)
             return menuGroup
+        }
+
+        fun orderTable(
+            id: UUID = UUID.randomUUID(),
+            name: String = "테이블1",
+            orderTableOccupancy: OrderTableOccupancy = OrderTableOccupancy(0, OrderTableStatus.EMPTY)
+        ): OrderTable {
+            return OrderTable(
+                id = id,
+                name = name,
+                orderTableOccupancy = orderTableOccupancy
+            )
         }
     }
 }
