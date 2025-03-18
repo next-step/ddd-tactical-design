@@ -14,7 +14,6 @@ import kitchenpos.order.tobe.eatinorder.domain.EatInOrderStatus
 import kitchenpos.order.tobe.eatinorder.domain.OrderTableOccupancy
 import kitchenpos.order.tobe.eatinorder.domain.OrderTableRepository
 import kitchenpos.order.tobe.eatinorder.domain.OrderTableStatus
-import kitchenpos.order.tobe.eatinorder.infra.DefaultEatInOrderOrderTableClient
 import kitchenpos.order.tobe.eatinorder.infra.FakeEatInOrderRepository
 import kitchenpos.order.tobe.eatinorder.infra.FakeOrderTableRepository
 import kitchenpos.utils.Fixtures
@@ -39,12 +38,11 @@ class EatInOrderServiceTest {
     fun setUp() {
         val menuRepository = FakeMenuRepository()
         orderTableRepository = FakeOrderTableRepository()
-
         eatInOrderRepository = FakeEatInOrderRepository()
         eatInOrderService = EatInOrderService(
             eatInOrderRepository = eatInOrderRepository,
             orderMenuClient = DefaultOrderMenuClient(menuRepository),
-            eatInOrderOrderTableClient = DefaultEatInOrderOrderTableClient(orderTableRepository)
+            orderTableRepository = orderTableRepository,
         )
 
         val productId = UUID.randomUUID()
@@ -223,13 +221,18 @@ class EatInOrderServiceTest {
 
         // then
         val eatInOrder = eatInOrderRepository.findById(eatInOrderId).get()
-        val orderTable = orderTableRepository.findById(orderTableId).get()
-        assertAll(
-            { assertThat(eatInOrder.status).isEqualTo(EatInOrderStatus.COMPLETED) },
-            { assertThat(orderTable.orderTableOccupancy.numberOfGuests).isEqualTo(0) },
-            { assertThat(orderTable.orderTableOccupancy.status).isEqualTo(OrderTableStatus.EMPTY) }
-        )
+        assertThat(eatInOrder.status).isEqualTo(EatInOrderStatus.COMPLETED)
+    }
 
+    @Test
+    @DisplayName("존재하지 않는 EatInOrder를 complete할 수 없다")
+    fun completeFailNonExistEatInOrder() {
+        // given
+        val nonExistEatInOrderId = Fixtures.INVALID_UUID
 
+        // when & then
+        assertThatThrownBy {
+            eatInOrderService.complete(nonExistEatInOrderId)
+        }.isInstanceOf(NoSuchElementException::class.java)
     }
 }

@@ -36,7 +36,7 @@ class EatInOrderServiceIntegrationTest {
     private lateinit var events: ApplicationEvents
 
     @SpyBean
-    private lateinit var orderTableEatInOrderCompleteEventListener: OrderTableEatInOrderCompleteEventListener
+    private lateinit var eatInOrderCompleteEventListener: EatInOrderCompleteEventListener
 
 
     @Autowired
@@ -127,7 +127,7 @@ class EatInOrderServiceIntegrationTest {
     @DisplayName("EatInOrder를 complete할때 OrderTable이 EmptyTable로 변경되지 않으면 롤백된다")
     fun rollbackWhenOrderTableStatusNotChanged() {
         // given
-        doThrow(RuntimeException()).`when`(orderTableEatInOrderCompleteEventListener)
+        doThrow(RuntimeException()).`when`(eatInOrderCompleteEventListener)
             .handle(any())
 
         // when

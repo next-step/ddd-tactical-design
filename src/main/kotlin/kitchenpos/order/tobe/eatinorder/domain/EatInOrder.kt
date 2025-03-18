@@ -28,15 +28,15 @@ class EatInOrder(
 ) : Order() {
     companion object {
         fun create(
-            orderTableInfo: EatInOrderOrderTableInfo,
+            orderTable: OrderTable,
             orderLineItems: EatInOrderLineItems,
         ): EatInOrder {
-            check(orderTableInfo.orderTableStatus == OrderTableStatus.OCCUPIED) {
+            check(orderTable.orderTableOccupancy.status == OrderTableStatus.OCCUPIED) {
                 "주문 테이블은 주문이 가능한 상태여야 합니다."
             }
             return EatInOrder(
                 orderLineItems = orderLineItems,
-                orderTableId = orderTableInfo.orderTableId,
+                orderTableId = orderTable.id,
                 status = EatInOrderStatus.WAITING
             )
         }

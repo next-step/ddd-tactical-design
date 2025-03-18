@@ -6,16 +6,16 @@ import kitchenpos.order.tobe.eatinorder.application.dto.CreateEatInOrderReq
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrder
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrderLineItem
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrderLineItems
-import kitchenpos.order.tobe.eatinorder.domain.EatInOrderOrderTableClient
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrderRepository
+import kitchenpos.order.tobe.eatinorder.domain.OrderTableRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service("tobeEatInOrderService")
 class EatInOrderService(
     private val eatInOrderRepository: EatInOrderRepository,
+    private val orderTableRepository: OrderTableRepository,
     private val orderMenuClient: OrderMenuClient,
-    private val eatInOrderOrderTableClient: EatInOrderOrderTableClient,
 ) {
 
     @Transactional
@@ -27,8 +27,11 @@ class EatInOrderService(
                 quantity = orderLineItem.quantity,
             )
         }
+        val orderTable = orderTableRepository.findById(req.orderTableId).orElseThrow {
+            NoSuchElementException("주문 테이블이 존재하지 않습니다.")
+        }
         val eatInOrder = EatInOrder.create(
-            orderTableInfo = eatInOrderOrderTableClient.getOrderTable(req.orderTableId),
+            orderTable = orderTable,
             orderLineItems = EatInOrderLineItems(orderLineItems),
         )
         return eatInOrderRepository.save(eatInOrder).id

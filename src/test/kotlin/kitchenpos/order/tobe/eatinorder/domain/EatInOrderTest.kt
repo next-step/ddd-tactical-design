@@ -3,6 +3,7 @@ package kitchenpos.order.tobe.eatinorder.domain
 import java.util.*
 import kitchenpos.menu.tobe.domain.MenuDisplay
 import kitchenpos.order.tobe.common.OrderMenuInfo
+import kitchenpos.utils.Fixtures
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.junit.jupiter.api.BeforeEach
@@ -11,10 +12,11 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
+import org.mockito.kotlin.or
 
 class EatInOrderTest {
     private lateinit var menuInfo: OrderMenuInfo
-    private lateinit var orderTableInfo: EatInOrderOrderTableInfo
+    private lateinit var orderTable: OrderTable
 
     @BeforeEach
     fun setUp() {
@@ -22,9 +24,10 @@ class EatInOrderTest {
             menuId = UUID.randomUUID(),
             menuDisplay = MenuDisplay.DISPLAYED,
         )
-        orderTableInfo = EatInOrderOrderTableInfo(
-            orderTableId = UUID.randomUUID(),
-            orderTableStatus = OrderTableStatus.OCCUPIED,
+        orderTable = Fixtures.orderTable(
+            orderTableOccupancy = OrderTableOccupancy(
+                status = OrderTableStatus.OCCUPIED,
+            ),
         )
     }
 
@@ -33,44 +36,29 @@ class EatInOrderTest {
     @DisplayName("EatInOrder를 생성한다")
     fun create() {
         val eatInOrder = EatInOrder.create(
-            orderTableInfo = orderTableInfo,
-            orderLineItems = EatInOrderLineItems(
-                listOf(
-                    EatInOrderLineItem(
-                        seq = 1,
-                        menuId = menuInfo.menuId,
-                        quantity = 1,
-                    )
-                )
-            ),
+            orderTable = orderTable,
+            orderLineItems = Fixtures.eatInOrderLineItems(menuId = menuInfo.menuId),
         )
 
         assertAll(
             { assertThat(eatInOrder.status).isEqualTo(EatInOrderStatus.WAITING) },
-            { assertThat(eatInOrder.orderTableId).isEqualTo(orderTableInfo.orderTableId) },
+            { assertThat(eatInOrder.orderTableId).isEqualTo(orderTable.id) },
         )
     }
 
     @Test
     @DisplayName("OrderTable이 EmptyTable인 경우 EatInOrder를 생성할 수 없다")
     fun createFailEmptyTable() {
-        val orderTableInfo = EatInOrderOrderTableInfo(
-            orderTableId = UUID.randomUUID(),
-            orderTableStatus = OrderTableStatus.EMPTY,
+        val orderTable = Fixtures.orderTable(
+            orderTableOccupancy = OrderTableOccupancy(
+                status = OrderTableStatus.EMPTY
+            ),
         )
 
         assertThatIllegalStateException().isThrownBy {
             EatInOrder.create(
-                orderTableInfo = orderTableInfo,
-                orderLineItems = EatInOrderLineItems(
-                    listOf(
-                        EatInOrderLineItem(
-                            seq = 1,
-                            menuId = menuInfo.menuId,
-                            quantity = 1,
-                        )
-                    )
-                ),
+                orderTable = orderTable,
+                orderLineItems = Fixtures.eatInOrderLineItems(menuId = menuInfo.menuId),
             )
         }
     }
@@ -79,16 +67,8 @@ class EatInOrderTest {
     @DisplayName("EatInOrder를 accept한다")
     fun accept() {
         val eatInOrder = EatInOrder(
-            orderTableId = orderTableInfo.orderTableId,
-            orderLineItems = EatInOrderLineItems(
-                listOf(
-                    EatInOrderLineItem(
-                        seq = 1,
-                        menuId = menuInfo.menuId,
-                        quantity = 1,
-                    )
-                )
-            ),
+            orderTableId = orderTable.id,
+            orderLineItems = Fixtures.eatInOrderLineItems(menuId = menuInfo.menuId),
             status = EatInOrderStatus.WAITING
         )
 
@@ -102,16 +82,8 @@ class EatInOrderTest {
     @DisplayName("EatInOrder는 waiting 상태에서만 accept할 수 있다")
     fun acceptFail(status: EatInOrderStatus) {
         val eatInOrder = EatInOrder(
-            orderTableId = orderTableInfo.orderTableId,
-            orderLineItems = EatInOrderLineItems(
-                listOf(
-                    EatInOrderLineItem(
-                        seq = 1,
-                        menuId = menuInfo.menuId,
-                        quantity = 1,
-                    )
-                )
-            ),
+            orderTableId = orderTable.id,
+            orderLineItems = Fixtures.eatInOrderLineItems(menuId = menuInfo.menuId),
             status = status
         )
 
@@ -124,16 +96,8 @@ class EatInOrderTest {
     @DisplayName("EatInOrder를 serve한다")
     fun serve() {
         val eatInOrder = EatInOrder(
-            orderTableId = orderTableInfo.orderTableId,
-            orderLineItems = EatInOrderLineItems(
-                listOf(
-                    EatInOrderLineItem(
-                        seq = 1,
-                        menuId = menuInfo.menuId,
-                        quantity = 1,
-                    )
-                )
-            ),
+            orderTableId = orderTable.id,
+            orderLineItems = Fixtures.eatInOrderLineItems(menuId = menuInfo.menuId),
             status = EatInOrderStatus.ACCEPTED
         )
 
@@ -147,21 +111,42 @@ class EatInOrderTest {
     @DisplayName("EatInOrder는 accepted 상태에서만 serve할 수 있다")
     fun serveFail(status: EatInOrderStatus) {
         val eatInOrder = EatInOrder(
-            orderTableId = orderTableInfo.orderTableId,
-            orderLineItems = EatInOrderLineItems(
-                listOf(
-                    EatInOrderLineItem(
-                        seq = 1,
-                        menuId = menuInfo.menuId,
-                        quantity = 1,
-                    )
-                )
-            ),
+            orderTableId = orderTable.id,
+            orderLineItems = Fixtures.eatInOrderLineItems(menuId = menuInfo.menuId),
             status = status
         )
 
         assertThatIllegalStateException().isThrownBy {
             eatInOrder.serve()
+        }
+    }
+
+    @Test
+    @DisplayName("EatInOrder를 complete한다")
+    fun complete() {
+        val eatInOrder = EatInOrder(
+            orderTableId = orderTable.id,
+            orderLineItems = Fixtures.eatInOrderLineItems(menuId = menuInfo.menuId),
+            status = EatInOrderStatus.SERVED
+        )
+
+        eatInOrder.complete()
+
+        assertThat(eatInOrder.status).isEqualTo(EatInOrderStatus.COMPLETED)
+    }
+
+    @ParameterizedTest
+    @EnumSource(EatInOrderStatus::class, mode = EnumSource.Mode.EXCLUDE, names = ["SERVED"])
+    @DisplayName("EatInOrder는 served 상태에서만 complete할 수 있다")
+    fun completeFail(status: EatInOrderStatus) {
+        val eatInOrder = EatInOrder(
+            orderTableId = orderTable.id,
+            orderLineItems = Fixtures.eatInOrderLineItems(menuId = menuInfo.menuId),
+            status = status
+        )
+
+        assertThatIllegalStateException().isThrownBy {
+            eatInOrder.complete()
         }
     }
 }

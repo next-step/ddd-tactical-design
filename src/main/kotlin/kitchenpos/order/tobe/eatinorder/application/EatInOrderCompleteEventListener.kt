@@ -8,7 +8,7 @@ import org.springframework.transaction.event.TransactionPhase
 import org.springframework.transaction.event.TransactionalEventListener
 
 @Service
-class OrderTableEatInOrderCompleteEventListener(
+class EatInOrderCompleteEventListener(
     private val eatInOrderRepository: EatInOrderRepository,
     private val orderTableRepository: OrderTableRepository
 ) {

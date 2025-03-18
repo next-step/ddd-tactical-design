@@ -88,15 +88,17 @@ class Fixtures {
             )
         }
 
-        fun orderLineItem(
-            seq: Long = 1,
-            menuId: UUID = UUID.randomUUID(),
-            quantity: Long = 1
-        ): EatInOrderLineItem {
-            return EatInOrderLineItem(
-                seq = seq,
-                menuId = menuId,
-                quantity = quantity,
+        fun eatInOrderLineItems(
+            menuId: UUID,
+        ): EatInOrderLineItems {
+            return EatInOrderLineItems(
+                listOf(
+                    EatInOrderLineItem(
+                        seq = 1,
+                        menuId = menuId,
+                        quantity = 1,
+                    )
+                )
             )
         }
 
@@ -116,7 +118,7 @@ class Fixtures {
             )
         }
 
-        fun eatInOrder(
+        private fun eatInOrder(
             orderLineItems: EatInOrderLineItems,
             orderTableId: UUID = UUID.randomUUID(),
             status: EatInOrderStatus,
