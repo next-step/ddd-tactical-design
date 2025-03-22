@@ -5,6 +5,7 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import kitchenpos.eatinorders.tobe.domain.exception.InvalidOccupiedException;
 import kitchenpos.eatinorders.tobe.domain.orderTable.vo.NumberOfGuests;
 import kitchenpos.eatinorders.tobe.domain.orderTable.vo.Occupied;
 import kitchenpos.eatinorders.tobe.domain.orderTable.vo.TableName;
@@ -24,6 +25,7 @@ public class EatInOrderTable {
     @Embedded
     private NumberOfGuests numberOfGuests;
 
+    @Embedded
     private Occupied occupied;
 
     protected EatInOrderTable() {
@@ -39,7 +41,7 @@ public class EatInOrderTable {
 
     public void changeNumberOfGuests(final int numberOfGuests) {
         if (!occupied.isOccupied()) {
-            throw new IllegalArgumentException();
+            throw new InvalidOccupiedException("손님 수를 변경하려면 테이블이 사용 중이어야 합니다.");
         }
         this.numberOfGuests = new NumberOfGuests(numberOfGuests);
     }
