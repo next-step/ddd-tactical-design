@@ -3,17 +3,11 @@ package kitchenpos.eatinorders.tobe.domain.order;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import static java.util.Objects.isNull;
 import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderLineItemPrice;
 import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderLineItemQuantity;
-import kitchenpos.menus.domain.Menu;
 
 import java.util.UUID;
 
