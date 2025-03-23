@@ -1,6 +1,11 @@
 package kitchenpos.order.tobe.eatinorder.domain
 
 import java.util.*
+import kitchenpos.order.tobe.eatinorder.domain.ordertable.OrderTable
+import kitchenpos.order.tobe.eatinorder.domain.ordertable.OrderTableEmptyService
+import kitchenpos.order.tobe.eatinorder.domain.ordertable.OrderTableName
+import kitchenpos.order.tobe.eatinorder.domain.ordertable.OrderTableOccupancy
+import kitchenpos.order.tobe.eatinorder.domain.ordertable.OrderTableStatus
 import kitchenpos.utils.Fixtures
 import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.junit.jupiter.api.Assertions.*

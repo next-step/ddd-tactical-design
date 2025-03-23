@@ -1,4 +1,4 @@
-package kitchenpos.order.tobe.eatinorder.domain
+package kitchenpos.order.tobe.eatinorder.domain.ordertable
 
 import jakarta.persistence.Column
 import jakarta.persistence.Embedded

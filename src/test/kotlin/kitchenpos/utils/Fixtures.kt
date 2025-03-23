@@ -14,10 +14,10 @@ import kitchenpos.order.tobe.eatinorder.domain.EatInOrder
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrderLineItem
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrderLineItems
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrderStatus
-import kitchenpos.order.tobe.eatinorder.domain.OrderTable
-import kitchenpos.order.tobe.eatinorder.domain.OrderTableName
-import kitchenpos.order.tobe.eatinorder.domain.OrderTableOccupancy
-import kitchenpos.order.tobe.eatinorder.domain.OrderTableStatus
+import kitchenpos.order.tobe.eatinorder.domain.ordertable.OrderTable
+import kitchenpos.order.tobe.eatinorder.domain.ordertable.OrderTableName
+import kitchenpos.order.tobe.eatinorder.domain.ordertable.OrderTableOccupancy
+import kitchenpos.order.tobe.eatinorder.domain.ordertable.OrderTableStatus
 import kitchenpos.product.tobe.domain.Product
 import kitchenpos.product.tobe.domain.ProductName
 import kitchenpos.product.tobe.domain.ProductNamePolicy

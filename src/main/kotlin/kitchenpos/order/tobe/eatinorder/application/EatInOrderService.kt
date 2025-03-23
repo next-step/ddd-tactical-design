@@ -7,8 +7,8 @@ import kitchenpos.order.tobe.eatinorder.domain.EatInOrder
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrderLineItem
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrderLineItems
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrderRepository
-import kitchenpos.order.tobe.eatinorder.domain.OrderTableEmptyService
-import kitchenpos.order.tobe.eatinorder.domain.OrderTableRepository
+import kitchenpos.order.tobe.eatinorder.domain.ordertable.OrderTableEmptyService
+import kitchenpos.order.tobe.eatinorder.domain.ordertable.OrderTableRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 

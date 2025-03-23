@@ -11,9 +11,9 @@ import kitchenpos.order.tobe.eatinorder.application.dto.CreateEatInOrderLineItem
 import kitchenpos.order.tobe.eatinorder.application.dto.CreateEatInOrderReq
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrderRepository
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrderStatus
-import kitchenpos.order.tobe.eatinorder.domain.OrderTableOccupancy
-import kitchenpos.order.tobe.eatinorder.domain.OrderTableRepository
-import kitchenpos.order.tobe.eatinorder.domain.OrderTableStatus
+import kitchenpos.order.tobe.eatinorder.domain.ordertable.OrderTableOccupancy
+import kitchenpos.order.tobe.eatinorder.domain.ordertable.OrderTableRepository
+import kitchenpos.order.tobe.eatinorder.domain.ordertable.OrderTableStatus
 import kitchenpos.order.tobe.eatinorder.infra.DefaultOrderTableEmptyService
 import kitchenpos.order.tobe.eatinorder.infra.FakeEatInOrderRepository
 import kitchenpos.order.tobe.eatinorder.infra.FakeOrderTableRepository

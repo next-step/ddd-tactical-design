@@ -1,5 +1,7 @@
 package kitchenpos.order.tobe.eatinorder.domain
 
+import kitchenpos.order.tobe.eatinorder.domain.ordertable.OrderTableOccupancy
+import kitchenpos.order.tobe.eatinorder.domain.ordertable.OrderTableStatus
 import org.assertj.core.api.Assertions.assertThatException
 import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.junit.jupiter.api.Assertions.assertAll

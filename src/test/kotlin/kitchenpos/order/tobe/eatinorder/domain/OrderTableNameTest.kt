@@ -1,5 +1,6 @@
 package kitchenpos.order.tobe.eatinorder.domain
 
+import kitchenpos.order.tobe.eatinorder.domain.ordertable.OrderTableName
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DisplayName

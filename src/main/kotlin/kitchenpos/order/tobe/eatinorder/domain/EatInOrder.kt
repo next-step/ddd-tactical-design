@@ -9,6 +9,9 @@ import jakarta.persistence.Enumerated
 import java.util.*
 import kitchenpos.order.tobe.common.Order
 import kitchenpos.order.tobe.common.OrderType
+import kitchenpos.order.tobe.eatinorder.domain.ordertable.OrderTable
+import kitchenpos.order.tobe.eatinorder.domain.ordertable.OrderTableEmptyService
+import kitchenpos.order.tobe.eatinorder.domain.ordertable.OrderTableStatus
 
 @Entity(name = "TobeEatInOrder")
 @DiscriminatorValue("EAT_IN")

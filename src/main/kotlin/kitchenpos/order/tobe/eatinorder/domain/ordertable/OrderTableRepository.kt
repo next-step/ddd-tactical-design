@@ -1,4 +1,4 @@
-package kitchenpos.order.tobe.eatinorder.domain
+package kitchenpos.order.tobe.eatinorder.domain.ordertable
 
 import java.util.*
 import org.springframework.context.annotation.Primary
