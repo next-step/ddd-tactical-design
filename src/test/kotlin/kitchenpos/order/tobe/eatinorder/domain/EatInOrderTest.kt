@@ -17,6 +17,7 @@ import org.mockito.kotlin.or
 class EatInOrderTest {
     private lateinit var menuInfo: OrderMenuInfo
     private lateinit var orderTable: OrderTable
+    private lateinit var orderTableEmptyService: OrderTableEmptyService
 
     @BeforeEach
     fun setUp() {
@@ -29,6 +30,11 @@ class EatInOrderTest {
                 status = OrderTableStatus.OCCUPIED,
             ),
         )
+        orderTableEmptyService = object : OrderTableEmptyService {
+            override fun canEmpty(orderTable: OrderTable): Boolean {
+                return true
+            }
+        }
     }
 
 
@@ -130,7 +136,7 @@ class EatInOrderTest {
             status = EatInOrderStatus.SERVED
         )
 
-        eatInOrder.complete()
+        eatInOrder.complete(orderTable, orderTableEmptyService)
 
         assertThat(eatInOrder.status).isEqualTo(EatInOrderStatus.COMPLETED)
     }
@@ -146,7 +152,7 @@ class EatInOrderTest {
         )
 
         assertThatIllegalStateException().isThrownBy {
-            eatInOrder.complete()
+            eatInOrder.complete(orderTable, orderTableEmptyService)
         }
     }
 }

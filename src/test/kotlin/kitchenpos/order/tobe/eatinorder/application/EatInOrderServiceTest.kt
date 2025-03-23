@@ -14,6 +14,7 @@ import kitchenpos.order.tobe.eatinorder.domain.EatInOrderStatus
 import kitchenpos.order.tobe.eatinorder.domain.OrderTableOccupancy
 import kitchenpos.order.tobe.eatinorder.domain.OrderTableRepository
 import kitchenpos.order.tobe.eatinorder.domain.OrderTableStatus
+import kitchenpos.order.tobe.eatinorder.infra.DefaultOrderTableEmptyService
 import kitchenpos.order.tobe.eatinorder.infra.FakeEatInOrderRepository
 import kitchenpos.order.tobe.eatinorder.infra.FakeOrderTableRepository
 import kitchenpos.utils.Fixtures
@@ -43,6 +44,7 @@ class EatInOrderServiceTest {
             eatInOrderRepository = eatInOrderRepository,
             orderMenuClient = DefaultOrderMenuClient(menuRepository),
             orderTableRepository = orderTableRepository,
+            orderTableEmptyService = DefaultOrderTableEmptyService(eatInOrderRepository),
         )
 
         val productId = UUID.randomUUID()
@@ -234,5 +236,55 @@ class EatInOrderServiceTest {
         assertThatThrownBy {
             eatInOrderService.complete(nonExistEatInOrderId)
         }.isInstanceOf(NoSuchElementException::class.java)
+    }
+
+    @Test
+    @DisplayName("EatInOrder를 complete할 때 OrderTable의 모든 EatInOrder가 complete된 경우 EmptyTable이 된다")
+    fun completeChangeOrderTableEmpty() {
+        // given
+        val eatInOrderId = eatInOrderRepository.save(
+            Fixtures.eatInOrder(
+                orderTableId = orderTableId,
+                menuId = menuId,
+                status = EatInOrderStatus.SERVED
+            )
+        ).id
+
+        // when
+        eatInOrderService.complete(eatInOrderId)
+
+        // then
+        val orderTable = orderTableRepository.findById(orderTableId).get()
+        assertAll(
+            { assertThat(orderTable.orderTableOccupancy.status).isEqualTo(OrderTableStatus.EMPTY) },
+            { assertThat(orderTable.orderTableOccupancy.numberOfGuests).isEqualTo(0) },
+        )
+    }
+
+    @Test
+    @DisplayName("EatInOrder를 complete할 때 OrderTable에 Complete되지 않은 EatInOrder가 있는 경우 OccupiedTable로 유지된다")
+    fun completeChangeOrderTableOccupied() {
+        // given
+        val eatInOrderId = eatInOrderRepository.save(
+            Fixtures.eatInOrder(
+                orderTableId = orderTableId,
+                menuId = menuId,
+                status = EatInOrderStatus.SERVED
+            )
+        ).id
+        eatInOrderRepository.save(
+            Fixtures.eatInOrder(
+                orderTableId = orderTableId,
+                menuId = menuId,
+                status = EatInOrderStatus.SERVED
+            )
+        )
+
+        // when
+        eatInOrderService.complete(eatInOrderId)
+
+        // then
+        val orderTable = orderTableRepository.findById(orderTableId).get()
+        assertThat(orderTable.orderTableOccupancy.status).isEqualTo(OrderTableStatus.OCCUPIED)
     }
 }

@@ -29,7 +29,16 @@ class OrderTable(
         orderTableOccupancy = orderTableOccupancy.occupied()
     }
 
-    fun empty() {
+    fun empty(orderTableEmptyService: OrderTableEmptyService) {
+        if (!orderTableEmptyService.canEmpty(this)) {
+            throw IllegalStateException("주문테이블에 완료되지않은 주문이 존재합니다.")
+        }
         this.orderTableOccupancy = OrderTableOccupancy.EMPTY
+    }
+
+    fun emptyIfPossible(orderTableEmptyService: OrderTableEmptyService) {
+        if (orderTableEmptyService.canEmpty(this)) {
+            this.orderTableOccupancy = OrderTableOccupancy.EMPTY
+        }
     }
 }

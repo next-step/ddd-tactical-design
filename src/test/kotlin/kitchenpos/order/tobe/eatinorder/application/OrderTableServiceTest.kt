@@ -7,6 +7,7 @@ import kitchenpos.order.tobe.eatinorder.domain.EatInOrderStatus
 import kitchenpos.order.tobe.eatinorder.domain.OrderTableOccupancy
 import kitchenpos.order.tobe.eatinorder.domain.OrderTableRepository
 import kitchenpos.order.tobe.eatinorder.domain.OrderTableStatus
+import kitchenpos.order.tobe.eatinorder.infra.DefaultOrderTableEmptyService
 import kitchenpos.order.tobe.eatinorder.infra.FakeEatInOrderRepository
 import kitchenpos.order.tobe.eatinorder.infra.FakeOrderTableRepository
 import kitchenpos.utils.Fixtures
@@ -26,7 +27,7 @@ class OrderTableServiceTest {
     fun setUp() {
         orderTableRepository = FakeOrderTableRepository()
         eatInOrderRepository = FakeEatInOrderRepository()
-        orderTableService = OrderTableService(orderTableRepository, eatInOrderRepository)
+        orderTableService = OrderTableService(orderTableRepository, DefaultOrderTableEmptyService(eatInOrderRepository))
     }
 
     @Test

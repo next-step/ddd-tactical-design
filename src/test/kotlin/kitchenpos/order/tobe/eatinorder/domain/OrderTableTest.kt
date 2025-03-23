@@ -2,6 +2,7 @@ package kitchenpos.order.tobe.eatinorder.domain
 
 import java.util.*
 import kitchenpos.utils.Fixtures
+import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -63,12 +64,60 @@ class OrderTableTest {
         val orderTable = Fixtures.orderTable(orderTableOccupancy = OrderTableOccupancy(4, OrderTableStatus.OCCUPIED))
 
         // when
-        orderTable.empty()
+        orderTable.empty(object : OrderTableEmptyService {
+            override fun canEmpty(orderTable: OrderTable): Boolean {
+                return true
+            }
+        })
 
         // then
         assertAll(
             { assertEquals(orderTable.orderTableOccupancy.numberOfGuests, 0) },
             { assertEquals(orderTable.orderTableOccupancy.status, OrderTableStatus.EMPTY) }
+        )
+    }
+
+    @Test
+    @DisplayName("OccupiedTable을 EmptyTable로 변경할 수 없으면 에러가 발생한다")
+    fun changeEmptyTableFail() {
+        // given
+        val orderTable = Fixtures.orderTable(orderTableOccupancy = OrderTableOccupancy(4, OrderTableStatus.OCCUPIED))
+
+        // when
+        assertThatIllegalStateException().isThrownBy {
+            orderTable.empty(object : OrderTableEmptyService {
+                override fun canEmpty(orderTable: OrderTable): Boolean {
+                    return false
+                }
+            })
+        }
+    }
+
+    @Test
+    @DisplayName("OccupiedTable을 EmptyTable로 변경할 수 있으면 변경한다")
+    fun changeEmptyTableIfPossible() {
+        // given
+        val orderTable = Fixtures.orderTable(orderTableOccupancy = OrderTableOccupancy(4, OrderTableStatus.OCCUPIED))
+        val orderTable2 = Fixtures.orderTable(orderTableOccupancy = OrderTableOccupancy(4, OrderTableStatus.OCCUPIED))
+
+        // when
+        orderTable.emptyIfPossible(object : OrderTableEmptyService {
+            override fun canEmpty(orderTable: OrderTable): Boolean {
+                return true
+            }
+        })
+        orderTable2.emptyIfPossible(object : OrderTableEmptyService {
+            override fun canEmpty(orderTable: OrderTable): Boolean {
+                return false
+            }
+        })
+
+        // then
+        assertAll(
+            { assertEquals(orderTable.orderTableOccupancy.numberOfGuests, 0) },
+            { assertEquals(orderTable.orderTableOccupancy.status, OrderTableStatus.EMPTY) },
+            { assertEquals(orderTable2.orderTableOccupancy.numberOfGuests, 4) },
+            { assertEquals(orderTable2.orderTableOccupancy.status, OrderTableStatus.OCCUPIED) }
         )
     }
 }

@@ -59,11 +59,11 @@ class EatInOrder(
         status = EatInOrderStatus.SERVED
     }
 
-    fun complete() {
+    fun complete(orderTable: OrderTable, orderTableEmptyService: OrderTableEmptyService) {
         check(status == EatInOrderStatus.SERVED) {
             "완료할 수 있는 상태가 아닙니다."
         }
         status = EatInOrderStatus.COMPLETED
-        registerEvent(EatInOrderCompleteEvent(id))
+        orderTable.emptyIfPossible(orderTableEmptyService)
     }
 }

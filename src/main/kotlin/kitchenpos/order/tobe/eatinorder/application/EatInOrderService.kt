@@ -7,6 +7,7 @@ import kitchenpos.order.tobe.eatinorder.domain.EatInOrder
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrderLineItem
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrderLineItems
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrderRepository
+import kitchenpos.order.tobe.eatinorder.domain.OrderTableEmptyService
 import kitchenpos.order.tobe.eatinorder.domain.OrderTableRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -16,6 +17,7 @@ class EatInOrderService(
     private val eatInOrderRepository: EatInOrderRepository,
     private val orderTableRepository: OrderTableRepository,
     private val orderMenuClient: OrderMenuClient,
+    private val orderTableEmptyService: OrderTableEmptyService,
 ) {
 
     @Transactional
@@ -58,7 +60,9 @@ class EatInOrderService(
         val eatInOrder = eatInOrderRepository.findById(orderId).orElseThrow {
             NoSuchElementException("주문이 존재하지 않습니다.")
         }
-        eatInOrder.complete()
-        eatInOrderRepository.save(eatInOrder)
+        val orderTable = orderTableRepository.findById(eatInOrder.orderTableId).orElseThrow {
+            NoSuchElementException("주문 테이블이 존재하지 않습니다.")
+        }
+        eatInOrder.complete(orderTable, orderTableEmptyService)
     }
 }
