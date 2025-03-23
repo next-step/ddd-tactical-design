@@ -60,7 +60,7 @@ public class EatInOrder {
                       final EatInOrderLineItems orderLineItems,
                       final EatInOrderMenus eatInOrderMenus) {
         validate(orderTableId, status, orderDateTime, orderLineItems);
-        eatInOrderMenus.validate(orderLineItems);
+        orderLineItems.validateWith(eatInOrderMenus);
         this.orderTableId = new OrderTableId(orderTableId);
         this.status = status;
         this.orderDateTime = new EatInOrderDateTime(orderDateTime);

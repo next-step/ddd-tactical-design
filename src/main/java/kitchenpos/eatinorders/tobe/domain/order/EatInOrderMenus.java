@@ -1,8 +1,10 @@
 package kitchenpos.eatinorders.tobe.domain.order;
 
-import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderLineItems;
+import java.util.UUID;
 
 public interface EatInOrderMenus {
 
-    void validate(final EatInOrderLineItems items);
+    boolean isSameSize(int size);
+    boolean isDisplayed(UUID menuId);
+    boolean isSamePrice(UUID menuId, int price);
 }

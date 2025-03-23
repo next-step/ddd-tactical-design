@@ -18,7 +18,7 @@ class EatInOrderLineItemTest {
                 = new EatInOrderLineItem(menuId, 1, 20_000);
 
         // when
-        final UUID actual = eatInOrderLineItem.menuId();
+        final UUID actual = eatInOrderLineItem.getMenuId();
 
         // then
         assertThat(actual).isEqualTo(menuId);

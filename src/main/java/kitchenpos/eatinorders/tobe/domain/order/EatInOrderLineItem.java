@@ -35,24 +35,16 @@ public class EatInOrderLineItem {
     public EatInOrderLineItem(final UUID menuId,
                               final int quantity,
                               final int price) {
-        validate(menuId, eatInorderId, quantity, price);
+        validate(menuId, quantity, price);
         this.menuId = menuId;
         this.quantity = new EatInOrderLineItemQuantity(quantity);
         this.price = new EatInOrderLineItemPrice(price);
     }
 
-    private void validate(final UUID menuId, final UUID eatInorderId, final int quantity, final int price) {
-        if (isNull(menuId) || isNull(eatInorderId)  || isNull(quantity) || isNull(price)) {
+    private void validate(final UUID menuId, final int quantity, final int price) {
+        if (isNull(menuId) || isNull(quantity) || isNull(price)) {
             throw new IllegalArgumentException();
         }
-    }
-
-    public UUID menuId() {
-        return menuId;
-    }
-
-    public int amount() {
-        return price.getPrice() * quantity.getQuantity();
     }
 
     public UUID getMenuId() {
@@ -61,5 +53,9 @@ public class EatInOrderLineItem {
 
     public int getPrice() {
         return price.getPrice();
+    }
+
+    public int amount() {
+        return price.getPrice() * quantity.getQuantity();
     }
 }

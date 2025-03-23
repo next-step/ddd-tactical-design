@@ -10,7 +10,7 @@ import java.util.UUID;
  */
 public interface EatInOrderMenu {
 
-    boolean exists(final UUID menuID);
-    boolean isDisplayed(final UUID menuId);
-    boolean isSamePrice(final UUID menuId, final int price);
+    UUID getMenuId();
+    boolean isDisplayed();
+    boolean isSamePrice(int price);
 }
