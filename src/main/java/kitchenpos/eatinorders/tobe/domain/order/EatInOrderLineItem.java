@@ -54,4 +54,12 @@ public class EatInOrderLineItem {
     public int amount() {
         return price.getPrice() * quantity.getQuantity();
     }
+
+    public UUID getMenuId() {
+        return menuId;
+    }
+
+    public int getPrice() {
+        return price.getPrice();
+    }
 }

@@ -25,6 +25,10 @@ public class EatInOrderLineItems {
         this.items = new ArrayList<>(items);
     }
 
+    public List<EatInOrderLineItem> getItems() {
+        return items;
+    }
+
     public int totalPrice() {
         return items.stream()
                 .mapToInt(EatInOrderLineItem::amount)
