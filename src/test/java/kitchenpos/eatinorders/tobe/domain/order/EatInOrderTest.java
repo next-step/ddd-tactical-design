@@ -242,5 +242,37 @@ class EatInOrderTest {
         // then
         assertThat(eatInOrder.getStatus()).isEqualTo(EatInOrderStatus.ACCEPTED);
     }
+
+    @DisplayName("접수되지 않은 주문은 서빙할 수 없다.")
+    @EnumSource(value = EatInOrderStatus.class, names = {"WAITING", "SERVED", "COMPLETED"})
+    @ParameterizedTest(name = "{index}. 주문 상태: {0}")
+    void 주문_상태가_접수가_아니면_서빙할_수_없다(final EatInOrderStatus status) {
+        // given
+        UUID firstMenuId = UUID.randomUUID();
+        EatInOrderMenus menus = new DefaultEatInOrderMenus(new DefaultEatInOrderMenu(firstMenuId, 10000, true));
+        EatInOrderLineItem item = new EatInOrderLineItem(firstMenuId, 1, 10000);
+        EatInOrderLineItems lineItems = new EatInOrderLineItems(List.of(item));
+        EatInOrder order = new EatInOrder(UUID.randomUUID(), UUID.randomUUID(), status, LocalDateTime.now(), lineItems, menus);
+
+        // when & then
+        assertThatThrownBy(order::served)
+                .isExactlyInstanceOf(IllegalStateException.class);
+    }
+
+    @Test
+    void 주문_상태가_접수이면_서빙할_수_있다() {
+        // given
+        UUID menuId = UUID.randomUUID();
+        EatInOrderMenus menus = new DefaultEatInOrderMenus(new DefaultEatInOrderMenu(menuId, 10000, true));
+        EatInOrderLineItem item = new EatInOrderLineItem(menuId, 1, 10000);
+        EatInOrderLineItems lineItems = new EatInOrderLineItems(List.of(item));
+        EatInOrder order = new EatInOrder(UUID.randomUUID(), UUID.randomUUID(), EatInOrderStatus.ACCEPTED, LocalDateTime.now(), lineItems, menus);
+
+        // when
+        order.served();
+
+        // then
+        assertThat(order.getStatus()).isEqualTo(EatInOrderStatus.SERVED);
+    }
     }
 }
