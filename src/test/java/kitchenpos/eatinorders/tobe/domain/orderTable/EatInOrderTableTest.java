@@ -4,9 +4,11 @@ package kitchenpos.eatinorders.tobe.domain.orderTable;
 import kitchenpos.eatinorders.tobe.domain.exception.InvalidNumberOfGuestsException;
 import kitchenpos.eatinorders.tobe.domain.exception.InvalidOccupiedException;
 import kitchenpos.eatinorders.tobe.domain.exception.InvalidTableNameException;
+import kitchenpos.eatinorders.tobe.domain.exception.UncompletedOrdersExistException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -58,5 +60,29 @@ class EatInOrderTableTest {
         assertThatThrownBy(() -> orderTable.changeNumberOfGuests(numberOfGuests))
                 .isInstanceOf(InvalidNumberOfGuestsException.class)
                 .hasMessage("방문한 손님 수가 0명 이상이어야 합니다.");
+    }
+
+    @Test
+    void 주문_완료_후_테이블을_비운다() {
+        // given
+        final EatInOrderTable orderTable = new EatInOrderTable("1번", 1, true);
+
+        // when
+        orderTable.clear(new EmptyOrderTableOrders());
+
+        // then
+        assertThat(orderTable.numberOfGuests()).isEqualTo(0);
+        assertThat(orderTable.occupied()).isFalse();
+    }
+
+    @Test
+    void 완료되지_않은_주문이_존재하면_테이블을_비울_수_없다() {
+        // given
+        final EatInOrderTable orderTable = new EatInOrderTable("1번", 4, true);
+
+        // when & then
+        assertThatThrownBy(() -> orderTable.clear(new ExistOrderTableOrders())) // orderTable.clear(orderTableId -> true);
+                .isInstanceOf(UncompletedOrdersExistException.class)
+                .hasMessage("완료되지 않은 주문이 존재하는 테이블은 비울 수 없습니다.");
     }
 }

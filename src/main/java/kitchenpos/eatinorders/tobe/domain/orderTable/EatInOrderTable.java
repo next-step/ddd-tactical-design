@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import kitchenpos.eatinorders.tobe.domain.exception.InvalidOccupiedException;
+import kitchenpos.eatinorders.tobe.domain.exception.UncompletedOrdersExistException;
 import kitchenpos.eatinorders.tobe.domain.orderTable.vo.NumberOfGuests;
 import kitchenpos.eatinorders.tobe.domain.orderTable.vo.Occupied;
 import kitchenpos.eatinorders.tobe.domain.orderTable.vo.TableName;
@@ -48,5 +49,17 @@ public class EatInOrderTable {
 
     public int numberOfGuests() {
         return numberOfGuests.getNumberOfGuests();
+    }
+
+    public boolean occupied() {
+        return occupied.isOccupied();
+    }
+
+    public void clear(final OrderTableOrders orderTableOrders) {
+        if (orderTableOrders.existByOrderTableId(id)) {
+            throw new UncompletedOrdersExistException("완료되지 않은 주문이 존재하는 테이블은 비울 수 없습니다.");
+        }
+        this.numberOfGuests = new NumberOfGuests(0);
+        this.occupied = new Occupied(false);
     }
 }
