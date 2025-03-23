@@ -119,6 +119,18 @@ public class EatInOrder {
         }
     }
 
+    public void accepted() {
+        this.status = status.accepted();
+    }
+
+    public void served() {
+        this.status = status.served();
+    }
+
+    public void completed() {
+        this.status = status.completed();
+    }
+
     public UUID getId() {
         return id;
     }

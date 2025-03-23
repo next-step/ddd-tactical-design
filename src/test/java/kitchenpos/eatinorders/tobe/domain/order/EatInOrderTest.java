@@ -9,6 +9,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -189,5 +191,28 @@ class EatInOrderTest {
         // then
         assertThat(eatInOrder.getId()).isNotNull();
         assertThat(eatInOrder.getStatus()).isEqualTo(EatInOrderStatus.WAITING);
+    }
+
+    @EnumSource(value = EatInOrderStatus.class, names = {"ACCEPTED", "SERVED", "COMPLETED"})
+    @ParameterizedTest(name = "{index}. 주문 상태: {0}")
+    void 주문_상태가_대기중이_아니면_주문을_승인할_수_없다(final EatInOrderStatus status) {
+        // given
+        final UUID firstMenuId = UUID.randomUUID();
+        final UUID secondMenuId = UUID.randomUUID();
+        final EatInOrderMenus eatInOrderMenus = new DefaultEatInOrderMenus(
+                new DefaultEatInOrderMenu(firstMenuId, 20_000, true),
+                new DefaultEatInOrderMenu(secondMenuId, 22_000, true)
+        );
+
+        final EatInOrderLineItem firstEatInOrderLineItem = new EatInOrderLineItem(firstMenuId, 1, 20_000);
+        final EatInOrderLineItem secondEatInOrderLineItem = new EatInOrderLineItem(secondMenuId, 1, 22_000);
+        final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(List.of(firstEatInOrderLineItem, secondEatInOrderLineItem));
+
+        // when
+        final EatInOrder eatInOrder = new EatInOrder(UUID.randomUUID(), UUID.randomUUID(), status, LocalDateTime.now(), eatInOrderLineItems, eatInOrderMenus);
+
+        // then
+        assertThatThrownBy(eatInOrder::accepted)
+                .isExactlyInstanceOf(IllegalStateException.class);
     }
 }
