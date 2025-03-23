@@ -26,7 +26,7 @@ public class EatInOrderLineItems {
         this.items = new ArrayList<>(items);
     }
 
-    public void validateWith(final EatInOrderMenus menus) {
+    public void verifyMenus(final EatInOrderMenus menus) {
         if (!menus.isSameSize(items.size())) {
             throw new IllegalArgumentException("주문 항목 수와 메뉴 수가 일치하지 않습니다.");
         }
