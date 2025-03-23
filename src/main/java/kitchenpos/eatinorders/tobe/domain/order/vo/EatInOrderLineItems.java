@@ -37,7 +37,7 @@ public class EatInOrderLineItems {
             }
 
             if (!menus.isSamePrice(item.getMenuId(), item.getPrice())) {
-                throw new IllegalArgumentException("메뉴 가격이 일치하지 않습니다.");
+                throw new IllegalArgumentException("주문 항목에 있는 가격이 메뉴에 있는 가격과 동일하지 않습니다.");
             }
         }
     }

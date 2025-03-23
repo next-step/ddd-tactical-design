@@ -53,4 +53,62 @@ class EatInOrderTest {
                 )
         ).isInstanceOf(IllegalArgumentException.class);
     }
+
+    @Test
+    void 주문항목_과_관련된_메뉴가_존재해야_한다() {
+        // given
+        UUID menuId = UUID.randomUUID();
+        EatInOrderLineItem item = new EatInOrderLineItem(menuId, 1, 20_000);
+        EatInOrderLineItems items = new EatInOrderLineItems(List.of(item));
+
+        // when & then
+        assertThatThrownBy(
+                () -> new EatInOrder(
+                        UUID.randomUUID(),
+                        EatInOrderStatus.WAITING,
+                        LocalDateTime.now(),
+                        items,
+                        eatInOrderMenus)
+        ).isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("존재하지 않는 메뉴입니다.");
+    }
+
+    @Test
+    void 메뉴가_비노출_상태이면_주문을_생성할_수_없다() {
+        // given
+        UUID menuId = UUID.randomUUID();
+        EatInOrderMenu eatInOrderMenu = new DefaultEatInOrderMenu(menuId, 1, false);
+        EatInOrderMenus eatInOrderMenus = new DefaultEatInOrderMenus(eatInOrderMenu);
+        EatInOrderLineItem item = new EatInOrderLineItem(menuId, 1, 20_000);
+        EatInOrderLineItems items = new EatInOrderLineItems(List.of(item));
+
+        // when
+        assertThatThrownBy(
+                () -> new EatInOrder(
+                        UUID.randomUUID(),
+                        EatInOrderStatus.WAITING,
+                        LocalDateTime.now(),
+                        items,
+                        eatInOrderMenus)
+        ).isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("표시되지 않은 메뉴는 주문할 수 없습니다.");
+    }
+
+    @Test
+    void 주문항목이_메뉴에_있는_가격과_같아야한다() {
+        // given
+        EatInOrderLineItem item = new EatInOrderLineItem(menuId, 1, 19_000);
+        EatInOrderLineItems items = new EatInOrderLineItems(List.of(item));
+
+        // when  &  then
+        assertThatThrownBy(
+                () -> new EatInOrder(
+                        UUID.randomUUID(),
+                        EatInOrderStatus.WAITING,
+                        LocalDateTime.now(),
+                        items,
+                        eatInOrderMenus)
+        ).isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("주문 항목에 있는 가격이 메뉴에 있는 가격과 동일하지 않습니다.");
+    }
 }
