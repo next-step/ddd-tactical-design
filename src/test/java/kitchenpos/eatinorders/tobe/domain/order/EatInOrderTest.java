@@ -214,5 +214,33 @@ class EatInOrderTest {
         // then
         assertThatThrownBy(eatInOrder::accepted)
                 .isExactlyInstanceOf(IllegalStateException.class);
+        /**
+         * isExactlyInstanceOf: 객체가 특정 클래스의 "정확한" 인스턴스(지정한 클래스 그 자체)인지 확인할 때 사용
+         *                      -> 예외 클래스 계층이 존재할 때, 특정 예외 클래스인지 확실히 확인하고 싶을 때 좋다.
+         *                      -> isInstanceOf와 달리, 하위 클래스는 허용하지 않음
+         */
+    }
+
+    @Test
+    void 주문_상태가_대기중이면_주문을_승인할_수_있다() {
+        // given
+        final UUID firstMenuId = UUID.randomUUID();
+        final UUID secondMenuId = UUID.randomUUID();
+        final EatInOrderMenus eatInOrderMenus = new DefaultEatInOrderMenus(
+                new DefaultEatInOrderMenu(firstMenuId, 20_000, true),
+                new DefaultEatInOrderMenu(secondMenuId, 22_000, true)
+        );
+
+        final EatInOrderLineItem firstEatInOrderLineItem = new EatInOrderLineItem(firstMenuId, 1, 20_000);
+        final EatInOrderLineItem secondEatInOrderLineItem = new EatInOrderLineItem(secondMenuId, 1, 22_000);
+        final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(List.of(firstEatInOrderLineItem, secondEatInOrderLineItem));
+
+        // when
+        final EatInOrder eatInOrder = new EatInOrder(eatInOrderLineItems, eatInOrderMenus);
+        eatInOrder.accepted();
+
+        // then
+        assertThat(eatInOrder.getStatus()).isEqualTo(EatInOrderStatus.ACCEPTED);
+    }
     }
 }
