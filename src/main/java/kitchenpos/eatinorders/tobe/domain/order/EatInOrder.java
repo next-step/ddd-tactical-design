@@ -8,6 +8,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import static java.util.Objects.isNull;
+import kitchenpos.eatinorders.tobe.domain.exception.InvalidEatInOrderException;
+import kitchenpos.eatinorders.tobe.domain.exception.InvalidOccupiedException;
 import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderDateTime;
 import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderLineItems;
 import kitchenpos.eatinorders.tobe.domain.orderTable.vo.OrderTableId;
@@ -59,7 +61,7 @@ public class EatInOrder {
                       final LocalDateTime orderDateTime,
                       final EatInOrderLineItems orderLineItems,
                       final EatInOrderMenus eatInOrderMenus) {
-        validate(orderTableId, status, orderDateTime, orderLineItems);
+        validateOrderCreation(orderTableId, status, orderDateTime, orderLineItems);
         orderLineItems.verifyMenus(eatInOrderMenus);
         this.orderTableId = new OrderTableId(orderTableId);
         this.status = status;
@@ -73,7 +75,7 @@ public class EatInOrder {
                       final LocalDateTime orderDateTime,
                       final EatInOrderLineItems orderLineItems,
                       final EatInOrderMenus eatInOrderMenus) {
-        validate(orderTableId, isOccupied, status, orderDateTime, orderLineItems);
+        validateOrderCreationWithOccupiedTable(orderTableId, isOccupied, status, orderDateTime, orderLineItems);
         orderLineItems.verifyMenus(eatInOrderMenus);
         this.orderTableId = new OrderTableId(orderTableId);
         this.status = status;
@@ -81,26 +83,26 @@ public class EatInOrder {
         this.orderLineItems = orderLineItems;
     }
 
-    private void validate(final UUID orderTableId,
+    private void validateOrderCreation(final UUID orderTableId,
                           final EatInOrderStatus status,
                           final LocalDateTime orderDateTime,
                           final EatInOrderLineItems orderLineItems) {
         if (isNull(orderTableId) || isNull(status) || isNull(orderDateTime) || isNull(orderLineItems)) {
-            throw new IllegalArgumentException();
+            throw new InvalidEatInOrderException("주문 생성에 필요한 정보가 누락되었습니다.");
         }
     }
 
-    private void validate(final UUID orderTableId,
+    private void validateOrderCreationWithOccupiedTable(final UUID orderTableId,
                           final boolean isOccupied,
                           final EatInOrderStatus status,
                           final LocalDateTime orderDateTime,
                           final EatInOrderLineItems orderLineItems) {
         if (isNull(orderTableId) || isNull(status) || isNull(orderDateTime) || isNull(orderLineItems)) {
-            throw new IllegalArgumentException();
+            throw new InvalidEatInOrderException("주문 생성에 필요한 정보가 누락되었습니다.");
         }
 
         if (!isOccupied) {
-            throw new IllegalArgumentException("빈 테이블에는 주문할 수 없습니다.");
+            throw new InvalidOccupiedException("매장 주문은 손님이 앉은 테이블에서만 가능합니다.");
         }
     }
 }

@@ -1,5 +1,7 @@
 package kitchenpos.eatinorders.tobe.domain.order;
 
+import kitchenpos.eatinorders.tobe.domain.exception.InvalidEatInOrderException;
+import kitchenpos.eatinorders.tobe.domain.exception.InvalidOccupiedException;
 import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderLineItems;
 import kitchenpos.eatinorders.tobe.domain.orderTable.vo.OrderTableId;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -39,7 +41,8 @@ class EatInOrderTest {
                         eatInOrderLineItems,
                         eatInOrderMenus
                 )
-        ).isInstanceOf(IllegalArgumentException.class);
+        ).isInstanceOf(InvalidEatInOrderException.class)
+                .hasMessage("주문 생성에 필요한 정보가 누락되었습니다.");
     }
 
     @Test
@@ -53,9 +56,11 @@ class EatInOrderTest {
                         null,
                         eatInOrderMenus
                 )
-        ).isInstanceOf(IllegalArgumentException.class);
+        ).isInstanceOf(InvalidEatInOrderException.class)
+                .hasMessage("주문 생성에 필요한 정보가 누락되었습니다.");
     }
 
+    @DisplayName("고객이 미리 자리에 앉아 있고 아직 메뉴를 정하지 않는 상태에서 자리만 확보할 수 있기 때문에, 주문수량이 0일 수도 있다.")
     @Test
     void 매장_식사이면_주문수량이_0일_수도_있다() {
         // given
@@ -152,7 +157,7 @@ class EatInOrderTest {
                         eatInOrderLineItems,
                         eatInOrderMenus
                 )
-        ).isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("빈 테이블에는 주문할 수 없습니다.");
+        ).isInstanceOf(InvalidOccupiedException.class)
+                .hasMessageContaining("매장 주문은 손님이 앉은 테이블에서만 가능합니다.");
     }
 }
