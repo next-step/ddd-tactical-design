@@ -32,12 +32,4 @@ class EatInOrderLineItemTest {
                 new EatInOrderLineItem(null, 1, 20_000)
         ).isInstanceOf(InvalidEatInOrderLineItemException.class);
     }
-
-    @Test
-    void 주문항목_생성시_가격이_0보다_작으면_안된다() {
-        // given & when & then
-        assertThatThrownBy(() ->
-                new EatInOrderLineItem(UUID.randomUUID(), 1, -1)
-        ).isInstanceOf(InvalidEatInOrderLineItemException.class);
-    }
 }

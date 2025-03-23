@@ -55,8 +55,4 @@ public class EatInOrderLineItem {
     public int getPrice() {
         return price.getPrice();
     }
-
-    public int amount() {
-        return price.getPrice() * quantity.getQuantity();
-    }
 }
