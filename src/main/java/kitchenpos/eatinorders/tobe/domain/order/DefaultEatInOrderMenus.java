@@ -30,7 +30,7 @@ public class DefaultEatInOrderMenus implements EatInOrderMenus {
         return findBy(menuId).isSamePrice(price);
     }
 
-    private EatInOrderMenu findBy(UUID menuId) {
+    private EatInOrderMenu findBy(final UUID menuId) {
         return menus.stream()
                 .filter(m -> m.getMenuId().equals(menuId))
                 .findFirst()

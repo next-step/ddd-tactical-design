@@ -4,7 +4,7 @@ import java.util.UUID;
 
 public interface EatInOrderMenus {
 
-    boolean isSameSize(int size);
-    boolean isDisplayed(UUID menuId);
-    boolean isSamePrice(UUID menuId, int price);
+    boolean isSameSize(final int size);
+    boolean isDisplayed(final UUID menuId);
+    boolean isSamePrice(final UUID menuId, int price);
 }
