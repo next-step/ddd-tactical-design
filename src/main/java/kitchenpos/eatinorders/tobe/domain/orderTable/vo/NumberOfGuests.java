@@ -23,6 +23,10 @@ public class NumberOfGuests {
         this.numberOfGuests = numberOfGuests;
     }
 
+    public int getNumberOfGuests() {
+        return numberOfGuests;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -33,9 +37,5 @@ public class NumberOfGuests {
     @Override
     public int hashCode() {
         return Objects.hash(numberOfGuests);
-    }
-
-    public int getNumberOfGuests() {
-        return numberOfGuests;
     }
 }

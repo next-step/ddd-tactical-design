@@ -18,6 +18,10 @@ public class Occupied {
         this.occupied = occupied;
     }
 
+    public boolean isOccupied() {
+        return occupied;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -28,9 +32,5 @@ public class Occupied {
     @Override
     public int hashCode() {
         return Objects.hash(occupied);
-    }
-
-    public boolean isOccupied() {
-        return occupied;
     }
 }
