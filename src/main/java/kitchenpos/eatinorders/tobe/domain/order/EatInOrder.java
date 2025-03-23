@@ -67,12 +67,40 @@ public class EatInOrder {
         this.orderLineItems = orderLineItems;
     }
 
+    public EatInOrder(final UUID orderTableId,
+                      final boolean isOccupied,
+                      final EatInOrderStatus status,
+                      final LocalDateTime orderDateTime,
+                      final EatInOrderLineItems orderLineItems,
+                      final EatInOrderMenus eatInOrderMenus) {
+        validate(orderTableId, isOccupied, status, orderDateTime, orderLineItems);
+        orderLineItems.verifyMenus(eatInOrderMenus);
+        this.orderTableId = new OrderTableId(orderTableId);
+        this.status = status;
+        this.orderDateTime = new EatInOrderDateTime(orderDateTime);
+        this.orderLineItems = orderLineItems;
+    }
+
     private void validate(final UUID orderTableId,
                           final EatInOrderStatus status,
                           final LocalDateTime orderDateTime,
                           final EatInOrderLineItems orderLineItems) {
         if (isNull(orderTableId) || isNull(status) || isNull(orderDateTime) || isNull(orderLineItems)) {
             throw new IllegalArgumentException();
+        }
+    }
+
+    private void validate(final UUID orderTableId,
+                          final boolean isOccupied,
+                          final EatInOrderStatus status,
+                          final LocalDateTime orderDateTime,
+                          final EatInOrderLineItems orderLineItems) {
+        if (isNull(orderTableId) || isNull(status) || isNull(orderDateTime) || isNull(orderLineItems)) {
+            throw new IllegalArgumentException();
+        }
+
+        if (!isOccupied) {
+            throw new IllegalArgumentException("빈 테이블에는 주문할 수 없습니다.");
         }
     }
 }

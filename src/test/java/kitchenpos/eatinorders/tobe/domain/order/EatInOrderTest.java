@@ -1,6 +1,7 @@
 package kitchenpos.eatinorders.tobe.domain.order;
 
 import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderLineItems;
+import kitchenpos.eatinorders.tobe.domain.orderTable.vo.OrderTableId;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.BeforeEach;
@@ -130,5 +131,28 @@ class EatInOrderTest {
                         eatInOrderMenus)
         ).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("주문 항목에 있는 가격이 메뉴에 있는 가격과 동일하지 않습니다.");
+    }
+
+    @Test
+    void 손님이_앉은_테이블에서만_주문을_생성할_수_있다() {
+        // given
+        EatInOrderLineItem eatInOrderLineItem = new EatInOrderLineItem(menuId, 1, 20_000);
+        EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(List.of(eatInOrderLineItem));
+
+        OrderTableId tableId = new OrderTableId(UUID.randomUUID());
+        boolean isOccupied = false;
+
+        // when & then
+        assertThatThrownBy(() ->
+                new EatInOrder(
+                        tableId.getId(),
+                        isOccupied,
+                        EatInOrderStatus.WAITING,
+                        LocalDateTime.now(),
+                        eatInOrderLineItems,
+                        eatInOrderMenus
+                )
+        ).isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("빈 테이블에는 주문할 수 없습니다.");
     }
 }
