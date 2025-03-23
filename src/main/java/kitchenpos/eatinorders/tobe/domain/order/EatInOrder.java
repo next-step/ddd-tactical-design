@@ -56,53 +56,74 @@ public class EatInOrder {
     protected EatInOrder() {
     }
 
-    public EatInOrder(final UUID orderTableId,
+    public EatInOrder(final EatInOrderLineItems eatInOrderLineItems,
+                      final EatInOrderMenus eatInOrderMenus) {
+        this(UUID.randomUUID(), UUID.randomUUID(), EatInOrderStatus.WAITING, LocalDateTime.now(), eatInOrderLineItems, eatInOrderMenus);
+    }
+
+    public EatInOrder(final UUID orderId,
+                      final UUID orderTableId,
                       final EatInOrderStatus status,
                       final LocalDateTime orderDateTime,
                       final EatInOrderLineItems orderLineItems,
                       final EatInOrderMenus eatInOrderMenus) {
-        validateOrderCreation(orderTableId, status, orderDateTime, orderLineItems);
+        validateOrderCreation(orderId, orderTableId, status, orderDateTime, orderLineItems);
         orderLineItems.verifyMenus(eatInOrderMenus);
+        this.id = orderId;
         this.orderTableId = new OrderTableId(orderTableId);
         this.status = status;
         this.orderDateTime = new EatInOrderDateTime(orderDateTime);
         this.orderLineItems = orderLineItems;
     }
 
-    public EatInOrder(final UUID orderTableId,
+    public EatInOrder(final UUID orderId,
+                      final UUID orderTableId,
                       final boolean isOccupied,
                       final EatInOrderStatus status,
                       final LocalDateTime orderDateTime,
                       final EatInOrderLineItems orderLineItems,
                       final EatInOrderMenus eatInOrderMenus) {
-        validateOrderCreationWithOccupiedTable(orderTableId, isOccupied, status, orderDateTime, orderLineItems);
+        validateOrderCreationWithOccupiedTable(orderId, orderTableId, isOccupied, status, orderDateTime, orderLineItems);
         orderLineItems.verifyMenus(eatInOrderMenus);
+        this.id = orderId;
         this.orderTableId = new OrderTableId(orderTableId);
         this.status = status;
         this.orderDateTime = new EatInOrderDateTime(orderDateTime);
         this.orderLineItems = orderLineItems;
     }
 
-    private void validateOrderCreation(final UUID orderTableId,
-                          final EatInOrderStatus status,
-                          final LocalDateTime orderDateTime,
-                          final EatInOrderLineItems orderLineItems) {
-        if (isNull(orderTableId) || isNull(status) || isNull(orderDateTime) || isNull(orderLineItems)) {
+    private void validateOrderCreation(
+            final UUID orderId,
+            final UUID orderTableId,
+            final EatInOrderStatus status,
+            final LocalDateTime orderDateTime,
+            final EatInOrderLineItems orderLineItems) {
+        if (isNull(orderId) || isNull(orderTableId) || isNull(status) || isNull(orderDateTime) || isNull(orderLineItems)) {
             throw new InvalidEatInOrderException("주문 생성에 필요한 정보가 누락되었습니다.");
         }
     }
 
-    private void validateOrderCreationWithOccupiedTable(final UUID orderTableId,
-                          final boolean isOccupied,
-                          final EatInOrderStatus status,
-                          final LocalDateTime orderDateTime,
-                          final EatInOrderLineItems orderLineItems) {
-        if (isNull(orderTableId) || isNull(status) || isNull(orderDateTime) || isNull(orderLineItems)) {
+    private void validateOrderCreationWithOccupiedTable(
+            final UUID orderId,
+            final UUID orderTableId,
+            final boolean isOccupied,
+            final EatInOrderStatus status,
+            final LocalDateTime orderDateTime,
+            final EatInOrderLineItems orderLineItems) {
+        if (isNull(orderId) || isNull(orderTableId) || isNull(status) || isNull(orderDateTime) || isNull(orderLineItems)) {
             throw new InvalidEatInOrderException("주문 생성에 필요한 정보가 누락되었습니다.");
         }
 
         if (!isOccupied) {
             throw new InvalidOccupiedException("매장 주문은 손님이 앉은 테이블에서만 가능합니다.");
         }
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public EatInOrderStatus getStatus() {
+        return status;
     }
 }
