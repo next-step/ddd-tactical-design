@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import static java.util.Objects.isNull;
+import kitchenpos.eatinorders.tobe.domain.exception.InvalidEatInOrderLineItemException;
 import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderLineItemPrice;
 import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderLineItemQuantity;
 
@@ -43,7 +44,7 @@ public class EatInOrderLineItem {
 
     private void validate(final UUID menuId, final int quantity, final int price) {
         if (isNull(menuId) || isNull(quantity) || isNull(price)) {
-            throw new IllegalArgumentException();
+            throw new InvalidEatInOrderLineItemException();
         }
     }
 

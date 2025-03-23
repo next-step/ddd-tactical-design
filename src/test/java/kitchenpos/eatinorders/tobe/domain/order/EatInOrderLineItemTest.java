@@ -1,5 +1,6 @@
 package kitchenpos.eatinorders.tobe.domain.order;
 
+import kitchenpos.eatinorders.tobe.domain.exception.InvalidEatInOrderLineItemException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.DisplayName;
@@ -29,7 +30,7 @@ class EatInOrderLineItemTest {
         // given & when & then
         assertThatThrownBy(() ->
                 new EatInOrderLineItem(null, 1, 20_000)
-        ).isInstanceOf(IllegalArgumentException.class);
+        ).isInstanceOf(InvalidEatInOrderLineItemException.class);
     }
 
     @Test
@@ -37,6 +38,6 @@ class EatInOrderLineItemTest {
         // given & when & then
         assertThatThrownBy(() ->
                 new EatInOrderLineItem(UUID.randomUUID(), 1, -1)
-        ).isInstanceOf(IllegalArgumentException.class);
+        ).isInstanceOf(InvalidEatInOrderLineItemException.class);
     }
 }
