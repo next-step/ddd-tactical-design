@@ -198,15 +198,9 @@ class EatInOrderTest {
     void 주문_상태가_대기중이_아니면_주문을_승인할_수_없다(final EatInOrderStatus status) {
         // given
         final UUID firstMenuId = UUID.randomUUID();
-        final UUID secondMenuId = UUID.randomUUID();
-        final EatInOrderMenus eatInOrderMenus = new DefaultEatInOrderMenus(
-                new DefaultEatInOrderMenu(firstMenuId, 20_000, true),
-                new DefaultEatInOrderMenu(secondMenuId, 22_000, true)
-        );
-
+        final EatInOrderMenus eatInOrderMenus = new DefaultEatInOrderMenus(new DefaultEatInOrderMenu(firstMenuId, 20_000, true));
         final EatInOrderLineItem firstEatInOrderLineItem = new EatInOrderLineItem(firstMenuId, 1, 20_000);
-        final EatInOrderLineItem secondEatInOrderLineItem = new EatInOrderLineItem(secondMenuId, 1, 22_000);
-        final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(List.of(firstEatInOrderLineItem, secondEatInOrderLineItem));
+        final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(List.of(firstEatInOrderLineItem));
 
         // when
         final EatInOrder eatInOrder = new EatInOrder(UUID.randomUUID(), UUID.randomUUID(), status, LocalDateTime.now(), eatInOrderLineItems, eatInOrderMenus);
@@ -225,15 +219,9 @@ class EatInOrderTest {
     void 주문_상태가_대기중이면_주문을_승인할_수_있다() {
         // given
         final UUID firstMenuId = UUID.randomUUID();
-        final UUID secondMenuId = UUID.randomUUID();
-        final EatInOrderMenus eatInOrderMenus = new DefaultEatInOrderMenus(
-                new DefaultEatInOrderMenu(firstMenuId, 20_000, true),
-                new DefaultEatInOrderMenu(secondMenuId, 22_000, true)
-        );
-
+        final EatInOrderMenus eatInOrderMenus = new DefaultEatInOrderMenus(new DefaultEatInOrderMenu(firstMenuId, 20_000, true));
         final EatInOrderLineItem firstEatInOrderLineItem = new EatInOrderLineItem(firstMenuId, 1, 20_000);
-        final EatInOrderLineItem secondEatInOrderLineItem = new EatInOrderLineItem(secondMenuId, 1, 22_000);
-        final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(List.of(firstEatInOrderLineItem, secondEatInOrderLineItem));
+        final EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems(List.of(firstEatInOrderLineItem));
 
         // when
         final EatInOrder eatInOrder = new EatInOrder(eatInOrderLineItems, eatInOrderMenus);
@@ -248,11 +236,11 @@ class EatInOrderTest {
     @ParameterizedTest(name = "{index}. 주문 상태: {0}")
     void 주문_상태가_접수가_아니면_서빙할_수_없다(final EatInOrderStatus status) {
         // given
-        UUID firstMenuId = UUID.randomUUID();
-        EatInOrderMenus menus = new DefaultEatInOrderMenus(new DefaultEatInOrderMenu(firstMenuId, 10000, true));
-        EatInOrderLineItem item = new EatInOrderLineItem(firstMenuId, 1, 10000);
-        EatInOrderLineItems lineItems = new EatInOrderLineItems(List.of(item));
-        EatInOrder order = new EatInOrder(UUID.randomUUID(), UUID.randomUUID(), status, LocalDateTime.now(), lineItems, menus);
+        final UUID firstMenuId = UUID.randomUUID();
+        final EatInOrderMenus menus = new DefaultEatInOrderMenus(new DefaultEatInOrderMenu(firstMenuId, 20_000, true));
+        final EatInOrderLineItem item = new EatInOrderLineItem(firstMenuId, 1, 20_000);
+        final EatInOrderLineItems lineItems = new EatInOrderLineItems(List.of(item));
+        final EatInOrder order = new EatInOrder(UUID.randomUUID(), UUID.randomUUID(), status, LocalDateTime.now(), lineItems, menus);
 
         // when & then
         assertThatThrownBy(order::served)
@@ -262,11 +250,11 @@ class EatInOrderTest {
     @Test
     void 주문_상태가_접수이면_서빙할_수_있다() {
         // given
-        UUID menuId = UUID.randomUUID();
-        EatInOrderMenus menus = new DefaultEatInOrderMenus(new DefaultEatInOrderMenu(menuId, 10000, true));
-        EatInOrderLineItem item = new EatInOrderLineItem(menuId, 1, 10000);
-        EatInOrderLineItems lineItems = new EatInOrderLineItems(List.of(item));
-        EatInOrder order = new EatInOrder(UUID.randomUUID(), UUID.randomUUID(), EatInOrderStatus.ACCEPTED, LocalDateTime.now(), lineItems, menus);
+        final UUID menuId = UUID.randomUUID();
+        final EatInOrderMenus menus = new DefaultEatInOrderMenus(new DefaultEatInOrderMenu(menuId, 20_000, true));
+        final EatInOrderLineItem item = new EatInOrderLineItem(menuId, 1, 20_000);
+        final EatInOrderLineItems lineItems = new EatInOrderLineItems(List.of(item));
+        final EatInOrder order = new EatInOrder(UUID.randomUUID(), UUID.randomUUID(), EatInOrderStatus.ACCEPTED, LocalDateTime.now(), lineItems, menus);
 
         // when
         order.served();
@@ -280,11 +268,11 @@ class EatInOrderTest {
     @ParameterizedTest(name = "{index}. 주문 상태: {0}")
     void 주문_상태가_서빙이_아니면_주문을_완료할_수_없다(final EatInOrderStatus status) {
         // given
-        UUID menuId = UUID.randomUUID();
-        EatInOrderMenus menus = new DefaultEatInOrderMenus(new DefaultEatInOrderMenu(menuId, 10000, true));
-        EatInOrderLineItem item = new EatInOrderLineItem(menuId, 1, 10000);
-        EatInOrderLineItems lineItems = new EatInOrderLineItems(List.of(item));
-        EatInOrder order = new EatInOrder(UUID.randomUUID(), UUID.randomUUID(), status, LocalDateTime.now(), lineItems, menus);
+        final UUID menuId = UUID.randomUUID();
+        final EatInOrderMenus menus = new DefaultEatInOrderMenus(new DefaultEatInOrderMenu(menuId, 20_000, true));
+        final EatInOrderLineItem item = new EatInOrderLineItem(menuId, 1, 20_000);
+        final EatInOrderLineItems lineItems = new EatInOrderLineItems(List.of(item));
+        final EatInOrder order = new EatInOrder(UUID.randomUUID(), UUID.randomUUID(), status, LocalDateTime.now(), lineItems, menus);
 
         // when & then
         assertThatThrownBy(order::completed)
@@ -294,11 +282,11 @@ class EatInOrderTest {
     @Test
     void 주문_상태가_서빙이면_주문을_완료할_수_있다() {
         // given
-        UUID menuId = UUID.randomUUID();
-        EatInOrderMenus menus = new DefaultEatInOrderMenus(new DefaultEatInOrderMenu(menuId, 10000, true));
-        EatInOrderLineItem item = new EatInOrderLineItem(menuId, 1, 10000);
-        EatInOrderLineItems lineItems = new EatInOrderLineItems(List.of(item));
-        EatInOrder order = new EatInOrder(UUID.randomUUID(), UUID.randomUUID(), EatInOrderStatus.SERVED, LocalDateTime.now(), lineItems, menus);
+        final UUID menuId = UUID.randomUUID();
+        final EatInOrderMenus menus = new DefaultEatInOrderMenus(new DefaultEatInOrderMenu(menuId, 20_000, true));
+        final EatInOrderLineItem item = new EatInOrderLineItem(menuId, 1, 20_000);
+        final EatInOrderLineItems lineItems = new EatInOrderLineItems(List.of(item));
+        final EatInOrder order = new EatInOrder(UUID.randomUUID(), UUID.randomUUID(), EatInOrderStatus.SERVED, LocalDateTime.now(), lineItems, menus);
 
         // when
         order.completed();
