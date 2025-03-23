@@ -1,6 +1,7 @@
 package kitchenpos.eatinorders.tobe.domain.order;
 
 import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderLineItems;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -55,7 +56,26 @@ class EatInOrderTest {
     }
 
     @Test
-    void 주문항목_과_관련된_메뉴가_존재해야_한다() {
+    void 매장_식사이면_주문수량이_0일_수도_있다() {
+        // given
+        EatInOrderLineItem item = new EatInOrderLineItem(menuId, 0, 20_000);
+        EatInOrderLineItems items = new EatInOrderLineItems(List.of(item));
+
+        // when
+        EatInOrder eatInOrder = new EatInOrder(
+                UUID.randomUUID(),
+                EatInOrderStatus.WAITING,
+                LocalDateTime.now(),
+                items,
+                eatInOrderMenus
+        );
+
+        // then
+        assertThat(eatInOrder).isNotNull();
+    }
+
+    @Test
+    void 주문항목_과_연관된_메뉴가_존재해야_한다() {
         // given
         UUID menuId = UUID.randomUUID();
         EatInOrderLineItem item = new EatInOrderLineItem(menuId, 1, 20_000);
