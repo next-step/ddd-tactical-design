@@ -1,6 +1,7 @@
 package kitchenpos.eatinorders.tobe.domain.order;
 
 import kitchenpos.eatinorders.tobe.domain.exception.InvalidEatInOrderException;
+import kitchenpos.eatinorders.tobe.domain.exception.InvalidEatInOrderLineItemException;
 import kitchenpos.eatinorders.tobe.domain.exception.InvalidOccupiedException;
 import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderLineItems;
 import kitchenpos.eatinorders.tobe.domain.orderTable.vo.OrderTableId;
@@ -124,7 +125,7 @@ class EatInOrderTest {
                         LocalDateTime.now(),
                         items,
                         eatInOrderMenus)
-        ).isInstanceOf(IllegalArgumentException.class)
+        ).isInstanceOf(InvalidEatInOrderLineItemException.class)
                 .hasMessage("표시되지 않은 메뉴는 주문할 수 없습니다.");
     }
 
@@ -143,7 +144,7 @@ class EatInOrderTest {
                         LocalDateTime.now(),
                         items,
                         eatInOrderMenus)
-        ).isInstanceOf(IllegalArgumentException.class)
+        ).isInstanceOf(InvalidEatInOrderLineItemException.class)
                 .hasMessage("주문 항목에 있는 가격이 메뉴에 있는 가격과 동일하지 않습니다.");
     }
 
