@@ -44,7 +44,7 @@ public class EatInOrderLineItem {
 
     private void validate(final UUID menuId, final int quantity, final int price) {
         if (isNull(menuId) || isNull(quantity) || isNull(price)) {
-            throw new InvalidEatInOrderLineItemException();
+            throw new InvalidEatInOrderLineItemException("주문 항목 생성에 필요한 정보가 누락되었습니다.");
         }
     }
 

@@ -19,10 +19,6 @@ public class EatInOrderDateTime {
         this.orderDateTime = orderDateTime;
     }
 
-    public LocalDateTime getOrderDateTime() {
-        return orderDateTime;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
