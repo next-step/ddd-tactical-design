@@ -1,12 +1,17 @@
 package kitchenpos.eatinorders.tobe.application;
 
+import kitchenpos.eatinorders.tobe.domain.exception.InvalidTableNameException;
 import kitchenpos.eatinorders.tobe.domain.orderTable.EatInOrderTableRepository;
 import kitchenpos.eatinorders.tobe.ui.dto.CreateEatInOrderTableRequest;
 import kitchenpos.eatinorders.tobe.ui.dto.CreateEatInOrderTableResponse;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class EatInOrderTableServiceTest {
 
@@ -35,6 +40,19 @@ class EatInOrderTableServiceTest {
                 () -> assertThat(actual.numberOfGuests()).isEqualTo(0),
                 () -> assertThat(actual.occupied()).isEqualTo(false)
         );
+    }
+
+    @NullAndEmptySource
+    @ValueSource(strings = {" ", "   "})
+    @ParameterizedTest(name = "{index}. 주문 테이블명: {0}")
+    void 주문_테이블의_이름이_없으면_등록할_수_없다(final String invalidName) {
+        // given
+        final CreateEatInOrderTableRequest expected = new CreateEatInOrderTableRequest(invalidName);
+
+        // when & then
+        assertThatThrownBy(() -> eatInOrderTableService.create(expected))
+                .isInstanceOf(InvalidTableNameException.class)
+                .hasMessage("주문 테이블이 존재해야 합니다.");
     }
 
 }
