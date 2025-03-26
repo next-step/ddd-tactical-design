@@ -35,6 +35,7 @@ public class EatInOrderTable {
     public EatInOrderTable(final String name,
                            final int numberOfGuests,
                            final boolean occupied) {
+        this.id = UUID.randomUUID();
         this.name = new TableName(name);
         this.numberOfGuests = new NumberOfGuests(numberOfGuests);
         this.occupied = new Occupied(occupied);
@@ -61,5 +62,21 @@ public class EatInOrderTable {
         }
         this.numberOfGuests = new NumberOfGuests(0);
         this.occupied = new Occupied(false);
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name.getName();
+    }
+
+    public int getNumberOfGuests() {
+        return numberOfGuests.getNumberOfGuests();
+    }
+
+    public boolean getOccupied() {
+        return occupied.isOccupied();
     }
 }
