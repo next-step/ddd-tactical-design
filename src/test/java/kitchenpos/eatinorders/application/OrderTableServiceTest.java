@@ -8,6 +8,9 @@ import static kitchenpos.fixtures.OrderTableFixtures.changeOrderTable;
 import static kitchenpos.fixtures.OrderTableFixtures.clearOrderTable;
 import static kitchenpos.fixtures.OrderTableFixtures.createOrderTable;
 import static kitchenpos.fixtures.OrderTableFixtures.sitOrderTable;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -17,10 +20,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 class OrderTableServiceTest {
 
