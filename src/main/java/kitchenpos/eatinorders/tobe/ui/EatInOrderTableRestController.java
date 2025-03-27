@@ -37,10 +37,10 @@ public class EatInOrderTableRestController {
         return ResponseEntity.ok(eatInOrderTableService.sit(orderTableId));
     }
 
-//    @PutMapping("/{orderTableId}/clear")
-//    public ResponseEntity<OrderTable> clear(@PathVariable final UUID orderTableId) {
-//        return ResponseEntity.ok(eatInOrderTableService.clear(orderTableId));
-//    }
+    @PutMapping("/{orderTableId}/clear")
+    public ResponseEntity<EatInOrderTable> clear(@PathVariable final UUID orderTableId) {
+        return ResponseEntity.ok(eatInOrderTableService.clear(orderTableId));
+    }
 //
 //    @PutMapping("/{orderTableId}/number-of-guests")
 //    public ResponseEntity<OrderTable> changeNumberOfGuests(
