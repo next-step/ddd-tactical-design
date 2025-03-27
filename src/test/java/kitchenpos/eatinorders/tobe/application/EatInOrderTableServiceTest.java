@@ -1,6 +1,7 @@
 package kitchenpos.eatinorders.tobe.application;
 
 import kitchenpos.eatinorders.tobe.domain.exception.InvalidTableNameException;
+import kitchenpos.eatinorders.tobe.domain.orderTable.EatInOrderTable;
 import kitchenpos.eatinorders.tobe.domain.orderTable.EatInOrderTableRepository;
 import kitchenpos.eatinorders.tobe.ui.dto.CreateEatInOrderTableRequest;
 import kitchenpos.eatinorders.tobe.ui.dto.CreateEatInOrderTableResponse;
@@ -55,4 +56,21 @@ class EatInOrderTableServiceTest {
                 .hasMessage("주문 테이블이 존재해야 합니다.");
     }
 
+    @Test
+    void 주문_테이블에_손님이_앉으면_사용중_상태로_변경된다() {
+        // given
+        final EatInOrderTable eatInOrderTable = sitEatInOrderTable("1번 테이블", 0, false);
+        final EatInOrderTable expected = eatInOrderTableRepository.save(eatInOrderTable);
+
+        // when
+        EatInOrderTable actual = eatInOrderTableService.sit(expected.getId());
+
+        // then
+        assertThat(actual.getOccupied()).isTrue();
+    }
+
+    private EatInOrderTable sitEatInOrderTable(final String name, final int numberOfGuests, final boolean occupied) {
+        EatInOrderTable eatInOrderTable = new EatInOrderTable(name, numberOfGuests, occupied);
+        return eatInOrderTable;
+    }
 }
