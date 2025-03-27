@@ -35,4 +35,9 @@ public class ProductRestController {
     public ResponseEntity<List<Product>> findAll() {
         return ResponseEntity.ok(productService.findAll());
     }
+
+    @PostMapping("/ids")
+    public ResponseEntity<List<ProductResponse>> listByIds(@RequestBody final List<UUID> productIds) {
+        return ResponseEntity.ok(productService.listByIds(productIds));
+    }
 }

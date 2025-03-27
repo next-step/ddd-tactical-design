@@ -1,12 +1,9 @@
 package kitchenpos.products.tobe.application;
 
-import kitchenpos.products.infra.PurgomalumClient;
-import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductName;
-import kitchenpos.products.tobe.domain.ProductPrice;
-import kitchenpos.products.tobe.domain.ProductRepository;
+import kitchenpos.products.tobe.domain.*;
 import kitchenpos.products.tobe.ui.ProductChangePriceRequest;
 import kitchenpos.products.tobe.ui.ProductCreateRequest;
+import kitchenpos.products.tobe.ui.ProductResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,20 +14,20 @@ import java.util.UUID;
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private final PurgomalumClient purgomalumClient;
+    private final ProfanityChecker profanityChecker;
 
     public ProductService(
             final ProductRepository productRepository,
-            final PurgomalumClient purgomalumClient
+            final ProfanityChecker profanityChecker
     ) {
         this.productRepository = productRepository;
-        this.purgomalumClient = purgomalumClient;
+        this.profanityChecker = profanityChecker;
     }
 
     @Transactional
     public Product create(final ProductCreateRequest request) {
         final var id = UUID.randomUUID();
-        final var name = new ProductName(request.name(), purgomalumClient);
+        final var name = new ProductName(request.name(), profanityChecker);
         final var price = new ProductPrice(request.price());
         return productRepository.save(new Product(id, name, price));
     }
@@ -45,5 +42,13 @@ public class ProductService {
     @Transactional(readOnly = true)
     public List<Product> findAll() {
         return productRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public List<ProductResponse> listByIds(final List<UUID> productIds) {
+        List<Product> products = productRepository.findAllByIdIn(productIds);
+        return products.stream()
+                .map(product -> new ProductResponse(product.getId(), product.getPrice().value()))
+                .toList();
     }
 }
