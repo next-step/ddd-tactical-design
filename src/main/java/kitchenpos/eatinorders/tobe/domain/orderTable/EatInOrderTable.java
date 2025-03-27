@@ -55,6 +55,9 @@ public class EatInOrderTable {
     public boolean occupied() {
         return occupied.isOccupied();
     }
+    public void sit() {
+        this.occupied = new Occupied(true);
+    }
 
     public void clear(final OrderTableOrders orderTableOrders) {
         if (orderTableOrders.existByOrderTableId(id)) {
