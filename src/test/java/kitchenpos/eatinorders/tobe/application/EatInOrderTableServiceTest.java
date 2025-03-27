@@ -1,10 +1,14 @@
 package kitchenpos.eatinorders.tobe.application;
 
 import kitchenpos.eatinorders.tobe.domain.exception.InvalidTableNameException;
+import kitchenpos.eatinorders.tobe.domain.order.EatInOrderRepository;
 import kitchenpos.eatinorders.tobe.domain.orderTable.EatInOrderTable;
 import kitchenpos.eatinorders.tobe.domain.orderTable.EatInOrderTableRepository;
+import kitchenpos.eatinorders.tobe.domain.orderTable.EmptyOrderTableOrders;
+import kitchenpos.eatinorders.tobe.domain.orderTable.OrderTableOrders;
 import kitchenpos.eatinorders.tobe.ui.dto.CreateEatInOrderTableRequest;
 import kitchenpos.eatinorders.tobe.ui.dto.CreateEatInOrderTableResponse;
+import org.assertj.core.api.Assertions;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -17,13 +21,16 @@ import org.junit.jupiter.params.provider.ValueSource;
 class EatInOrderTableServiceTest {
 
     private EatInOrderTableService eatInOrderTableService;
-
+    private EatInOrderRepository eatInOrderRepository;
     private EatInOrderTableRepository eatInOrderTableRepository;
+    private OrderTableOrders orderTableOrders;
+
 
     @BeforeEach
     void setUp() {
+        orderTableOrders = new EmptyOrderTableOrders();
         eatInOrderTableRepository = new InMemoryEatInOrderTableRepository();
-        eatInOrderTableService = new EatInOrderTableService(eatInOrderTableRepository);
+        eatInOrderTableService = new EatInOrderTableService(eatInOrderRepository, eatInOrderTableRepository, orderTableOrders);
     }
 
     @Test
@@ -63,14 +70,34 @@ class EatInOrderTableServiceTest {
         final EatInOrderTable expected = eatInOrderTableRepository.save(eatInOrderTable);
 
         // when
-        EatInOrderTable actual = eatInOrderTableService.sit(expected.getId());
+        final EatInOrderTable actual = eatInOrderTableService.sit(expected.getId());
 
         // then
         assertThat(actual.getOccupied()).isTrue();
     }
 
+    @Test
+    void 주문이_완료된_경우_주문_테이블을_정리할_수_있다() {
+        // given
+        final EatInOrderTable eatInOrderTable = clearOrderTable("1번 테이블", 4, true);
+        final EatInOrderTable expected = eatInOrderTableRepository.save(eatInOrderTable);
+
+        final EatInOrderTable actual = eatInOrderTableService.clear(expected.getId());
+
+        // then
+        assertAll(
+                () -> Assertions.assertThat(actual.getNumberOfGuests()).isEqualTo(0),
+                () -> Assertions.assertThat(actual.occupied()).isFalse()
+        );
+    }
+
     private EatInOrderTable sitEatInOrderTable(final String name, final int numberOfGuests, final boolean occupied) {
         EatInOrderTable eatInOrderTable = new EatInOrderTable(name, numberOfGuests, occupied);
         return eatInOrderTable;
+    }
+
+    public static EatInOrderTable clearOrderTable(final String name, final int numberOfGuests, final boolean occupied) {
+        EatInOrderTable orderTable = new EatInOrderTable(name, numberOfGuests, occupied);
+        return orderTable;
     }
 }

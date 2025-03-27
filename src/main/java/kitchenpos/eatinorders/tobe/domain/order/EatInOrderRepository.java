@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface OrderRepository {
+public interface EatInOrderRepository {
     EatInOrder save(final EatInOrder order);
 
     Optional<EatInOrder> findById(final UUID id);
