@@ -1,4 +1,4 @@
-package kitchenpos.menus.tobe.infra;
+package kitchenpos.menus.tobe.application;
 
 public interface PurgomalumClient {
 

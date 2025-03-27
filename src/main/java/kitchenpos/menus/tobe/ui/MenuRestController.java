@@ -1,5 +1,8 @@
 package kitchenpos.menus.tobe.ui;
 
+import kitchenpos.menus.tobe.application.MenuCreateRequest;
+import kitchenpos.menus.tobe.application.MenuFacade;
+import kitchenpos.menus.tobe.application.MenuPriceChangeRequest;
 import kitchenpos.menus.tobe.application.MenuService;
 import kitchenpos.menus.tobe.domain.Menu;
 import org.springframework.http.ResponseEntity;
@@ -13,26 +16,28 @@ import java.util.UUID;
 @RestController("tobeMenuRestController")
 public class MenuRestController {
     private final MenuService menuService;
+    private final MenuFacade menuFacade;
 
-    public MenuRestController(final MenuService menuService) {
+    public MenuRestController(final MenuService menuService, final MenuFacade menuFacade) {
         this.menuService = menuService;
+        this.menuFacade = menuFacade;
     }
 
     @PostMapping
     public ResponseEntity<Menu> create(@RequestBody final MenuCreateRequest request) {
-        final Menu response = menuService.create(request);
+        final Menu response = menuFacade.create(request);
         return ResponseEntity.created(URI.create("/api/tobe/menus/" + response.getId()))
                 .body(response);
     }
 
     @PutMapping("/{menuId}/price")
     public ResponseEntity<Menu> changePrice(@PathVariable final UUID menuId, @RequestBody final MenuPriceChangeRequest request) {
-        return ResponseEntity.ok(menuService.changePrice(menuId, request));
+        return ResponseEntity.ok(menuFacade.changePrice(menuId, request));
     }
 
     @PutMapping("/{menuId}/display")
     public ResponseEntity<Menu> display(@PathVariable final UUID menuId) {
-        return ResponseEntity.ok(menuService.display(menuId));
+        return ResponseEntity.ok(menuFacade.display(menuId));
     }
 
     @PutMapping("/{menuId}/hide")

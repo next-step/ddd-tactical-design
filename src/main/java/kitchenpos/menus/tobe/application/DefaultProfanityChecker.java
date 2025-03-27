@@ -1,7 +1,6 @@
 package kitchenpos.menus.tobe.application;
 
 import kitchenpos.menus.tobe.domain.ProfanityChecker;
-import kitchenpos.products.infra.PurgomalumClient;
 import org.springframework.stereotype.Component;
 
 @Component("tobeMenuContextProfanityChecker")

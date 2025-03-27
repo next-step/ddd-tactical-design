@@ -1,5 +1,8 @@
 package kitchenpos.menus.tobe.infra;
 
+import kitchenpos.menus.tobe.application.ProductClient;
+import kitchenpos.menus.tobe.domain.ProductInfo;
+import kitchenpos.menus.tobe.domain.ProductInfos;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -24,19 +27,19 @@ public class RestTemplateProductClient implements ProductClient {
     }
 
     @Override
-    public ProductResponses listByIds(List<UUID> productIds) {
+    public ProductInfos listByIds(List<UUID> productIds) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
 
-            List<ProductResponse> body = restTemplate.exchange(
+            List<ProductInfo> body = restTemplate.exchange(
                     BASE_URL + CHECK_PRODUCTS_EXISTENCE_URL,
                     HttpMethod.POST,
                     new HttpEntity<>(productIds, headers),
-                    new ParameterizedTypeReference<List<ProductResponse>>() {
+                    new ParameterizedTypeReference<List<ProductInfo>>() {
                     }
             ).getBody();
-            return new ProductResponses(body);
+            return new ProductInfos(body);
 
         } catch (RestClientException e) {
             throw new IllegalArgumentException();

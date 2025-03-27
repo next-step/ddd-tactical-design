@@ -2,6 +2,7 @@ package kitchenpos.menus.tobe.domain;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -21,8 +22,11 @@ public class MenuProducts {
     protected MenuProducts() {
     }
 
-    public MenuProducts(final List<MenuProduct> menuProducts) {
-        this.menuProductList = menuProducts;
+    public MenuProducts(MenuProductCatalog menuProductCatalog) {
+        this.menuProductList = menuProductCatalog.getEntries()
+                .stream()
+                .map(menuProductInfo -> new MenuProduct(menuProductInfo.id(), menuProductInfo.quantity()))
+                .toList();
     }
 
     public List<UUID> getProductIds() {
@@ -36,5 +40,14 @@ public class MenuProducts {
                 .filter(menuProduct -> menuProduct.getProductId().equals(id))
                 .findFirst()
                 .orElseThrow(NoSuchElementException::new);
+    }
+
+    public BigDecimal calculateTotalPrice(ProductInfos productInfos) {
+        return menuProductList.stream()
+                .map(menuProduct -> {
+                    ProductInfo productInfo = productInfos.findById(menuProduct.getProductId());
+                    return productInfo.price().multiply(BigDecimal.valueOf(menuProduct.getQuantity().value()));
+                })
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

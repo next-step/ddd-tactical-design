@@ -1,8 +1,6 @@
 package kitchenpos.menus.tobe.application;
 
 import kitchenpos.menus.tobe.domain.*;
-import kitchenpos.menus.tobe.ui.MenuCreateRequest;
-import kitchenpos.menus.tobe.ui.MenuPriceChangeRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,48 +12,30 @@ import java.util.UUID;
 public class MenuService {
 
     private final MenuRepository menuRepository;
-    private final MenuGroupService menuGroupService;
-    private final ProfanityChecker profanityChecker;
-    private final MenuProductService menuProductService;
 
-    public MenuService(
-            final MenuRepository menuRepository,
-            final MenuGroupService menuGroupService,
-            final ProfanityChecker profanityChecker,
-            final MenuProductService menuProductService
-    ) {
+    public MenuService(final MenuRepository menuRepository) {
         this.menuRepository = menuRepository;
-        this.menuGroupService = menuGroupService;
-        this.profanityChecker = profanityChecker;
-        this.menuProductService = menuProductService;
     }
 
     @Transactional
-    public Menu create(final MenuCreateRequest request) {
-        final MenuPrice price = new MenuPrice(request.price());
-        final MenuGroup menuGroup = menuGroupService.findById(request.menuGroupId());
-        final List<MenuProduct> menuProducts = menuProductService.getMenuProducts(price, request.menuProducts(), request.productIds());
-        final MenuName name = new MenuName(request.name(), profanityChecker);
-        final Menu menu = new Menu(UUID.randomUUID(), name, price, menuGroup, request.displayed(), menuProducts);
+    public Menu create(final MenuName name, final MenuPrice price, final MenuGroup menuGroup, final boolean displayed, final MenuProductCatalog menuProductCatalog) {
+        final Menu menu = new Menu(UUID.randomUUID(), name, price, menuGroup, displayed, menuProductCatalog);
         return menuRepository.save(menu);
     }
 
     @Transactional
-    public Menu changePrice(final UUID menuId, final MenuPriceChangeRequest request) {
-        final MenuPrice price = new MenuPrice(request.price());
+    public Menu changePrice(final UUID menuId, final MenuPrice price, final ProductInfos productInfos) {
         final Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(NoSuchElementException::new);
-        menuProductService.checkMenuProductPrice(menu.getMenuProducts(), price);
-        menu.changePrice(price);
+        menu.changePrice(price, productInfos);
         return menu;
     }
 
     @Transactional
-    public Menu display(final UUID menuId) {
+    public Menu display(final UUID menuId, final ProductInfos productInfos) {
         final Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(NoSuchElementException::new);
-        menuProductService.checkMenuProductPrice(menu.getMenuProducts(), menu.getPrice());
-        menu.display();
+        menu.display(productInfos);
         return menu;
     }
 
@@ -70,5 +50,11 @@ public class MenuService {
     @Transactional(readOnly = true)
     public List<Menu> findAll() {
         return menuRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public Menu findById(UUID menuId) {
+        return menuRepository.findById(menuId)
+                .orElseThrow(NoSuchElementException::new);
     }
 }
