@@ -6,6 +6,7 @@ plugins {
     kotlin("jvm") version "1.9.23"
     kotlin("plugin.spring") version "1.9.23"
     kotlin("plugin.jpa") version "1.9.23"
+    kotlin("plugin.allopen") version "1.9.23"
     id("org.flywaydb.flyway") version "7.12.0"
 }
 
@@ -51,3 +52,10 @@ flyway {
     user = "user"
     password = "password"
 }
+
+allOpen {
+    annotation("javax.persistence.Entity")
+    annotation("javax.persistence.MappedSuperclass")
+    annotation("javax.persistence.Embeddable")
+}
+

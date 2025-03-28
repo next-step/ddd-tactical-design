@@ -20,7 +20,7 @@ public class OrderTable {
     @Column(name = "number_of_guests", nullable = false)
     private int numberOfGuests;
 
-    @Column(name = "occupied", nullable = false)
+    @Column(name = "occupied", columnDefinition = "varchar(255)", nullable = false)
     private boolean occupied;
 
     public OrderTable() {
