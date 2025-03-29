@@ -15,6 +15,7 @@ import kitchenpos.menus.tobe.domain.vo.MenuProductPrice;
 import kitchenpos.menus.tobe.domain.vo.MenuProductQuantity;
 import kitchenpos.products.tobe.domain.Product;
 
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -61,12 +62,21 @@ public class MenuProduct {
     }
 
     public int amount() {
-        return price.getPrice() * quantity.getQuantity();
+        return product.getPrice().intValue() * quantity.getQuantity();
     }
 
     public UUID getProductId() {
         return productId;
     }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public int getQuantity() {
+        return quantity.getQuantity();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

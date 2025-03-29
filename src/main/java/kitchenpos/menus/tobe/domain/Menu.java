@@ -96,6 +96,14 @@ public class Menu {
         this.price = new MenuPrice(newPrice);
     }
 
+    public boolean refreshDisplayedStatus() {
+        if (this.price.getPrice() > menuProducts.total()) {
+            this.displayed = false;
+            return true;
+        }
+        return false;
+    }
+
     public void display(MenuProducts menuProducts) {
         if (this.price.getPrice() > menuProducts.total()) {
             throw new InvalidMenuPriceException("메뉴 가격은 포함된 상품들의 총 가격보다 클 수 없습니다.");
@@ -117,6 +125,10 @@ public class Menu {
 
     public boolean isDisplayed() {
         return displayed;
+    }
+
+    public MenuProducts getMenuProducts() {
+        return menuProducts;
     }
 
     @Override
