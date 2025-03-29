@@ -29,11 +29,11 @@ class MenuServiceTest {
     @Test
     void 상품_가격이_변경되면_메뉴의_전시_상태가_숨김_처리된다() {
         // given
-        Product product = new Product("후라이드치킨", valueOf(20_000));
-        MenuProduct menuProduct = new MenuProduct(product, 20_000, 1, product.getId());
-        MenuProducts menuProducts = new MenuProducts(List.of(menuProduct));
+        final Product product = new Product("후라이드치킨", valueOf(20_000));
+        final MenuProduct menuProduct = new MenuProduct(product, 20_000, 1, product.getId());
+        final MenuProducts menuProducts = new MenuProducts(List.of(menuProduct));
 
-        Menu menu = new Menu(
+        final Menu menu = new Menu(
                 new MenuGroup("메인메뉴"),
                 "후라이드치킨",
                 20_000,
@@ -48,9 +48,9 @@ class MenuServiceTest {
         product.updatePrice(valueOf(10_000));
 
         // when
-        ProductPriceChangedEvent event = new ProductPriceChangedEvent(product.getId(), valueOf(10_000));
+        final ProductPriceChangedEvent event = new ProductPriceChangedEvent(product.getId(), valueOf(10_000));
         menuService.handleProductPriceChanged(event);
-        List<Menu> updatedMenus = menuRepository.findAllByProductId(product.getId());
+        final List<Menu> updatedMenus = menuRepository.findAllByProductId(product.getId());
 
         // then
         assertThat(updatedMenus).hasSize(1);
