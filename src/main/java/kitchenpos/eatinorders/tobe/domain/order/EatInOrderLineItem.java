@@ -10,6 +10,7 @@ import kitchenpos.eatinorders.tobe.domain.exception.InvalidEatInOrderLineItemExc
 import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderLineItemPrice;
 import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderLineItemQuantity;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "order_line_item")
@@ -54,5 +55,18 @@ public class EatInOrderLineItem {
 
     public int getPrice() {
         return price.getPrice();
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof EatInOrderLineItem that)) return false;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

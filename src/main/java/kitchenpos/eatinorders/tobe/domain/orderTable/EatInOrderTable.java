@@ -11,6 +11,7 @@ import kitchenpos.eatinorders.tobe.domain.orderTable.vo.NumberOfGuests;
 import kitchenpos.eatinorders.tobe.domain.orderTable.vo.Occupied;
 import kitchenpos.eatinorders.tobe.domain.orderTable.vo.TableName;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "order_table")
@@ -88,5 +89,17 @@ public class EatInOrderTable {
 
     public boolean getOccupied() {
         return occupied.isOccupied();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof EatInOrderTable that)) return false;
+        return Objects.equals(getId(), that.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }

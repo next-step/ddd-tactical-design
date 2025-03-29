@@ -15,6 +15,7 @@ import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderLineItems;
 import kitchenpos.eatinorders.tobe.domain.orderTable.vo.OrderTableId;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -137,5 +138,17 @@ public class EatInOrder {
 
     public EatInOrderStatus getStatus() {
         return status;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof EatInOrder that)) return false;
+        return Objects.equals(getId(), that.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }
