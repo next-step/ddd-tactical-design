@@ -29,9 +29,8 @@ public class EatInOrderTableService {
     }
 
     public CreateEatInOrderTableResponse create(final CreateEatInOrderTableRequest request) {
-        final String name = request.name();
         final EatInOrderTable eatInOrderTable = eatInOrderTableRepository.save(
-                new EatInOrderTable(name, 0, false));
+                new EatInOrderTable(request.name()));
         return CreateEatInOrderTableResponse.from(eatInOrderTable);
     }
 

@@ -32,6 +32,13 @@ public class EatInOrderTable {
     protected EatInOrderTable() {
     }
 
+    public EatInOrderTable(final String name) {
+        this.id = UUID.randomUUID();
+        this.name = new TableName(name);
+        this.numberOfGuests = new NumberOfGuests(0);
+        this.occupied = new Occupied(false);
+    }
+
     public EatInOrderTable(final String name,
                            final int numberOfGuests,
                            final boolean occupied) {
