@@ -15,6 +15,7 @@ import kitchenpos.menus.tobe.domain.vo.MenuPrice;
 import kitchenpos.menus.tobe.domain.vo.MenuProducts;
 import kitchenpos.menus.tobe.domain.vo.Profanities;
 
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -106,7 +107,27 @@ public class Menu {
         this.displayed = false;
     }
 
+    public UUID getId() {
+        return id;
+    }
+
+    public MenuPrice getPrice() {
+        return price;
+    }
+
     public boolean isDisplayed() {
         return displayed;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Menu menu)) return false;
+        return Objects.equals(getId(), menu.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }

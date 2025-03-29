@@ -67,4 +67,15 @@ public class MenuProduct {
     public UUID getProductId() {
         return productId;
     }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MenuProduct that)) return false;
+        return Objects.equals(seq, that.seq);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(seq);
+    }
 }
