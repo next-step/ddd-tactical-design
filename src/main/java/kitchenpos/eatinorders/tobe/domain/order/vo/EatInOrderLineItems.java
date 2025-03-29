@@ -28,12 +28,20 @@ public class EatInOrderLineItems {
         this.items = new ArrayList<>(items);
     }
 
+    public EatInOrderLineItems(final EatInOrderMenus eatInOrderMenus, final List<EatInOrderLineItem> items) {
+        if (isNull(eatInOrderMenus) || isNull(items) || items.isEmpty()) {
+            throw new InvalidEatInOrderLineItemException("주문 항목이 존재해야 합니다.");
+        }
+        this.items = new ArrayList<>(items);
+    }
+
     public void verifyMenus(final EatInOrderMenus menus) {
         if (!menus.isSameSize(items.size())) {
             throw new InvalidEatInOrderLineItemException("주문 항목 수와 메뉴 수가 일치하지 않습니다.");
         }
 
         for (EatInOrderLineItem item : items) {
+
             if (!menus.isDisplayed(item.getMenuId())) {
                 throw new InvalidEatInOrderLineItemException("표시되지 않은 메뉴는 주문할 수 없습니다.");
             }
