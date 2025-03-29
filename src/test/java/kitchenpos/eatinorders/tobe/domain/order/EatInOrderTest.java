@@ -3,6 +3,7 @@ package kitchenpos.eatinorders.tobe.domain.order;
 import kitchenpos.eatinorders.tobe.domain.exception.InvalidEatInOrderException;
 import kitchenpos.eatinorders.tobe.domain.exception.InvalidEatInOrderLineItemException;
 import kitchenpos.eatinorders.tobe.domain.exception.InvalidOccupiedException;
+import kitchenpos.eatinorders.tobe.domain.exception.InvalidOrderStatusTransitionException;
 import kitchenpos.eatinorders.tobe.domain.order.vo.EatInOrderLineItems;
 import kitchenpos.eatinorders.tobe.domain.orderTable.vo.OrderTableId;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -208,7 +209,7 @@ class EatInOrderTest {
 
         // then
         assertThatThrownBy(eatInOrder::accepted)
-                .isExactlyInstanceOf(IllegalStateException.class);
+                .isExactlyInstanceOf(InvalidOrderStatusTransitionException.class);
         /**
          * isExactlyInstanceOf: 객체가 특정 클래스의 "정확한" 인스턴스(지정한 클래스 그 자체)인지 확인할 때 사용
          *                      -> 예외 클래스 계층이 존재할 때, 특정 예외 클래스인지 확실히 확인하고 싶을 때 좋다.
@@ -245,7 +246,7 @@ class EatInOrderTest {
 
         // when & then
         assertThatThrownBy(order::served)
-                .isExactlyInstanceOf(IllegalStateException.class);
+                .isExactlyInstanceOf(InvalidOrderStatusTransitionException.class);
     }
 
     @Test
@@ -277,7 +278,7 @@ class EatInOrderTest {
 
         // when & then
         assertThatThrownBy(order::completed)
-                .isExactlyInstanceOf(IllegalStateException.class);
+                .isExactlyInstanceOf(InvalidOrderStatusTransitionException.class);
     }
 
     @Test
