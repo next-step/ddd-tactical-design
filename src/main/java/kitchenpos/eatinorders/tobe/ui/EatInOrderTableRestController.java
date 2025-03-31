@@ -6,6 +6,7 @@ import kitchenpos.eatinorders.tobe.ui.dto.ChangeNumberOfGuestsRequest;
 import kitchenpos.eatinorders.tobe.ui.dto.CreateEatInOrderTableRequest;
 import kitchenpos.eatinorders.tobe.ui.dto.CreateEatInOrderTableResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
+import java.util.List;
 import java.util.UUID;
 
 @RequestMapping("/api/order-tables")
@@ -50,9 +52,9 @@ public class EatInOrderTableRestController {
     ) {
         return ResponseEntity.ok(eatInOrderTableService.changeNumberOfGuests(orderTableId, request));
     }
-//
-//    @GetMapping
-//    public ResponseEntity<List<EatInOrderTable>> findAll() {
-//        return ResponseEntity.ok(eatInOrderTableService.findAll());
-//    }
+
+    @GetMapping
+    public ResponseEntity<List<EatInOrderTable>> findAll() {
+        return ResponseEntity.ok(eatInOrderTableService.findAll());
+    }
 }

@@ -12,6 +12,7 @@ import kitchenpos.eatinorders.tobe.ui.dto.CreateEatInOrderTableResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
@@ -61,5 +62,9 @@ public class EatInOrderTableService {
                 .orElseThrow(NoSuchElementException::new);
         eatInOrderTable.changeNumberOfGuests(numberOfGuests.getNumberOfGuests());
         return eatInOrderTable;
+    }
+
+    public List<EatInOrderTable> findAll() {
+        return eatInOrderTableRepository.findAll();
     }
 }
