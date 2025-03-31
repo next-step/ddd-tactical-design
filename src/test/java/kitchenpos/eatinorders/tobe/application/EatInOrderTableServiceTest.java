@@ -1,11 +1,13 @@
 package kitchenpos.eatinorders.tobe.application;
 
+import kitchenpos.eatinorders.tobe.domain.exception.InvalidOccupiedException;
 import kitchenpos.eatinorders.tobe.domain.exception.InvalidTableNameException;
 import kitchenpos.eatinorders.tobe.domain.order.EatInOrderRepository;
 import kitchenpos.eatinorders.tobe.domain.orderTable.EatInOrderTable;
 import kitchenpos.eatinorders.tobe.domain.orderTable.EatInOrderTableRepository;
 import kitchenpos.eatinorders.tobe.domain.orderTable.EmptyOrderTableOrders;
 import kitchenpos.eatinorders.tobe.domain.orderTable.OrderTableOrders;
+import kitchenpos.eatinorders.tobe.ui.dto.ChangeNumberOfGuestsRequest;
 import kitchenpos.eatinorders.tobe.ui.dto.CreateEatInOrderTableRequest;
 import kitchenpos.eatinorders.tobe.ui.dto.CreateEatInOrderTableResponse;
 import org.assertj.core.api.Assertions;
@@ -66,7 +68,7 @@ class EatInOrderTableServiceTest {
     @Test
     void 주문_테이블에_손님이_앉으면_사용중_상태로_변경된다() {
         // given
-        final EatInOrderTable eatInOrderTable = sitEatInOrderTable("1번 테이블", 0, false);
+        final EatInOrderTable eatInOrderTable = createEatInOrderTable("1번 테이블", 0, false);
         final EatInOrderTable expected = eatInOrderTableRepository.save(eatInOrderTable);
 
         // when
@@ -79,7 +81,7 @@ class EatInOrderTableServiceTest {
     @Test
     void 주문이_완료된_경우_주문_테이블을_정리할_수_있다() {
         // given
-        final EatInOrderTable eatInOrderTable = clearOrderTable("1번 테이블", 4, true);
+        final EatInOrderTable eatInOrderTable = createEatInOrderTable("1번 테이블", 4, true);
         final EatInOrderTable expected = eatInOrderTableRepository.save(eatInOrderTable);
 
         final EatInOrderTable actual = eatInOrderTableService.clear(expected.getId());
@@ -91,13 +93,32 @@ class EatInOrderTableServiceTest {
         );
     }
 
-    private EatInOrderTable sitEatInOrderTable(final String name, final int numberOfGuests, final boolean occupied) {
-        EatInOrderTable eatInOrderTable = new EatInOrderTable(name, numberOfGuests, occupied);
-        return eatInOrderTable;
+    @Test
+    void 주문_테이블의_손님_수를_변경할_수_있다() {
+        // given
+        final EatInOrderTable expected =  eatInOrderTableRepository.save(createEatInOrderTable("1번 테이블", 4, true));
+        final ChangeNumberOfGuestsRequest request = new ChangeNumberOfGuestsRequest(5);
+        final EatInOrderTable actual = eatInOrderTableService.changeNumberOfGuests(expected.getId(), request);
+
+        // when & then
+        assertThat(actual.numberOfGuests()).isEqualTo(5);
     }
 
-    public static EatInOrderTable clearOrderTable(final String name, final int numberOfGuests, final boolean occupied) {
-        EatInOrderTable orderTable = new EatInOrderTable(name, numberOfGuests, occupied);
-        return orderTable;
+    @Test
+    void 사용_중이_아닌_주문_테이블은_손님_수를_변경할_수_없다() {
+        // given
+        final EatInOrderTable eatInOrderTable =  eatInOrderTableRepository.save(createEatInOrderTable("1번 테이블", 4, false));
+        final ChangeNumberOfGuestsRequest request = new ChangeNumberOfGuestsRequest(5);
+
+        // when & then
+        assertThatThrownBy(() ->
+                eatInOrderTableService.changeNumberOfGuests(eatInOrderTable.getId(), request)
+        ).isInstanceOf(InvalidOccupiedException.class)
+                .hasMessage("손님 수를 변경하려면 테이블이 사용 중이어야 합니다.");
+    }
+
+    private EatInOrderTable createEatInOrderTable(final String name, final int numberOfGuests, final boolean occupied) {
+        EatInOrderTable eatInOrderTable = new EatInOrderTable(name, numberOfGuests, occupied);
+        return eatInOrderTable;
     }
 }
