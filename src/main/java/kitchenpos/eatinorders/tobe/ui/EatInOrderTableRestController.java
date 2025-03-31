@@ -2,6 +2,7 @@ package kitchenpos.eatinorders.tobe.ui;
 
 import kitchenpos.eatinorders.tobe.application.EatInOrderTableService;
 import kitchenpos.eatinorders.tobe.domain.orderTable.EatInOrderTable;
+import kitchenpos.eatinorders.tobe.ui.dto.ChangeNumberOfGuestsRequest;
 import kitchenpos.eatinorders.tobe.ui.dto.CreateEatInOrderTableRequest;
 import kitchenpos.eatinorders.tobe.ui.dto.CreateEatInOrderTableResponse;
 import org.springframework.http.ResponseEntity;
@@ -41,17 +42,17 @@ public class EatInOrderTableRestController {
     public ResponseEntity<EatInOrderTable> clear(@PathVariable final UUID orderTableId) {
         return ResponseEntity.ok(eatInOrderTableService.clear(orderTableId));
     }
-//
-//    @PutMapping("/{orderTableId}/number-of-guests")
-//    public ResponseEntity<OrderTable> changeNumberOfGuests(
-//            @PathVariable final UUID orderTableId,
-//            @RequestBody final OrderTable request
-//    ) {
-//        return ResponseEntity.ok(eatInOrderTableService.changeNumberOfGuests(orderTableId, request));
-//    }
+
+    @PutMapping("/{orderTableId}/number-of-guests")
+    public ResponseEntity<EatInOrderTable> changeNumberOfGuests(
+            @PathVariable final UUID orderTableId,
+            @RequestBody final ChangeNumberOfGuestsRequest request
+    ) {
+        return ResponseEntity.ok(eatInOrderTableService.changeNumberOfGuests(orderTableId, request));
+    }
 //
 //    @GetMapping
-//    public ResponseEntity<List<OrderTable>> findAll() {
+//    public ResponseEntity<List<EatInOrderTable>> findAll() {
 //        return ResponseEntity.ok(eatInOrderTableService.findAll());
 //    }
 }

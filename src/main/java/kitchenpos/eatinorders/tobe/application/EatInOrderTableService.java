@@ -5,11 +5,14 @@ import kitchenpos.eatinorders.tobe.domain.order.EatInOrderRepository;
 import kitchenpos.eatinorders.tobe.domain.orderTable.EatInOrderTable;
 import kitchenpos.eatinorders.tobe.domain.orderTable.EatInOrderTableRepository;
 import kitchenpos.eatinorders.tobe.domain.orderTable.OrderTableOrders;
+import kitchenpos.eatinorders.tobe.domain.orderTable.vo.NumberOfGuests;
+import kitchenpos.eatinorders.tobe.ui.dto.ChangeNumberOfGuestsRequest;
 import kitchenpos.eatinorders.tobe.ui.dto.CreateEatInOrderTableRequest;
 import kitchenpos.eatinorders.tobe.ui.dto.CreateEatInOrderTableResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Transactional
@@ -49,6 +52,14 @@ public class EatInOrderTableService {
                 .orElseThrow(() -> new InvalidEatInOrderTableException("주문 테이블이 존재해야 합니다."));
 
         eatInOrderTable.clear(orderTableOrders);
+        return eatInOrderTable;
+    }
+
+    public EatInOrderTable changeNumberOfGuests(final UUID orderTableId, final ChangeNumberOfGuestsRequest request) {
+        final NumberOfGuests numberOfGuests  = new NumberOfGuests(request.numberOfGuests());
+        final EatInOrderTable eatInOrderTable = eatInOrderTableRepository.findById(orderTableId)
+                .orElseThrow(NoSuchElementException::new);
+        eatInOrderTable.changeNumberOfGuests(numberOfGuests.getNumberOfGuests());
         return eatInOrderTable;
     }
 }
