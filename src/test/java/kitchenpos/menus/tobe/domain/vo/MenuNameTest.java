@@ -34,7 +34,7 @@ class MenuNameTest {
     @Test
     void 메뉴이름에_비속어가_포함되면_안된다() {
         // given
-        Profanities profanities;
+        final Profanities profanities;
         profanities = new FakeProfanitiesClient(List.of("욕설", "비속어"));
 
         // when & then

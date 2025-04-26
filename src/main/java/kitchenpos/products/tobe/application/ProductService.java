@@ -1,6 +1,5 @@
 package kitchenpos.products.tobe.application;
 
-import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.tobe.domain.exception.InvalidProductException;
 import kitchenpos.products.tobe.domain.vo.Profanities;
 import kitchenpos.products.tobe.domain.event.ProductPriceChangedEvent;
@@ -22,16 +21,13 @@ import java.util.UUID;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
-    private final MenuRepository menuRepository;
     private final Profanities profanities;
     private final ApplicationEventPublisher eventPublisher;
 
     public ProductService(final ProductRepository productRepository,
-                          final MenuRepository menuRepository,
                           final Profanities profanities,
                           final ApplicationEventPublisher eventPublisher) {
         this.productRepository = productRepository;
-        this.menuRepository = menuRepository;
         this.profanities = profanities;
         this.eventPublisher = eventPublisher;
     }
@@ -50,6 +46,7 @@ public class ProductService {
                 .orElseThrow(() -> new InvalidProductException("해당 상품이 존재하지 않습니다"));
         product.updatePrice(price.getPrice());
 
+        // 트랜잭션이 성공적으로 커밋된 후 ProductPriceChangedEvent 이벤트 리스너가 실행됨
         eventPublisher.publishEvent(new ProductPriceChangedEvent(productId, price.getPrice()));
         return ChangeProductResponse.from(product);
     }

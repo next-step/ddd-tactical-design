@@ -6,6 +6,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import kitchenpos.menus.tobe.domain.exception.InvalidMenuGroupNameException;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "menu_group")
@@ -21,11 +22,23 @@ public class MenuGroup {
     protected MenuGroup() {
     }
 
-    public MenuGroup(String name) {
+    public MenuGroup(final String name) {
         if (name == null || name.isBlank()) {
             throw new InvalidMenuGroupNameException("메뉴 그룹명이 존재해야 합니다.");
         }
         this.id = UUID.randomUUID();
         this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MenuGroup menuGroup)) return false;
+        return Objects.equals(id, menuGroup.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

@@ -15,6 +15,7 @@ import kitchenpos.menus.tobe.domain.vo.MenuPrice;
 import kitchenpos.menus.tobe.domain.vo.MenuProducts;
 import kitchenpos.menus.tobe.domain.vo.Profanities;
 
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -95,6 +96,14 @@ public class Menu {
         this.price = new MenuPrice(newPrice);
     }
 
+    public boolean refreshDisplayedStatus() {
+        if (this.price.getPrice() > menuProducts.total()) {
+            this.displayed = false;
+            return true;
+        }
+        return false;
+    }
+
     public void display(MenuProducts menuProducts) {
         if (this.price.getPrice() > menuProducts.total()) {
             throw new InvalidMenuPriceException("메뉴 가격은 포함된 상품들의 총 가격보다 클 수 없습니다.");
@@ -106,7 +115,31 @@ public class Menu {
         this.displayed = false;
     }
 
+    public UUID getId() {
+        return id;
+    }
+
+    public MenuPrice getPrice() {
+        return price;
+    }
+
     public boolean isDisplayed() {
         return displayed;
+    }
+
+    public MenuProducts getMenuProducts() {
+        return menuProducts;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Menu menu)) return false;
+        return Objects.equals(getId(), menu.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }

@@ -1,24 +1,25 @@
 package kitchenpos.products.tobe.application;
 
 import static java.math.BigDecimal.valueOf;
-import kitchenpos.products.tobe.infra.FakeProfanitiesClient;
-import kitchenpos.menus.application.InMemoryMenuRepository;
-import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductRepository;
+import kitchenpos.products.tobe.domain.event.ProductPriceChangedEvent;
 import kitchenpos.products.tobe.domain.exception.InvalidProductException;
+import kitchenpos.products.tobe.domain.vo.ProductName;
+import kitchenpos.products.tobe.domain.vo.ProductPrice;
 import kitchenpos.products.tobe.domain.vo.Profanities;
+import kitchenpos.products.tobe.infra.FakeProfanitiesClient;
 import kitchenpos.products.tobe.ui.dto.ChangeProductRequest;
 import kitchenpos.products.tobe.ui.dto.ChangeProductResponse;
 import kitchenpos.products.tobe.ui.dto.CreateProductRequest;
 import kitchenpos.products.tobe.ui.dto.CreateProductResponse;
-import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.vo.ProductName;
-import kitchenpos.products.tobe.domain.vo.ProductPrice;
-import kitchenpos.products.tobe.domain.ProductRepository;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import org.springframework.context.ApplicationEventPublisher;
 
 import java.math.BigDecimal;
@@ -30,16 +31,15 @@ class ProductServiceTest {
 
     private ProductService productService;
     private ProductRepository productRepository;
-    private MenuRepository menuRepository;
     private Profanities profanities;
     private ApplicationEventPublisher eventPublisher;
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
-        menuRepository = new InMemoryMenuRepository();
         profanities = new FakeProfanitiesClient();
-        productService = new ProductService(productRepository, menuRepository, profanities, eventPublisher);
+        eventPublisher = mock(ApplicationEventPublisher.class);
+        productService = new ProductService(productRepository, profanities, eventPublisher);
     }
 
     @Test
@@ -77,6 +77,7 @@ class ProductServiceTest {
         assertThat(updatedProduct.getPrice().compareTo(변경할_가격)).isEqualTo(0);
         assertThat(response.productId()).isEqualTo(productId);
         assertThat(response.price()).isEqualTo(변경할_가격);
+        verify(eventPublisher).publishEvent(new ProductPriceChangedEvent(productId, 변경할_가격));
     }
 
     @Test

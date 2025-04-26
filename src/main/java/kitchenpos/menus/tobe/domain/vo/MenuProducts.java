@@ -37,4 +37,8 @@ public class MenuProducts {
                 .sum()
                 ;
     }
+
+    public List<MenuProduct> getProducts() {
+        return products;
+    }
 }
